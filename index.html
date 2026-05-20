@@ -1,328 +1,204 @@
 import React, { useState, useEffect } from 'react';
 
-// --- БАЗА ДАННЫХ ПРЕДМЕТОВ (Telegram Gifts) ---
-const GIFTS_DATA = [
-  { id: 1, name: "Red Star", price: 5, image: "⭐", category: "basic" },
-  { id: 2, name: "Whale Sticker", price: 2, image: "🐳", category: "basic" },
-  { id: 3, name: "TON Coin", price: 7, image: "💠", category: "basic" },
-  { id: 4, name: "Duck Champion", price: 12, image: "🦆", category: "rare" },
-  { id: 5, name: "Telegram Premium 1 Year", price: 45, image: "💎", category: "epic" },
-  { id: 6, name: "NFT Telegram Username", price: 150, image: "🌐", category: "legendary" },
-  { id: 7, name: "Pavel Durov Dog", price: 300, image: "🐶", category: "legendary" },
+// Предметы магазина согласно ТЗ
+const SHOP_ITEMS = [
+  { id: 1, name: "Telegram Star x100", price: 2.00, img: "https://placehold.co/100x100/2481cc/ffffff?text=Star+x100" },
+  { id: 2, name: "Premium 6 Months", price: 25.00, img: "https://placehold.co/100x100/2481cc/ffffff?text=Premium" },
+  { id: 3, name: "Exclusive NFT Gift", price: 120.00, img: "https://placehold.co/100x100/2481cc/ffffff?text=NFT" },
+  { id: 4, name: "Rare Username @king", price: 500.00, img: "https://placehold.co/100x100/2481cc/ffffff?text=@king" },
 ];
 
-export default function UpgraderSite() {
-  // --- СОСТОЯНИЯ ---
-  const [user, setUser] = useState(null);
-  const [inventory, setInventory] = useState([]);
-  const [selectedLeft, setSelectedLeft] = useState(null); // Предмет юзера
-  const [selectedRight, setSelectedRight] = useState(null); // Желаемый предмет
-  const [activeCategory, setActiveCategory] = useState("all");
+export default function App() {
+  const [balance, setBalance] = useState(0);
+  // Изначально даем пользователю один дешевый предмет для теста
+  const [inventory, setInventory] = useState([
+    { id: 101, name: "Basic Gift", price: 1.00, img: "https://placehold.co/100x100/444/fff?text=Basic" }
+  ]);
   
-  // Состояния апгрейдера
-  const [isUpgrading, setIsUpgrading] = useState(false);
-  const [upgradeResult, setUpgradeResult] = useState(null); // 'win', 'lose', null
-  const [rotation, setRotation] = useState(0);
-  
-  // Модалка правил
-  const [showRules, setShowRules] = useState(false);
+  const [selectedInventoryItem, setSelectedInventoryItem] = useState(null);
+  const [selectedShopItem, setSelectedShopItem] = useState(null);
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [spinResult, setSpinResult] = useState(null);
 
-  // --- ЛОГИКА ---
-  const handleLogin = () => {
-    // Симуляция входа через Google Auth
-    setUser({ name: "PlayerOne", avatar: "👤" });
-    // Даем стартовые предметы для теста
-    setInventory([
-      GIFTS_DATA[0], GIFTS_DATA[0], GIFTS_DATA[1], GIFTS_DATA[2]
-    ]);
-  };
-
-  const getChance = () => {
-    if (!selectedLeft || !selectedRight) return 0;
-    const chance = (selectedLeft.price / selectedRight.price) * 100;
-    return Math.min(Math.max(chance, 0.01), 100).toFixed(2);
+  // Расчет вероятности (Максимум 100%)
+  const calculateProbability = () => {
+    if (!selectedInventoryItem || !selectedShopItem) return 0;
+    const prob = (selectedInventoryItem.price / selectedShopItem.price) * 100;
+    return prob > 100 ? 100 : prob;
   };
 
   const handleUpgrade = () => {
-    if (!selectedLeft || !selectedRight || isUpgrading) return;
+    if (!selectedInventoryItem || !selectedShopItem || isSpinning) return;
     
-    setIsUpgrading(true);
-    setUpgradeResult(null);
-    
-    // Анимация вращения (крутим колесо несколько раз)
-    const spinSpins = 5; // 5 полных оборотов
-    const extraDegrees = Math.floor(Math.random() * 360);
-    const totalRotation = rotation + (spinSpins * 360) + extraDegrees;
-    setRotation(totalRotation);
+    setIsSpinning(true);
+    setSpinResult(null);
 
+    const probability = calculateProbability() / 100;
+    const randomChance = Math.random();
+    const isWin = randomChance <= probability;
+
+    // Имитация задержки рулетки
     setTimeout(() => {
-      const chance = parseFloat(getChance());
-      const roll = Math.random() * 100;
-      
-      const newInventory = [...inventory];
-      const leftIndex = newInventory.findIndex(item => item.id === selectedLeft.id);
-      
-      if (leftIndex !== -1) {
-        newInventory.splice(leftIndex, 1); // Забираем предмет в любом случае
-      }
+      setIsSpinning(false);
+      setSpinResult(isWin ? 'win' : 'lose');
 
-      if (roll <= chance) {
-        // Победа
-        setUpgradeResult('win');
-        newInventory.push(selectedRight);
-        setSelectedLeft(selectedRight); // Ставим выигранный предмет слева
+      if (isWin) {
+        // Убираем старый предмет, добавляем новый
+        setInventory(prev => prev.filter(item => item.id !== selectedInventoryItem.id));
+        setInventory(prev => [...prev, { ...selectedShopItem, id: Date.now() }]);
+        setSelectedInventoryItem(null);
       } else {
-        // Поражение
-        setUpgradeResult('lose');
-        setSelectedLeft(null);
+        // Просто теряем предмет
+        setInventory(prev => prev.filter(item => item.id !== selectedInventoryItem.id));
+        setSelectedInventoryItem(null);
       }
-      
-      setInventory(newInventory);
-      setIsUpgrading(false);
-    }, 3000); // 3 секунды анимации
+    }, 3000);
   };
 
-  // Фильтрация
-  const filteredGifts = activeCategory === "all" 
-    ? GIFTS_DATA 
-    : GIFTS_DATA.filter(g => g.category === activeCategory);
-
-  const chanceValue = getChance();
-
   return (
-    <div className="min-h-screen bg-[#0e1621] text-gray-100 font-sans flex flex-col">
-      {/* --- HEADER --- */}
-      <header className="flex justify-between items-center px-6 py-4 bg-[#17212b] shadow-lg border-b border-[#2b3a4a]">
-        <div className="flex items-center gap-2 text-2xl font-bold text-[#38b6ff] tracking-wider">
-          <span className="text-3xl">🚀</span> TG UPGRADER
-        </div>
-        
-        <div className="flex items-center gap-4">
-          <button 
-            onClick={() => setShowRules(true)}
-            className="text-sm font-medium text-gray-300 hover:text-white transition"
-          >
-            Правила
+    <div className="min-h-screen bg-[#0e1621] text-white font-sans flex flex-col">
+      {/* CSS для анимации колеса апгрейда */}
+      <style>{`
+        .spin-animation {
+          animation: spin 3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+        }
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(1080deg); }
+        }
+      `}</style>
+
+      {/* HEADER */}
+      <header className="flex justify-between items-center p-4 bg-[#17212b] shadow-md border-b border-[#2481cc]/20">
+        <div className="text-2xl font-bold text-[#2481cc]">Telegram Gifts Upgrader</div>
+        <div className="flex items-center gap-6">
+          <div className="text-lg font-semibold text-green-400">Balance: ${balance.toFixed(2)}</div>
+          <button className="bg-white text-gray-800 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition flex items-center gap-2">
+            <svg className="w-5 h-5" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M21.35,11.1H12.18V13.83H18.69C18.36,17.64 15.19,19.27 12.19,19.27C8.36,19.27 5,16.25 5,12C5,7.9 8.2,4.73 12.2,4.73C15.29,4.73 17.1,6.7 17.1,6.7L19,4.72C19,4.72 16.56,2 12.1,2C6.42,2 2.03,6.8 2.03,12C2.03,17.05 6.16,22 12.25,22C17.6,22 21.5,18.33 21.5,12.91C21.5,11.76 21.35,11.1 21.35,11.1V11.1Z" />
+            </svg>
+            Sign in with Google
           </button>
-          {user ? (
-            <div className="flex items-center gap-3 bg-[#242f3d] px-4 py-2 rounded-full border border-[#2b3a4a]">
-              <span className="text-xl">{user.avatar}</span>
-              <span className="font-semibold">{user.name}</span>
-            </div>
-          ) : (
-            <button 
-              onClick={handleLogin}
-              className="bg-[#2aabee] hover:bg-[#2298d6] text-white px-5 py-2.5 rounded-lg font-bold transition-all shadow-[0_0_15px_rgba(42,171,238,0.3)]"
-            >
-              Войти через Google
-            </button>
-          )}
         </div>
       </header>
 
-      {/* --- MAIN CONTENT --- */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 flex flex-col lg:flex-row gap-6">
-        
-        {/* ЛЕВАЯ ПАНЕЛЬ: Инвентарь пользователя */}
-        <div className="flex-1 bg-[#17212b] rounded-2xl p-5 border border-[#2b3a4a] flex flex-col">
-          <h2 className="text-xl font-bold mb-4 text-[#8a9ba8]">Ваш инвентарь</h2>
-          {user ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 overflow-y-auto max-h-[600px] pr-2 custom-scrollbar">
-              {inventory.map((item, idx) => (
+      <div className="flex flex-1 overflow-hidden">
+        {/* LEFT SIDEBAR: INVENTORY */}
+        <aside className="w-64 bg-[#17212b] p-4 flex flex-col border-r border-[#2481cc]/20 overflow-y-auto">
+          <h2 className="text-xl font-bold mb-4 text-[#2481cc]">Your Inventory</h2>
+          {inventory.length === 0 ? (
+            <p className="text-gray-400 text-sm">Inventory is empty.</p>
+          ) : (
+            <div className="grid grid-cols-1 gap-3">
+              {inventory.map(item => (
                 <div 
-                  key={idx} 
-                  onClick={() => !isUpgrading && setSelectedLeft(item)}
-                  className={`cursor-pointer rounded-xl p-3 flex flex-col items-center justify-center gap-2 border-2 transition-all ${
-                    selectedLeft === item ? 'border-[#38b6ff] bg-[#242f3d]' : 'border-transparent bg-[#242f3d] hover:border-[#2b3a4a]'
+                  key={item.id} 
+                  onClick={() => setSelectedInventoryItem(item)}
+                  className={`p-3 rounded-lg cursor-pointer border-2 transition-all ${
+                    selectedInventoryItem?.id === item.id ? 'border-[#2481cc] bg-[#2481cc]/10' : 'border-transparent bg-[#0e1621] hover:border-gray-600'
                   }`}
                 >
-                  <div className="text-4xl">{item.image}</div>
-                  <div className="text-xs font-semibold text-center truncate w-full">{item.name}</div>
-                  <div className="text-sm font-bold text-[#2aabee]">${item.price}</div>
+                  <img src={item.img} alt={item.name} className="w-full h-24 object-cover rounded mb-2" />
+                  <p className="text-sm font-medium text-center truncate">{item.name}</p>
+                  <p className="text-xs text-green-400 text-center">${item.price.toFixed(2)}</p>
                 </div>
               ))}
             </div>
-          ) : (
-            <div className="flex-1 flex items-center justify-center text-[#8a9ba8]">
-              Войдите, чтобы увидеть инвентарь
-            </div>
           )}
-        </div>
+        </aside>
 
-        {/* ЦЕНТР: Апгрейдер */}
-        <div className="flex-[1.2] flex flex-col items-center justify-center p-4 bg-gradient-to-b from-[#17212b] to-[#0e1621] rounded-2xl border border-[#2b3a4a] relative overflow-hidden">
+        {/* RIGHT AREA: UPGRADE & SHOP */}
+        <main className="flex-1 p-6 flex flex-col gap-8 overflow-y-auto">
           
-          {/* Свечение на фоне */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#2aabee] opacity-5 blur-[100px] rounded-full pointer-events-none"></div>
-
-          <div className="text-center mb-8 z-10">
-            <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#38b6ff] to-[#0077ff]">
-              UPGRADE YOUR GIFT
-            </h1>
-            <p className="text-[#8a9ba8] mt-2">Выберите предмет слева и справа</p>
-          </div>
-
-          {/* КОЛЕСО АПГРЕЙДА */}
-          <div className="relative w-72 h-72 rounded-full flex items-center justify-center z-10 mb-8 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
-            {/* Круг шанса (Conic Gradient) */}
-            <div 
-              className="absolute inset-0 rounded-full transition-all duration-500"
-              style={{ 
-                background: chanceValue > 0 
-                  ? `conic-gradient(#2aabee ${chanceValue}%, #242f3d ${chanceValue}%)` 
-                  : '#242f3d',
-                boxShadow: 'inset 0 0 20px rgba(0,0,0,0.5)'
-              }}
-            ></div>
+          {/* UPGRADE AREA */}
+          <section className="bg-[#17212b] p-8 rounded-2xl border border-[#2481cc]/20 flex flex-col items-center relative">
+            <h2 className="text-2xl font-bold mb-6">Upgrade Hub</h2>
             
-            {/* Внутренний темный круг */}
-            <div className="absolute inset-3 bg-[#17212b] rounded-full flex flex-col items-center justify-center overflow-hidden border border-[#2b3a4a]">
-              
-              {/* Анимированные Эмодзи */}
-              <div 
-                className="absolute w-full h-full flex items-center justify-center transition-transform duration-[3000ms] ease-out"
-                style={{ transform: `rotate(${rotation}deg)` }}
-              >
-                {isUpgrading && (
-                  <>
-                    <span className="absolute top-4 text-2xl">💎</span>
-                    <span className="absolute bottom-4 text-2xl">🔥</span>
-                    <span className="absolute left-4 text-2xl">⚡</span>
-                    <span className="absolute right-4 text-2xl">⭐</span>
-                  </>
+            <div className="flex items-center gap-12 mb-8">
+              {/* User Item */}
+              <div className="w-32 h-32 rounded-xl bg-[#0e1621] border border-gray-700 flex items-center justify-center relative">
+                {selectedInventoryItem ? (
+                  <img src={selectedInventoryItem.img} alt="User Item" className="w-24 h-24 rounded-lg object-cover" />
+                ) : (
+                  <span className="text-gray-500 text-sm text-center px-2">Select item from inventory</span>
                 )}
               </div>
 
-              {/* Отображение шанса */}
-              {!isUpgrading && (
-                <div className="z-10 flex flex-col items-center">
-                  <span className="text-4xl font-black text-white">{chanceValue}%</span>
-                  <span className="text-xs font-bold text-[#8a9ba8] uppercase">Шанс успеха</span>
-                </div>
-              )}
-
-              {/* Результат */}
-              {!isUpgrading && upgradeResult && (
-                <div className={`absolute inset-0 flex items-center justify-center bg-opacity-90 backdrop-blur-sm z-20 ${upgradeResult === 'win' ? 'bg-green-600' : 'bg-red-600'}`}>
-                  <span className="text-3xl font-black text-white drop-shadow-lg">
-                    {upgradeResult === 'win' ? 'SUCCESS! 🎉' : 'CRASHED 💥'}
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="flex items-center gap-6 w-full px-8 z-10">
-            <div className="flex-1 flex justify-end">
-              {selectedLeft ? (
-                <div className="text-right">
-                  <div className="text-3xl">{selectedLeft.image}</div>
-                  <div className="text-[#8a9ba8] text-sm">{selectedLeft.name}</div>
-                  <div className="text-xl font-bold text-gray-300">${selectedLeft.price}</div>
-                </div>
-              ) : <div className="text-[#8a9ba8]">Пусто</div>}
-            </div>
-            <div className="text-2xl text-[#2b3a4a] font-black">▶</div>
-            <div className="flex-1">
-              {selectedRight ? (
-                <div>
-                  <div className="text-3xl">{selectedRight.image}</div>
-                  <div className="text-[#8a9ba8] text-sm">{selectedRight.name}</div>
-                  <div className="text-xl font-bold text-[#2aabee]">${selectedRight.price}</div>
-                </div>
-              ) : <div className="text-[#8a9ba8]">Пусто</div>}
-            </div>
-          </div>
-
-          <button 
-            onClick={handleUpgrade}
-            disabled={!selectedLeft || !selectedRight || isUpgrading}
-            className="mt-8 w-4/5 py-4 rounded-xl font-black text-xl uppercase tracking-widest transition-all
-              disabled:bg-[#242f3d] disabled:text-[#8a9ba8] disabled:cursor-not-allowed
-              bg-[#2aabee] hover:bg-[#2298d6] text-white shadow-[0_0_20px_rgba(42,171,238,0.4)] hover:shadow-[0_0_30px_rgba(42,171,238,0.6)]"
-          >
-            {isUpgrading ? 'Upgrading...' : 'Upgrade'}
-          </button>
-        </div>
-
-        {/* ПРАВАЯ ПАНЕЛЬ: Выбор цели */}
-        <div className="flex-1 bg-[#17212b] rounded-2xl p-5 border border-[#2b3a4a] flex flex-col">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-[#8a9ba8]">Цель</h2>
-            <select 
-              className="bg-[#242f3d] text-sm text-white px-3 py-1.5 rounded-lg border border-[#2b3a4a] outline-none"
-              value={activeCategory}
-              onChange={(e) => setActiveCategory(e.target.value)}
-            >
-              <option value="all">Все подарки</option>
-              <option value="basic">Basic</option>
-              <option value="rare">Rare</option>
-              <option value="epic">Epic</option>
-              <option value="legendary">Legendary</option>
-            </select>
-          </div>
-          
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 overflow-y-auto max-h-[600px] pr-2 custom-scrollbar">
-            {filteredGifts.map((item) => (
-              <div 
-                key={item.id} 
-                onClick={() => !isUpgrading && setSelectedRight(item)}
-                className={`cursor-pointer rounded-xl p-3 flex flex-col items-center justify-center gap-2 border-2 transition-all ${
-                  selectedRight?.id === item.id ? 'border-[#38b6ff] bg-[#242f3d]' : 'border-transparent bg-[#242f3d] hover:border-[#2b3a4a]'
-                }`}
-              >
-                <div className="text-4xl">{item.image}</div>
-                <div className="text-xs font-semibold text-center truncate w-full">{item.name}</div>
-                <div className="text-sm font-bold text-[#2aabee]">${item.price}</div>
+              {/* Central Wheel Animation */}
+              <div className="relative flex items-center justify-center">
+                 <svg 
+                    className={`w-32 h-32 ${isSpinning ? 'spin-animation' : ''}`} 
+                    viewBox="0 0 100 100"
+                 >
+                    {/* Background Circle */}
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#2481cc" strokeWidth="2" strokeDasharray="5,5" opacity="0.3" />
+                    {/* Probability Arc (visual representation) */}
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="#2481cc" strokeWidth="8" strokeDasharray={`${(calculateProbability() / 100) * 251.2} 251.2`} transform="rotate(-90 50 50)" className="transition-all duration-500" />
+                    {/* Inner styling */}
+                    <circle cx="50" cy="50" r="20" fill="#2481cc" opacity="0.2" />
+                 </svg>
+                 <div className="absolute font-bold text-lg">
+                    {calculateProbability().toFixed(1)}%
+                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </main>
 
-      {/* --- МОДАЛЬНОЕ ОКНО ПРАВИЛ --- */}
-      {showRules && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#17212b] border border-[#2b3a4a] rounded-2xl max-w-lg w-full p-6 relative">
-            <button 
-              onClick={() => setShowRules(false)}
-              className="absolute top-4 right-4 text-[#8a9ba8] hover:text-white text-xl"
-            >
-              ✕
-            </button>
-            <h2 className="text-2xl font-bold text-white mb-4">Правила игры: Апгрейд</h2>
-            <div className="space-y-4 text-[#8a9ba8] text-sm">
-              <p><strong className="text-white">1. Выбор предметов:</strong> Выберите подарок из вашего инвентаря (слева) и желаемый более дорогой подарок из магазина (справа).</p>
-              <p><strong className="text-white">2. Расчет шанса:</strong> Шанс на успех рассчитывается по строгой формуле стоимости: <code>(Цена вашего предмета / Цена желаемого) * 100%</code>. Максимальный шанс — 100%.</p>
-              <p><strong className="text-white">3. Анимация и Результат:</strong> После нажатия на "Upgrade" запускается генератор случайных чисел. Если число попадает в ваш диапазон вероятности (выделено синим на круге) — вы получаете новый предмет.</p>
-              <p><strong className="text-white">4. Поражение:</strong> При неудачном исходе ваш первоначальный предмет сгорает и пропадает из инвентаря.</p>
-              <p><strong className="text-white">5. Правила всех игр:</strong> На сайте честный Random. Администрация не несет ответственности за сгоревшие предметы. Играйте ответственно.</p>
+              {/* Target Item */}
+              <div className="w-32 h-32 rounded-xl bg-[#0e1621] border border-[#2481cc] shadow-[0_0_15px_rgba(36,129,204,0.3)] flex items-center justify-center relative">
+                 {selectedShopItem ? (
+                  <img src={selectedShopItem.img} alt="Shop Item" className="w-24 h-24 rounded-lg object-cover" />
+                ) : (
+                  <span className="text-gray-500 text-sm text-center px-2">Select item from shop</span>
+                )}
+              </div>
             </div>
+
             <button 
-              onClick={() => setShowRules(false)}
-              className="mt-6 w-full bg-[#242f3d] hover:bg-[#2b3a4a] text-white py-3 rounded-lg font-bold transition"
+              onClick={handleUpgrade}
+              disabled={!selectedInventoryItem || !selectedShopItem || isSpinning}
+              className={`px-12 py-4 rounded-xl text-xl font-bold uppercase tracking-wider transition-all
+                ${(!selectedInventoryItem || !selectedShopItem || isSpinning) 
+                  ? 'bg-gray-600 text-gray-400 cursor-not-allowed' 
+                  : 'bg-[#2481cc] text-white hover:bg-[#1d6ba8] shadow-[0_0_20px_rgba(36,129,204,0.5)] hover:scale-105'
+                }`}
             >
-              Понятно
+              {isSpinning ? 'Upgrading...' : 'Upgrade'}
             </button>
-          </div>
-        </div>
-      )}
 
-      {/* --- FOOTER --- */}
-      <footer className="bg-[#17212b] border-t border-[#2b3a4a] p-6 text-center mt-auto">
-        <div className="text-[#8a9ba8] text-sm">
-          <p>© 2026 TG Upgrader Clone. Создано для демонстрации.</p>
-          <p className="mt-2 text-[#38b6ff] font-medium">Техническая поддержка в Telegram: @om1a2</p>
-        </div>
+            {spinResult && (
+              <div className={`mt-6 text-xl font-bold ${spinResult === 'win' ? 'text-green-400' : 'text-red-400'}`}>
+                {spinResult === 'win' ? 'Upgrade Successful! 🎉' : 'Upgrade Failed! 💥'}
+              </div>
+            )}
+          </section>
+
+          {/* SHOP AREA */}
+          <section>
+            <h2 className="text-2xl font-bold mb-4 text-[#2481cc]">Target Shop</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {SHOP_ITEMS.map(item => (
+                <div 
+                  key={item.id}
+                  onClick={() => setSelectedShopItem(item)}
+                  className={`bg-[#17212b] p-4 rounded-xl cursor-pointer border-2 transition-all ${
+                    selectedShopItem?.id === item.id ? 'border-[#2481cc] shadow-[0_0_10px_rgba(36,129,204,0.3)]' : 'border-transparent hover:border-gray-600'
+                  }`}
+                >
+                  <img src={item.img} alt={item.name} className="w-full h-32 object-cover rounded-lg mb-3" />
+                  <h3 className="font-semibold text-center mb-1">{item.name}</h3>
+                  <p className="text-green-400 font-bold text-center">${item.price.toFixed(2)}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+        </main>
+      </div>
+
+      {/* FOOTER */}
+      <footer className="bg-[#17212b] text-gray-500 text-sm text-center py-4 border-t border-[#2481cc]/20">
+        <p>Rules | Privacy Policy | Terms of Service</p>
+        <p className="mt-1 text-[#2481cc]">@om1a2 for support</p>
       </footer>
-
-      {/* Глобальные стили для скроллбара, чтобы он выглядел аккуратно (можно добавить в globals.css) */}
-      <style dangerouslySetInnerHTML={{__html: `
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #17212b; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #2b3a4a; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #38b6ff; }
-      `}} />
     </div>
   );
 }
