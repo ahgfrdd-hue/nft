@@ -26,17 +26,16 @@
             user-select: none;
         }
 
-        /* Шапка */
         .header {
             text-align: center;
-            padding: 10px 0;
+            padding: 5px 0;
         }
         .header h1 {
-            font-size: 20px; margin: 0; color: var(--accent-yellow);
+            font-size: 18px; margin: 0; color: var(--accent-yellow);
             text-transform: uppercase; letter-spacing: 1px;
         }
 
-        /* Главная рабочая зона (Слоты и Крутилка) */
+        /* Главная рабочая зона */
         .workspace {
             display: flex;
             align-items: center;
@@ -61,7 +60,6 @@
             justify-content: center;
             text-align: center;
             position: relative;
-            transition: all 0.3s;
         }
         .slot.active {
             border: 2px solid var(--accent-yellow);
@@ -70,52 +68,77 @@
         .slot .emoji { font-size: 36px; margin-bottom: 4px; }
         .slot .name { font-size: 11px; color: var(--text-main); font-weight: bold; }
         .slot .price { font-size: 12px; color: var(--accent-yellow); font-weight: bold; }
-        .slot .placeholder { font-size: 12px; color: var(--text-muted); padding: 5px; }
+        .slot .placeholder { font-size: 11px; color: var(--text-muted); padding: 5px; }
 
-        /* Центр: Колесо апгрейда */
+        /* Центр: Колесо и Вращающаяся СТРЕЛКА */
         .center-area {
             width: 35%;
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
         }
 
         .circle-container {
             position: relative;
-            width: 110px; height: 110px;
+            width: 120px; height: 120px;
         }
         .circle-svg { transform: rotate(-90deg); }
-        .circle-bg { fill: none; stroke: #232838; stroke-width: 8; }
+        .circle-bg { fill: none; stroke: #232838; stroke-width: 10; }
+        
+        /* Сектор шанса (зеленый полукруг) */
         .circle-progress {
-            fill: none; stroke: var(--accent-yellow); stroke-width: 8;
+            fill: none; stroke: var(--accent-green); stroke-width: 10;
             stroke-dasharray: 314; stroke-dashoffset: 314;
-            transition: stroke-dashoffset 0.5s ease, stroke 0.3s;
-        }
-        .circle-progress.spinning {
-            animation: spinCircle 0.3s linear infinite;
-        }
-        .percentage {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 18px; font-weight: bold;
+            transition: stroke-dashoffset 0.3s ease;
         }
 
-        /* Кнопка Улучшить */
+        /* Механика СТРЕЛКИ из видео */
+        .arrow-ticker {
+            position: absolute;
+            top: 0; left: 50%;
+            width: 4px; height: 60px; /* Радиус вращения */
+            transform-origin: bottom center;
+            transform: translateX(-50%) rotate(0deg);
+            pointer-events: none;
+            z-index: 10;
+        }
+        /* Сама стрелочка на конце оси */
+        .arrow-head {
+            width: 0; height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 14px solid var(--accent-yellow);
+            position: absolute;
+            top: -8px; left: -6px;
+            filter: drop-shadow(0 0 4px rgba(255,183,0,0.8));
+        }
+
+        /* Шанс строго ВНИЗУ колеса */
+        .chance-below {
+            margin-top: 8px;
+            font-size: 16px;
+            font-weight: 800;
+            color: #ffffff;
+            background: #1c202c;
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid #31374a;
+        }
+
         .btn-upgrade {
             width: 100%;
             background: linear-gradient(135deg, #ffc800, #ff9000);
             border: none; color: #000; font-weight: 800;
-            padding: 12px; font-size: 14px; border-radius: 10px;
+            padding: 10px; font-size: 13px; border-radius: 10px;
             cursor: pointer; margin-top: 10px;
             text-transform: uppercase; letter-spacing: 1px;
-            transition: transform 0.1s, opacity 0.3s;
         }
-        .btn-upgrade:active { transform: scale(0.98); }
-        .btn-upgrade:disabled { background: #2e3344; color: #555; cursor: not-allowed; }
+        .btn-upgrade:disabled { background: #2e3344; color: #555; }
 
-        /* Сетки Инвентаря и Магазина */
+        /* Сетки */
         .section-title {
-            font-size: 14px; font-weight: bold; margin: 15px 0 8px 5px;
+            font-size: 13px; font-weight: bold; margin: 12px 0 6px 5px;
             color: var(--text-muted); display: flex; justify-content: space-between;
         }
         .section-title span { color: var(--text-main); }
@@ -124,41 +147,33 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 8px;
-            max-height: 180px;
+            max-height: 170px;
             overflow-y: auto;
-            padding-right: 3px;
         }
 
-        /* Карточка предмета */
+        /* Карточки предметов */
         .item-card {
             background: var(--panel-color);
             border: 1px solid #222735;
             border-radius: 10px;
             padding: 8px 4px;
             text-align: center;
-            position: relative;
-            transition: border-color 0.2s, background 0.2s;
         }
-        .item-card:active { transform: scale(0.95); }
         .item-card.selected { border-color: var(--accent-yellow); background: #1f2433; }
-        .item-card .item-emoji { font-size: 28px; }
-        .item-card .item-name { font-size: 9px; color: var(--text-muted); margin: 4px 0 2px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .item-card .item-price { font-size: 11px; font-weight: bold; color: #00e5ff; }
+        .item-card .item-emoji { font-size: 32px; }
+        .item-card .item-name { font-size: 10px; color: var(--text-muted); margin: 4px 0 2px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .item-card .item-price { font-size: 11px; font-weight: bold; color: #ffb700; }
 
-        /* Всплывашка результата */
+        /* Результат */
         .result-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(10,12,18,0.9);
+            background: rgba(10,12,18,0.95);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s;
         }
         .result-overlay.active { opacity: 1; pointer-events: auto; }
-        .result-box { text-align: center; transform: scale(0.7); transition: transform 0.3s; }
-        .result-overlay.active .result-box { transform: scale(1); }
-        .result-status { font-size: 26px; font-weight: 900; margin-bottom: 15px; }
-        .result-gift { font-size: 70px; margin-bottom: 15px; animation: bounce 1s infinite alternate; }
-
-        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+        .result-status { font-size: 28px; font-weight: 900; margin-bottom: 10px; }
+        .result-gift { font-size: 80px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -174,12 +189,17 @@
 
         <div class="center-area">
             <div class="circle-container">
-                <svg class="circle-svg" width="110" height="110">
-                    <circle class="circle-bg" cx="55" cy="55" r="50"></circle>
-                    <circle class="circle-progress" id="progress-bar" cx="55" cy="55" r="50"></circle>
+                <div class="arrow-ticker" id="arrow-ticker">
+                    <div class="arrow-head"></div>
+                </div>
+                <svg class="circle-svg" width="120" height="120">
+                    <circle class="circle-bg" cx="60" cy="60" r="50"></circle>
+                    <circle class="circle-progress" id="progress-bar" cx="60" cy="60" r="50"></circle>
                 </svg>
-                <div class="percentage" id="chance-display">0%</div>
             </div>
+            
+            <div class="chance-below" id="chance-display">0%</div>
+            
             <button class="btn-upgrade" id="btn-start" disabled onclick="executeUpgrade()">Upgrade</button>
         </div>
 
@@ -188,18 +208,18 @@
         </div>
     </div>
 
-    <div class="section-title">🎒 МОИ NFT ПОДАРКИ <span id="inv-count">0</span></div>
+    <div class="section-title">🎒 МОИ NFT ПОДАРКИ <span id="inv-count">(0)</span></div>
     <div class="grid" id="inventory-grid"></div>
 
     <div class="section-title">👑 ВЫБЕРИТЕ ЦЕЛЬ АПГРЕЙДА</div>
     <div class="grid" id="shop-grid"></div>
 
     <div class="result-overlay" id="result-screen" onclick="closeResult()">
-        <div class="result-box">
+        <div style="text-align: center;">
             <div class="result-status" id="res-title">УСПЕХ!</div>
-            <div class="result-gift" id="res-emoji">👑</div>
+            <div class="result-gift" id="res-emoji">🧢</div>
             <div style="font-size: 16px;" id="res-desc">Вы прокачали предмет!</div>
-            <div style="color: var(--text-muted); margin-top: 20px; font-size: 12px;">Нажмите в любое место, чтобы продолжить</div>
+            <div style="color: var(--text-muted); margin-top: 25px; font-size: 12px;">Нажмите, чтобы продолжить</div>
         </div>
     </div>
 
@@ -207,26 +227,23 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Полная база официальных лимитированных подарков Telegram
+        // Обновленная база данных: Телеграм подарки и ЗВЕЗДЫ (⭐)
         const GIFT_DATABASE = {
             "candy": { name: "Candy Cane", emoji: "🍬", price: 50 },
-            "tree": { name: "Christmas Tree", emoji: "🎄", price: 120 },
-            "frog": { name: "Toy Frog", emoji: "🐸", price: 300 },
-            "heart": { name: "Love Heart", emoji: "❤️", price: 650 },
-            "star": { name: "Telegram Star", emoji: "⭐", price: 1500 },
-            "duck": { name: "CEO Duck", emoji: "🦆", price: 3500 },
-            "matrix": { name: "Neo Matrix", emoji: "🫙", price: 8000 },
-            "crystal": { name: "TON Crystal", emoji: "💎", price: 18000 },
-            "crown": { name: "Durov Crown", emoji: "👑", price: 50000 }
+            "frog": { name: "Toy Frog", emoji: "🐸", price: 150 },
+            "pumpkin": { name: "Pumpkin", emoji: "🎃", price: 350 },
+            "star_badge": { name: "Star Badge", emoji: "⭐", price: 800 },
+            "dur_cap": { name: "Кепка Дурова", emoji: "🧢", price: 2000 },
+            "matrix": { name: "Neo Matrix", emoji: "🫙", price: 5000 },
+            "crystal": { name: "TON Crystal", emoji: "💎", price: 12000 },
+            "dur_crown": { name: "Корона Дурова", emoji: "👑", price: 40000 }
         };
 
-        // Состояние игры в реальном времени
-        let userInventory = ["candy", "candy", "tree", "frog", "heart"]; 
+        let userInventory = ["candy", "candy", "frog", "pumpkin"]; 
         let selectedFromIdx = null;
         let selectedToKey = null;
         let calculatedChance = 0;
 
-        // Инициализация сеток
         function initApp() {
             renderInventory();
             renderShop();
@@ -246,7 +263,7 @@
                 card.innerHTML = `
                     <div class="item-emoji">${item.emoji}</div>
                     <div class="item-name">${item.name}</div>
-                    <div class="item-price">$${item.price}</div>
+                    <div class="item-price">${item.price} ⭐</div>
                 `;
                 grid.appendChild(card);
             });
@@ -264,7 +281,7 @@
                 card.innerHTML = `
                     <div class="item-emoji">${item.emoji}</div>
                     <div class="item-name">${item.name}</div>
-                    <div class="item-price">$${item.price}</div>
+                    <div class="item-price">${item.price} ⭐</div>
                 `;
                 grid.appendChild(card);
             });
@@ -286,27 +303,24 @@
             const slotFrom = document.getElementById("slot-from");
             const slotTo = document.getElementById("slot-to");
 
-            // Левый слот
             if (selectedFromIdx !== null) {
                 const item = GIFT_DATABASE[userInventory[selectedFromIdx]];
                 slotFrom.className = "slot active";
-                slotFrom.innerHTML = `<div class="emoji">${item.emoji}</div><div class="name">${item.name}</div><div class="price">$${item.price}</div>`;
+                slotFrom.innerHTML = `<div class="emoji">${item.emoji}</div><div class="name">${item.name}</div><div class="price">${item.price} ⭐</div>`;
             } else {
                 slotFrom.className = "slot";
                 slotFrom.innerHTML = `<div class="placeholder">Выбери свой подарок ниже 🎒</div>`;
             }
 
-            // Правый слот
             if (selectedToKey !== null) {
                 const item = GIFT_DATABASE[selectedToKey];
                 slotTo.className = "slot active";
-                slotTo.innerHTML = `<div class="emoji">${item.emoji}</div><div class="name">${item.name}</div><div class="price">$${item.price}</div>`;
+                slotTo.innerHTML = `<div class="emoji">${item.emoji}</div><div class="name">${item.name}</div><div class="price">${item.price} ⭐</div>`;
             } else {
                 slotTo.className = "slot";
                 slotTo.innerHTML = `<div class="placeholder">Выбери цель справа 👑</div>`;
             }
 
-            // Шансы
             if (selectedFromIdx !== null && selectedToKey !== null) {
                 const priceFrom = GIFT_DATABASE[userInventory[selectedFromIdx]].price;
                 const priceTo = GIFT_DATABASE[selectedToKey].price;
@@ -324,46 +338,37 @@
         function updateCircle(chance) {
             document.getElementById("chance-display").innerText = chance + "%";
             const circle = document.getElementById("progress-bar");
-            // Длина окружности 2 * Math.PI * 50 = 314
+            // Длина окружности круга 2 * PI * 50 = 314
             const offset = 314 - (314 * chance) / 100;
             circle.style.strokeDashoffset = offset;
         }
 
-        // КРУТИЛКА ИЗ ВИДЕО (АНИМАЦИЯ)
+        // РЕАЛИСТИЧНАЯ КРУТИЛКА СТРЕЛКИ
         function executeUpgrade() {
             const btn = document.getElementById("btn-start");
-            const circle = document.getElementById("progress-bar");
+            const arrow = document.getElementById("arrow-ticker");
             btn.disabled = true;
 
-            let currentFakeChance = 0;
-            let duration = 2500; // 2.5 секунды кручения
-            let startTime = performance.now();
+            // Генерируем случайную точку остановки стрелки от 0 до 100%
+            const rollResult = Math.random() * 100;
+            
+            // Вычисляем угол: 1% = 3.6 градуса. Делаем 5 полных оборотов (1800 градусов) для эффекта разгона
+            const finalAngle = 1800 + (rollResult * 3.6);
 
-            // Эффект быстрого тиканья / вращения как в казино
-            function animate(now) {
-                let elapsed = now - startTime;
-                let progress = Math.min(elapsed / duration, 1);
-                
-                // Случайные скачки шкалы во время вращения
-                let fakeChance = Math.floor(Math.random() * 100);
-                updateCircle(fakeChance);
+            // Запускаем плавное вращение стрелки через CSS
+            arrow.style.transition = "transform 3s cubic-bezier(0.25, 0.1, 0.1, 1)";
+            arrow.style.transform = `translateX(-50%) rotate(${finalAngle}deg)`;
 
-                if (progress < 1) {
-                    requestAnimationFrame(animate);
-                } else {
-                    // Анимация завершилась, выдаем реальный результат
-                    finalizeUpgrade();
-                }
-            }
-            requestAnimationFrame(animate);
+            setTimeout(() => {
+                finalizeUpgrade(rollResult);
+            }, 3100); // По окончании анимации выдаем результат
         }
 
-        function finalizeUpgrade() {
-            const roll = Math.random() * 100;
+        function finalizeUpgrade(rollResult) {
             const itemFromKey = userInventory[selectedFromIdx];
             const itemToKey = selectedToKey;
 
-            // Удаляем предмет-донор
+            // Удаляем предмет из инвентаря
             userInventory.splice(selectedFromIdx, 1);
 
             const overlay = document.getElementById("result-screen");
@@ -371,33 +376,36 @@
             const resEmoji = document.getElementById("res-emoji");
             const resDesc = document.getElementById("res-desc");
 
-            if (roll <= calculatedChance) {
-                // Победил
+            // Если стрелка остановилась внутри зеленой зоны (выиграл)
+            if (rollResult <= calculatedChance) {
                 userInventory.push(itemToKey);
                 resTitle.innerText = "УСПЕХ!";
                 resTitle.style.color = "var(--accent-green)";
                 resEmoji.innerText = GIFT_DATABASE[itemToKey].emoji;
-                resDesc.innerText = `Вы успешно получили ${GIFT_DATABASE[itemToKey].name}!`;
+                resDesc.innerText = `Вы успешно апгрейднули в ${GIFT_DATABASE[itemToKey].name}!`;
             } else {
-                // Проиграл
                 resTitle.innerText = "СГОРЕЛ!";
                 resTitle.style.color = "var(--accent-red)";
                 resEmoji.innerText = "💥";
-                resDesc.innerText = `${GIFT_DATABASE[itemFromKey].name} был уничтожен при апгрейде.`;
+                resDesc.innerText = `${GIFT_DATABASE[itemFromKey].name} уничтожен при транзакции.`;
             }
 
-            // Сброс выбора
+            // Сброс позиций
             selectedFromIdx = null;
             selectedToKey = null;
+            
+            // Возвращаем стрелку в начальное положение без анимации для следующего раза
+            const arrow = document.getElementById("arrow-ticker");
+            arrow.style.transition = "none";
+            arrow.style.transform = "translateX(-50%) rotate(0deg)";
+
             updateSlots();
             initApp();
-
             overlay.classList.add("active");
         }
 
         function closeResult() {
             document.getElementById("result-screen").classList.remove("active");
-            // Если баланс на нуле, даем утешительную конфету
             if (userInventory.length === 0) {
                 userInventory.push("candy");
                 initApp();
