@@ -1,609 +1,328 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upgrader - Luxury Premium Service</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+import React, { useState, useEffect } from 'react';
 
-        :root {
-            --bg-darker: #0b0e14;
-            --bg-panel: #141925;
-            --bg-card: #1c2331;
-            --accent-primary: #00ff88; /* Основной неоновый зеленый */
-            --accent-gold: #f4b814;
-            --text-main: #ffffff;
-            --text-dim: #8e96aa;
-            --border: rgba(255, 255, 255, 0.05);
-            --danger: #ff4b4b;
-            
-            /* Градиенты категорий */
-            --gradient-common: linear-gradient(180deg, rgba(62, 128, 238, 0.2) 0%, rgba(62, 128, 238, 0) 100%);
-            --gradient-epic: linear-gradient(180deg, rgba(163, 53, 255, 0.2) 0%, rgba(163, 53, 255, 0) 100%);
-            --gradient-legend: linear-gradient(180deg, rgba(255, 184, 0, 0.2) 0%, rgba(255, 184, 0, 0) 100%);
-        }
+// --- БАЗА ДАННЫХ ПРЕДМЕТОВ (Telegram Gifts) ---
+const GIFTS_DATA = [
+  { id: 1, name: "Red Star", price: 5, image: "⭐", category: "basic" },
+  { id: 2, name: "Whale Sticker", price: 2, image: "🐳", category: "basic" },
+  { id: 3, name: "TON Coin", price: 7, image: "💠", category: "basic" },
+  { id: 4, name: "Duck Champion", price: 12, image: "🦆", category: "rare" },
+  { id: 5, name: "Telegram Premium 1 Year", price: 45, image: "💎", category: "epic" },
+  { id: 6, name: "NFT Telegram Username", price: 150, image: "🌐", category: "legendary" },
+  { id: 7, name: "Pavel Durov Dog", price: 300, image: "🐶", category: "legendary" },
+];
 
-        body {
-            background-color: var(--bg-darker);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            overflow-x: hidden;
-        }
+export default function UpgraderSite() {
+  // --- СОСТОЯНИЯ ---
+  const [user, setUser] = useState(null);
+  const [inventory, setInventory] = useState([]);
+  const [selectedLeft, setSelectedLeft] = useState(null); // Предмет юзера
+  const [selectedRight, setSelectedRight] = useState(null); // Желаемый предмет
+  const [activeCategory, setActiveCategory] = useState("all");
+  
+  // Состояния апгрейдера
+  const [isUpgrading, setIsUpgrading] = useState(false);
+  const [upgradeResult, setUpgradeResult] = useState(null); // 'win', 'lose', null
+  const [rotation, setRotation] = useState(0);
+  
+  // Модалка правил
+  const [showRules, setShowRules] = useState(false);
 
-        .main-layout {
-            width: 100%;
-            max-width: 1200px;
-            padding: 40px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
+  // --- ЛОГИКА ---
+  const handleLogin = () => {
+    // Симуляция входа через Google Auth
+    setUser({ name: "PlayerOne", avatar: "👤" });
+    // Даем стартовые предметы для теста
+    setInventory([
+      GIFTS_DATA[0], GIFTS_DATA[0], GIFTS_DATA[1], GIFTS_DATA[2]
+    ]);
+  };
 
-        /* NAVIGATION TABS */
-        .nav-tabs {
-            display: flex;
-            gap: 10px;
-            background: var(--bg-panel);
-            padding: 6px;
-            border-radius: 12px;
-            width: fit-content;
-            border: 1px solid var(--border);
-        }
+  const getChance = () => {
+    if (!selectedLeft || !selectedRight) return 0;
+    const chance = (selectedLeft.price / selectedRight.price) * 100;
+    return Math.min(Math.max(chance, 0.01), 100).toFixed(2);
+  };
 
-        .tab {
-            padding: 10px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: 0.3s;
-            color: var(--text-dim);
-        }
+  const handleUpgrade = () => {
+    if (!selectedLeft || !selectedRight || isUpgrading) return;
+    
+    setIsUpgrading(true);
+    setUpgradeResult(null);
+    
+    // Анимация вращения (крутим колесо несколько раз)
+    const spinSpins = 5; // 5 полных оборотов
+    const extraDegrees = Math.floor(Math.random() * 360);
+    const totalRotation = rotation + (spinSpins * 360) + extraDegrees;
+    setRotation(totalRotation);
 
-        .tab.active {
-            background: var(--bg-card);
-            color: #fff;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
+    setTimeout(() => {
+      const chance = parseFloat(getChance());
+      const roll = Math.random() * 100;
+      
+      const newInventory = [...inventory];
+      const leftIndex = newInventory.findIndex(item => item.id === selectedLeft.id);
+      
+      if (leftIndex !== -1) {
+        newInventory.splice(leftIndex, 1); // Забираем предмет в любом случае
+      }
 
-        /* UPGRADER SECTION */
-        .upgrader-grid {
-            display: grid;
-            grid-template-columns: 1fr 450px 1fr;
-            gap: 24px;
-            align-items: start;
-        }
+      if (roll <= chance) {
+        // Победа
+        setUpgradeResult('win');
+        newInventory.push(selectedRight);
+        setSelectedLeft(selectedRight); // Ставим выигранный предмет слева
+      } else {
+        // Поражение
+        setUpgradeResult('lose');
+        setSelectedLeft(null);
+      }
+      
+      setInventory(newInventory);
+      setIsUpgrading(false);
+    }, 3000); // 3 секунды анимации
+  };
 
-        .drop-zone {
-            background: var(--bg-panel);
-            border-radius: 24px;
-            height: 380px;
-            border: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            transition: 0.3s;
-        }
+  // Фильтрация
+  const filteredGifts = activeCategory === "all" 
+    ? GIFTS_DATA 
+    : GIFTS_DATA.filter(g => g.category === activeCategory);
 
-        .drop-zone.filled {
-            background: radial-gradient(circle at center, rgba(0, 255, 136, 0.05) 0%, var(--bg-panel) 100%);
-        }
+  const chanceValue = getChance();
 
-        .drop-zone .label {
-            font-size: 12px;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-
-        .item-visual {
-            width: 160px;
-            height: 160px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 30px rgba(0,255,136,0.2));
-            animation: float 4s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        /* CENTRAL WHEEL */
-        .wheel-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 25px;
-        }
-
-        .wheel-box {
-            width: 320px;
-            height: 320px;
-            background: var(--bg-panel);
-            border-radius: 50%;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 8px solid var(--bg-darker);
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-        }
-
-        .wheel-outer-ring {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: conic-gradient(from 0deg, var(--bg-card) 0%, var(--bg-card) 100%);
-            transition: background 0.5s ease;
-        }
-
-        .wheel-inner {
-            width: 240px;
-            height: 240px;
-            background: var(--bg-darker);
-            border-radius: 50%;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
-            border: 1px solid var(--border);
-        }
-
-        .chance-val {
-            font-size: 48px;
-            font-weight: 800;
-            color: var(--accent-primary);
-            text-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
-        }
-
-        .chance-label {
-            font-size: 12px;
-            color: var(--text-dim);
-            font-weight: 600;
-        }
-
-        .wheel-ticker {
-            position: absolute;
-            top: -15px;
-            width: 4px;
-            height: 160px;
-            background: #fff;
-            left: 50%;
-            transform-origin: bottom center;
-            transform: translateX(-50%) rotate(0deg);
-            z-index: 20;
-            box-shadow: 0 0 15px #fff;
-            border-radius: 2px;
-        }
-
-        .wheel-ticker::after {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: -6px;
-            width: 16px;
-            height: 16px;
-            background: #fff;
-            border-radius: 50%;
-        }
-
-        /* CONTROLS */
-        .upgrade-btn {
-            width: 100%;
-            background: var(--accent-primary);
-            color: #000;
-            border: none;
-            padding: 20px;
-            border-radius: 14px;
-            font-size: 18px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: 0.3s;
-            text-transform: uppercase;
-            box-shadow: 0 8px 0px #00a85a;
-        }
-
-        .upgrade-btn:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.1);
-        }
-
-        .upgrade-btn:active {
-            transform: translateY(4px);
-            box-shadow: 0 2px 0px #00a85a;
-        }
-
-        .upgrade-btn:disabled {
-            background: var(--bg-card);
-            color: var(--text-dim);
-            box-shadow: none;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* INVENTORY & SHOP */
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .balance-pill {
-            background: rgba(244, 184, 20, 0.1);
-            border: 1px solid rgba(244, 184, 20, 0.2);
-            padding: 8px 16px;
-            border-radius: 100px;
-            color: var(--accent-gold);
-            font-weight: 700;
-            font-size: 14px;
-        }
-
-        .inventory-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
-        }
-
-        .item-card {
-            background: var(--bg-panel);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 15px;
-            cursor: pointer;
-            transition: 0.2s;
-            text-align: center;
-            position: relative;
-        }
-
-        .item-card:hover {
-            background: var(--bg-card);
-            transform: translateY(-5px);
-            border-color: rgba(255,255,255,0.1);
-        }
-
-        .item-card.selected {
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
-        }
-
-        .item-card img {
-            width: 70px;
-            height: 70px;
-            margin: 10px 0;
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
-        }
-
-        .item-card .name {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-dim);
-            margin-bottom: 8px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .item-card .price {
-            font-size: 14px;
-            font-weight: 800;
-            color: var(--accent-gold);
-        }
-
-        /* BANNER */
-        .status-banner {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 16px 30px;
-            border-radius: 12px;
-            font-weight: 700;
-            z-index: 100;
-            transform: translateX(200%);
-            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .status-banner.show { transform: translateX(0); }
-        .status-banner.win { background: var(--accent-primary); color: #000; box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3); }
-        .status-banner.lose { background: var(--danger); color: #fff; box-shadow: 0 10px 30px rgba(255, 75, 75, 0.3); }
-
-        /* Кнопки пресетов шанса */
-        .chance-presets {
-            display: flex;
-            gap: 8px;
-            margin-top: 15px;
-        }
-        .preset-btn {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            color: var(--text-dim);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-        .preset-btn:hover { color: #fff; background: #2a3447; }
-
-    </style>
-</head>
-<body>
-
-<div id="banner" class="status-banner">УСПЕХ!</div>
-
-<div class="main-layout">
-    <div class="nav-tabs">
-        <div class="tab active">UPGRADER</div>
-        <div class="tab">MINES</div>
-        <div class="tab">COOLDOWN</div>
-        <div class="tab">SUPPORT</div>
-    </div>
-
-    <div class="upgrader-grid">
-        <div class="drop-zone" id="slot-left">
-            <div class="label">From</div>
-            <div id="left-empty" style="color: var(--text-dim); text-align: center; padding: 20px;">
-                <div style="font-size: 40px; margin-bottom: 10px;">🎒</div>
-                Select item<br>from inventory
-            </div>
-            <div id="left-filled" style="display: none; text-align: center;">
-                <img src="" id="left-img" class="item-visual">
-                <div id="left-name" style="font-weight: 700; font-size: 18px;">Item Name</div>
-                <div id="left-price" style="color: var(--accent-gold); font-weight: 800;">0 ⭐️</div>
-            </div>
+  return (
+    <div className="min-h-screen bg-[#0e1621] text-gray-100 font-sans flex flex-col">
+      {/* --- HEADER --- */}
+      <header className="flex justify-between items-center px-6 py-4 bg-[#17212b] shadow-lg border-b border-[#2b3a4a]">
+        <div className="flex items-center gap-2 text-2xl font-bold text-[#38b6ff] tracking-wider">
+          <span className="text-3xl">🚀</span> TG UPGRADER
         </div>
+        
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={() => setShowRules(true)}
+            className="text-sm font-medium text-gray-300 hover:text-white transition"
+          >
+            Правила
+          </button>
+          {user ? (
+            <div className="flex items-center gap-3 bg-[#242f3d] px-4 py-2 rounded-full border border-[#2b3a4a]">
+              <span className="text-xl">{user.avatar}</span>
+              <span className="font-semibold">{user.name}</span>
+            </div>
+          ) : (
+            <button 
+              onClick={handleLogin}
+              className="bg-[#2aabee] hover:bg-[#2298d6] text-white px-5 py-2.5 rounded-lg font-bold transition-all shadow-[0_0_15px_rgba(42,171,238,0.3)]"
+            >
+              Войти через Google
+            </button>
+          )}
+        </div>
+      </header>
 
-        <div class="wheel-container">
-            <div class="wheel-box">
-                <div class="wheel-outer-ring" id="wheel-ring"></div>
-                <div class="wheel-ticker" id="ticker"></div>
-                <div class="wheel-inner">
-                    <div class="chance-val" id="chance-display">0%</div>
-                    <div class="chance-label" id="chance-text">CHANCE</div>
+      {/* --- MAIN CONTENT --- */}
+      <main className="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 flex flex-col lg:flex-row gap-6">
+        
+        {/* ЛЕВАЯ ПАНЕЛЬ: Инвентарь пользователя */}
+        <div className="flex-1 bg-[#17212b] rounded-2xl p-5 border border-[#2b3a4a] flex flex-col">
+          <h2 className="text-xl font-bold mb-4 text-[#8a9ba8]">Ваш инвентарь</h2>
+          {user ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 overflow-y-auto max-h-[600px] pr-2 custom-scrollbar">
+              {inventory.map((item, idx) => (
+                <div 
+                  key={idx} 
+                  onClick={() => !isUpgrading && setSelectedLeft(item)}
+                  className={`cursor-pointer rounded-xl p-3 flex flex-col items-center justify-center gap-2 border-2 transition-all ${
+                    selectedLeft === item ? 'border-[#38b6ff] bg-[#242f3d]' : 'border-transparent bg-[#242f3d] hover:border-[#2b3a4a]'
+                  }`}
+                >
+                  <div className="text-4xl">{item.image}</div>
+                  <div className="text-xs font-semibold text-center truncate w-full">{item.name}</div>
+                  <div className="text-sm font-bold text-[#2aabee]">${item.price}</div>
                 </div>
+              ))}
             </div>
-            <div style="width: 100%;">
-                <button class="upgrade-btn" id="upgrade-btn" disabled onclick="handleUpgrade()">Upgrade Item</button>
-                <div class="chance-presets">
-                    <button class="preset-btn">10%</button>
-                    <button class="preset-btn">25%</button>
-                    <button class="preset-btn">50%</button>
-                    <button class="preset-btn">MAX</button>
+          ) : (
+            <div className="flex-1 flex items-center justify-center text-[#8a9ba8]">
+              Войдите, чтобы увидеть инвентарь
+            </div>
+          )}
+        </div>
+
+        {/* ЦЕНТР: Апгрейдер */}
+        <div className="flex-[1.2] flex flex-col items-center justify-center p-4 bg-gradient-to-b from-[#17212b] to-[#0e1621] rounded-2xl border border-[#2b3a4a] relative overflow-hidden">
+          
+          {/* Свечение на фоне */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#2aabee] opacity-5 blur-[100px] rounded-full pointer-events-none"></div>
+
+          <div className="text-center mb-8 z-10">
+            <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#38b6ff] to-[#0077ff]">
+              UPGRADE YOUR GIFT
+            </h1>
+            <p className="text-[#8a9ba8] mt-2">Выберите предмет слева и справа</p>
+          </div>
+
+          {/* КОЛЕСО АПГРЕЙДА */}
+          <div className="relative w-72 h-72 rounded-full flex items-center justify-center z-10 mb-8 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+            {/* Круг шанса (Conic Gradient) */}
+            <div 
+              className="absolute inset-0 rounded-full transition-all duration-500"
+              style={{ 
+                background: chanceValue > 0 
+                  ? `conic-gradient(#2aabee ${chanceValue}%, #242f3d ${chanceValue}%)` 
+                  : '#242f3d',
+                boxShadow: 'inset 0 0 20px rgba(0,0,0,0.5)'
+              }}
+            ></div>
+            
+            {/* Внутренний темный круг */}
+            <div className="absolute inset-3 bg-[#17212b] rounded-full flex flex-col items-center justify-center overflow-hidden border border-[#2b3a4a]">
+              
+              {/* Анимированные Эмодзи */}
+              <div 
+                className="absolute w-full h-full flex items-center justify-center transition-transform duration-[3000ms] ease-out"
+                style={{ transform: `rotate(${rotation}deg)` }}
+              >
+                {isUpgrading && (
+                  <>
+                    <span className="absolute top-4 text-2xl">💎</span>
+                    <span className="absolute bottom-4 text-2xl">🔥</span>
+                    <span className="absolute left-4 text-2xl">⚡</span>
+                    <span className="absolute right-4 text-2xl">⭐</span>
+                  </>
+                )}
+              </div>
+
+              {/* Отображение шанса */}
+              {!isUpgrading && (
+                <div className="z-10 flex flex-col items-center">
+                  <span className="text-4xl font-black text-white">{chanceValue}%</span>
+                  <span className="text-xs font-bold text-[#8a9ba8] uppercase">Шанс успеха</span>
                 </div>
+              )}
+
+              {/* Результат */}
+              {!isUpgrading && upgradeResult && (
+                <div className={`absolute inset-0 flex items-center justify-center bg-opacity-90 backdrop-blur-sm z-20 ${upgradeResult === 'win' ? 'bg-green-600' : 'bg-red-600'}`}>
+                  <span className="text-3xl font-black text-white drop-shadow-lg">
+                    {upgradeResult === 'win' ? 'SUCCESS! 🎉' : 'CRASHED 💥'}
+                  </span>
+                </div>
+              )}
             </div>
+          </div>
+
+          <div className="flex items-center gap-6 w-full px-8 z-10">
+            <div className="flex-1 flex justify-end">
+              {selectedLeft ? (
+                <div className="text-right">
+                  <div className="text-3xl">{selectedLeft.image}</div>
+                  <div className="text-[#8a9ba8] text-sm">{selectedLeft.name}</div>
+                  <div className="text-xl font-bold text-gray-300">${selectedLeft.price}</div>
+                </div>
+              ) : <div className="text-[#8a9ba8]">Пусто</div>}
+            </div>
+            <div className="text-2xl text-[#2b3a4a] font-black">▶</div>
+            <div className="flex-1">
+              {selectedRight ? (
+                <div>
+                  <div className="text-3xl">{selectedRight.image}</div>
+                  <div className="text-[#8a9ba8] text-sm">{selectedRight.name}</div>
+                  <div className="text-xl font-bold text-[#2aabee]">${selectedRight.price}</div>
+                </div>
+              ) : <div className="text-[#8a9ba8]">Пусто</div>}
+            </div>
+          </div>
+
+          <button 
+            onClick={handleUpgrade}
+            disabled={!selectedLeft || !selectedRight || isUpgrading}
+            className="mt-8 w-4/5 py-4 rounded-xl font-black text-xl uppercase tracking-widest transition-all
+              disabled:bg-[#242f3d] disabled:text-[#8a9ba8] disabled:cursor-not-allowed
+              bg-[#2aabee] hover:bg-[#2298d6] text-white shadow-[0_0_20px_rgba(42,171,238,0.4)] hover:shadow-[0_0_30px_rgba(42,171,238,0.6)]"
+          >
+            {isUpgrading ? 'Upgrading...' : 'Upgrade'}
+          </button>
         </div>
 
-        <div class="drop-zone" id="slot-right">
-            <div class="label">To</div>
-            <div id="right-empty" style="color: var(--text-dim); text-align: center; padding: 20px;">
-                <div style="font-size: 40px; margin-bottom: 10px;">🏆</div>
-                Target item<br>from shop
-            </div>
-            <div id="right-filled" style="display: none; text-align: center;">
-                <img src="" id="right-img" class="item-visual">
-                <div id="right-name" style="font-weight: 700; font-size: 18px;">Item Name</div>
-                <div id="right-price" style="color: var(--accent-gold); font-weight: 800;">0 ⭐️</div>
-            </div>
+        {/* ПРАВАЯ ПАНЕЛЬ: Выбор цели */}
+        <div className="flex-1 bg-[#17212b] rounded-2xl p-5 border border-[#2b3a4a] flex flex-col">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold text-[#8a9ba8]">Цель</h2>
+            <select 
+              className="bg-[#242f3d] text-sm text-white px-3 py-1.5 rounded-lg border border-[#2b3a4a] outline-none"
+              value={activeCategory}
+              onChange={(e) => setActiveCategory(e.target.value)}
+            >
+              <option value="all">Все подарки</option>
+              <option value="basic">Basic</option>
+              <option value="rare">Rare</option>
+              <option value="epic">Epic</option>
+              <option value="legendary">Legendary</option>
+            </select>
+          </div>
+          
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 overflow-y-auto max-h-[600px] pr-2 custom-scrollbar">
+            {filteredGifts.map((item) => (
+              <div 
+                key={item.id} 
+                onClick={() => !isUpgrading && setSelectedRight(item)}
+                className={`cursor-pointer rounded-xl p-3 flex flex-col items-center justify-center gap-2 border-2 transition-all ${
+                  selectedRight?.id === item.id ? 'border-[#38b6ff] bg-[#242f3d]' : 'border-transparent bg-[#242f3d] hover:border-[#2b3a4a]'
+                }`}
+              >
+                <div className="text-4xl">{item.image}</div>
+                <div className="text-xs font-semibold text-center truncate w-full">{item.name}</div>
+                <div className="text-sm font-bold text-[#2aabee]">${item.price}</div>
+              </div>
+            ))}
+          </div>
         </div>
+      </main>
+
+      {/* --- МОДАЛЬНОЕ ОКНО ПРАВИЛ --- */}
+      {showRules && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-[#17212b] border border-[#2b3a4a] rounded-2xl max-w-lg w-full p-6 relative">
+            <button 
+              onClick={() => setShowRules(false)}
+              className="absolute top-4 right-4 text-[#8a9ba8] hover:text-white text-xl"
+            >
+              ✕
+            </button>
+            <h2 className="text-2xl font-bold text-white mb-4">Правила игры: Апгрейд</h2>
+            <div className="space-y-4 text-[#8a9ba8] text-sm">
+              <p><strong className="text-white">1. Выбор предметов:</strong> Выберите подарок из вашего инвентаря (слева) и желаемый более дорогой подарок из магазина (справа).</p>
+              <p><strong className="text-white">2. Расчет шанса:</strong> Шанс на успех рассчитывается по строгой формуле стоимости: <code>(Цена вашего предмета / Цена желаемого) * 100%</code>. Максимальный шанс — 100%.</p>
+              <p><strong className="text-white">3. Анимация и Результат:</strong> После нажатия на "Upgrade" запускается генератор случайных чисел. Если число попадает в ваш диапазон вероятности (выделено синим на круге) — вы получаете новый предмет.</p>
+              <p><strong className="text-white">4. Поражение:</strong> При неудачном исходе ваш первоначальный предмет сгорает и пропадает из инвентаря.</p>
+              <p><strong className="text-white">5. Правила всех игр:</strong> На сайте честный Random. Администрация не несет ответственности за сгоревшие предметы. Играйте ответственно.</p>
+            </div>
+            <button 
+              onClick={() => setShowRules(false)}
+              className="mt-6 w-full bg-[#242f3d] hover:bg-[#2b3a4a] text-white py-3 rounded-lg font-bold transition"
+            >
+              Понятно
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* --- FOOTER --- */}
+      <footer className="bg-[#17212b] border-t border-[#2b3a4a] p-6 text-center mt-auto">
+        <div className="text-[#8a9ba8] text-sm">
+          <p>© 2026 TG Upgrader Clone. Создано для демонстрации.</p>
+          <p className="mt-2 text-[#38b6ff] font-medium">Техническая поддержка в Telegram: @om1a2</p>
+        </div>
+      </footer>
+
+      {/* Глобальные стили для скроллбара, чтобы он выглядел аккуратно (можно добавить в globals.css) */}
+      <style dangerouslySetInnerHTML={{__html: `
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #17212b; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #2b3a4a; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #38b6ff; }
+      `}} />
     </div>
-
-    <div class="inventory-section">
-        <div class="section-header">
-            <div class="section-title"><span>🎒</span> MY INVENTORY</div>
-            <div class="balance-pill"><span id="balance">5000</span> ⭐️</div>
-        </div>
-        <div class="inventory-grid" id="inv-grid"></div>
-    </div>
-
-    <div class="inventory-section">
-        <div class="section-header">
-            <div class="section-title"><span>🛒</span> UPGRADE SHOP</div>
-        </div>
-        <div class="inventory-grid" id="shop-grid"></div>
-    </div>
-</div>
-
-<script>
-    const NFT_DATA = {
-        "lolly": { name: "Lollipop", img: "https://i.postimg.cc/k47vYg7k/lollipop.png", price: 50 },
-        "pigeon": { name: "Letter Pigeon", img: "https://i.postimg.cc/g0gDcgL4/pigeon.png", price: 150 },
-        "cake": { name: "Birthday Cake", img: "https://i.postimg.cc/0jXm8Yf1/cake.png", price: 400 },
-        "duck": { name: "Rubber Duck", img: "https://i.postimg.cc/N0fL8vWh/duck.png", price: 1000 },
-        "star": { name: "Premium Star", img: "https://i.postimg.cc/85zXbXfG/star.png", price: 2500 },
-        "heart": { name: "Cyber Heart", img: "https://i.postimg.cc/PqMvMDp6/heart.png", price: 7000 },
-        "bitcoin": { name: "Crypto Coin", img: "https://i.postimg.cc/02Xm6zZ2/bitcoin.png", price: 20000 },
-        "crown": { name: "Royal Crown", img: "https://i.postimg.cc/9QvXbXb8/crown.png", price: 100000 }
-    };
-
-    let userInv = ["lolly", "pigeon", "cake", "duck"];
-    let balance = 5000;
-    let selectedInvIdx = null;
-    let selectedShopKey = null;
-    let isSpinning = false;
-
-    function init() {
-        renderInv();
-        renderShop();
-    }
-
-    function renderInv() {
-        const grid = document.getElementById('inv-grid');
-        grid.innerHTML = userInv.map((key, i) => `
-            <div class="item-card ${selectedInvIdx === i ? 'selected' : ''}" onclick="selectInv(${i})">
-                <div class="price">${NFT_DATA[key].price} ⭐️</div>
-                <img src="${NFT_DATA[key].img}">
-                <div class="name">${NFT_DATA[key].name}</div>
-            </div>
-        `).join('');
-    }
-
-    function renderShop() {
-        const grid = document.getElementById('shop-grid');
-        grid.innerHTML = Object.keys(NFT_DATA).map(key => `
-            <div class="item-card ${selectedShopKey === key ? 'selected' : ''}" onclick="selectShop('${key}')">
-                <div class="price">${NFT_DATA[key].price} ⭐️</div>
-                <img src="${NFT_DATA[key].img}">
-                <div class="name">${NFT_DATA[key].name}</div>
-            </div>
-        `).join('');
-    }
-
-    function selectInv(idx) {
-        if(isSpinning) return;
-        selectedInvIdx = (selectedInvIdx === idx) ? null : idx;
-        renderInv();
-        updateWorkspace();
-    }
-
-    function selectShop(key) {
-        if(isSpinning) return;
-        selectedShopKey = (selectedShopKey === key) ? null : key;
-        renderShop();
-        updateWorkspace();
-    }
-
-    function updateWorkspace() {
-        const leftFilled = document.getElementById('left-filled');
-        const leftEmpty = document.getElementById('left-empty');
-        if(selectedInvIdx !== null) {
-            const item = NFT_DATA[userInv[selectedInvIdx]];
-            leftEmpty.style.display = 'none';
-            leftFilled.style.display = 'block';
-            document.getElementById('left-img').src = item.img;
-            document.getElementById('left-name').innerText = item.name;
-            document.getElementById('left-price').innerText = item.price + ' ⭐️';
-        } else {
-            leftEmpty.style.display = 'block';
-            leftFilled.style.display = 'none';
-        }
-
-        const rightFilled = document.getElementById('right-filled');
-        const rightEmpty = document.getElementById('right-empty');
-        if(selectedShopKey !== null) {
-            const item = NFT_DATA[selectedShopKey];
-            rightEmpty.style.display = 'none';
-            rightFilled.style.display = 'block';
-            document.getElementById('right-img').src = item.img;
-            document.getElementById('right-name').innerText = item.name;
-            document.getElementById('right-price').innerText = item.price + ' ⭐️';
-        } else {
-            rightEmpty.style.display = 'block';
-            rightFilled.style.display = 'none';
-        }
-
-        calculateChance();
-    }
-
-    function calculateChance() {
-        const display = document.getElementById('chance-display');
-        const ring = document.getElementById('wheel-ring');
-        const btn = document.getElementById('upgrade-btn');
-
-        if(selectedInvIdx !== null && selectedShopKey !== null) {
-            const p1 = NFT_DATA[userInv[selectedInvIdx]].price;
-            const p2 = NFT_DATA[selectedShopKey].price;
-            let chance = (p1 / p2) * 100;
-            if(chance > 95) chance = 95;
-            
-            display.innerText = chance.toFixed(2) + '%';
-            
-            const deg = (chance / 100) * 360;
-            const start = 180 - (deg/2);
-            const end = 180 + (deg/2);
-            
-            ring.style.background = `conic-gradient(from 0deg, 
-                var(--bg-card) 0deg ${start}deg, 
-                var(--accent-primary) ${start}deg ${end}deg, 
-                var(--bg-card) ${end}deg 360deg)`;
-            
-            btn.disabled = false;
-            return chance;
-        } else {
-            display.innerText = '0%';
-            ring.style.background = `var(--bg-card)`;
-            btn.disabled = true;
-            return 0;
-        }
-    }
-
-    function handleUpgrade() {
-        if(isSpinning) return;
-        const chance = calculateChance();
-        isSpinning = true;
-        document.getElementById('upgrade-btn').disabled = true;
-
-        const isWin = (Math.random() * 100) <= chance;
-        const ticker = document.getElementById('ticker');
-        
-        // Логика вращения
-        const arc = (chance / 100) * 360;
-        const halfArc = arc / 2;
-        let targetDeg = 0;
-
-        if(isWin) {
-            // Попадаем в зеленый сектор (центр на 180град)
-            targetDeg = 180 + (Math.random() * (halfArc * 0.8) - (halfArc * 0.4));
-        } else {
-            // Попадаем мимо
-            const offset = halfArc + 20;
-            targetDeg = Math.random() > 0.5 ? (Math.random() * (180 - offset)) : (180 + offset + Math.random() * (180 - offset));
-        }
-
-        const totalRotation = 360 * 6 + targetDeg; // 6 полных оборотов + цель
-        
-        ticker.style.transition = 'transform 4s cubic-bezier(0.15, 0, 0.15, 1)';
-        ticker.style.transform = `translateX(-50%) rotate(${totalRotation}deg)`;
-
-        setTimeout(() => {
-            finishUpgrade(isWin);
-        }, 4100);
-    }
-
-    function finishUpgrade(win) {
-        const banner = document.getElementById('banner');
-        banner.innerText = win ? 'SUCCESSFUL UPGRADE!' : 'UPGRADE FAILED';
-        banner.className = `status-banner show ${win ? 'win' : 'lose'}`;
-        
-        const shopKey = selectedShopKey;
-        userInv.splice(selectedInvIdx, 1);
-        if(win) userInv.push(shopKey);
-
-        setTimeout(() => {
-            banner.className = 'status-banner';
-            isSpinning = false;
-            selectedInvIdx = null;
-            const ticker = document.getElementById('ticker');
-            ticker.style.transition = 'none';
-            ticker.style.transform = `translateX(-50%) rotate(${parseInt(ticker.style.transform.replace(/[^\d.]/g, '')) % 360}deg)`;
-            renderInv();
-            updateWorkspace();
-        }, 2000);
-    }
-
-    window.onload = init;
-</script>
-
-</body>
-</html>
+  );
+}
