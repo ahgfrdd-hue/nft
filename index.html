@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFT Upgrade</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            background-color: #12131a;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 0; padding: 20px;
+        }
+        /* Круговой прогресс-бар как на видео */
+        .circle-container {
+            position: relative;
+            width: 200px; height: 200px;
+            margin: 30px auto;
+        }
+        .circle-svg {
+            transform: rotate(-90deg);
+        }
+        .circle-bg {
+            fill: none; stroke: #232533; stroke-width: 12;
+        }
+        .circle-progress {
+            fill: none; stroke: #00ff66; stroke-width: 12;
+            stroke-dasharray: 565; stroke-dashoffset: 565;
+            transition: stroke-dashoffset 2s cubic-bezier(0.1, 0.8, 0.2, 1);
+        }
+        .percentage {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 28px; font-weight: bold;
+        }
+        .btn-upgrade {
+            background: linear-gradient(90deg, #ffcc00, #ff9900);
+            border: none; color: black; font-weight: bold;
+            padding: 15px 40px; font-size: 18px;
+            border-radius: 10px; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 153, 0, 0.4);
+        }
+        .btn-upgrade:disabled { background: #444; color: #888; box-shadow: none; }
+    </style>
+</head>
+<body>
+
+    <h2>⚡ СИМУЛЯТОР АПГРЕЙДА NFT ⚡</h2>
+    <p>Шанс на успех: <span id="chance-text">50</span>%</p>
+
+    <div class="circle-container">
+        <svg class="circle-svg" width="200" height="200">
+            <circle class="circle-bg" cx="100" cy="100" r="90"></circle>
+            <circle class="circle-progress" id="progress" cx="100" cy="100" r="90"></circle>
+        </svg>
+        <div class="percentage" id="percent-display">0%</div>
+    </div>
+
+    <button class="btn-upgrade" id="upgrade-btn" onclick="startUpgrade()">UPGRADE</button>
+    <h3 id="result" style="margin-top: 20px;"></h3>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Разворачиваем на весь экран
+
+        let chance = Math.floor(Math.random() * 60) + 15; // Рандомный шанс от 15% до 75%
+        document.getElementById('chance-text').innerText = chance;
+
+        function startUpgrade() {
+            const btn = document.getElementById('upgrade-btn');
+            const progressCircle = document.getElementById('progress');
+            const percentDisplay = document.getElementById('percent-display');
+            const resultText = document.getElementById('result');
+            
+            btn.disabled = true;
+            resultText.innerText = "⚡ Синхронизация с блокчейном...";
+            
+            // Расчет круга (длина окружности 2 * pi * r = 2 * 3.14 * 90 = 565)
+            const maxOffset = 565;
+            const targetOffset = maxOffset - (maxOffset * chance) / 100;
+            
+            // Запускаем плавную анимацию заполнения круга
+            progressCircle.style.strokeDashoffset = targetOffset;
+            
+            // Анимация цифр процентов внутри круга
+            let currentPercent = 0;
+            let interval = setInterval(() => {
+                if (currentPercent >= chance) {
+                    clearInterval(interval);
+                    determineResult();
+                } else {
+                    currentPercent++;
+                    percentDisplay.innerText = currentPercent + "%";
+                }
+            }, 2000 / chance); // подгоняем под 2 секунды анимации CSS
+        }
+
+        function determineResult() {
+            const roll = Math.floor(Math.random() * 100) + 1;
+            const resultText = document.getElementById('result');
+            
+            if (roll <= chance) {
+                resultText.innerHTML = "<span style='color: #00ff66;'>🎉 УСПЕХ! NFT ПОВЫШЕН!</span>";
+                document.getElementById('progress').style.stroke = "#00ff66";
+            } else {
+                resultText.innerHTML = "<span style='color: #ff3333;'>💀 СГОРЕЛ! Ошибка транзакции.</span>";
+                document.getElementById('progress').style.stroke = "#ff3333";
+            }
+        }
+    </script>
+</body>
+</html>
