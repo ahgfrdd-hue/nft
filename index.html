@@ -41,6 +41,11 @@
             100% { transform: translateY(0px); }
         }
 
+        .support-info {
+            text-align: center; color: var(--text-muted); font-size: 13px; font-weight: 600; margin-bottom: 15px; width: 100%; max-width: 1280px; text-align: right;
+        }
+        .support-info span { color: var(--accent-yellow); }
+
         .app-container {
             width: 100%; max-width: 1280px;
             display: flex; flex-direction: column; gap: 20px;
@@ -69,10 +74,10 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center;
         }
         
-        .gift-img-large {
-            width: 140px; height: 140px; object-fit: contain; margin: 15px 0;
+        .emoji-large {
+            font-size: 90px; margin: 15px 0;
             filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6));
-            animation: float 4s ease-in-out infinite;
+            animation: float 4s ease-in-out infinite; line-height: 1;
         }
         
         .item-name { color: #fff; font-size: 20px; font-weight: 800; margin-top: 5px; }
@@ -109,7 +114,7 @@
         }
 
         .wheel-inner {
-            width: 210px; height: 210px;
+            width: 240px; height: 240px; /* Сделал кольцо тоньше */
             background: var(--bg-main); border-radius: 50%;
             z-index: 3; display: flex; flex-direction: column; align-items: center; justify-content: center;
             box-shadow: inset 0 0 30px rgba(0,0,0,0.9);
@@ -118,17 +123,17 @@
         .wheel-percent { font-size: 38px; font-weight: 800; color: var(--accent-yellow); letter-spacing: -0.5px; }
         .wheel-text { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-top: 4px; }
 
-        .wheel-ticker {
-            position: absolute; bottom: 0; left: 50%; width: 4px; height: 100%;
-            transform-origin: center center; transform: translateX(-50%) rotate(0deg);
-            z-index: 4; pointer-events: none;
+        /* Анимация крутящейся точки */
+        .wheel-dot-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 50%; z-index: 4; pointer-events: none;
+            transform-origin: center;
         }
-        .ticker-arrow {
-            position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%);
-            width: 0; height: 0;
-            border-left: 10px solid transparent; border-right: 10px solid transparent;
-            border-bottom: 16px solid var(--accent-yellow);
-            filter: drop-shadow(0 0 8px var(--accent-yellow));
+        
+        .wheel-dot {
+            position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+            width: 16px; height: 16px; background: #fff; border-radius: 50%;
+            box-shadow: 0 0 10px #fff, 0 0 20px var(--accent-yellow);
         }
 
         .btn-upgrade {
@@ -141,12 +146,12 @@
 
         /* МНОЖИТЕЛИ СПРАВА */
         .multiplier-grid {
-            margin-top: auto; display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px;
+            margin-top: auto; display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
             border-top: 1px solid var(--border-color); padding-top: 15px; width: 100%;
         }
         .btn-mult {
             background: #171d2e; border: 1px solid var(--border-color); color: #8a96b3;
-            padding: 8px 0; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer;
+            padding: 8px 0; font-size: 12px; font-weight: 700; border-radius: 6px; cursor: pointer;
             transition: all 0.15s ease; text-align: center;
         }
         .btn-mult:hover:not(:disabled) { background: #212942; color: #fff; border-color: #3b486e; }
@@ -188,8 +193,8 @@
         .rarity-line { position: absolute; top: 0; left: 0; width: 100%; height: 3px; border-radius: 12px 12px 0 0; }
         .card-price { width: 100%; text-align: right; font-size: 11px; font-weight: 700; color: var(--accent-yellow); }
         
-        .gift-img-small { width: 60px; height: 60px; object-fit: contain; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3)); transition: transform 0.2s ease; margin: 5px 0;}
-        .skin-card:hover .gift-img-small { transform: scale(1.06); }
+        .emoji-small { font-size: 45px; margin: 5px 0; transition: transform 0.2s ease; line-height: 1; }
+        .skin-card:hover .emoji-small { transform: scale(1.1); }
 
         .skin-card .name { font-size: 11px; color: #e1e6f0; font-weight: 600; text-align: center; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
@@ -207,13 +212,15 @@
 </head>
 <body>
 
+<div class="support-info">Поддержка: <span>@om1a2</span></div>
+
 <div class="app-container">
     <div class="top-section">
         
         <div class="panel">
             <div class="panel-title">Выбор предметов и баланса</div>
             <div id="preview-left-content" class="item-preview" style="display: none;">
-                <img src="" class="gift-img-large" id="input-img" alt="">
+                <div class="emoji-large" id="input-emoji">✨</div>
                 <div class="item-name" id="input-title">Название</div>
                 <div class="item-price" id="input-price">0 ⭐️</div>
             </div>
@@ -235,8 +242,8 @@
             <div class="result-banner" id="res-banner">УСПЕХ!</div>
             <div class="circle-container">
                 <div class="upgrader-wheel" id="wheel-canvas">
-                    <div class="wheel-ticker" id="wheel-ticker">
-                        <div class="ticker-arrow"></div>
+                    <div class="wheel-dot-container" id="wheel-dot-container">
+                        <div class="wheel-dot"></div>
                     </div>
                     <div class="wheel-inner">
                         <div class="wheel-percent" id="chance-display">50.00%</div>
@@ -250,7 +257,7 @@
         <div class="panel">
             <div class="panel-title">Целевой апгрейд</div>
             <div id="preview-right-content" class="item-preview" style="display: none;">
-                <img src="" class="gift-img-large" id="target-img" alt="">
+                <div class="emoji-large" id="target-emoji">✨</div>
                 <div class="item-name" id="target-title">Название</div>
                 <div class="item-price" id="target-price">0 ⭐️</div>
             </div>
@@ -260,12 +267,11 @@
             </div>
 
             <div class="multiplier-grid">
-                <button class="btn-mult" id="m-x4" onclick="applyQuickMultiplier(4, false)">x4</button>
-                <button class="btn-mult" id="m-x8" onclick="applyQuickMultiplier(8, false)">x8</button>
-                <button class="btn-mult" id="m-x25" onclick="applyQuickMultiplier(25, false)">x25</button>
-                <button class="btn-mult" id="m-35" onclick="applyQuickMultiplier(35, true)">35%</button>
-                <button class="btn-mult" id="m-40" onclick="applyQuickMultiplier(40, true)">40%</button>
-                <button class="btn-mult" id="m-75" onclick="applyQuickMultiplier(75, true)">75%</button>
+                <button class="btn-mult" id="m-1.5" onclick="applyQuickMultiplier(1.5)">1.5x</button>
+                <button class="btn-mult" id="m-2" onclick="applyQuickMultiplier(2)">2x</button>
+                <button class="btn-mult" id="m-5" onclick="applyQuickMultiplier(5)">5x</button>
+                <button class="btn-mult" id="m-10" onclick="applyQuickMultiplier(10)">10x</button>
+                <button class="btn-mult" id="m-20" onclick="applyQuickMultiplier(20)">20x</button>
             </div>
         </div>
     </div>
@@ -289,6 +295,13 @@
 </div>
 
 <script>
+    // --- АДМИН / СИСТЕМНЫЕ НАСТРОЙКИ ---
+    const ADMIN_SETTINGS = {
+        nerfFactor: 0.85, // Глобальный нерф шансов апгрейда (-15%)
+        bannedUsers: ['@test_loser'], // Юзеры, у которых шанс всегда 0 (бан)
+        currentUser: '@player' // Имитация текущего юзера
+    };
+
     // --- ЗВУКОВОЙ ДВИЖОК ---
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     let audioCtx;
@@ -330,21 +343,20 @@
         }
     }
 
-    // --- ОБНОВЛЕННАЯ БАЗА РЕАЛЬНЫХ ПОДАРКОВ TELEGRAM (БЕЗ ЭМОДЗИ) ---
+    // --- БАЗА ПОДАРКОВ (ПЕРЕВЕДЕНА НА ЭМОДЗИ) ---
     const NFT_DATABASE = {
-        "lollipop": { name: "Lollipop", img: "https://i.postimg.cc/k47vYg7k/lollipop.png", price: 50, rarity: "var(--tier-common)" },
-        "pigeon": { name: "Letter Pigeon", img: "https://i.postimg.cc/g0gDcgL4/pigeon.png", price: 150, rarity: "var(--tier-common)" },
-        "cake": { name: "Birthday Cake", img: "https://i.postimg.cc/0jXm8Yf1/cake.png", price: 400, rarity: "var(--tier-common)" },
-        "duck": { name: "Rubber Duck", img: "https://i.postimg.cc/N0fL8vWh/duck.png", price: 1000, rarity: "var(--tier-rare)" },
-        "star_bottle": { name: "Star Bottle", img: "https://i.postimg.cc/85zXbXfG/star.png", price: 2500, rarity: "var(--tier-rare)" },
-        "plush_pepe": { name: "Plush Pepe", img: "https://i.postimg.cc/HkWZzX9S/hotdog.png", price: 6000, rarity: "var(--tier-epic)" },
-        "cyber_heart": { name: "Cyber Heart", img: "https://i.postimg.cc/PqMvMDp6/heart.png", price: 15000, rarity: "var(--tier-epic)" },
-        "pavel_durov": { name: "Pavel Durov", img: "https://i.postimg.cc/hGvXbXbY/cap.png", price: 40000, rarity: "var(--tier-epic)" },
-        "magic_crystal": { name: "Magic Crystal", img: "https://i.postimg.cc/fyXbXbF3/crystal.png", price: 100000, rarity: "var(--tier-legendary)" },
-        "telegram_bear": { name: "Telegram Bear", img: "https://i.postimg.cc/9QvXbXb8/crown.png", price: 250000, rarity: "var(--tier-immortal)" }
+        "lollipop": { name: "Lollipop", emoji: "🍭", price: 50, rarity: "var(--tier-common)" },
+        "pigeon": { name: "Letter Pigeon", emoji: "🕊️", price: 150, rarity: "var(--tier-common)" },
+        "cake": { name: "Birthday Cake", emoji: "🎂", price: 400, rarity: "var(--tier-common)" },
+        "duck": { name: "Rubber Duck", emoji: "🦆", price: 1000, rarity: "var(--tier-rare)" },
+        "star_bottle": { name: "Star Bottle", emoji: "🌟", price: 2500, rarity: "var(--tier-rare)" },
+        "plush_pepe": { name: "Plush Pepe", emoji: "🐸", price: 6000, rarity: "var(--tier-epic)" },
+        "cyber_heart": { name: "Cyber Heart", emoji: "💖", price: 15000, rarity: "var(--tier-epic)" },
+        "pavel_durov": { name: "Pavel Durov", emoji: "🧢", price: 40000, rarity: "var(--tier-epic)" },
+        "magic_crystal": { name: "Magic Crystal", emoji: "💎", price: 100000, rarity: "var(--tier-legendary)" },
+        "telegram_bear": { name: "Telegram Bear", emoji: "🐻", price: 250000, rarity: "var(--tier-immortal)" }
     };
 
-    // Состояние игры
     let freebetBalance = 15000;
     let userInventory = ["lollipop", "pigeon", "cake", "duck", "star_bottle"]; 
     let selectedInvIdx = null;
@@ -377,7 +389,7 @@
             card.innerHTML = `
                 <div class="rarity-line" style="background: ${item.rarity}"></div>
                 <div class="card-price">${item.price} ⭐️</div>
-                <img src="${item.img}" class="gift-img-small" alt="">
+                <div class="emoji-small">${item.emoji}</div>
                 <div class="name">${item.name}</div>
             `;
             grid.appendChild(card);
@@ -399,7 +411,7 @@
             card.innerHTML = `
                 <div class="rarity-line" style="background: ${item.rarity}"></div>
                 <div class="card-price">${item.price} ⭐️</div>
-                <img src="${item.img}" class="gift-img-small" alt="">
+                <div class="emoji-small">${item.emoji}</div>
                 <div class="name">${item.name}</div>
             `;
             grid.appendChild(card);
@@ -438,26 +450,17 @@
         const slider = document.getElementById("balance-slider");
         addedBalance = parseInt(slider.value);
         document.getElementById("slider-val").innerText = addedBalance;
-        updateWorkspace(false); // Не сбрасываем слайдер рекурсивно
+        updateWorkspace(false); 
     }
 
-    // --- КНОПКИ МГНОВЕННЫХ МНОЖИТЕЛЕЙ (МЕХАНИКА АПГРЕЙДЕРА) ---
-    function applyQuickMultiplier(value, isPercentage = false) {
+    function applyQuickMultiplier(multiplier) {
         if (selectedInvIdx === null || isUpgrading) return;
         playSound('click');
         
         const inputItem = NFT_DATABASE[userInventory[selectedInvIdx]];
-        let neededTargetPrice = 0;
+        let neededTargetPrice = inputItem.price * multiplier;
+        activeMultId = `m-${multiplier}`;
 
-        if (!isPercentage) {
-            neededTargetPrice = inputItem.price * value;
-            activeMultId = `m-x${value}`;
-        } else {
-            neededTargetPrice = (inputItem.price + addedBalance) / (value / 100);
-            activeMultId = `m-${value}`;
-        }
-
-        // Поиск ближайшего подходящего подарка в магазине
         let bestKey = null;
         let minDiff = Infinity;
 
@@ -477,14 +480,12 @@
             renderShop();
             updateWorkspace(false);
             
-            // Подсвечиваем активную кнопку множителя
             document.querySelectorAll('.btn-mult').forEach(b => b.classList.remove('active'));
             const activeBtn = document.getElementById(activeMultId);
             if (activeBtn) activeBtn.classList.add('active');
         }
     }
 
-    // Расчет шансов и обновление UI элементов
     function updateWorkspace(resetSlider = true) {
         const pLeftContent = document.getElementById("preview-left-content");
         const pLeftEmpty = document.getElementById("preview-left-empty");
@@ -493,7 +494,7 @@
         if (selectedInvIdx !== null) {
             const item = NFT_DATABASE[userInventory[selectedInvIdx]];
             pLeftEmpty.style.display = "none"; pLeftContent.style.display = "flex";
-            document.getElementById("input-img").src = item.img;
+            document.getElementById("input-emoji").innerText = item.emoji;
             document.getElementById("input-title").innerText = item.name;
             document.getElementById("input-price").innerText = item.price + " ⭐️";
             
@@ -514,19 +515,20 @@
         if (selectedShopKey !== null) {
             const item = NFT_DATABASE[selectedShopKey];
             pRightEmpty.style.display = "none"; pRightContent.style.display = "flex";
-            document.getElementById("target-img").src = item.img;
+            document.getElementById("target-emoji").innerText = item.emoji;
             document.getElementById("target-title").innerText = item.name;
             document.getElementById("target-price").innerText = item.price + " ⭐️";
         } else { pRightContent.style.display = "none"; pRightEmpty.style.display = "block"; }
 
-        // Расчет финального процента
         const btnUpgrade = document.getElementById("btn-upgrade-main");
         
         if (selectedInvIdx !== null && selectedShopKey !== null) {
             const costFrom = NFT_DATABASE[userInventory[selectedInvIdx]].price + addedBalance;
             const costTo = NFT_DATABASE[selectedShopKey].price;
             
-            calculatedChance = Math.min((costFrom / costTo) * 100, 100);
+            // Расчет шанса с учетом глобального нерфа
+            let rawChance = (costFrom / costTo) * 100 * ADMIN_SETTINGS.nerfFactor;
+            calculatedChance = Math.min(rawChance, 100);
             
             const displayChance = document.getElementById("chance-display");
             displayChance.innerText = calculatedChance.toFixed(2) + "%";
@@ -542,7 +544,6 @@
                 displayChance.style.color = "var(--accent-red)";
             }
             
-            // Если выбран тот же или более дешевый предмет, апгрейд невозможен
             if (costTo <= NFT_DATABASE[userInventory[selectedInvIdx]].price) {
                 displayChance.innerText = "0.00%";
                 document.getElementById("chance-status").innerText = "выберите цель выше";
@@ -562,23 +563,19 @@
         }
     }
 
+    // Отрисовка сектора по кругу (начинается с 0 градусов сверху)
     function drawWheelSector(chance) {
         const wheel = document.getElementById("wheel-canvas");
         if (chance <= 0) { wheel.style.background = `#151a29`; return; }
         
         const arcDegrees = (chance / 100) * 360;
-        // Сектор победы располагается внизу, центрируясь по стрелке (180 градусов)
-        const startDeg = 180 - (arcDegrees / 2);
-        const endDeg = 180 + (arcDegrees / 2);
-        
         wheel.style.background = `conic-gradient(from 0deg, 
-            #151a29 0deg, #151a29 ${startDeg}deg, 
-            var(--accent-yellow) ${startDeg}deg, var(--accent-yellow) ${endDeg}deg, 
-            #151a29 ${endDeg}deg, #151a29 360deg
+            var(--accent-yellow) 0deg, var(--accent-yellow) ${arcDegrees}deg, 
+            #151a29 ${arcDegrees}deg, #151a29 360deg
         )`;
     }
 
-    // --- ИСПРАВЛЕННАЯ АНИМАЦИЯ И ЛОГИКА ВРАЩЕНИЯ ---
+    // Классическая анимация кольца: точка бегает по границе
     function startUpgrade() {
         if (isUpgrading || selectedInvIdx === null || selectedShopKey === null) return;
         
@@ -588,28 +585,28 @@
         document.querySelectorAll('.btn-mult').forEach(b => b.disabled = true);
         document.getElementById("balance-slider").disabled = true;
 
-        const isWin = (Math.random() * 100) <= calculatedChance;
-        const arcDegrees = (calculatedChance / 100) * 360;
+        let isWin = (Math.random() * 100) <= calculatedChance;
         
-        let targetAngle = 0;
-        if (isWin) {
-            // Попадание в желтый сектор победы (внизу)
-            const half = arcDegrees / 2; 
-            targetAngle = 180 + (Math.random() * (half * 0.9) * (Math.random() > 0.5 ? 1 : -1));
-        } else {
-            // Промах мимо сектора
-            const half = arcDegrees / 2;
-            if (Math.random() > 0.5) { 
-                targetAngle = Math.random() * (180 - half - 10); 
-            } else { 
-                targetAngle = (180 + half + 10) + (Math.random() * (180 - half - 10)); 
-            }
+        // Проверка на админский бан пользователя
+        if (ADMIN_SETTINGS.bannedUsers.includes(ADMIN_SETTINGS.currentUser)) {
+            isWin = false; 
         }
 
-        const totalSpins = 2160; // Ровно 6 полных кругов для динамики
+        const arcDegrees = (calculatedChance / 100) * 360;
+        let targetAngle = 0;
+
+        if (isWin) {
+            // Если победа - точка остановится внутри желтой зоны (от 0 до arcDegrees)
+            targetAngle = Math.random() * (arcDegrees - 5);
+        } else {
+            // Если проигрыш - за пределами желтой зоны
+            targetAngle = arcDegrees + 5 + Math.random() * (360 - arcDegrees - 10);
+        }
+
+        const totalSpins = 360 * 5; // 5 полных оборотов
         const finalRotation = totalSpins + targetAngle;
         
-        const ticker = document.getElementById("wheel-ticker");
+        const dotContainer = document.getElementById("wheel-dot-container");
         document.getElementById("res-banner").style.opacity = "0";
 
         let startTimestamp = null;
@@ -621,14 +618,12 @@
             const elapsed = timestamp - startTimestamp;
             const progress = Math.min(elapsed / duration, 1);
             
-            // Плавное замедление (Cubic Out)
             const easeOut = 1 - Math.pow(1 - progress, 3);
             const currentAngle = finalRotation * easeOut;
 
-            ticker.style.transform = `translateX(-50%) rotate(${currentAngle}deg)`;
+            dotContainer.style.transform = `rotate(${currentAngle}deg)`;
 
-            // Звук трещотки колеса каждые 15 градусов прокрутки
-            if (currentAngle - lastTickAngle > 15) {
+            if (currentAngle - lastTickAngle > 20) {
                 playSound('tick');
                 lastTickAngle = currentAngle;
             }
@@ -645,7 +640,6 @@
     function finishUpgrade(isWin) {
         const banner = document.getElementById("res-banner");
         
-        // Списываем использованный баланс и предмет
         freebetBalance -= addedBalance;
         userInventory.splice(selectedInvIdx, 1);
 
@@ -660,12 +654,19 @@
             playSound('lose');
         }
 
-        // Сброс состояния
         selectedInvIdx = null;
         selectedShopKey = null;
         addedBalance = 0;
         isUpgrading = false;
         
+        // Сброс вращения точки
+        setTimeout(() => {
+            const dot = document.getElementById("wheel-dot-container");
+            dot.style.transition = 'transform 0.5s ease';
+            dot.style.transform = `rotate(0deg)`;
+            setTimeout(() => { dot.style.transition = 'none'; }, 500);
+        }, 3000);
+
         document.querySelectorAll('.btn-mult').forEach(b => b.disabled = false);
         document.getElementById("balance-slider").disabled = false;
         
