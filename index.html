@@ -13,37 +13,70 @@
             background-color: #0b0d14;
             color: #ffffff;
             display: flex;
+            min-height: 100vh;
+        }
+
+        /* Лайв лента слева */
+        .live-feed-sidebar {
+            width: 100px;
+            height: 100vh;
+            background: #11131f;
+            border-right: 2px solid #23273e;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow: hidden;
+            display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
+            padding-top: 15px;
+            z-index: 100;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+        }
+
+        .live-item {
+            width: 70px;
+            height: 70px;
+            background: #151828;
+            border: 2px solid #23273e;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: slideDown 0.5s ease-out;
+            position: relative;
+        }
+
+        .live-item img { width: 50px; height: 50px; object-fit: contain; }
+        .live-item.high-value { border-color: #ffd700; box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Основной контент (сдвинут вправо из-за сайдбара) */
+        .main-wrapper {
+            margin-left: 100px;
+            width: calc(100% - 100px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             padding-bottom: 50px;
         }
 
-        /* Шапка с профилем */
         header {
             width: 100%;
             padding: 15px 40px;
             background-color: #151828;
             border-bottom: 2px solid #23273e;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            justify-content: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
         .logo { color: #0088cc; font-size: 24px; font-weight: 900; letter-spacing: 1px; }
-        
-        .profile {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            background: #1e2235;
-            padding: 10px 20px;
-            border-radius: 30px;
-            border: 1px solid #23273e;
-        }
-
-        .balance { font-size: 18px; font-weight: 700; color: #ffd700; }
 
         /* Зона Апгрейда */
         .upgrade-container {
@@ -77,118 +110,75 @@
         .item-price { font-size: 26px; font-weight: 900; color: #ffd700; }
         .item-name { color: #a0a5c0; margin-top: 10px; font-size: 14px; text-align: center; padding: 0 15px; }
 
-        /* Центральная часть с рулеткой */
+        /* Рулетка */
         .central-block { display: flex; flex-direction: column; align-items: center; position: relative; }
-
         .roulette-container {
-            width: 220px;
-            height: 220px;
-            border-radius: 50%;
-            background-color: #151828;
-            border: 10px solid #1e2235;
-            position: relative;
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 40px rgba(0,0,0,0.6);
-            overflow: hidden;
+            width: 220px; height: 220px; border-radius: 50%;
+            background-color: #151828; border: 10px solid #1e2235;
+            position: relative; margin-bottom: 30px; display: flex;
+            justify-content: center; align-items: center;
+            box-shadow: 0 0 40px rgba(0,0,0,0.6); overflow: hidden;
         }
-
-        /* Заливка шанса */
-        .chance-bg {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: conic-gradient(#00ff00 0deg, #151828 0deg); /* Меняется через JS */
-            z-index: 1;
-        }
-
-        /* Внутренний круг для красоты */
-        .inner-circle {
-            position: absolute;
-            width: 170px;
-            height: 170px;
-            background-color: #11131f;
-            border-radius: 50%;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            border: 4px solid #1e2235;
-        }
-
-        /* Стрелка */
-        .arrow-container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 3;
-            transition: transform 4s cubic-bezier(0.1, 0.8, 0.1, 1); /* Плавная остановка */
-        }
-
-        .arrow {
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-bottom: 30px solid #ffffff;
-            filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
-        }
-
+        .chance-bg { position: absolute; width: 100%; height: 100%; border-radius: 50%; z-index: 1; }
+        .inner-circle { position: absolute; width: 170px; height: 170px; background-color: #11131f; border-radius: 50%; z-index: 2; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 4px solid #1e2235; }
+        .arrow-container { position: absolute; width: 100%; height: 100%; z-index: 3; transition: transform 4s cubic-bezier(0.1, 0.8, 0.1, 1); }
+        .arrow { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 30px solid #ffffff; filter: drop-shadow(0 0 5px rgba(255,255,255,0.5)); }
         .chance-value { font-size: 36px; font-weight: 900; z-index: 4; }
         .chance-label { font-size: 12px; color: #6a7199; text-transform: uppercase; z-index: 4; }
 
         .btn-upgrade {
             background: linear-gradient(90deg, #0088cc, #005580);
-            border: none;
-            padding: 18px 50px;
-            color: white;
-            font-size: 20px;
-            font-weight: 900;
-            border-radius: 40px;
-            cursor: pointer;
-            text-transform: uppercase;
-            box-shadow: 0 5px 20px rgba(0, 136, 204, 0.4);
-            transition: 0.2s;
+            border: none; padding: 18px 50px; color: white;
+            font-size: 20px; font-weight: 900; border-radius: 40px;
+            cursor: pointer; text-transform: uppercase;
+            box-shadow: 0 5px 20px rgba(0, 136, 204, 0.4); transition: 0.2s;
+            width: 100%;
         }
-
         .btn-upgrade:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0, 136, 204, 0.6); }
         .btn-upgrade:disabled { background: #23273e; color: #4d5373; box-shadow: none; cursor: not-allowed; transform: none; }
 
-        /* Разделы инвентаря и магазина */
-        .section-container { margin-top: 60px; width: 90%; max-width: 1100px; }
-        .section-title { margin-bottom: 20px; font-size: 22px; color: #ffffff; border-bottom: 2px solid #23273e; padding-bottom: 15px; display: flex; justify-content: space-between; }
-        
-        .items-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 20px;
+        /* Зеленые Множители */
+        .multipliers {
+            display: flex; gap: 10px; margin-top: 15px; width: 100%; justify-content: center;
         }
+        .btn-mult {
+            background: #11131f; border: 2px solid #00ff00; color: #00ff00;
+            padding: 8px 15px; font-weight: 900; border-radius: 8px; cursor: pointer;
+            transition: 0.2s; font-size: 14px; box-shadow: 0 0 10px rgba(0,255,0,0.1);
+        }
+        .btn-mult:hover { background: #00ff00; color: #11131f; box-shadow: 0 0 20px rgba(0,255,0,0.4); }
+
+        /* Секции инвентаря и магазина */
+        .section-container { margin-top: 60px; width: 90%; max-width: 1100px; }
+        .section-title { 
+            margin-bottom: 20px; font-size: 22px; color: #ffffff; 
+            border-bottom: 2px solid #23273e; padding-bottom: 15px; 
+            display: flex; justify-content: space-between; align-items: center; 
+        }
+        
+        .inventory-balance {
+            background: #1e2235; padding: 8px 20px; border-radius: 20px;
+            border: 1px solid #0088cc; font-size: 20px; font-weight: 900; color: #ffd700;
+        }
+
+        .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
 
         .grid-item {
-            background: #151828;
-            border: 2px solid #23273e;
-            border-radius: 12px;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            transition: 0.2s;
-            position: relative;
+            background: #151828; border: 2px solid #23273e; border-radius: 12px;
+            padding: 15px; display: flex; flex-direction: column; align-items: center;
+            cursor: pointer; transition: 0.2s; position: relative;
         }
-
         .grid-item:hover { border-color: #0088cc; transform: translateY(-5px); }
         .grid-item.active { border-color: #00ff00; box-shadow: 0 0 15px rgba(0, 255, 0, 0.2); }
         .grid-item img { width: 80px; height: 80px; object-fit: contain; margin-bottom: 15px; }
-        .item-count { position: absolute; top: 10px; right: 10px; background: #23273e; padding: 2px 8px; border-radius: 10px; font-size: 12px; font-weight: bold; }
+
+        /* Кнопка покупки */
+        .btn-buy {
+            background: #00ff00; color: #11131f; border: none;
+            padding: 8px 0; width: 100%; border-radius: 8px; margin-top: 10px;
+            font-weight: bold; cursor: pointer; transition: 0.2s;
+        }
+        .btn-buy:hover { background: #00cc00; transform: scale(1.05); }
 
         .result-overlay { position: absolute; top: -60px; font-size: 28px; font-weight: 900; opacity: 0; transition: 0.3s; text-transform: uppercase; text-shadow: 0 0 20px rgba(0,0,0,0.8); }
         .win-text { color: #00ff00; }
@@ -202,85 +192,88 @@
     <audio id="sound-win" src="win.mp3" preload="auto"></audio>
     <audio id="sound-lose" src="lose.mp3" preload="auto"></audio>
 
-    <header>
-        <div class="logo">UPGRADER.PRO</div>
-        <div class="profile">
-            <div style="color: #6a7199; font-size: 14px;">Мой профиль</div>
-            <div class="balance" id="user-balance">0 ⭐️</div>
-        </div>
-    </header>
-
-    <div class="upgrade-container">
-        <div class="item-box selected" id="source-box">
-            <div class="box-title">Ваш предмет</div>
-            <img src="" class="item-image none-selected" id="source-img">
-            <div class="item-price" id="source-price">-</div>
-            <div class="item-name" id="source-name">Выберите предмет снизу</div>
+    <div class="live-feed-sidebar" id="live-feed">
         </div>
 
-        <div class="central-block">
-            <div class="result-overlay" id="result-msg">УСПЕХ!</div>
-            <div class="roulette-container">
-                <div class="chance-bg" id="chance-bg"></div>
-                <div class="inner-circle">
-                    <div class="chance-value" id="chance-display">0%</div>
-                    <div class="chance-label">Шанс</div>
+    <div class="main-wrapper">
+        <header>
+            <div class="logo">UPGRADER.PRO</div>
+        </header>
+
+        <div class="upgrade-container">
+            <div class="item-box selected" id="source-box">
+                <div class="box-title">Ваш предмет</div>
+                <img src="" class="item-image none-selected" id="source-img">
+                <div class="item-price" id="source-price">-</div>
+                <div class="item-name" id="source-name">Выберите из инвентаря</div>
+            </div>
+
+            <div class="central-block">
+                <div class="result-overlay" id="result-msg">УСПЕХ!</div>
+                <div class="roulette-container">
+                    <div class="chance-bg" id="chance-bg"></div>
+                    <div class="inner-circle">
+                        <div class="chance-value" id="chance-display">0%</div>
+                        <div class="chance-label">Шанс</div>
+                    </div>
+                    <div class="arrow-container" id="arrow-container">
+                        <div class="arrow"></div>
+                    </div>
                 </div>
-                <div class="arrow-container" id="arrow-container">
-                    <div class="arrow"></div>
+                <button class="btn-upgrade" id="btn-upgrade" onclick="startUpgrade()" disabled>UPGRADE</button>
+                
+                <div class="multipliers">
+                    <button class="btn-mult" onclick="applyMultiplier(2)">2X</button>
+                    <button class="btn-mult" onclick="applyMultiplier(5)">5X</button>
+                    <button class="btn-mult" onclick="applyMultiplier(8)">8X</button>
+                    <button class="btn-mult" onclick="applyMultiplier(10)">10X</button>
                 </div>
             </div>
-            <button class="btn-upgrade" id="btn-upgrade" onclick="startUpgrade()" disabled>UPGRADE</button>
-        </div>
 
-        <div class="item-box" id="target-box">
-            <div class="box-title">Желаемый предмет</div>
-            <img src="" class="item-image none-selected" id="target-img">
-            <div class="item-price" id="target-price">-</div>
-            <div class="item-name" id="target-name">Выберите предмет снизу</div>
-        </div>
-    </div>
-
-    <div class="section-container">
-        <div class="section-title">
-            <span>Мой Инвентарь</span>
-        </div>
-        <div class="items-grid" id="inventory-grid">
+            <div class="item-box" id="target-box">
+                <div class="box-title">Желаемый предмет</div>
+                <img src="" class="item-image none-selected" id="target-img">
+                <div class="item-price" id="target-price">-</div>
+                <div class="item-name" id="target-name">Выберите из магазина</div>
             </div>
-    </div>
-
-    <div class="section-container" style="margin-top: 30px;">
-        <div class="section-title">
-            <span>Доступно для апгрейда</span>
         </div>
-        <div class="items-grid" id="store-grid">
+
+        <div class="section-container">
+            <div class="section-title">
+                <span>Мой Инвентарь</span>
+                <div class="inventory-balance" id="user-balance">0 ⭐️</div>
             </div>
+            <div class="items-grid" id="inventory-grid"></div>
+        </div>
+
+        <div class="section-container" style="margin-top: 30px;">
+            <div class="section-title">
+                <span>Магазин Подарков (Цели)</span>
+            </div>
+            <div class="items-grid" id="store-grid"></div>
+        </div>
     </div>
 
     <script>
-        // База всех предметов
         const allItems = [
             { id: 1, name: "Обычная Звезда", price: 100, img: "https://em-content.zobj.net/source/telegram/386/star_2b50.webp" },
             { id: 2, name: "Новогодняя Елка", price: 250, img: "https://em-content.zobj.net/source/telegram/386/christmas-tree_1f384.webp" },
             { id: 3, name: "Золотое Сердце", price: 1000, img: "https://em-content.zobj.net/source/telegram/386/yellow-heart_1f49b.webp" },
             { id: 4, name: "Премиум Корона", price: 5000, img: "https://em-content.zobj.net/source/telegram/386/crown_1f451.webp" },
-            { id: 5, name: "Блестящая Желейная Лягушка", price: 15000, img: "16148.jpg" }
+            { id: 5, name: "Желейная Лягушка", price: 15000, img: "16148.jpg" }
         ];
 
-        // Состояние игрока
-        let playerBalance = 50000; // Стартовый баланс просто для красоты
+        let playerBalance = 50000; 
         let playerInventory = [
             {...allItems[0], uniqueId: Date.now() + 1}, 
-            {...allItems[0], uniqueId: Date.now() + 2},
-            {...allItems[1], uniqueId: Date.now() + 3}
-        ]; // Даем игроку пару предметов для старта
+            {...allItems[2], uniqueId: Date.now() + 2}
+        ]; 
 
         let selectedSource = null;
         let selectedTarget = null;
         let isUpgrading = false;
         let currentRotation = 0;
 
-        // Звуки (с защитой от ошибок, если файлы не загружены)
         const sounds = {
             tick: document.getElementById('sound-tick'),
             win: document.getElementById('sound-win'),
@@ -288,13 +281,63 @@
         };
 
         function playSound(type) {
-            try {
-                sounds[type].currentTime = 0;
-                sounds[type].play().catch(e => console.log("Нет файла звука или браузер блокирует autoplay"));
-            } catch (e) {}
+            try { sounds[type].currentTime = 0; sounds[type].play().catch(()=>{}); } catch (e) {}
         }
 
-        // Отрисовка инвентаря
+        // --- ЛАЙВ ЛЕНТА ---
+        function addLiveDrop() {
+            const feed = document.getElementById('live-feed');
+            const randomItem = allItems[Math.floor(Math.random() * allItems.length)];
+            
+            const div = document.createElement('div');
+            div.className = `live-item ${randomItem.price >= 5000 ? 'high-value' : ''}`;
+            div.innerHTML = `<img src="${randomItem.img}">`;
+            
+            feed.prepend(div);
+            
+            // Удаляем старые, чтобы не засорять память (оставляем макс 10 штук)
+            if (feed.children.length > 10) {
+                feed.removeChild(feed.lastChild);
+            }
+        }
+        setInterval(addLiveDrop, 2500); // Генерируем новый дроп каждые 2.5 секунды
+
+        // --- ПОКУПКА ПРЕДМЕТА ---
+        function buyItem(item, event) {
+            event.stopPropagation(); // Чтобы не сработало выделение карточки
+            if (playerBalance >= item.price) {
+                playerBalance -= item.price;
+                playerInventory.push({ ...item, uniqueId: Date.now() });
+                renderInventory();
+                // Небольшой визуал
+                const btn = event.target;
+                const oldText = btn.innerText;
+                btn.innerText = "КУПЛЕНО!";
+                btn.style.background = "#fff";
+                setTimeout(() => { btn.innerText = oldText; btn.style.background = "#00ff00"; }, 1000);
+            } else {
+                alert("Недостаточно звезд на балансе!");
+            }
+        }
+
+        // --- ЗЕЛЕНЫЕ МНОЖИТЕЛИ ---
+        function applyMultiplier(mult) {
+            if (!selectedSource) {
+                alert("Сначала выберите свой предмет из инвентаря!");
+                return;
+            }
+            const targetPrice = selectedSource.price * mult;
+            
+            // Ищем предмет, цена которого максимально близка к желаемой
+            let closestItem = allItems.reduce((prev, curr) => {
+                return (Math.abs(curr.price - targetPrice) < Math.abs(prev.price - targetPrice) ? curr : prev);
+            });
+
+            selectedTarget = closestItem;
+            renderStore();
+            updateUI();
+        }
+
         function renderInventory() {
             document.getElementById('user-balance').innerText = playerBalance.toLocaleString() + " ⭐️";
             const grid = document.getElementById('inventory-grid');
@@ -302,6 +345,8 @@
             
             if (playerInventory.length === 0) {
                 grid.innerHTML = '<div style="color: #6a7199;">Инвентарь пуст</div>';
+                // Если сгорел последний выбранный предмет
+                if(selectedSource) { selectedSource = null; updateUI(); }
                 return;
             }
 
@@ -316,14 +361,13 @@
                 div.onclick = () => {
                     if (isUpgrading) return;
                     selectedSource = item;
-                    renderInventory(); // обновляем рамку активности
+                    renderInventory();
                     updateUI();
                 };
                 grid.appendChild(div);
             });
         }
 
-        // Отрисовка магазина
         function renderStore() {
             const grid = document.getElementById('store-grid');
             grid.innerHTML = '';
@@ -335,6 +379,7 @@
                     <img src="${item.img}">
                     <div style="color: #ffd700; font-weight: bold; margin-bottom: 5px;">${item.price} ⭐️</div>
                     <div style="font-size: 12px; color: #a0a5c0; text-align: center;">${item.name}</div>
+                    <button class="btn-buy" onclick="buyItem(${JSON.stringify(item).replace(/"/g, '&quot;')}, event)">КУПИТЬ</button>
                 `;
                 div.onclick = () => {
                     if (isUpgrading) return;
@@ -351,7 +396,6 @@
             const chanceDisplay = document.getElementById('chance-display');
             const chanceBg = document.getElementById('chance-bg');
 
-            // Обновляем левый блок
             if (selectedSource) {
                 document.getElementById('source-img').src = selectedSource.img;
                 document.getElementById('source-img').classList.remove('none-selected');
@@ -363,7 +407,6 @@
                 document.getElementById('source-name').innerText = "Выберите предмет";
             }
 
-            // Обновляем правый блок
             if (selectedTarget) {
                 document.getElementById('target-img').src = selectedTarget.img;
                 document.getElementById('target-img').classList.remove('none-selected');
@@ -375,29 +418,23 @@
                 document.getElementById('target-name').innerText = "Выберите цель";
             }
 
-            // Расчет шанса
             if (selectedSource && selectedTarget) {
                 let chance = (selectedSource.price / selectedTarget.price) * 100;
                 if (chance > 100) chance = 100;
 
                 chanceDisplay.innerText = chance.toFixed(2) + "%";
-                
-                // Заливаем зону победы зеленым
                 const degrees = (chance / 100) * 360;
                 chanceBg.style.background = `conic-gradient(#00ff00 ${degrees}deg, #151828 ${degrees}deg)`;
 
                 if (selectedSource.price >= selectedTarget.price) {
-                    btn.disabled = true;
-                    btn.innerText = "НЕДОСТУПНО";
+                    btn.disabled = true; btn.innerText = "НЕДОСТУПНО";
                 } else {
-                    btn.disabled = false;
-                    btn.innerText = "UPGRADE";
+                    btn.disabled = false; btn.innerText = "UPGRADE";
                 }
             } else {
                 chanceDisplay.innerText = "0%";
                 chanceBg.style.background = `conic-gradient(#00ff00 0deg, #151828 0deg)`;
-                btn.disabled = true;
-                btn.innerText = "ВЫБЕРИТЕ ПРЕДМЕТЫ";
+                btn.disabled = true; btn.innerText = "ВЫБЕРИТЕ ПРЕДМЕТЫ";
             }
         }
 
@@ -411,34 +448,20 @@
             
             btn.disabled = true;
             resultMsg.style.opacity = 0;
-            playSound('tick'); // Звук старта
+            playSound('tick');
             
             let chance = (selectedSource.price / selectedTarget.price) * 100;
             if (chance > 100) chance = 100;
             
-            // Логика рулетки
-            const roll = Math.random() * 100; // Бросаем кубики от 0 до 100
-            const winDegrees = (chance / 100) * 360; // Размер зеленой зоны в градусах
+            const roll = Math.random() * 100; 
+            const winDegrees = (chance / 100) * 360; 
             
-            let targetDegree;
-            if (roll <= chance) {
-                // Победа: стрелка должна остановиться в зеленой зоне (от 0 до winDegrees)
-                targetDegree = Math.random() * winDegrees;
-            } else {
-                // Поражение: стрелка в серой зоне (от winDegrees до 360)
-                targetDegree = winDegrees + Math.random() * (360 - winDegrees);
-            }
-
-            // Крутим стрелку несколько раз (например, 5 полных оборотов = 1800 градусов) + целевой градус
-            const spins = 3600; 
-            currentRotation += spins + targetDegree - (currentRotation % 360);
+            let targetDegree = (roll <= chance) ? (Math.random() * winDegrees) : (winDegrees + Math.random() * (360 - winDegrees));
             
+            currentRotation += 3600 + targetDegree - (currentRotation % 360);
             arrow.style.transform = `rotate(${currentRotation}deg)`;
 
-            // Ждем завершения анимации (4 секунды)
-            setTimeout(() => {
-                finishUpgrade(roll <= chance);
-            }, 4000);
+            setTimeout(() => { finishUpgrade(roll <= chance); }, 4000);
         }
 
         function finishUpgrade(isWin) {
@@ -448,18 +471,13 @@
                 playSound('win');
                 resultMsg.innerText = "УСПЕШНЫЙ АПГРЕЙД!";
                 resultMsg.className = "result-overlay win-text";
-                
-                // Удаляем старый, добавляем новый
                 playerInventory = playerInventory.filter(item => item.uniqueId !== selectedSource.uniqueId);
                 playerInventory.push({ ...selectedTarget, uniqueId: Date.now() });
-                
-                selectedSource = null; // Сбрасываем выбор
+                selectedSource = null; 
             } else {
                 playSound('lose');
                 resultMsg.innerText = "КРАШ!";
                 resultMsg.className = "result-overlay lose-text";
-                
-                // Удаляем сгоревший предмет
                 playerInventory = playerInventory.filter(item => item.uniqueId !== selectedSource.uniqueId);
                 selectedSource = null;
             }
@@ -470,12 +488,10 @@
             renderInventory();
             updateUI();
             
-            setTimeout(() => {
-                resultMsg.style.opacity = 0;
-            }, 3000);
+            setTimeout(() => { resultMsg.style.opacity = 0; }, 3000);
         }
 
-        // Инициализация
+        // Запуск
         renderInventory();
         renderStore();
         updateUI();
