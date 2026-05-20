@@ -3,127 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram NFT Upgrader</title>
+    <title>Telegram Premium NFT Upgrader</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg-color: #0e1015;
-            --panel-color: #161922;
+            --bg-color: #0b0c10;
+            --panel-color: #14161f;
+            --panel-dark: #0f1118;
             --accent-yellow: #ffb700;
             --accent-green: #00ff66;
             --accent-red: #ff3344;
             --text-main: #ffffff;
-            --text-muted: #62687a;
+            --text-muted: #5c6275;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            margin: 0; padding: 10px;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            margin: 0; padding: 12px;
             box-sizing: border-box;
             -webkit-user-select: none;
             user-select: none;
         }
 
-        .header {
-            text-align: center;
-            padding: 5px 0;
-        }
         .header h1 {
-            font-size: 18px; margin: 0; color: var(--accent-yellow);
-            text-transform: uppercase; letter-spacing: 1px;
+            text-align: center;
+            font-size: 16px; margin: 0 0 10px 0; color: var(--accent-yellow);
+            text-transform: uppercase; letter-spacing: 1.5px;
+            text-shadow: 0 0 10px rgba(255,183,0,0.2);
         }
 
-        /* Главная рабочая зона */
+        /* Рабочая зона из видео */
         .workspace {
             display: flex;
             align-items: center;
             justify-content: space-between;
             background: var(--panel-color);
             border-radius: 16px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-            border: 1px solid #222735;
+            padding: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            border: 1px solid #1e2230;
         }
 
         .slot {
             width: 30%;
-            height: 110px;
-            background: #1c202c;
-            border: 2px dashed #31374a;
+            height: 115px;
+            background: var(--panel-dark);
+            border: 2px dashed #262b3d;
             border-radius: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            position: relative;
+            box-sizing: border-box;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .slot.active {
             border: 2px solid var(--accent-yellow);
-            background: #232838;
+            background: #191d2a;
+            box-shadow: 0 0 15px rgba(255,183,0,0.15);
         }
-        .slot .emoji { font-size: 36px; margin-bottom: 4px; }
-        .slot .name { font-size: 11px; color: var(--text-main); font-weight: bold; }
-        .slot .price { font-size: 12px; color: var(--accent-yellow); font-weight: bold; }
-        .slot .placeholder { font-size: 11px; color: var(--text-muted); padding: 5px; }
+        .slot .emoji { font-size: 38px; margin-bottom: 2px; }
+        .slot .name { font-size: 10px; color: var(--text-main); font-weight: bold; }
+        .slot .price { font-size: 11px; color: var(--accent-yellow); font-weight: bold; margin-top: 2px;}
+        .slot .placeholder { font-size: 10px; color: var(--text-muted); padding: 5px; }
 
-        /* Центр: Колесо и Вращающаяся СТРЕЛКА */
+        /* ЦЕНТР: Колесо со стрелкой */
         .center-area {
-            width: 35%;
+            width: 36%;
             display: flex;
             flex-direction: column;
             align-items: center;
             position: relative;
         }
 
-        .circle-container {
+        /* Кастомный круг с поддержкой динамического сектора внизу */
+        .wheel-outer {
             position: relative;
-            width: 120px; height: 120px;
-        }
-        .circle-svg { transform: rotate(-90deg); }
-        .circle-bg { fill: none; stroke: #232838; stroke-width: 10; }
-        
-        /* Сектор шанса (зеленый полукруг) */
-        .circle-progress {
-            fill: none; stroke: var(--accent-green); stroke-width: 10;
-            stroke-dasharray: 314; stroke-dashoffset: 314;
-            transition: stroke-dashoffset 0.3s ease;
+            width: 110px; height: 110px;
+            border-radius: 50%;
+            background: #1c202e;
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* Механика СТРЕЛКИ из видео */
-        .arrow-ticker {
+        /* Внутренняя маска, делающая круг кольцом */
+        .wheel-inner {
+            width: 90px; height: 90px;
+            background: var(--panel-color);
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        /* СТРЕЛКА-УКАЗАТЕЛЬ ИЗ ВИДЕО */
+        .wheel-arrow {
             position: absolute;
             top: 0; left: 50%;
-            width: 4px; height: 60px; /* Радиус вращения */
+            width: 4px; height: 55px; /* Ось вращения от центра вверх */
             transform-origin: bottom center;
             transform: translateX(-50%) rotate(0deg);
+            z-index: 5;
             pointer-events: none;
-            z-index: 10;
         }
-        /* Сама стрелочка на конце оси */
-        .arrow-head {
+        .arrow-pointer {
             width: 0; height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-top: 14px solid var(--accent-yellow);
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-top: 15px solid var(--accent-yellow);
             position: absolute;
-            top: -8px; left: -6px;
-            filter: drop-shadow(0 0 4px rgba(255,183,0,0.8));
+            top: -6px; left: -5px;
+            filter: drop-shadow(0 0 5px rgba(255,183,0,0.8));
         }
 
-        /* Шанс строго ВНИЗУ колеса */
-        .chance-below {
-            margin-top: 8px;
-            font-size: 16px;
-            font-weight: 800;
+        /* Шанс строго ВНИЗУ */
+        .chance-badge {
+            margin-top: 10px;
+            font-size: 14px; font-weight: 800;
             color: #ffffff;
-            background: #1c202c;
-            padding: 4px 12px;
+            background: var(--panel-dark);
+            padding: 4px 14px;
             border-radius: 20px;
-            border: 1px solid #31374a;
+            border: 1px solid #222735;
         }
 
         .btn-upgrade {
@@ -131,15 +136,17 @@
             background: linear-gradient(135deg, #ffc800, #ff9000);
             border: none; color: #000; font-weight: 800;
             padding: 10px; font-size: 13px; border-radius: 10px;
-            cursor: pointer; margin-top: 10px;
-            text-transform: uppercase; letter-spacing: 1px;
+            cursor: pointer; margin-top: 8px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 12px rgba(255,144,0,0.2);
         }
-        .btn-upgrade:disabled { background: #2e3344; color: #555; }
+        .btn-upgrade:disabled { background: #232633; color: #4e5366; box-shadow: none; cursor: not-allowed; }
 
         /* Сетки */
         .section-title {
-            font-size: 13px; font-weight: bold; margin: 12px 0 6px 5px;
+            font-size: 12px; font-weight: bold; margin: 14px 0 6px 4px;
             color: var(--text-muted); display: flex; justify-content: space-between;
+            text-transform: uppercase; letter-spacing: 0.5px;
         }
         .section-title span { color: var(--text-main); }
 
@@ -147,33 +154,39 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 8px;
-            max-height: 170px;
+            max-height: 165px;
             overflow-y: auto;
         }
 
-        /* Карточки предметов */
+        /* Элементы сеток */
         .item-card {
             background: var(--panel-color);
-            border: 1px solid #222735;
-            border-radius: 10px;
+            border: 1px solid #1c1f2b;
+            border-radius: 12px;
             padding: 8px 4px;
             text-align: center;
+            box-sizing: border-box;
+            transition: all 0.2s;
         }
-        .item-card.selected { border-color: var(--accent-yellow); background: #1f2433; }
-        .item-card .item-emoji { font-size: 32px; }
-        .item-card .item-name { font-size: 10px; color: var(--text-muted); margin: 4px 0 2px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .item-card .item-price { font-size: 11px; font-weight: bold; color: #ffb700; }
+        .item-card.selected { 
+            border-color: var(--accent-yellow); 
+            background: #1a1e2b;
+            box-shadow: inset 0 0 10px rgba(255,183,0,0.1);
+        }
+        .item-card .item-emoji { font-size: 30px; }
+        .item-card .item-name { font-size: 10px; color: #8e95a8; margin: 3px 0 1px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .item-card .item-price { font-size: 10px; font-weight: bold; color: var(--accent-yellow); }
 
-        /* Результат */
+        /* Оверлей результатов */
         .result-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(10,12,18,0.95);
+            background: rgba(7,9,13,0.96);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+            z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
         }
         .result-overlay.active { opacity: 1; pointer-events: auto; }
-        .result-status { font-size: 28px; font-weight: 900; margin-bottom: 10px; }
-        .result-gift { font-size: 80px; margin-bottom: 15px; }
+        .result-title { font-size: 32px; font-weight: 900; margin-bottom: 10px; letter-spacing: 1px; }
+        .result-gift { font-size: 85px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -188,17 +201,14 @@
         </div>
 
         <div class="center-area">
-            <div class="circle-container">
-                <div class="arrow-ticker" id="arrow-ticker">
-                    <div class="arrow-head"></div>
+            <div class="wheel-outer" id="wheel-canvas">
+                <div class="wheel-arrow" id="wheel-arrow">
+                    <div class="arrow-pointer"></div>
                 </div>
-                <svg class="circle-svg" width="120" height="120">
-                    <circle class="circle-bg" cx="60" cy="60" r="50"></circle>
-                    <circle class="circle-progress" id="progress-bar" cx="60" cy="60" r="50"></circle>
-                </svg>
+                <div class="wheel-inner"></div>
             </div>
             
-            <div class="chance-below" id="chance-display">0%</div>
+            <div class="chance-badge" id="chance-display">0.00%</div>
             
             <button class="btn-upgrade" id="btn-start" disabled onclick="executeUpgrade()">Upgrade</button>
         </div>
@@ -216,10 +226,10 @@
 
     <div class="result-overlay" id="result-screen" onclick="closeResult()">
         <div style="text-align: center;">
-            <div class="result-status" id="res-title">УСПЕХ!</div>
+            <div class="result-title" id="res-title">УСПЕХ!</div>
             <div class="result-gift" id="res-emoji">🧢</div>
-            <div style="font-size: 16px;" id="res-desc">Вы прокачали предмет!</div>
-            <div style="color: var(--text-muted); margin-top: 25px; font-size: 12px;">Нажмите, чтобы продолжить</div>
+            <div style="font-size: 15px; color: #a4abbf;" id="res-desc">Вы успешно обновили контракт!</div>
+            <div style="color: var(--text-muted); margin-top: 30px; font-size: 11px;">Кликните в любом месте для продолжения</div>
         </div>
     </div>
 
@@ -227,27 +237,75 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Обновленная база данных: Телеграм подарки и ЗВЕЗДЫ (⭐)
+        // Аудиосистема на Web Audio API (Генерация звуков на лету без багов с загрузкой)
+        let audioCtx = null;
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playTickSound() {
+            if (!audioCtx) return;
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.type = 'sine'; osc.frequency.setValueAtTime(900, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.04);
+        }
+
+        function playWinSound() {
+            if (!audioCtx) return;
+            const notes = [523.25, 659.25, 783.99, 1046.50]; // Аккорд до-мажор
+            notes.forEach((freq, i) => {
+                setTimeout(() => {
+                    let osc = audioCtx.createOscillator();
+                    let gain = audioCtx.createGain();
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.type = 'triangle'; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+                }, i * 90);
+            });
+        }
+
+        function playLoseSound() {
+            if (!audioCtx) return;
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(140, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(45, audioCtx.currentTime + 0.5);
+            gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+        }
+
+        // База реальных лимитированных Telegram-подарков (Цены в Звёздах)
         const GIFT_DATABASE = {
             "candy": { name: "Candy Cane", emoji: "🍬", price: 50 },
             "frog": { name: "Toy Frog", emoji: "🐸", price: 150 },
-            "pumpkin": { name: "Pumpkin", emoji: "🎃", price: 350 },
-            "star_badge": { name: "Star Badge", emoji: "⭐", price: 800 },
-            "dur_cap": { name: "Кепка Дурова", emoji: "🧢", price: 2000 },
-            "matrix": { name: "Neo Matrix", emoji: "🫙", price: 5000 },
-            "crystal": { name: "TON Crystal", emoji: "💎", price: 12000 },
-            "dur_crown": { name: "Корона Дурова", emoji: "👑", price: 40000 }
+            "pumpkin": { name: "Pumpkin", emoji: "🎃", price: 400 },
+            "star_badge": { name: "Star Badge", emoji: "⭐", price: 1000 },
+            "dur_hoodie": { name: "Худи Дурова", emoji: "🧥", price: 2500 },
+            "dur_cap": { name: "Кепка Дурова", emoji: "🧢", price: 6000 },
+            "crystal": { name: "TON Crystal", emoji: "💎", price: 15000 },
+            "dur_crown": { name: "Корона Дурова", emoji: "👑", price: 50000 }
         };
 
-        let userInventory = ["candy", "candy", "frog", "pumpkin"]; 
+        let userInventory = ["candy", "candy", "frog", "pumpkin", "star_badge"]; 
         let selectedFromIdx = null;
         let selectedToKey = null;
         let calculatedChance = 0;
+        let currentArrowAngle = 0;
 
         function initApp() {
             renderInventory();
             renderShop();
-            updateCircle(0);
+            updateWheelVisual(0);
         }
 
         function renderInventory() {
@@ -288,12 +346,14 @@
         }
 
         function selectFrom(idx) {
+            initAudio(); // Активация аудио-контекста по клику юзера
             selectedFromIdx = (selectedFromIdx === idx) ? null : idx;
             renderInventory();
             updateSlots();
         }
 
         function selectTo(key) {
+            initAudio();
             selectedToKey = (selectedToKey === key) ? null : key;
             renderShop();
             updateSlots();
@@ -325,50 +385,101 @@
                 const priceFrom = GIFT_DATABASE[userInventory[selectedFromIdx]].price;
                 const priceTo = GIFT_DATABASE[selectedToKey].price;
                 
-                calculatedChance = Math.min(((priceFrom / priceTo) * 100), 100).toFixed(2);
+                calculatedChance = Math.min(((priceFrom / priceTo) * 100), 100);
                 document.getElementById("btn-start").disabled = false;
-                updateCircle(calculatedChance);
+                updateWheelVisual(calculatedChance);
             } else {
                 calculatedChance = 0;
                 document.getElementById("btn-start").disabled = true;
-                updateCircle(0);
+                updateWheelVisual(0);
             }
         }
 
-        function updateCircle(chance) {
-            document.getElementById("chance-display").innerText = chance + "%";
-            const circle = document.getElementById("progress-bar");
-            // Длина окружности круга 2 * PI * 50 = 314
-            const offset = 314 - (314 * chance) / 100;
-            circle.style.strokeDashoffset = offset;
-        }
-
-        // РЕАЛИСТИЧНАЯ КРУТИЛКА СТРЕЛКИ
-        function executeUpgrade() {
-            const btn = document.getElementById("btn-start");
-            const arrow = document.getElementById("arrow-ticker");
-            btn.disabled = true;
-
-            // Генерируем случайную точку остановки стрелки от 0 до 100%
-            const rollResult = Math.random() * 100;
+        // ОТРИСОВКА ЗЕЛЕНОЙ ШТУКИ СТРОГО СНИЗУ КОЛЕСА
+        function updateWheelVisual(chance) {
+            document.getElementById("chance-display").innerText = chance.toFixed(2) + "%";
+            const wheel = document.getElementById("wheel-canvas");
             
-            // Вычисляем угол: 1% = 3.6 градуса. Делаем 5 полных оборотов (1800 градусов) для эффекта разгона
-            const finalAngle = 1800 + (rollResult * 3.6);
+            if (chance <= 0) {
+                wheel.style.background = "#1c202e";
+                return;
+            }
 
-            // Запускаем плавное вращение стрелки через CSS
-            arrow.style.transition = "transform 3s cubic-bezier(0.25, 0.1, 0.1, 1)";
-            arrow.style.transform = `translateX(-50%) rotate(${finalAngle}deg)`;
+            // Математическое выравнивание сектора по центру нижней точки (180 градусов)
+            const sectorHalf = (chance * 3.6) / 2;
+            const startDeg = 180 - sectorHalf;
+            const endDeg = 180 + sectorHalf;
 
-            setTimeout(() => {
-                finalizeUpgrade(rollResult);
-            }, 3100); // По окончании анимации выдаем результат
+            // Рендерим красивый Conic-Gradient
+            wheel.style.background = `conic-gradient(#1c202e ${startDeg}deg, var(--accent-green) ${startDeg}deg ${endDeg}deg, #1c202e ${endDeg}deg)`;
         }
 
-        function finalizeUpgrade(rollResult) {
+        // ФИЗИКА ВРАЩЕНИЯ СТРЕЛКИ СО ЗВУКОМ ТИКАНИЯ
+        function executeUpgrade() {
+            document.getElementById("btn-start").disabled = true;
+            
+            const rollResult = Math.random() * 100; // Серверный бросок от 0 до 100
+            const isWin = rollResult <= calculatedChance;
+
+            const sectorHalf = (calculatedChance * 3.6) / 2;
+            let targetAngle = 0;
+
+            // Подсчет точных координат посадки стрелки на сектор
+            if (isWin) {
+                // Если победа, стрелка садится внутрь зеленого сектора внизу
+                const randomOffset = (Math.random() * (sectorHalf * 2)) - sectorHalf;
+                targetAngle = 180 + randomOffset;
+            } else {
+                // Если проигрыш, стрелка падает мимо сектора
+                const leftArea = 180 - sectorHalf;
+                const rightArea = 180 + sectorHalf;
+                if (Math.random() > 0.5) {
+                    targetAngle = Math.random() * leftArea;
+                } else {
+                    targetAngle = rightArea + (Math.random() * (360 - rightArea));
+                }
+            }
+
+            // Делаем 5 полных оборотов вокруг круга для разгона
+            const totalSpins = 1800; 
+            const destinationAngle = totalSpins + targetAngle;
+            
+            const arrow = document.getElementById("wheel-arrow");
+            let startTime = null;
+            const duration = 3800; // Длительность прокрутки
+            let lastTickAngle = 0;
+
+            function animateWheel(timestamp) {
+                if (!startTime) startTime = timestamp;
+                let elapsed = timestamp - startTime;
+                let progress = Math.min(elapsed / duration, 1);
+                
+                // Плавное торможение (EaseOutCubic)
+                let ease = 1 - Math.pow(1 - progress, 4);
+                let currentAngle = destinationAngle * ease;
+                
+                arrow.style.transform = `translateX(-50%) rotate(${currentAngle}deg)`;
+                
+                // Триггер звука тиканья при пересечении каждых 12 градусов пролета стрелки
+                if (Math.abs(currentAngle - lastTickAngle) >= 12) {
+                    playTickSound();
+                    lastTickAngle = currentAngle;
+                }
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateWheel);
+                } else {
+                    finalizeUpgrade(isWin);
+                }
+            }
+            requestAnimationFrame(animateWheel);
+        }
+
+        function finalizeUpgrade(isWin) {
             const itemFromKey = userInventory[selectedFromIdx];
             const itemToKey = selectedToKey;
 
-            // Удаляем предмет из инвентаря
+            // Списываем вещь-донор
             userInventory.splice(selectedFromIdx, 1);
 
             const overlay = document.getElementById("result-screen");
@@ -376,27 +487,26 @@
             const resEmoji = document.getElementById("res-emoji");
             const resDesc = document.getElementById("res-desc");
 
-            // Если стрелка остановилась внутри зеленой зоны (выиграл)
-            if (rollResult <= calculatedChance) {
+            if (isWin) {
                 userInventory.push(itemToKey);
+                playWinSound(); // Звук победы
                 resTitle.innerText = "УСПЕХ!";
                 resTitle.style.color = "var(--accent-green)";
                 resEmoji.innerText = GIFT_DATABASE[itemToKey].emoji;
-                resDesc.innerText = `Вы успешно апгрейднули в ${GIFT_DATABASE[itemToKey].name}!`;
+                resDesc.innerText = `Контракт выполнен! Вы получили ${GIFT_DATABASE[itemToKey].name}!`;
             } else {
+                playLoseSound(); // Звук взрыва/слива
                 resTitle.innerText = "СГОРЕЛ!";
                 resTitle.style.color = "var(--accent-red)";
                 resEmoji.innerText = "💥";
-                resDesc.innerText = `${GIFT_DATABASE[itemFromKey].name} уничтожен при транзакции.`;
+                resDesc.innerText = `${GIFT_DATABASE[itemFromKey].name} испарился в блокчейне.`;
             }
 
-            // Сброс позиций
             selectedFromIdx = null;
             selectedToKey = null;
             
-            // Возвращаем стрелку в начальное положение без анимации для следующего раза
-            const arrow = document.getElementById("arrow-ticker");
-            arrow.style.transition = "none";
+            // Быстрый сброс позиции стрелки на 0 для следующего захода
+            const arrow = document.getElementById("wheel-arrow");
             arrow.style.transform = "translateX(-50%) rotate(0deg)";
 
             updateSlots();
@@ -406,6 +516,7 @@
 
         function closeResult() {
             document.getElementById("result-screen").classList.remove("active");
+            // Механика анти-слива: если инвентарь пуст, выдаем утешительную конфету
             if (userInventory.length === 0) {
                 userInventory.push("candy");
                 initApp();
