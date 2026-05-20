@@ -15,6 +15,12 @@
             --accent-red: #ff3344;
             --text-main: #ffffff;
             --text-muted: #5c6275;
+            
+            /* Цвета редкостей для карточек */
+            --tier-common: rgba(92, 98, 117, 0.15);
+            --tier-rare: rgba(0, 149, 255, 0.15);
+            --tier-epic: rgba(187, 0, 255, 0.15);
+            --tier-legendary: rgba(255, 183, 0, 0.15);
         }
 
         body {
@@ -34,7 +40,7 @@
             text-shadow: 0 0 10px rgba(255,183,0,0.2);
         }
 
-        /* Рабочая зона из видео */
+        /* Рабочая зона: Слоты + Колесо */
         .workspace {
             display: flex;
             align-items: center;
@@ -59,7 +65,7 @@
             justify-content: center;
             text-align: center;
             box-sizing: border-box;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
         }
         .slot.active {
             border: 2px solid var(--accent-yellow);
@@ -71,7 +77,7 @@
         .slot .price { font-size: 11px; color: var(--accent-yellow); font-weight: bold; margin-top: 2px;}
         .slot .placeholder { font-size: 10px; color: var(--text-muted); padding: 5px; }
 
-        /* ЦЕНТР: Колесо со стрелкой */
+        /* ЦЕНТР: Колесо со стрелкой и процентами внутри */
         .center-area {
             width: 36%;
             display: flex;
@@ -80,31 +86,44 @@
             position: relative;
         }
 
-        /* Кастомный круг с поддержкой динамического сектора внизу */
+        /* Внешнее кольцо (тут рендерится сектор выигрыша через conic-gradient) */
         .wheel-outer {
             position: relative;
-            width: 110px; height: 110px;
+            width: 115px; height: 115px;
             border-radius: 50%;
             background: #1c202e;
-            box-shadow: 0 0 20px rgba(0,0,0,0.4);
+            box-shadow: 0 0 25px rgba(0,0,0,0.5);
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* Внутренняя маска, делающая круг кольцом */
+        /* Внутренний круг — перекрывает центр и хранит ПРОЦЕНТЫ */
         .wheel-inner {
-            width: 90px; height: 90px;
+            width: 93px; height: 93px;
             background: var(--panel-color);
             border-radius: 50%;
             z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
         }
 
-        /* СТРЕЛКА-УКАЗАТЕЛЬ ИЗ ВИДЕО */
+        /* ПРОЦЕНТЫ СТРОГО В КРУГЕ */
+        .percentage-inside {
+            font-size: 16px;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 8px rgba(255,255,255,0.2);
+        }
+
+        /* СТРЕЛКА-УКАЗАТЕЛЬ */
         .wheel-arrow {
             position: absolute;
             top: 0; left: 50%;
-            width: 4px; height: 55px; /* Ось вращения от центра вверх */
+            width: 4px; height: 57.5px; /* Высота до центра круга */
             transform-origin: bottom center;
             transform: translateX(-50%) rotate(0deg);
             z-index: 5;
@@ -117,18 +136,7 @@
             border-top: 15px solid var(--accent-yellow);
             position: absolute;
             top: -6px; left: -5px;
-            filter: drop-shadow(0 0 5px rgba(255,183,0,0.8));
-        }
-
-        /* Шанс строго ВНИЗУ */
-        .chance-badge {
-            margin-top: 10px;
-            font-size: 14px; font-weight: 800;
-            color: #ffffff;
-            background: var(--panel-dark);
-            padding: 4px 14px;
-            border-radius: 20px;
-            border: 1px solid #222735;
+            filter: drop-shadow(0 0 6px rgba(255,183,0,0.9));
         }
 
         .btn-upgrade {
@@ -136,17 +144,17 @@
             background: linear-gradient(135deg, #ffc800, #ff9000);
             border: none; color: #000; font-weight: 800;
             padding: 10px; font-size: 13px; border-radius: 10px;
-            cursor: pointer; margin-top: 8px;
+            cursor: pointer; margin-top: 12px;
             text-transform: uppercase;
             box-shadow: 0 4px 12px rgba(255,144,0,0.2);
         }
         .btn-upgrade:disabled { background: #232633; color: #4e5366; box-shadow: none; cursor: not-allowed; }
 
-        /* Сетки */
+        /* Сетки инвентаря */
         .section-title {
-            font-size: 12px; font-weight: bold; margin: 14px 0 6px 4px;
+            font-size: 11px; font-weight: bold; margin: 14px 0 6px 4px;
             color: var(--text-muted); display: flex; justify-content: space-between;
-            text-transform: uppercase; letter-spacing: 0.5px;
+            text-transform: uppercase; letter-spacing: 0.8px;
         }
         .section-title span { color: var(--text-main); }
 
@@ -158,7 +166,7 @@
             overflow-y: auto;
         }
 
-        /* Элементы сеток */
+        /* Прокачанные карточки предметов под чистую */
         .item-card {
             background: var(--panel-color);
             border: 1px solid #1c1f2b;
@@ -166,21 +174,29 @@
             padding: 8px 4px;
             text-align: center;
             box-sizing: border-box;
-            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+        /* Градиентные подложки под эмодзи в зависимости от редкости */
+        .item-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--card-tier-color, var(--tier-common));
+            pointer-events: none; z-index: 0;
         }
         .item-card.selected { 
             border-color: var(--accent-yellow); 
             background: #1a1e2b;
-            box-shadow: inset 0 0 10px rgba(255,183,0,0.1);
+            box-shadow: 0 0 10px rgba(255,183,0,0.15);
         }
-        .item-card .item-emoji { font-size: 30px; }
-        .item-card .item-name { font-size: 10px; color: #8e95a8; margin: 3px 0 1px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .item-card .item-price { font-size: 10px; font-weight: bold; color: var(--accent-yellow); }
+        .item-card .item-emoji { font-size: 30px; position: relative; z-index: 1; }
+        .item-card .item-name { font-size: 10px; color: #8e95a8; margin: 4px 0 1px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; position: relative; z-index: 1; }
+        .item-card .item-price { font-size: 10px; font-weight: bold; color: var(--accent-yellow); position: relative; z-index: 1; }
 
-        /* Оверлей результатов */
+        /* Экран выигрыша / проигрыша */
         .result-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(7,9,13,0.96);
+            background: rgba(7,9,13,0.97);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
         }
@@ -205,10 +221,10 @@
                 <div class="wheel-arrow" id="wheel-arrow">
                     <div class="arrow-pointer"></div>
                 </div>
-                <div class="wheel-inner"></div>
+                <div class="wheel-inner">
+                    <div class="percentage-inside" id="chance-display">0.00%</div>
+                </div>
             </div>
-            
-            <div class="chance-badge" id="chance-display">0.00%</div>
             
             <button class="btn-upgrade" id="btn-start" disabled onclick="executeUpgrade()">Upgrade</button>
         </div>
@@ -237,12 +253,10 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Аудиосистема на Web Audio API (Генерация звуков на лету без багов с загрузкой)
+        // Генерация звуков через чистый Web Audio API (без скачивания файлов)
         let audioCtx = null;
         function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         }
 
         function playTickSound() {
@@ -250,25 +264,25 @@
             let osc = audioCtx.createOscillator();
             let gain = audioCtx.createGain();
             osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.type = 'sine'; osc.frequency.setValueAtTime(900, audioCtx.currentTime);
-            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.04);
+            osc.type = 'sine'; osc.frequency.setValueAtTime(850, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.07, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.03);
         }
 
         function playWinSound() {
             if (!audioCtx) return;
-            const notes = [523.25, 659.25, 783.99, 1046.50]; // Аккорд до-мажор
+            const notes = [523.25, 659.25, 783.99, 1046.50];
             notes.forEach((freq, i) => {
                 setTimeout(() => {
                     let osc = audioCtx.createOscillator();
                     let gain = audioCtx.createGain();
                     osc.connect(gain); gain.connect(audioCtx.destination);
                     osc.type = 'triangle'; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
-                    osc.start(); osc.stop(audioCtx.currentTime + 0.4);
-                }, i * 90);
+                    gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.35);
+                }, i * 85);
             });
         }
 
@@ -277,30 +291,29 @@
             let osc = audioCtx.createOscillator();
             let gain = audioCtx.createGain();
             osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(140, audioCtx.currentTime);
-            osc.frequency.linearRampToValueAtTime(45, audioCtx.currentTime + 0.5);
-            gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(130, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(40, audioCtx.currentTime + 0.45);
+            gain.gain.setValueAtTime(0.22, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.45);
         }
 
-        // База реальных лимитированных Telegram-подарков (Цены в Звёздах)
+        // База подарков со Звёздами (⭐) и цветовыми тирами редкости
         const GIFT_DATABASE = {
-            "candy": { name: "Candy Cane", emoji: "🍬", price: 50 },
-            "frog": { name: "Toy Frog", emoji: "🐸", price: 150 },
-            "pumpkin": { name: "Pumpkin", emoji: "🎃", price: 400 },
-            "star_badge": { name: "Star Badge", emoji: "⭐", price: 1000 },
-            "dur_hoodie": { name: "Худи Дурова", emoji: "🧥", price: 2500 },
-            "dur_cap": { name: "Кепка Дурова", emoji: "🧢", price: 6000 },
-            "crystal": { name: "TON Crystal", emoji: "💎", price: 15000 },
-            "dur_crown": { name: "Корона Дурова", emoji: "👑", price: 50000 }
+            "candy": { name: "Candy Cane", emoji: "🍬", price: 50, tier: "var(--tier-common)" },
+            "frog": { name: "Toy Frog", emoji: "🐸", price: 150, tier: "var(--tier-common)" },
+            "pumpkin": { name: "Pumpkin", emoji: "🎃", price: 400, tier: "var(--tier-rare)" },
+            "star_badge": { name: "Star Badge", emoji: "⭐", price: 1000, tier: "var(--tier-rare)" },
+            "dur_hoodie": { name: "Худи Дурова", emoji: "🧥", price: 2500, tier: "var(--tier-epic)" },
+            "dur_cap": { name: "Кепка Дурова", emoji: "🧢", price: 6000, tier: "var(--tier-epic)" },
+            "crystal": { name: "TON Crystal", emoji: "💎", price: 15000, tier: "var(--tier-legendary)" },
+            "dur_crown": { name: "Корона Дурова", emoji: "👑", price: 50000, tier: "var(--tier-legendary)" }
         };
 
         let userInventory = ["candy", "candy", "frog", "pumpkin", "star_badge"]; 
         let selectedFromIdx = null;
         let selectedToKey = null;
         let calculatedChance = 0;
-        let currentArrowAngle = 0;
 
         function initApp() {
             renderInventory();
@@ -317,6 +330,7 @@
                 const item = GIFT_DATABASE[key];
                 const card = document.createElement("div");
                 card.className = `item-card ${selectedFromIdx === idx ? 'selected' : ''}`;
+                card.style.setProperty('--card-tier-color', item.tier);
                 card.onclick = () => selectFrom(idx);
                 card.innerHTML = `
                     <div class="item-emoji">${item.emoji}</div>
@@ -335,6 +349,7 @@
                 const item = GIFT_DATABASE[key];
                 const card = document.createElement("div");
                 card.className = `item-card ${selectedToKey === key ? 'selected' : ''}`;
+                card.style.setProperty('--card-tier-color', item.tier);
                 card.onclick = () => selectTo(key);
                 card.innerHTML = `
                     <div class="item-emoji">${item.emoji}</div>
@@ -346,7 +361,7 @@
         }
 
         function selectFrom(idx) {
-            initAudio(); // Активация аудио-контекста по клику юзера
+            initAudio();
             selectedFromIdx = (selectedFromIdx === idx) ? null : idx;
             renderInventory();
             updateSlots();
@@ -395,7 +410,7 @@
             }
         }
 
-        // ОТРИСОВКА ЗЕЛЕНОЙ ШТУКИ СТРОГО СНИЗУ КОЛЕСА
+        // ЗЕЛЕНЫЙ СЕКТОР СТРОГО ВНИЗУ
         function updateWheelVisual(chance) {
             document.getElementById("chance-display").innerText = chance.toFixed(2) + "%";
             const wheel = document.getElementById("wheel-canvas");
@@ -405,32 +420,30 @@
                 return;
             }
 
-            // Математическое выравнивание сектора по центру нижней точки (180 градусов)
+            // Выравнивание сектора по центру нижней точки (180 градусов)
             const sectorHalf = (chance * 3.6) / 2;
             const startDeg = 180 - sectorHalf;
             const endDeg = 180 + sectorHalf;
 
-            // Рендерим красивый Conic-Gradient
             wheel.style.background = `conic-gradient(#1c202e ${startDeg}deg, var(--accent-green) ${startDeg}deg ${endDeg}deg, #1c202e ${endDeg}deg)`;
         }
 
-        // ФИЗИКА ВРАЩЕНИЯ СТРЕЛКИ СО ЗВУКОМ ТИКАНИЯ
+        // КРУТИЛКА
         function executeUpgrade() {
             document.getElementById("btn-start").disabled = true;
             
-            const rollResult = Math.random() * 100; // Серверный бросок от 0 до 100
+            const rollResult = Math.random() * 100;
             const isWin = rollResult <= calculatedChance;
 
             const sectorHalf = (calculatedChance * 3.6) / 2;
             let targetAngle = 0;
 
-            // Подсчет точных координат посадки стрелки на сектор
             if (isWin) {
-                // Если победа, стрелка садится внутрь зеленого сектора внизу
+                // Стрелка падает внутрь нижнего зелёного сектора
                 const randomOffset = (Math.random() * (sectorHalf * 2)) - sectorHalf;
                 targetAngle = 180 + randomOffset;
             } else {
-                // Если проигрыш, стрелка падает мимо сектора
+                // Стрелка падает мимо сектора
                 const leftArea = 180 - sectorHalf;
                 const rightArea = 180 + sectorHalf;
                 if (Math.random() > 0.5) {
@@ -440,13 +453,12 @@
                 }
             }
 
-            // Делаем 5 полных оборотов вокруг круга для разгона
-            const totalSpins = 1800; 
+            const totalSpins = 1800; // 5 кругов разгона
             const destinationAngle = totalSpins + targetAngle;
             
             const arrow = document.getElementById("wheel-arrow");
             let startTime = null;
-            const duration = 3800; // Длительность прокрутки
+            const duration = 3500; // Время вращения
             let lastTickAngle = 0;
 
             function animateWheel(timestamp) {
@@ -454,13 +466,12 @@
                 let elapsed = timestamp - startTime;
                 let progress = Math.min(elapsed / duration, 1);
                 
-                // Плавное торможение (EaseOutCubic)
-                let ease = 1 - Math.pow(1 - progress, 4);
+                let ease = 1 - Math.pow(1 - progress, 4); // Плавный занос стрелки
                 let currentAngle = destinationAngle * ease;
                 
                 arrow.style.transform = `translateX(-50%) rotate(${currentAngle}deg)`;
                 
-                // Триггер звука тиканья при пересечении каждых 12 градусов пролета стрелки
+                // Звук тиканья каждые 12 градусов пролёта стрелки
                 if (Math.abs(currentAngle - lastTickAngle) >= 12) {
                     playTickSound();
                     lastTickAngle = currentAngle;
@@ -479,7 +490,6 @@
             const itemFromKey = userInventory[selectedFromIdx];
             const itemToKey = selectedToKey;
 
-            // Списываем вещь-донор
             userInventory.splice(selectedFromIdx, 1);
 
             const overlay = document.getElementById("result-screen");
@@ -489,13 +499,13 @@
 
             if (isWin) {
                 userInventory.push(itemToKey);
-                playWinSound(); // Звук победы
+                playWinSound();
                 resTitle.innerText = "УСПЕХ!";
                 resTitle.style.color = "var(--accent-green)";
                 resEmoji.innerText = GIFT_DATABASE[itemToKey].emoji;
                 resDesc.innerText = `Контракт выполнен! Вы получили ${GIFT_DATABASE[itemToKey].name}!`;
             } else {
-                playLoseSound(); // Звук взрыва/слива
+                playLoseSound();
                 resTitle.innerText = "СГОРЕЛ!";
                 resTitle.style.color = "var(--accent-red)";
                 resEmoji.innerText = "💥";
@@ -505,7 +515,6 @@
             selectedFromIdx = null;
             selectedToKey = null;
             
-            // Быстрый сброс позиции стрелки на 0 для следующего захода
             const arrow = document.getElementById("wheel-arrow");
             arrow.style.transform = "translateX(-50%) rotate(0deg)";
 
@@ -516,7 +525,6 @@
 
         function closeResult() {
             document.getElementById("result-screen").classList.remove("active");
-            // Механика анти-слива: если инвентарь пуст, выдаем утешительную конфету
             if (userInventory.length === 0) {
                 userInventory.push("candy");
                 initApp();
