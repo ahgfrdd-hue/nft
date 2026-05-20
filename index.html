@@ -2,332 +2,608 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FlashUpgrader LUXE | Telegram Gifts</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upgrader - Luxury Premium Service</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
         :root {
-            --bg-main: #0b0f14;
-            --bg-sec: #12171f;
-            --bg-card: #1a212c;
-            --tg-blue: #0088cc;
-            --accent-glow: rgba(0, 136, 204, 0.5);
-            --accent-star: #fac031;
+            --bg-darker: #0b0e14;
+            --bg-panel: #141925;
+            --bg-card: #1c2331;
+            --accent-primary: #00ff88; /* Основной неоновый зеленый */
+            --accent-gold: #f4b814;
             --text-main: #ffffff;
-            --text-muted: #707a89;
-            --accent-green: #2ecc71;
-            --accent-red: #e74c3c;
+            --text-dim: #8e96aa;
+            --border: rgba(255, 255, 255, 0.05);
+            --danger: #ff4b4b;
+            
+            /* Градиенты категорий */
+            --gradient-common: linear-gradient(180deg, rgba(62, 128, 238, 0.2) 0%, rgba(62, 128, 238, 0) 100%);
+            --gradient-epic: linear-gradient(180deg, rgba(163, 53, 255, 0.2) 0%, rgba(163, 53, 255, 0) 100%);
+            --gradient-legend: linear-gradient(180deg, rgba(255, 184, 0, 0.2) 0%, rgba(255, 184, 0, 0) 100%);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; user-select: none; }
-        body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; overflow-x: hidden; }
+        body {
+            background-color: var(--bg-darker);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
+        }
 
-        /* HEADER */
-        .header { display: flex; justify-content: space-between; align-items: center; height: 70px; background: var(--bg-sec); padding: 0 30px; border-bottom: 2px solid #1c2533; }
-        .logo { font-weight: 900; font-size: 24px; text-transform: uppercase; letter-spacing: 1px; color: #fff; text-shadow: 0 0 10px var(--accent-glow); }
-        .logo span { color: var(--tg-blue); }
-        .online { color: var(--accent-green); font-size: 13px; font-weight: 700; background: rgba(46, 204, 113, 0.1); padding: 8px 15px; border-radius: 20px; border: 1px solid rgba(46, 204, 113, 0.2); }
+        .main-layout {
+            width: 100%;
+            max-width: 1200px;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
 
-        /* LIVE DROPS */
-        .live-drops { display: flex; gap: 15px; padding: 15px; background: var(--bg-main); overflow-x: hidden; border-bottom: 1px solid #1c2533; }
-        .drop-card { background: var(--bg-card); padding: 10px 15px; border-radius: 12px; display: flex; align-items: center; gap: 10px; border: 1px solid #2a3547; min-width: 180px; animation: slideDrop 0.5s ease; }
-        .drop-icon { font-size: 20px; }
-        .drop-name { font-size: 11px; font-weight: 800; color: #fff; }
-        .drop-user { font-size: 10px; color: var(--tg-blue); }
+        /* NAVIGATION TABS */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            background: var(--bg-panel);
+            padding: 6px;
+            border-radius: 12px;
+            width: fit-content;
+            border: 1px solid var(--border);
+        }
 
-        /* UPGRADER ARENA */
-        .arena { display: flex; justify-content: center; align-items: center; gap: 60px; padding: 60px 20px; flex-wrap: wrap; perspective: 1000px; }
+        .tab {
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            color: var(--text-dim);
+        }
 
-        .slot { width: 280px; height: 350px; background: var(--bg-card); border-radius: 24px; border: 2px solid #2a3547; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; transition: 0.4s; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .slot.active { border-color: var(--tg-blue); box-shadow: 0 0 40px var(--accent-glow); transform: translateY(-5px); }
-        .slot-label { position: absolute; top: 20px; font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-        .slot-icon { font-size: 100px; margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(255,255,255,0.2)); }
-        .slot-name { font-size: 16px; font-weight: 800; text-align: center; padding: 0 20px; }
-        .slot-price { margin-top: 10px; color: var(--accent-star); font-weight: 900; font-size: 20px; }
+        .tab.active {
+            background: var(--bg-card);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
 
-        /* CIRCLE & POINTER */
-        .upgrade-center { display: flex; flex-direction: column; align-items: center; gap: 30px; }
-        .circle-wrap { width: 220px; height: 220px; position: relative; display: flex; justify-content: center; align-items: center; }
-        .circle-svg { width: 100%; height: 100%; transform: rotate(-90deg); filter: drop-shadow(0 0 10px var(--accent-glow)); }
-        .circle-bg { fill: none; stroke: #1c2533; stroke-width: 12; }
-        .circle-progress { fill: none; stroke: var(--tg-blue); stroke-width: 12; stroke-dasharray: 0 100; transition: stroke-dasharray 0.3s ease; stroke-linecap: round; }
-        
-        .pointer-container { position: absolute; width: 100%; height: 100%; top: 0; left: 0; transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1); z-index: 10; }
-        .pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 4px; height: 30px; background: #fff; box-shadow: 0 0 15px #fff; border-radius: 2px; }
-        .pointer::after { content: ''; position: absolute; top: -5px; left: 50%; transform: translateX(-50%); border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 12px solid #fff; }
+        /* UPGRADER SECTION */
+        .upgrader-grid {
+            display: grid;
+            grid-template-columns: 1fr 450px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
 
-        .chance-data { position: absolute; text-align: center; z-index: 5; }
-        .chance-num { font-size: 40px; font-weight: 900; color: #fff; text-shadow: 0 0 15px var(--accent-glow); }
-        .chance-txt { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+        .drop-zone {
+            background: var(--bg-panel);
+            border-radius: 24px;
+            height: 380px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+        }
 
-        .btn-upgrade { background: var(--tg-blue); color: #fff; width: 220px; height: 60px; border-radius: 15px; font-weight: 900; font-size: 16px; text-transform: uppercase; cursor: pointer; border: none; box-shadow: 0 0 20px var(--accent-glow); transition: 0.3s; position: relative; overflow: hidden; }
-        .btn-upgrade:hover { transform: scale(1.05); filter: brightness(1.2); }
-        .btn-upgrade:disabled { background: #2a3547; box-shadow: none; cursor: not-allowed; opacity: 0.5; }
-        .btn-upgrade.spinning { animation: pulseBtn 1s infinite; }
+        .drop-zone.filled {
+            background: radial-gradient(circle at center, rgba(0, 255, 136, 0.05) 0%, var(--bg-panel) 100%);
+        }
+
+        .drop-zone .label {
+            font-size: 12px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .item-visual {
+            width: 160px;
+            height: 160px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 30px rgba(0,255,136,0.2));
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* CENTRAL WHEEL */
+        .wheel-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .wheel-box {
+            width: 320px;
+            height: 320px;
+            background: var(--bg-panel);
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 8px solid var(--bg-darker);
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        .wheel-outer-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, var(--bg-card) 0%, var(--bg-card) 100%);
+            transition: background 0.5s ease;
+        }
+
+        .wheel-inner {
+            width: 240px;
+            height: 240px;
+            background: var(--bg-darker);
+            border-radius: 50%;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
+            border: 1px solid var(--border);
+        }
+
+        .chance-val {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--accent-primary);
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+        }
+
+        .chance-label {
+            font-size: 12px;
+            color: var(--text-dim);
+            font-weight: 600;
+        }
+
+        .wheel-ticker {
+            position: absolute;
+            top: -15px;
+            width: 4px;
+            height: 160px;
+            background: #fff;
+            left: 50%;
+            transform-origin: bottom center;
+            transform: translateX(-50%) rotate(0deg);
+            z-index: 20;
+            box-shadow: 0 0 15px #fff;
+            border-radius: 2px;
+        }
+
+        .wheel-ticker::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -6px;
+            width: 16px;
+            height: 16px;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        /* CONTROLS */
+        .upgrade-btn {
+            width: 100%;
+            background: var(--accent-primary);
+            color: #000;
+            border: none;
+            padding: 20px;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            box-shadow: 0 8px 0px #00a85a;
+        }
+
+        .upgrade-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .upgrade-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0px #00a85a;
+        }
+
+        .upgrade-btn:disabled {
+            background: var(--bg-card);
+            color: var(--text-dim);
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
 
         /* INVENTORY & SHOP */
-        .panels { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding: 0 30px 50px; max-width: 1300px; margin: 0 auto; }
-        .panel { background: var(--bg-sec); border-radius: 24px; padding: 25px; border: 1px solid #1c2533; min-height: 500px; }
-        .panel-h { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .panel-title { font-size: 18px; font-weight: 900; letter-spacing: 0.5px; }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
-        .item { background: var(--bg-card); border-radius: 18px; padding: 15px; text-align: center; border: 2px solid transparent; cursor: pointer; transition: 0.3s; position: relative; }
-        .item:hover { transform: translateY(-5px); border-color: #34495e; }
-        .item.selected { border-color: var(--tg-blue); background: rgba(0, 136, 204, 0.05); box-shadow: 0 0 20px rgba(0, 136, 204, 0.2); }
-        .item-icon { font-size: 45px; margin-bottom: 10px; }
-        .item-name { font-size: 12px; font-weight: 700; margin-bottom: 8px; color: #eee; }
-        .item-price { font-size: 14px; font-weight: 900; color: var(--accent-star); }
-        .btn-buy { margin-top: 12px; background: rgba(46, 204, 113, 0.1); color: var(--accent-green); border: 1px solid var(--accent-green); width: 100%; padding: 8px; border-radius: 10px; font-size: 11px; font-weight: 800; }
-        .btn-buy:hover { background: var(--accent-green); color: #fff; }
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-        @keyframes slideDrop { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes pulseBtn { 0% { box-shadow: 0 0 20px var(--accent-glow); } 50% { box-shadow: 0 0 40px var(--accent-glow); } 100% { box-shadow: 0 0 20px var(--accent-glow); } }
+        .balance-pill {
+            background: rgba(244, 184, 20, 0.1);
+            border: 1px solid rgba(244, 184, 20, 0.2);
+            padding: 8px 16px;
+            border-radius: 100px;
+            color: var(--accent-gold);
+            font-weight: 700;
+            font-size: 14px;
+        }
 
-        @media (max-width: 900px) { .panels { grid-template-columns: 1fr; } .arena { gap: 30px; } }
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+        }
+
+        .item-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: center;
+            position: relative;
+        }
+
+        .item-card:hover {
+            background: var(--bg-card);
+            transform: translateY(-5px);
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        .item-card.selected {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
+        }
+
+        .item-card img {
+            width: 70px;
+            height: 70px;
+            margin: 10px 0;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+        }
+
+        .item-card .name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .item-card .price {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--accent-gold);
+        }
+
+        /* BANNER */
+        .status-banner {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 30px;
+            border-radius: 12px;
+            font-weight: 700;
+            z-index: 100;
+            transform: translateX(200%);
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .status-banner.show { transform: translateX(0); }
+        .status-banner.win { background: var(--accent-primary); color: #000; box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3); }
+        .status-banner.lose { background: var(--danger); color: #fff; box-shadow: 0 10px 30px rgba(255, 75, 75, 0.3); }
+
+        /* Кнопки пресетов шанса */
+        .chance-presets {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        .preset-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .preset-btn:hover { color: #fff; background: #2a3447; }
+
     </style>
 </head>
 <body>
 
-    <header class="header">
-        <div class="logo">FLASH<span>UPGRADER</span></div>
-        <div style="display: flex; gap: 20px; align-items: center;">
-            <div class="online">● <span id="online-val">3 142</span> ONLINE</div>
-            <div id="user-display"></div>
+<div id="banner" class="status-banner">УСПЕХ!</div>
+
+<div class="main-layout">
+    <div class="nav-tabs">
+        <div class="tab active">UPGRADER</div>
+        <div class="tab">MINES</div>
+        <div class="tab">COOLDOWN</div>
+        <div class="tab">SUPPORT</div>
+    </div>
+
+    <div class="upgrader-grid">
+        <div class="drop-zone" id="slot-left">
+            <div class="label">From</div>
+            <div id="left-empty" style="color: var(--text-dim); text-align: center; padding: 20px;">
+                <div style="font-size: 40px; margin-bottom: 10px;">🎒</div>
+                Select item<br>from inventory
+            </div>
+            <div id="left-filled" style="display: none; text-align: center;">
+                <img src="" id="left-img" class="item-visual">
+                <div id="left-name" style="font-weight: 700; font-size: 18px;">Item Name</div>
+                <div id="left-price" style="color: var(--accent-gold); font-weight: 800;">0 ⭐️</div>
+            </div>
         </div>
-    </header>
 
-    <div class="live-drops" id="drops-line"></div>
-
-    <div class="arena">
-        <div class="slot" id="slot-my">
-            <div class="slot-label">Ваш предмет</div>
-            <div class="slot-icon" id="my-icon">🎁</div>
-            <div class="slot-name" id="my-name">ВЫБЕРИТЕ ПРЕДМЕТ</div>
-            <div class="slot-price" id="my-price">0 ⭐️</div>
-        </div>
-
-        <div class="upgrade-center">
-            <div class="circle-wrap">
-                <svg class="circle-svg" viewBox="0 0 100 100">
-                    <circle class="circle-bg" cx="50" cy="50" r="42" />
-                    <circle class="circle-progress" id="circle-arc" cx="50" cy="50" r="42" pathLength="100" />
-                </svg>
-                <div class="pointer-container" id="pointer-anim">
-                    <div class="pointer"></div>
-                </div>
-                <div class="chance-data">
-                    <div class="chance-num" id="chance-val">0%</div>
-                    <div class="chance-txt">ШАНС</div>
+        <div class="wheel-container">
+            <div class="wheel-box">
+                <div class="wheel-outer-ring" id="wheel-ring"></div>
+                <div class="wheel-ticker" id="ticker"></div>
+                <div class="wheel-inner">
+                    <div class="chance-val" id="chance-display">0%</div>
+                    <div class="chance-label" id="chance-text">CHANCE</div>
                 </div>
             </div>
-            <button class="btn-upgrade" id="btn-up" onclick="startUpgrade()" disabled>АПГРЕЙД</button>
+            <div style="width: 100%;">
+                <button class="upgrade-btn" id="upgrade-btn" disabled onclick="handleUpgrade()">Upgrade Item</button>
+                <div class="chance-presets">
+                    <button class="preset-btn">10%</button>
+                    <button class="preset-btn">25%</button>
+                    <button class="preset-btn">50%</button>
+                    <button class="preset-btn">MAX</button>
+                </div>
+            </div>
         </div>
 
-        <div class="slot" id="slot-target">
-            <div class="slot-label">Цель</div>
-            <div class="slot-icon" id="tg-icon">🎯</div>
-            <div class="slot-name" id="tg-name">ВЫБЕРИТЕ ЦЕЛЬ</div>
-            <div class="slot-price" id="tg-price">0 ⭐️</div>
+        <div class="drop-zone" id="slot-right">
+            <div class="label">To</div>
+            <div id="right-empty" style="color: var(--text-dim); text-align: center; padding: 20px;">
+                <div style="font-size: 40px; margin-bottom: 10px;">🏆</div>
+                Target item<br>from shop
+            </div>
+            <div id="right-filled" style="display: none; text-align: center;">
+                <img src="" id="right-img" class="item-visual">
+                <div id="right-name" style="font-weight: 700; font-size: 18px;">Item Name</div>
+                <div id="right-price" style="color: var(--accent-gold); font-weight: 800;">0 ⭐️</div>
+            </div>
         </div>
     </div>
 
-    <div class="panels">
-        <div class="panel">
-            <div class="panel-h">
-                <div class="panel-title">📦 ИНВЕНТАРЬ</div>
-                <div style="color: var(--accent-star); font-weight: 800;" id="inv-count">0 ПРЕДМЕТОВ</div>
-            </div>
-            <div class="grid" id="my-grid"></div>
+    <div class="inventory-section">
+        <div class="section-header">
+            <div class="section-title"><span>🎒</span> MY INVENTORY</div>
+            <div class="balance-pill"><span id="balance">5000</span> ⭐️</div>
         </div>
-
-        <div class="panel">
-            <div class="panel-h">
-                <div class="panel-title">🛒 МАГАЗИН</div>
-                <div style="font-size: 12px; color: var(--text-muted);">TG GIFTS 2026</div>
-            </div>
-            <div class="grid" id="shop-grid"></div>
-        </div>
+        <div class="inventory-grid" id="inv-grid"></div>
     </div>
 
-    <audio id="snd-tick" src="https://www.soundjay.com/buttons/button-50.mp3"></audio>
-    <audio id="snd-win" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
-    <audio id="snd-lose" src="https://www.soundjay.com/buttons/button-10.mp3"></audio>
+    <div class="inventory-section">
+        <div class="section-header">
+            <div class="section-title"><span>🛒</span> UPGRADE SHOP</div>
+        </div>
+        <div class="inventory-grid" id="shop-grid"></div>
+    </div>
+</div>
 
-    <script>
-        const shopItems = [
-            { id: 1, name: "Plush Pepe", price: 925000, icon: "🐸" },
-            { id: 2, name: "Magic Mirror", price: 450000, icon: "🪞" },
-            { id: 3, name: "Golden Duck", price: 210000, icon: "🦆" },
-            { id: 4, name: "Cyber Dragon", price: 1500000, icon: "🐲" },
-            { id: 5, name: "Eternal Star", price: 85000, icon: "⭐" },
-            { id: 6, name: "Moon Stone", price: 320000, icon: "💎" }
-        ];
+<script>
+    const NFT_DATA = {
+        "lolly": { name: "Lollipop", img: "https://i.postimg.cc/k47vYg7k/lollipop.png", price: 50 },
+        "pigeon": { name: "Letter Pigeon", img: "https://i.postimg.cc/g0gDcgL4/pigeon.png", price: 150 },
+        "cake": { name: "Birthday Cake", img: "https://i.postimg.cc/0jXm8Yf1/cake.png", price: 400 },
+        "duck": { name: "Rubber Duck", img: "https://i.postimg.cc/N0fL8vWh/duck.png", price: 1000 },
+        "star": { name: "Premium Star", img: "https://i.postimg.cc/85zXbXfG/star.png", price: 2500 },
+        "heart": { name: "Cyber Heart", img: "https://i.postimg.cc/PqMvMDp6/heart.png", price: 7000 },
+        "bitcoin": { name: "Crypto Coin", img: "https://i.postimg.cc/02Xm6zZ2/bitcoin.png", price: 20000 },
+        "crown": { name: "Royal Crown", img: "https://i.postimg.cc/9QvXbXb8/crown.png", price: 100000 }
+    };
 
-        let user = { balance: 2500000, name: "sn1kersevo", inv: [] };
-        let selectedMyIdx = null;
-        let selectedTarget = null;
-        let isSpinning = false;
-        let currentRotation = 0;
+    let userInv = ["lolly", "pigeon", "cake", "duck"];
+    let balance = 5000;
+    let selectedInvIdx = null;
+    let selectedShopKey = null;
+    let isSpinning = false;
 
-        function init() {
-            renderShop();
-            updateBalance();
-            startLiveStats();
-            // Даем один подарок в начале для теста
-            user.inv.push({...shopItems[4], invId: Date.now()});
-            renderInv();
+    function init() {
+        renderInv();
+        renderShop();
+    }
+
+    function renderInv() {
+        const grid = document.getElementById('inv-grid');
+        grid.innerHTML = userInv.map((key, i) => `
+            <div class="item-card ${selectedInvIdx === i ? 'selected' : ''}" onclick="selectInv(${i})">
+                <div class="price">${NFT_DATA[key].price} ⭐️</div>
+                <img src="${NFT_DATA[key].img}">
+                <div class="name">${NFT_DATA[key].name}</div>
+            </div>
+        `).join('');
+    }
+
+    function renderShop() {
+        const grid = document.getElementById('shop-grid');
+        grid.innerHTML = Object.keys(NFT_DATA).map(key => `
+            <div class="item-card ${selectedShopKey === key ? 'selected' : ''}" onclick="selectShop('${key}')">
+                <div class="price">${NFT_DATA[key].price} ⭐️</div>
+                <img src="${NFT_DATA[key].img}">
+                <div class="name">${NFT_DATA[key].name}</div>
+            </div>
+        `).join('');
+    }
+
+    function selectInv(idx) {
+        if(isSpinning) return;
+        selectedInvIdx = (selectedInvIdx === idx) ? null : idx;
+        renderInv();
+        updateWorkspace();
+    }
+
+    function selectShop(key) {
+        if(isSpinning) return;
+        selectedShopKey = (selectedShopKey === key) ? null : key;
+        renderShop();
+        updateWorkspace();
+    }
+
+    function updateWorkspace() {
+        const leftFilled = document.getElementById('left-filled');
+        const leftEmpty = document.getElementById('left-empty');
+        if(selectedInvIdx !== null) {
+            const item = NFT_DATA[userInv[selectedInvIdx]];
+            leftEmpty.style.display = 'none';
+            leftFilled.style.display = 'block';
+            document.getElementById('left-img').src = item.img;
+            document.getElementById('left-name').innerText = item.name;
+            document.getElementById('left-price').innerText = item.price + ' ⭐️';
+        } else {
+            leftEmpty.style.display = 'block';
+            leftFilled.style.display = 'none';
         }
 
-        function updateBalance() {
-            document.getElementById('user-display').innerHTML = `
-                <div style="background: var(--bg-card); padding: 8px 20px; border-radius: 15px; border: 1px solid #2a3547; display: flex; align-items: center; gap: 10px;">
-                    <div style="text-align: right;"><div style="font-size: 10px; color: var(--text-muted);">БАЛАНС</div>
-                    <div style="font-size: 16px; font-weight: 900; color: var(--accent-star);">${user.balance.toLocaleString()} ⭐️</div></div>
-                    <div style="width: 35px; height: 35px; background: var(--tg-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900;">S</div>
-                </div>`;
+        const rightFilled = document.getElementById('right-filled');
+        const rightEmpty = document.getElementById('right-empty');
+        if(selectedShopKey !== null) {
+            const item = NFT_DATA[selectedShopKey];
+            rightEmpty.style.display = 'none';
+            rightFilled.style.display = 'block';
+            document.getElementById('right-img').src = item.img;
+            document.getElementById('right-name').innerText = item.name;
+            document.getElementById('right-price').innerText = item.price + ' ⭐️';
+        } else {
+            rightEmpty.style.display = 'block';
+            rightFilled.style.display = 'none';
         }
 
-        function renderShop() {
-            const g = document.getElementById('shop-grid');
-            g.innerHTML = shopItems.map(i => `
-                <div class="item ${selectedTarget?.id === i.id ? 'selected' : ''}" onclick="setTarget(${i.id})">
-                    <div class="item-icon">${i.icon}</div>
-                    <div class="item-name">${i.name}</div>
-                    <div class="item-price">${i.price.toLocaleString()}</div>
-                    <button class="btn-buy" onclick="buyItem(event, ${i.id})">КУПИТЬ</button>
-                </div>`).join('');
-        }
+        calculateChance();
+    }
 
-        function renderInv() {
-            const g = document.getElementById('my-grid');
-            document.getElementById('inv-count').innerText = `${user.inv.length} ПРЕДМЕТОВ`;
-            if(user.inv.length === 0) g.innerHTML = '<div style="grid-column:1/-1; color:var(--text-muted); text-align:center;">Пусто</div>';
-            else g.innerHTML = user.inv.map((i, idx) => `
-                <div class="item ${selectedMyIdx === idx ? 'selected' : ''}" onclick="setMyItem(${idx})">
-                    <div class="item-icon">${i.icon}</div>
-                    <div class="item-name">${i.name}</div>
-                    <div class="item-price">${i.price.toLocaleString()}</div>
-                </div>`).join('');
-        }
+    function calculateChance() {
+        const display = document.getElementById('chance-display');
+        const ring = document.getElementById('wheel-ring');
+        const btn = document.getElementById('upgrade-btn');
 
-        function buyItem(e, id) {
-            e.stopPropagation();
-            const i = shopItems.find(x => x.id === id);
-            if(user.balance >= i.price) {
-                user.balance -= i.price;
-                user.inv.push({...i, invId: Date.now()});
-                updateBalance();
-                renderInv();
-            }
-        }
-
-        function setMyItem(idx) {
-            if(isSpinning) return;
-            selectedMyIdx = idx;
-            const item = user.inv[idx];
-            document.getElementById('my-icon').innerText = item.icon;
-            document.getElementById('my-name').innerText = item.name;
-            document.getElementById('my-price').innerText = item.price.toLocaleString() + ' ⭐️';
-            document.getElementById('slot-my').classList.add('active');
-            renderInv();
-            calc();
-        }
-
-        function setTarget(id) {
-            if(isSpinning) return;
-            selectedTarget = shopItems.find(x => x.id === id);
-            document.getElementById('tg-icon').innerText = selectedTarget.icon;
-            document.getElementById('tg-name').innerText = selectedTarget.name;
-            document.getElementById('tg-price').innerText = selectedTarget.price.toLocaleString() + ' ⭐️';
-            document.getElementById('slot-target').classList.add('active');
-            renderShop();
-            calc();
-        }
-
-        function calc() {
-            if(selectedMyIdx === null || !selectedTarget) return;
-            const chance = Math.min(95, (user.inv[selectedMyIdx].price / selectedTarget.price) * 100);
-            document.getElementById('circle-arc').style.strokeDasharray = `${chance} 100`;
-            document.getElementById('chance-val').innerText = chance.toFixed(2) + '%';
-            document.getElementById('btn-up').disabled = false;
-        }
-
-        function startUpgrade() {
-            if(isSpinning) return;
-            isSpinning = true;
-            const btn = document.getElementById('btn-up');
-            btn.classList.add('spinning');
-            btn.innerText = 'УЛУЧШАЕМ...';
+        if(selectedInvIdx !== null && selectedShopKey !== null) {
+            const p1 = NFT_DATA[userInv[selectedInvIdx]].price;
+            const p2 = NFT_DATA[selectedShopKey].price;
+            let chance = (p1 / p2) * 100;
+            if(chance > 95) chance = 95;
+            
+            display.innerText = chance.toFixed(2) + '%';
+            
+            const deg = (chance / 100) * 360;
+            const start = 180 - (deg/2);
+            const end = 180 + (deg/2);
+            
+            ring.style.background = `conic-gradient(from 0deg, 
+                var(--bg-card) 0deg ${start}deg, 
+                var(--accent-primary) ${start}deg ${end}deg, 
+                var(--bg-card) ${end}deg 360deg)`;
+            
+            btn.disabled = false;
+            return chance;
+        } else {
+            display.innerText = '0%';
+            ring.style.background = `var(--bg-card)`;
             btn.disabled = true;
+            return 0;
+        }
+    }
 
-            const chance = parseFloat(document.getElementById('chance-val').innerText);
-            const isWin = Math.random() * 100 <= chance;
-            
-            // Расчет вращения стрелки
-            const extraSpins = 5 + Math.random() * 5;
-            const finalAngle = isWin ? (chance * 3.6 * Math.random()) : (chance * 3.6 + Math.random() * (360 - chance * 3.6));
-            currentRotation += (extraSpins * 360) + finalAngle;
-            
-            document.getElementById('pointer-anim').style.transform = `rotate(${currentRotation}deg)`;
+    function handleUpgrade() {
+        if(isSpinning) return;
+        const chance = calculateChance();
+        isSpinning = true;
+        document.getElementById('upgrade-btn').disabled = true;
 
-            // Звук тиканья (имитация)
-            const tickInterval = setInterval(() => {
-                document.getElementById('snd-tick').currentTime = 0;
-                document.getElementById('snd-tick').play();
-            }, 150);
+        const isWin = (Math.random() * 100) <= chance;
+        const ticker = document.getElementById('ticker');
+        
+        // Логика вращения
+        const arc = (chance / 100) * 360;
+        const halfArc = arc / 2;
+        let targetDeg = 0;
 
-            setTimeout(() => {
-                clearInterval(tickInterval);
-                isSpinning = false;
-                btn.classList.remove('spinning');
-                
-                if(isWin) {
-                    document.getElementById('snd-win').play();
-                    user.inv.push({...selectedTarget, invId: Date.now()});
-                    user.inv.splice(selectedMyIdx, 1);
-                    alert("УСПЕХ! Предмет получен!");
-                } else {
-                    document.getElementById('snd-lose').play();
-                    user.inv.splice(selectedMyIdx, 1);
-                    alert("КРАШ! Предмет сгорел!");
-                }
-                
-                selectedMyIdx = null;
-                renderInv();
-                updateSlotsReset();
-                btn.innerText = 'АПГРЕЙД';
-            }, 4000);
+        if(isWin) {
+            // Попадаем в зеленый сектор (центр на 180град)
+            targetDeg = 180 + (Math.random() * (halfArc * 0.8) - (halfArc * 0.4));
+        } else {
+            // Попадаем мимо
+            const offset = halfArc + 20;
+            targetDeg = Math.random() > 0.5 ? (Math.random() * (180 - offset)) : (180 + offset + Math.random() * (180 - offset));
         }
 
-        function updateSlotsReset() {
-            document.getElementById('my-icon').innerText = '🎁';
-            document.getElementById('my-name').innerText = 'ВЫБЕРИТЕ ПРЕДМЕТ';
-            document.getElementById('my-price').innerText = '0 ⭐️';
-            document.getElementById('slot-my').classList.remove('active');
-            document.getElementById('circle-arc').style.strokeDasharray = `0 100`;
-            document.getElementById('chance-val').innerText = '0%';
-        }
+        const totalRotation = 360 * 6 + targetDeg; // 6 полных оборотов + цель
+        
+        ticker.style.transition = 'transform 4s cubic-bezier(0.15, 0, 0.15, 1)';
+        ticker.style.transform = `translateX(-50%) rotate(${totalRotation}deg)`;
 
-        function startLiveStats() {
-            setInterval(() => {
-                document.getElementById('online-val').innerText = (3000 + Math.floor(Math.random()*500)).toLocaleString();
-            }, 3000);
+        setTimeout(() => {
+            finishUpgrade(isWin);
+        }, 4100);
+    }
 
-            const names = ["Dmitry", "Alex", "User_77", "RichBot", "Whale"];
-            setInterval(() => {
-                const item = shopItems[Math.floor(Math.random()*shopItems.length)];
-                const n = names[Math.floor(Math.random()*names.length)];
-                const d = document.createElement('div');
-                d.className = 'drop-card';
-                d.innerHTML = `<div class="drop-icon">${item.icon}</div><div><div class="drop-name">${item.name}</div><div class="drop-user">${n}</div></div>`;
-                const line = document.getElementById('drops-line');
-                line.prepend(d);
-                if(line.children.length > 10) line.lastElementChild.remove();
-            }, 2500);
-        }
+    function finishUpgrade(win) {
+        const banner = document.getElementById('banner');
+        banner.innerText = win ? 'SUCCESSFUL UPGRADE!' : 'UPGRADE FAILED';
+        banner.className = `status-banner show ${win ? 'win' : 'lose'}`;
+        
+        const shopKey = selectedShopKey;
+        userInv.splice(selectedInvIdx, 1);
+        if(win) userInv.push(shopKey);
 
-        init();
-    </script>
+        setTimeout(() => {
+            banner.className = 'status-banner';
+            isSpinning = false;
+            selectedInvIdx = null;
+            const ticker = document.getElementById('ticker');
+            ticker.style.transition = 'none';
+            ticker.style.transform = `translateX(-50%) rotate(${parseInt(ticker.style.transform.replace(/[^\d.]/g, '')) % 360}deg)`;
+            renderInv();
+            updateWorkspace();
+        }, 2000);
+    }
+
+    window.onload = init;
+</script>
+
 </body>
 </html>
