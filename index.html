@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Telegram Stars Upgrader Pro</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2=family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
         :root {
             --bg-main: #060913;
@@ -15,7 +15,7 @@
             --text-main: #ffffff;
             --text-muted: #64748b;
             --accent-blue: #0088cc;
-            --accent-yellow: #00f0ff; /* Обновленный кибер-неон для точности */
+            --accent-yellow: #00f0ff; 
             --accent-gold: #ffca00;
             --accent-green: #10b981;
             --accent-red: #ef4444;
@@ -28,6 +28,10 @@
             --tier-epic: linear-gradient(135deg, #be185d, #701a75);
             --tier-legendary: linear-gradient(135deg, #b91c1c, #7f1d1d);
             --tier-immortal: linear-gradient(135deg, #b45309, #78350f);
+            
+            --glow-green: drop-shadow(0 0 15px rgba(16, 185, 129, 0.6));
+            --glow-red: drop-shadow(0 0 15px rgba(239, 68, 68, 0.6));
+            --glow-gold: drop-shadow(0 0 15px rgba(255, 202, 0, 0.5));
         }
 
         body {
@@ -41,7 +45,7 @@
 
         @keyframes float {
             0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(2deg); }
+            50% { transform: translateY(-8px) rotate(1deg); }
             100% { transform: translateY(0px) rotate(0deg); }
         }
 
@@ -55,16 +59,19 @@
             display: flex; justify-content: space-between; align-items: center;
             background-color: var(--bg-panel); padding: 16px 24px;
             border-radius: 16px; border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
         .brand { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
-        .brand span { color: var(--accent-blue); }
+        .brand span { color: var(--accent-blue); text-shadow: 0 0 10px rgba(0, 136, 204, 0.5); }
         .header-controls { display: flex; align-items: center; gap: 16px; }
         
-        .btn-audio {
+        .btn-audio, .btn-gift-add {
             background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-muted);
-            padding: 10px; border-radius: 10px; cursor: pointer; transition: all 0.2s;
+            padding: 10px 16px; border-radius: 10px; cursor: pointer; transition: all 0.2s; font-weight: 700;
         }
-        .btn-audio.active { color: var(--accent-gold); border-color: rgba(255,202,0,0.3); }
+        .btn-audio.active { color: var(--accent-gold); border-color: rgba(255,202,0,0.3); box-shadow: 0 0 10px rgba(255,202,0,0.2); }
+        .btn-gift-add { color: #fff; background: linear-gradient(135deg, #0284c7, #0369a1); border: none; }
+        .btn-gift-add:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(3, 105, 161, 0.4); }
 
         /* ВЕРХНЯЯ ЗОНА (РАБОЧЕЕ ПРОСТРАНСТВО) */
         .top-section {
@@ -75,7 +82,8 @@
             background-color: var(--bg-panel); border-radius: 20px;
             position: relative; display: flex; flex-direction: column;
             border: 1px solid var(--border-color);
-            padding: 24px; box-sizing: border-box; transition: border-color 0.3s;
+            padding: 24px; box-sizing: border-box; transition: all 0.3s;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
         }
 
         .panel-title {
@@ -88,18 +96,17 @@
         }
         
         .gift-img-large {
-            width: 160px; height: 160px; object-fit: contain; margin-bottom: 15px;
-            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.7));
-            animation: float 5s ease-in-out infinite;
+            width: 140px; height: 140px; object-fit: contain; margin-bottom: 15px;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+            animation: float 4s ease-in-out infinite;
         }
         
-        .item-name { color: #fff; font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
-        .item-price { font-size: 18px; font-weight: 700; color: var(--accent-gold); margin-top: 8px; background: rgba(255,202,0,0.06); padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255,202,0,0.15); }
+        .item-name { color: #fff; font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+        .item-price { font-size: 16px; font-weight: 700; color: var(--accent-gold); margin-top: 8px; background: rgba(255,202,0,0.06); padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255,202,0,0.15); }
         
         .empty-state { color: var(--text-muted); font-size: 13px; font-weight: 600; text-align: center; margin: auto; line-height: 1.6; max-width: 200px; }
         .empty-state span { display: block; margin-top: 8px; font-size: 11px; color: #475569; }
 
-        /* Кастомизация слайдера баланса */
         .balance-slider-container {
             margin-top: auto; display: flex; flex-direction: column; gap: 10px;
             background: var(--bg-input); padding: 16px; border-radius: 14px; border: 1px solid var(--border-color);
@@ -124,46 +131,43 @@
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             border-radius: 50%; background: #0f1524;
             display: flex; align-items: center; justify-content: center;
-            z-index: 1; transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1; transition: background 0.3s;
             border: 4px solid var(--border-color); box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
         }
 
         .wheel-inner {
-            width: 230px; height: 230px;
+            width: 210px; height: 210px;
             background: var(--bg-panel); border-radius: 50%;
             z-index: 3; display: flex; flex-direction: column; align-items: center; justify-content: center;
             border: 2px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
 
-        .wheel-percent { font-size: 46px; font-weight: 800; color: var(--accent-gold); letter-spacing: -1px; }
-        .wheel-text { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-top: 4px; }
+        .wheel-percent { font-size: 42px; font-weight: 800; color: var(--accent-gold); letter-spacing: -1px; transition: color 0.3s; text-shadow: 0 0 15px rgba(255, 202, 0, 0.2); }
+        .wheel-text { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-top: 4px; text-align: center; max-width: 160px;}
 
+        /* Стрелка теперь указывает СНИЗУ ВВЕРХ (на 6 часов) */
         .wheel-ticker {
-            position: absolute; bottom: 0; left: 50%; width: 4px; height: 100%;
-            transform-origin: center center; transform: translateX(-50%) rotate(0deg);
-            z-index: 4; pointer-events: none;
+            position: absolute; bottom: -12px; left: 50%; width: 4px; height: 40px;
+            transform: translateX(-50%); z-index: 10; pointer-events: none;
         }
         .ticker-arrow {
-            position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
             width: 0; height: 0;
-            border-left: 12px solid transparent; border-right: 12px solid transparent;
-            border-bottom: 20px solid var(--accent-gold);
-            filter: drop-shadow(0 0 12px var(--accent-gold));
+            border-left: 14px solid transparent; border-right: 14px solid transparent;
+            border-bottom: 22px solid var(--accent-gold);
+            filter: drop-shadow(0 0 10px var(--accent-gold));
         }
 
         .btn-upgrade {
             width: 100%; background: linear-gradient(135deg, #ffca00, #e6b600); color: #000; border: none;
-            padding: 20px; font-size: 16px; font-weight: 800; border-radius: 14px; cursor: pointer;
-            text-transform: uppercase; letter-spacing: 1.5px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 20px rgba(255,202,0,0.15);
+            padding: 18px; font-size: 15px; font-weight: 800; border-radius: 14px; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 1.5px; transition: all 0.2s;
+            box-shadow: 0 4px 20px rgba(255,202,0,0.2);
         }
-        .btn-upgrade:hover:not(:disabled) { background: linear-gradient(135deg, #ffe100, #ffca00); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(255,202,0,0.3); }
+        .btn-upgrade:hover:not(:disabled) { background: linear-gradient(135deg, #ffe100, #ffca00); transform: translateY(-2px); box-shadow: 0 0 25px rgba(255,202,0,0.4); }
         .btn-upgrade:disabled { background: #151c2e; color: #3b455e; cursor: not-allowed; box-shadow: none; border: 1px solid var(--border-color); }
 
         /* СЕТКА УМНОЖИТЕЛЕЙ */
-        .multiplier-container {
-            margin-top: auto; display: flex; flex-direction: column; gap: 8px; width: 100%;
-        }
+        .multiplier-container { margin-top: auto; display: flex; flex-direction: column; gap: 8px; width: 100%; }
         .multiplier-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
         .btn-mult {
             background: var(--bg-input); border: 1px solid var(--border-color); color: #94a3b8;
@@ -171,67 +175,76 @@
             transition: all 0.15s; text-align: center;
         }
         .btn-mult:hover:not(:disabled) { background: #1e293b; color: #fff; border-color: var(--border-hover); }
-        .btn-mult.active { background: rgba(0, 240, 255, 0.08); border-color: var(--accent-yellow); color: var(--accent-yellow); box-shadow: 0 0 10px rgba(0,240,255,0.15); }
+        .btn-mult.active { background: rgba(0, 240, 255, 0.08); border-color: var(--accent-yellow); color: var(--accent-yellow); box-shadow: 0 0 10px rgba(0,240,255,0.2); }
         .btn-mult:disabled { opacity: 0.3; cursor: not-allowed; }
 
-        /* ИНВЕНТАРНАЯ ЗОНА */
-        .bottom-section { display: grid; grid-template-columns: 1fr 1.2fr; gap: 24px; min-height: 520px; }
+        /* ИНВЕНТАРНАЯ ЗОНА И ИСТОРИЯ */
+        .bottom-section { display: grid; grid-template-columns: 1fr 1fr 0.8fr; gap: 24px; min-height: 480px; }
 
         .inventory-header {
             display: flex; justify-content: space-between; align-items: center;
-            padding-bottom: 16px; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; gap: 12px;
+            padding-bottom: 16px; border-bottom: 1px solid var(--border-color); margin-bottom: 16px; gap: 12px;
         }
-        .inventory-title { font-weight: 800; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; color: #fff; display: flex; align-items: center; gap: 8px;}
-        .inventory-title span { color: var(--text-muted); font-weight: 600; font-size: 13px; }
+        .inventory-title { font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #fff; display: flex; align-items: center; gap: 8px;}
+        .inventory-title span { color: var(--text-muted); font-weight: 600; font-size: 12px; }
         
         .balance-badge {
             background: rgba(255,202,0,0.08); border: 1px solid rgba(255,202,0,0.2);
-            padding: 8px 16px; border-radius: 10px; font-size: 15px; font-weight: 700; color: var(--accent-gold);
-            display: flex; align-items: center; gap: 6px;
+            padding: 8px 14px; border-radius: 10px; font-size: 14px; font-weight: 700; color: var(--accent-gold);
         }
 
-        /* Поиск и фильтры магазина */
-        .shop-filter-bar {
-            display: flex; gap: 10px; width: 100%; max-width: 320px;
-        }
+        .shop-filter-bar { display: flex; gap: 8px; width: 100%; max-width: 260px; }
         .search-input {
             width: 100%; background: var(--bg-input); border: 1px solid var(--border-color);
-            border-radius: 10px; padding: 8px 14px; color: #fff; font-family: inherit; font-size: 13px; outline: none;
-            transition: border-color 0.2s;
+            border-radius: 10px; padding: 8px 12px; color: #fff; font-family: inherit; font-size: 12px; outline: none;
         }
-        .search-input:focus { border-color: var(--border-hover); }
-        
         .select-sort {
             background: var(--bg-input); border: 1px solid var(--border-color);
-            border-radius: 10px; padding: 0 10px; color: var(--text-muted); font-family: inherit; font-size: 12px; cursor: pointer; outline: none;
+            border-radius: 10px; padding: 0 8px; color: var(--text-muted); font-family: inherit; font-size: 11px; cursor: pointer; outline: none;
         }
 
         .grid-container {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
-            gap: 12px; overflow-y: auto; height: 420px; align-content: start; padding-right: 4px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
+            gap: 12px; overflow-y: auto; height: 380px; align-content: start; padding-right: 4px;
         }
-        .grid-container::-webkit-scrollbar { width: 6px; }
-        .grid-container::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        .grid-container::-webkit-scrollbar, .history-log::-webkit-scrollbar { width: 6px; }
+        .grid-container::-webkit-scrollbar-thumb, .history-log::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
 
-        /* Премиальные карточки предметов */
+        /* Премиальные карточки предметов с ГЛОУ эффектом */
         .skin-card {
             background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px;
-            padding: 14px; position: relative; cursor: pointer;
+            padding: 12px; position: relative; cursor: pointer;
             display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-            height: 155px; box-sizing: border-box; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 145px; box-sizing: border-box; transition: all 0.25s;
         }
-        .skin-card:hover { background: #16223d; border-color: #334155; transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
-        .skin-card.selected { border-color: var(--accent-gold); background: #1a2642; box-shadow: 0 0 20px rgba(255, 202, 0, 0.15); }
+        .skin-card:hover { background: #16223d; border-color: #475569; transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+        .skin-card.selected { border-color: var(--accent-gold); background: #1a2642; box-shadow: 0 0 15px rgba(255, 202, 0, 0.25); }
         
         .rarity-line { position: absolute; top: 0; left: 0; width: 100%; height: 4px; border-radius: 14px 14px 0 0; }
-        .card-price { width: 100%; text-align: right; font-size: 12px; font-weight: 700; color: var(--accent-gold); }
+        .card-price { width: 100%; text-align: right; font-size: 11px; font-weight: 700; color: var(--accent-gold); }
         
-        .gift-img-small { width: 68px; height: 68px; object-fit: contain; filter: drop-shadow(0 8px 12px rgba(0,0,0,0.4)); transition: transform 0.25s; margin: 4px 0;}
+        .gift-img-small { width: 60px; height: 60px; object-fit: contain; filter: drop-shadow(0 6px 10px rgba(0,0,0,0.4)); transition: transform 0.25s; margin: 4px 0;}
         .skin-card:hover .gift-img-small { transform: scale(1.1); }
+        .skin-card .name { font-size: 11px; color: #f1f5f9; font-weight: 600; text-align: center; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .skin-card .name { font-size: 12px; color: #f1f5f9; font-weight: 600; text-align: center; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .empty-slot { background: rgba(17, 26, 48, 0.1); border: 2px dashed rgba(255,255,255,0.02); border-radius: 14px; height: 145px; }
 
-        .empty-slot { background: rgba(17, 26, 48, 0.2); border: 2px dashed rgba(255,255,255,0.03); border-radius: 14px; height: 155px; }
+        /* КРАСИВАЯ СТРУКТУРА ИСТОРИИ */
+        .history-log { display: flex; flex-direction: column; gap: 10px; overflow-y: auto; height: 380px; padding-right: 4px; }
+        .history-item {
+            background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 12px;
+            transition: all 0.2s; animation: fadeIn 0.3s ease-out;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .history-meta { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--text-muted); }
+        .history-badge { padding: 2px 8px; border-radius: 6px; font-weight: 800; text-transform: uppercase; font-size: 9px; }
+        .history-badge.win { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); border: 1px solid rgba(16, 185, 129, 0.3); }
+        .history-badge.lose { background: rgba(239, 68, 68, 0.15); color: var(--accent-red); border: 1px solid rgba(239, 68, 68, 0.3); }
+        
+        .history-details { display: flex; align-items: center; justify-content: space-between; font-weight: 600; color: #e2e8f0; }
+        .history-details span b { color: var(--accent-gold); }
 
         /* Баннер исхода апгрейда */
         .result-banner {
@@ -239,8 +252,8 @@
             padding: 12px 32px; border-radius: 10px; font-weight: 800; font-size: 14px;
             opacity: 0; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 20; text-transform: uppercase; letter-spacing: 1.5px; pointer-events: none;
         }
-        .result-banner.win { opacity: 1; transform: translateX(-50%) scale(1); background: var(--accent-green); color: #000; box-shadow: 0 0 30px rgba(16, 185, 129, 0.5); }
-        .result-banner.lose { opacity: 1; transform: translateX(-50%) scale(1); background: var(--accent-red); color: #fff; box-shadow: 0 0 30px rgba(239, 68, 68, 0.5); }
+        .result-banner.win { opacity: 1; transform: translateX(-50%) scale(1); background: var(--accent-green); color: #000; box-shadow: 0 0 30px rgba(16, 185, 129, 0.6); }
+        .result-banner.lose { opacity: 1; transform: translateX(-50%) scale(1); background: var(--accent-red); color: #fff; box-shadow: 0 0 30px rgba(239, 68, 68, 0.6); }
     </style>
 </head>
 <body>
@@ -249,6 +262,7 @@
     <div class="app-header">
         <div class="brand">🚀 UPGRADER<span>.TG</span></div>
         <div class="header-controls">
+            <button class="btn-gift-add" onclick="getFreeGift()">🎁 Получить подарок</button>
             <button class="btn-audio active" id="audio-toggle" onclick="toggleAudio()" title="Вкл/Выкл звук">
                 🔊 Звук
             </button>
@@ -280,7 +294,8 @@
         <div class="panel center-panel">
             <div class="result-banner" id="res-banner">УСПЕХ!</div>
             <div class="circle-container">
-                <div class="upgrader-wheel" id="wheel-canvas">
+                <canvas id="wheel-canvas-render" width="280" height="280" style="position:absolute; top:0; left:0; z-index:2; border-radius:50%; pointer-events:none;"></canvas>
+                <div class="upgrader-wheel" id="wheel-base">
                     <div class="wheel-ticker" id="wheel-ticker">
                         <div class="ticker-arrow"></div>
                     </div>
@@ -322,7 +337,7 @@
         <div class="panel">
             <div class="inventory-header">
                 <div class="inventory-title">🗃 Мой инвентарь <span id="inv-count">(0)</span></div>
-                <div class="balance-badge"><span id="balance-amount">5000</span> ⭐️</div>
+                <div class="balance-badge"><span id="balance-amount">25000</span> ⭐️</div>
             </div>
             <div class="grid-container" id="my-inventory-grid"></div>
         </div>
@@ -340,11 +355,19 @@
             </div>
             <div class="grid-container" id="shop-grid"></div>
         </div>
+
+        <div class="panel">
+            <div class="inventory-header">
+                <div class="inventory-title">📜 История Апгрейдов</div>
+            </div>
+            <div class="history-log" id="history-log-container">
+                <div style="color: var(--text-muted); text-align: center; margin-top: 40px; font-size: 13px;">История пуста</div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
-    // --- АУДИОСИСТЕМА ---
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     let audioCtx;
     let isSoundEnabled = true;
@@ -380,8 +403,8 @@
         } else if (type === 'tick') {
             const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
             osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.type = 'triangle'; osc.frequency.setValueAtTime(280, now);
-            gain.gain.setValueAtTime(0.05, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+            osc.type = 'triangle'; osc.frequency.setValueAtTime(320, now);
+            gain.gain.setValueAtTime(0.06, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
             osc.start(now); osc.stop(now + 0.03);
         } else if (type === 'win') {
             [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
@@ -393,13 +416,13 @@
         } else if (type === 'lose') {
             const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
             osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(110, now); osc.frequency.linearRampToValueAtTime(40, now + 0.45);
-            gain.gain.setValueAtTime(0.12, now); gain.gain.linearRampToValueAtTime(0.001, now + 0.45);
-            osc.start(now); osc.stop(now + 0.45);
+            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(120, now); osc.frequency.linearRampToValueAtTime(50, now + 0.4);
+            gain.gain.setValueAtTime(0.12, now); gain.gain.linearRampToValueAtTime(0.001, now + 0.4);
+            osc.start(now); osc.stop(now + 0.4);
         }
     }
 
-    // --- БАЗА ДАННЫХ ПРЕДМЕТОВ TELEGRAM ---
+    // Рабочие иконки подарков Telegram
     const NFT_DATABASE = {
         "lollipop": { name: "Lollipop", img: "https://i.postimg.cc/k47vYg7k/lollipop.png", price: 50, rarity: "var(--tier-common)" },
         "pigeon": { name: "Letter Pigeon", img: "https://i.postimg.cc/g0gDcgL4/pigeon.png", price: 150, rarity: "var(--tier-common)" },
@@ -413,7 +436,6 @@
         "telegram_bear": { name: "Golden Crown Bear", img: "https://i.postimg.cc/9QvXbXb8/crown.png", price: 300000, rarity: "var(--tier-immortal)" }
     };
 
-    // Стейт
     let freebetBalance = 25000;
     let userInventory = ["lollipop", "pigeon", "cake", "duck", "star_bottle"]; 
     let selectedInvIdx = null;
@@ -421,13 +443,26 @@
     let addedBalance = 0;
     let calculatedChance = 0;
     let isUpgrading = false;
+    let upgradeHistory = [];
 
     document.body.addEventListener('click', initAudio, { once: true });
+
+    window.onload = function() {
+        init();
+    };
 
     function init() { 
         renderInventory(); 
         renderShop(); 
         updateWorkspace(); 
+    }
+
+    function getFreeGift() {
+        const keys = Object.keys(NFT_DATABASE);
+        const randomKey = keys[Math.floor(Math.random() * 3)]; // Рандомим обычные вещи
+        userInventory.push(randomKey);
+        playSound('click');
+        renderInventory();
     }
 
     function renderInventory() {
@@ -460,18 +495,11 @@
         const grid = document.getElementById("shop-grid");
         const searchQuery = document.getElementById("shop-search").value.toLowerCase();
         const sortOrder = document.getElementById("shop-sort").value;
-        
         grid.innerHTML = "";
         
         let keys = Object.keys(NFT_DATABASE);
-        
-        // Фильтрация поиска
         keys = keys.filter(k => NFT_DATABASE[k].name.toLowerCase().includes(searchQuery));
-        
-        // Сортировка
-        keys.sort((a, b) => {
-            return sortOrder === 'asc' ? NFT_DATABASE[a].price - NFT_DATABASE[b].price : NFT_DATABASE[b].price - NFT_DATABASE[a].price;
-        });
+        keys.sort((a, b) => sortOrder === 'asc' ? NFT_DATABASE[a].price - NFT_DATABASE[b].price : NFT_DATABASE[b].price - NFT_DATABASE[a].price);
 
         keys.forEach(key => {
             const item = NFT_DATABASE[key];
@@ -514,7 +542,6 @@
         updateWorkspace(false);
     }
 
-    // --- УМНАЯ ЛОГИКА МНОЖИТЕЛЕЙ (МЕХАНИКА ИЗ UPGRADER.PRO) ---
     function applyQuickMultiplier(value, isPercentage = false) {
         if (selectedInvIdx === null || isUpgrading) return;
         playSound('click');
@@ -524,20 +551,16 @@
         let targetTargetPrice = 0;
 
         if (!isPercentage) {
-            // Режим множителя цены (x2, x5, x10)
             targetTargetPrice = currentTotalInput * value;
         } else {
-            // Режим фиксированного процента риска (25%, 50%, 75%)
             targetTargetPrice = currentTotalInput / (value / 100);
         }
 
-        // Ищем в базе предмет, наиболее близкий по цене к расчетному значению
         let bestKey = null;
         let minDiff = Infinity;
 
         Object.keys(NFT_DATABASE).forEach(key => {
             const item = NFT_DATABASE[key];
-            // Цель должна быть строго дороже базового предмета инвентаря
             if (item.price > inputItem.price) {
                 const diff = Math.abs(item.price - targetTargetPrice);
                 if (diff < minDiff) {
@@ -559,7 +582,37 @@
         }
     }
 
-    // Расчет шансов
+    // Отрисовка сектора шанса на Canvas (ЧЕТКО СНИЗУ НА 6 ЧАСОВ)
+    function drawWheelSector(chance) {
+        const canvas = document.getElementById("wheel-canvas-render");
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        if (chance <= 0) return;
+
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const radius = canvas.width / 2 - 6;
+
+        const totalRads = (chance / 100) * Math.PI * 2;
+        
+        // Математика: чтобы сектор был по центру внизу, 
+        // стартовая точка должна быть зеркально сбалансирована относительно 90 градусов (Math.PI / 2)
+        const startAngle = (Math.PI / 2) - (totalRads / 2);
+        const endAngle = (Math.PI / 2) + (totalRads / 2);
+
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.closePath();
+
+        ctx.fillStyle = "rgba(0, 240, 255, 0.15)";
+        ctx.fill();
+        ctx.strokeStyle = "var(--accent-yellow)";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+    }
+
     function updateWorkspace(resetSlider = true) {
         const pLeftContent = document.getElementById("preview-left-content");
         const pLeftEmpty = document.getElementById("preview-left-empty");
@@ -634,130 +687,148 @@
                 drawWheelSector(calculatedChance);
             }
         } else {
-            calculatedChance = 0;
             document.getElementById("chance-display").innerText = "0.00%";
-            document.getElementById("chance-display").style.color = "var(--text-muted)";
+            document.getElementById("chance-display").style.color = "var(--accent-gold)";
             document.getElementById("chance-status").innerText = "выберите цели";
             btnUpgrade.disabled = true;
             drawWheelSector(0);
         }
     }
 
-    function drawWheelSector(chance) {
-        const wheel = document.getElementById("wheel-canvas");
-        if (chance <= 0) { wheel.style.background = `#0f1524`; return; }
-        
-        const arcDegrees = (chance / 100) * 360;
-        const startDeg = 180 - (arcDegrees / 2);
-        const endDeg = 180 + (arcDegrees / 2);
-        
-        wheel.style.background = `conic-gradient(from 0deg, 
-            #0f1524 0deg, #0f1524 ${startDeg}deg, 
-            var(--accent-gold) ${startDeg}deg, var(--accent-gold) ${endDeg}deg, 
-            #0f1524 ${endDeg}deg, #0f1524 360deg
-        )`;
-    }
-
-    // --- КРУТИЛКА И ТИКЕР КИНЕМАТИКИ ---
+    // --- НАСТОЯЩИЙ ПОФИКСЕННЫЙ АПГРЕЙД ---
     function startUpgrade() {
-        if (isUpgrading || selectedInvIdx === null || selectedShopKey === null) return;
-        
+        if(isUpgrading || selectedInvIdx === null || selectedShopKey === null) return;
         isUpgrading = true;
-        playSound('click');
-        document.getElementById("btn-upgrade-main").disabled = true;
-        document.querySelectorAll('.btn-mult').forEach(b => b.disabled = true);
-        document.getElementById("balance-slider").disabled = true;
-        document.getElementById("shop-sort").disabled = true;
-        document.getElementById("shop-search").disabled = true;
-
-        const isWin = (Math.random() * 100) <= calculatedChance;
-        const arcDegrees = (calculatedChance / 100) * 360;
         
-        let targetAngle = 0;
-        if (isWin) {
-            const half = arcDegrees / 2; 
-            targetAngle = 180 + (Math.random() * (half * 0.85) * (Math.random() > 0.5 ? 1 : -1));
-        } else {
-            const half = arcDegrees / 2;
-            if (Math.random() > 0.5) { 
-                targetAngle = Math.random() * (180 - half - 15); 
-            } else { 
-                targetAngle = (180 + half + 15) + (Math.random() * (180 - half - 15)); 
-            }
-        }
+        const btnUpgrade = document.getElementById("btn-upgrade-main");
+        btnUpgrade.disabled = true;
 
-        const totalSpins = 2880; // Повышено количество оборотов для лучшей плавности замедления
-        const finalRotation = totalSpins + targetAngle;
+        // Минусуем добавленный баланс звезд
+        freebetBalance -= addedBalance;
+        document.getElementById("balance-amount").innerText = freebetBalance.toLocaleString();
+
+        const itemFrom = NFT_DATABASE[userInventory[selectedInvIdx]];
+        const itemTo = NFT_DATABASE[selectedShopKey];
+
+        // Генерируем случайный угол финиша стрелки (в радианах)
+        const randomSpins = 5 + Math.random() * 3; 
+        const targetRad = Math.random() * Math.PI * 2;
+        const totalRotation = randomSpins * Math.PI * 2 + targetRad;
         
-        const ticker = document.getElementById("wheel-ticker");
-        document.getElementById("res-banner").className = "result-banner";
-
+        const canvas = document.getElementById("wheel-canvas-render");
+        
         let startTimestamp = null;
-        const duration = 4500; 
-        let lastTickAngle = 0;
+        const duration = 3500; // 3.5 секунды кручения
 
-        function animate(timestamp) {
+        function animateWheel(timestamp) {
             if (!startTimestamp) startTimestamp = timestamp;
-            const elapsed = timestamp - startTimestamp;
-            const progress = Math.min(elapsed / duration, 1);
+            const progress = timestamp - startTimestamp;
+            const percentage = Math.min(progress / duration, 1);
             
-            // Плавное физическое торможение стрелки
-            const easeOut = 1 - Math.pow(1 - progress, 4);
-            const currentAngle = finalRotation * easeOut;
-
-            ticker.style.transform = `translateX(-50%) rotate(${currentAngle}deg)`;
-
-            if (currentAngle - lastTickAngle > 18) {
+            // Плавное замедление (Ease Out Cubic)
+            const easeOutValue = 1 - Math.pow(1 - percentage, 3);
+            const currentRad = easeOutValue * totalRotation;
+            
+            // Крутим сам канвас, имитируя движение колеса
+            canvas.style.transform = `rotate(${currentRad}rad)`;
+            
+            // Воспроизводим тиканье звука во время прокрутки
+            if (Math.floor(currentRad * 5) % 2 === 0) {
                 playSound('tick');
-                lastTickAngle = currentAngle;
             }
 
-            if (progress < 1) {
-                requestAnimationFrame(animate);
+            if (percentage < 1) {
+                requestAnimationFrame(animateWheel);
             } else {
-                finishUpgrade(isWin);
+                // Конец анимации — определяем исход
+                // Так как сектор выигрыша находится СНИЗУ, финальный угол стрелки относительно сектора вычисляется так:
+                const finalAngleOnWheel = (currentRad % (Math.PI * 2));
+                
+                // Переводим радианы сектора в углы
+                const sectorHalfWidth = ((calculatedChance / 100) * Math.PI * 2) / 2;
+                const winStart = (Math.PI / 2) - sectorHalfWidth;
+                const winEnd = (Math.PI / 2) + sectorHalfWidth;
+
+                // Считаем попала ли стрелка (которая стоит на 90 градусах снизу) в сектор
+                // Но так как вращается колесо, а стрелка статична, мы смотрим на противоположный угол
+                const relativeArrowAngle = (Math.PI * 2.5 - finalAngleOnWheel) % (Math.PI * 2);
+
+                const isWin = (relativeArrowAngle >= winStart && relativeArrowAngle <= winEnd);
+                finishUpgrade(isWin, itemFrom, itemTo);
             }
         }
-        requestAnimationFrame(animate);
+
+        requestAnimationFrame(animateWheel);
     }
 
-    function finishUpgrade(isWin) {
+    function finishUpgrade(isWin, itemFrom, itemTo) {
         const banner = document.getElementById("res-banner");
         
-        freebetBalance -= addedBalance;
-        const rawKey = userInventory[selectedInvIdx];
-        userInventory.splice(selectedInvIdx, 1);
+        // Формируем объект для истории
+        const historyItem = {
+            from: itemFrom.name,
+            to: itemTo.name,
+            chance: calculatedChance.toFixed(2),
+            win: isWin,
+            time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'})
+        };
 
         if (isWin) {
-            userInventory.push(selectedShopKey);
-            banner.innerText = "🎉 Успешный Апгрейд!";
-            banner.className = "result-banner win";
             playSound('win');
+            banner.innerText = "УСПЕХ!";
+            banner.className = "result-banner win";
+            
+            // Заменяем предмет в инвентаре на новый
+            userInventory[selectedInvIdx] = selectedShopKey;
         } else {
-            banner.innerText = "💥 Подарок Сгорел";
-            banner.className = "result-banner lose";
             playSound('lose');
+            banner.innerText = "НЕУДАЧА";
+            banner.className = "result-banner lose";
+            
+            // Удаляем сгоревший предмет
+            userInventory.splice(selectedInvIdx, 1);
         }
+
+        // Добавляем в лог
+        upgradeHistory.unshift(historyItem);
+        renderHistory();
 
         selectedInvIdx = null;
         selectedShopKey = null;
         addedBalance = 0;
-        isUpgrading = false;
-        
-        document.querySelectorAll('.btn-mult').forEach(b => b.disabled = false);
-        document.getElementById("balance-slider").disabled = false;
-        document.getElementById("shop-sort").disabled = false;
-        document.getElementById("shop-search").disabled = false;
-        
-        resetMultipliers();
-        renderInventory(); 
-        renderShop();
-        updateWorkspace();
 
-        setTimeout(() => { banner.className = "result-banner"; }, 4000);
+        setTimeout(() => {
+            banner.className = "result-banner";
+            isUpgrading = false;
+            init();
+        }, 2500);
     }
 
-    window.onload = init;
+    // Рендер истории апгрейдов
+    function renderHistory() {
+        const container = document.getElementById("history-log-container");
+        if(upgradeHistory.length === 0) {
+            container.innerHTML = `<div style="color: var(--text-muted); text-align: center; margin-top: 40px; font-size: 13px;">История пуста</div>`;
+            return;
+        }
+
+        container.innerHTML = "";
+        upgradeHistory.forEach(item => {
+            const el = document.createElement("div");
+            el.className = "history-item";
+            el.innerHTML = `
+                <div class="history-meta">
+                    <span>${item.time}</span>
+                    <span class="history-badge ${item.win ? 'win' : 'lose'}">${item.win ? 'Успех' : 'Сгорел'}</span>
+                </div>
+                <div class="history-details">
+                    <span>${item.from} ➔ <b>${item.to}</b></span>
+                    <span style="color: ${item.win ? 'var(--accent-green)' : 'var(--accent-red)'}">${item.chance}%</span>
+                </div>
+            `;
+            container.appendChild(el);
+        });
+    }
 </script>
 
 </body>
