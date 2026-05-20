@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skin Upgrader Simulator</title>
+    <title>NFT Upgrade Simulator with Freebet</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
 
@@ -16,8 +16,14 @@
             --accent-yellow: #f8c021;
             --accent-green: #21f852;
             --accent-red: #f82142;
-            
             --border-color: #272c3d;
+
+            /* Цвета тиров для линий редкости */
+            --tier-common: #4b69ff;
+            --tier-rare: #8847ff;
+            --tier-epic: #d32ce6;
+            --tier-legendary: #eb4b4b;
+            --tier-immortal: #f8c021;
         }
 
         body {
@@ -29,7 +35,36 @@
             box-sizing: border-box;
             user-select: none;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Панель баланса сверху */
+        .top-bar {
+            width: 100%;
+            max-width: 1300px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-panel);
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .freebet-display {
+            font-size: 18px;
+            font-weight: 800;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .freebet-display span {
+            color: var(--accent-yellow);
+            text-shadow: 0 0 10px rgba(248, 192, 33, 0.3);
         }
 
         .app-container {
@@ -40,12 +75,12 @@
             gap: 20px;
         }
 
-        /* --- ВЕРХНЯЯ СЕКЦИЯ (Апгрейдер) --- */
+        /* --- ВЕРХНЯЯ СЕКЦИЯ (Рабочая зона) --- */
         .top-section {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1.1fr 1fr;
             gap: 20px;
-            height: 320px;
+            height: 340px;
         }
 
         .panel {
@@ -56,9 +91,10 @@
             flex-direction: column;
             border: 1px solid rgba(255,255,255,0.02);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-sizing: border-box;
         }
 
-        /* Левая панель - Выбор скина */
+        /* Левая панель - Жертвуемый предмет */
         .input-panel {
             justify-content: center;
             align-items: center;
@@ -69,100 +105,87 @@
             color: var(--text-muted);
             font-size: 13px;
             font-weight: 600;
-            margin-bottom: 20px;
             position: absolute;
-            top: 30px;
+            top: 25px;
         }
-        .chevron-icon {
+        
+        .slot-preview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             margin-top: 20px;
+        }
+        .slot-preview .emoji { font-size: 70px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); }
+        .slot-preview .name { font-size: 16px; font-weight: 700; margin-top: 10px; }
+        .slot-preview .price { font-size: 14px; color: var(--accent-yellow); font-weight: 600; margin-top: 4px; }
+
+        .chevron-icon {
             display: flex;
             flex-direction: column;
-            gap: -5px;
+            align-items: center;
         }
-        .chevron-icon svg { width: 60px; height: auto; fill: var(--accent-yellow); opacity: 0.8;}
+        .chevron-icon svg { width: 50px; height: 35px; fill: var(--accent-yellow); opacity: 0.5; margin: -10px 0;}
 
-        .balance-slider-container {
-            position: absolute;
-            bottom: 20px;
-            width: 90%;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .slider-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-        .slider-labels span.yellow { color: var(--accent-yellow); }
-        .slider-bar {
-            height: 4px;
-            background: #252a3a;
-            border-radius: 2px;
-            position: relative;
-        }
-        .slider-handle {
-            position: absolute;
-            left: 0; top: -4px;
-            width: 12px; height: 12px;
-            background: var(--accent-yellow);
-            border-radius: 50%;
-            box-shadow: 0 0 10px rgba(248, 192, 33, 0.5);
-        }
-
-        /* Центральная панель - Круг */
+        /* Центральная панель - Колесо */
         .center-panel {
             background: transparent;
             box-shadow: none;
             border: none;
             align-items: center;
             justify-content: flex-end;
-            padding-bottom: 0;
         }
 
         .circle-container {
             position: relative;
-            width: 240px;
-            height: 240px;
-            margin-bottom: 20px;
+            width: 230px;
+            height: 230px;
+            margin-bottom: 15px;
         }
 
-        /* Внешние отметки (50%, 100%) */
         .circle-ticks {
             position: absolute;
-            top: -20px; left: -20px; right: -20px; bottom: -20px;
-            border: 2px dashed #212533;
+            top: -15px; left: -15px; right: -15px; bottom: -15px;
+            border: 2px dashed #1f2433;
             border-radius: 50%;
             z-index: 1;
         }
-        .tick-label {
-            position: absolute;
-            font-size: 10px;
-            color: #4a5063;
-            font-weight: 700;
-        }
+        .tick-label { position: absolute; font-size: 10px; color: #4a5063; font-weight: 700; }
         .tick-50-l { top: 50%; left: -25px; transform: translateY(-50%); }
         .tick-50-r { top: 50%; right: -25px; transform: translateY(-50%); }
         .tick-100 { top: -20px; left: 50%; transform: translateX(-50%); }
 
-        /* Сам круг с шансом */
         .upgrader-wheel {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             border-radius: 50%;
-            background: conic-gradient(from 90deg, #181b24 0deg, #181b24 360deg);
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            background: conic-gradient(from 0deg, #181b24 0deg, #181b24 360deg);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 2;
+            transition: background 0.3s ease;
+        }
+
+        /* Линия бегунка во время анимации */
+        .wheel-ticker {
+            position: absolute;
+            top: 0; left: 50%;
+            width: 4px; height: 115px;
+            background: transparent;
+            transform-origin: bottom center;
+            transform: translateX(-50%) rotate(0deg);
+            z-index: 4;
+        }
+        .ticker-dot {
+            width: 100%; height: 15px;
+            background: #fff;
+            box-shadow: 0 0 10px #fff, 0 0 20px var(--accent-yellow);
+            border-radius: 2px;
         }
 
         .wheel-inner {
-            width: 190px;
-            height: 190px;
+            width: 185px; height: 185px;
             background: var(--bg-main);
             border-radius: 50%;
             z-index: 3;
@@ -170,141 +193,108 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.9);
         }
 
         .wheel-percent {
-            font-size: 32px;
+            font-size: 34px;
             font-weight: 800;
-            color: var(--accent-green);
-            text-shadow: 0 0 15px rgba(33, 248, 82, 0.4);
-            margin-bottom: 5px;
-        }
-        .wheel-percent-yellow {
             color: var(--accent-yellow);
-            text-shadow: 0 0 15px rgba(248, 192, 33, 0.4);
+            text-shadow: 0 0 15px rgba(248, 192, 33, 0.2);
         }
         .wheel-text {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 1px;
-            font-weight: 600;
+            font-weight: 700;
+            margin-top: 2px;
         }
 
-        /* Стрелка внизу */
         .arrow-indicator {
             position: absolute;
-            bottom: -10px;
-            left: 50%;
+            bottom: -8px; left: 50%;
             transform: translateX(-50%);
             width: 0; height: 0;
             border-left: 8px solid transparent;
             border-right: 8px solid transparent;
             border-bottom: 16px solid var(--accent-yellow);
             z-index: 10;
-            filter: drop-shadow(0 0 5px var(--accent-yellow));
+            filter: drop-shadow(0 0 6px var(--accent-yellow));
         }
 
         .btn-upgrade {
             width: 100%;
             background: var(--accent-yellow);
-            color: #000;
-            border: none;
-            padding: 16px;
-            font-size: 16px;
-            font-weight: 800;
-            border-radius: 8px;
-            cursor: pointer;
+            color: #000; border: none;
+            padding: 15px; font-size: 16px; font-weight: 800;
+            border-radius: 8px; cursor: pointer;
             text-transform: uppercase;
-            box-shadow: 0 5px 20px rgba(248, 192, 33, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: 0.2s;
+            box-shadow: 0 5px 25px rgba(248, 192, 33, 0.25);
+            display: flex; align-items: center; justify-content: center; gap: 10px;
         }
-        .btn-upgrade:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(248, 192, 33, 0.5); }
-        .btn-upgrade svg { width: 16px; fill: #000; }
-
-        .multipliers {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            margin-top: 15px;
-        }
-        .multipliers div {
-            font-size: 11px;
-            color: var(--text-muted);
-            background: var(--bg-panel);
-            padding: 6px 10px;
-            border-radius: 4px;
-            font-weight: 700;
-            cursor: pointer;
-            border: 1px solid var(--border-color);
+        .btn-upgrade:disabled {
+            background: #202430; color: #4e5466; box-shadow: none; cursor: not-allowed;
         }
 
-        /* Правая панель - Выбиваемый скин */
+        /* Правая панель - Целевой предмет */
         .target-panel {
-            background: linear-gradient(180deg, #2a2015 0%, var(--bg-panel) 100%);
             padding: 20px;
             text-align: center;
-            position: relative;
+            justify-content: flex-start;
         }
-        .target-panel .item-type { color: var(--text-muted); font-size: 12px; font-weight: 600; margin-top: 10px;}
-        .target-panel .item-name { color: #fff; font-size: 22px; font-weight: 800; margin-top: 5px;}
-        .target-panel img { width: 80%; margin-top: 20px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); }
+        .target-panel .item-type { color: var(--text-muted); font-size: 12px; font-weight: 700; margin-top: 10px;}
+        .target-panel .item-name { color: #fff; font-size: 20px; font-weight: 800; margin-top: 3px;}
+        .target-panel .target-emoji { font-size: 85px; margin: 20px 0; filter: drop-shadow(0 10px 25px rgba(0,0,0,0.4)); }
+        
+        .btn-buy-store {
+            position: absolute;
+            bottom: 65px; left: 50%; transform: translateX(-50%);
+            width: 85%; background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color); color: #fff;
+            padding: 8px; font-size: 11px; font-weight: 700;
+            border-radius: 6px; cursor: pointer; text-transform: uppercase;
+            transition: 0.2s;
+        }
+        .btn-buy-store:hover:not(:disabled) { background: #fff; color: #000; }
+        
         .target-panel .item-price {
             position: absolute; bottom: 25px; left: 0; width: 100%;
-            font-size: 20px; font-weight: 800; color: var(--accent-yellow);
-            display: flex; align-items: center; justify-content: center; gap: 6px;
+            font-size: 18px; font-weight: 800; color: var(--accent-yellow);
         }
 
-        /* --- НИЖНЯЯ СЕКЦИЯ (Инвентари) --- */
+        /* --- НИЖНЯЯ СЕКЦИЯ (Гриды) --- */
         .bottom-section {
             display: grid;
             grid-template-columns: 4fr 6fr;
             gap: 20px;
-            height: 500px;
+            height: 450px;
         }
 
         .inventory-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            background: rgba(0,0,0,0.2);
+            padding: 12px 20px;
+            background: rgba(0,0,0,0.15);
             border-bottom: 1px solid var(--border-color);
         }
-        .inventory-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 700;
-            font-size: 14px;
-        }
-        .inventory-title svg { width: 18px; fill: var(--accent-yellow); }
-        .inventory-stats {
-            font-size: 12px;
-            color: var(--text-muted);
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-        .inventory-stats span { color: var(--text-main); font-weight: 700; }
-        .inventory-stats .price { color: var(--accent-yellow); display: flex; align-items: center; gap: 4px;}
+        .inventory-title { font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .inventory-stats { font-size: 12px; color: var(--text-muted); font-weight: 600;}
+        .inventory-stats span { color: var(--accent-yellow); font-weight: 700; }
 
         .grid-container {
             padding: 15px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             gap: 10px;
             overflow-y: auto;
-            height: calc(100% - 60px);
+            height: calc(100% - 55px);
             align-content: start;
+            box-sizing: border-box;
         }
 
-        /* Карточки скинов */
+        /* Карточки */
         .skin-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -315,113 +305,68 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: 0.2s;
-            height: 120px;
+            height: 115px;
+            box-sizing: border-box;
         }
-        .skin-card:hover { background: #232838; }
-        .skin-card.selected { border-color: var(--accent-yellow); box-shadow: inset 0 0 0 1px var(--accent-yellow); }
+        .skin-card:hover { background: #222736; }
+        .skin-card.selected { border-color: var(--accent-yellow); background: #1b2030; }
         
-        .card-top {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            font-size: 10px;
-            font-weight: 700;
-            z-index: 2;
-        }
+        .card-top { width: 100%; display: flex; justify-content: space-between; font-size: 10px; font-weight: 700; }
         .card-top .price { color: var(--accent-yellow); }
-        .card-top .condition { color: var(--text-muted); }
         
-        .skin-card img {
-            width: 80%;
-            height: 60px;
-            object-fit: contain;
-            margin-top: 5px;
-            z-index: 2;
-        }
-        
-        .skin-card .name {
-            font-size: 10px;
-            color: var(--text-main);
-            font-weight: 600;
-            margin-top: auto;
-            text-align: center;
-            width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            z-index: 2;
-        }
+        .skin-card .card-emoji { font-size: 36px; margin-top: 8px; }
+        .skin-card .name { font-size: 11px; color: var(--text-main); font-weight: 600; margin-top: auto; text-align: center; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* Цвета редкостей (полоски сверху как на фото) */
         .rarity-line {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 3px;
+            position: absolute; top: 0; left: 0; width: 100%; height: 3px;
             border-radius: 8px 8px 0 0;
         }
-        .rarity-covert { background: #eb4b4b; } /* Красное */
-        .rarity-classified { background: #d32ce6; } /* Розовое */
-        .rarity-restricted { background: #8847ff; } /* Фиолетовое */
-        .rarity-milspec { background: #4b69ff; } /* Синее */
-        .rarity-industrial { background: #5e98d9; } /* Голубое */
-        .rarity-yellow { background: var(--accent-yellow); } /* Золотое/Ножи */
 
-        /* Пустые слоты в левом инвентаре */
         .empty-slot {
-            background: rgba(28, 32, 45, 0.4);
-            border: 1px dashed rgba(255,255,255,0.05);
-            border-radius: 8px;
-            height: 120px;
+            background: rgba(28, 32, 45, 0.25);
+            border: 1px dashed rgba(255,255,255,0.03);
+            border-radius: 8px; height: 115px;
         }
 
-        /* SVG Иконка Монетки */
         .coin-icon {
-            display: inline-block;
-            width: 12px; height: 12px;
-            background: var(--accent-yellow);
-            border-radius: 50%;
-            position: relative;
-        }
-        .coin-icon::after {
-            content: '';
-            position: absolute;
-            top: 2px; left: 2px; right: 2px; bottom: 2px;
-            border: 1px solid rgba(0,0,0,0.3);
-            border-radius: 50%;
+            display: inline-block; width: 10px; height: 10px;
+            background: var(--accent-yellow); border-radius: 50%;
+            vertical-align: middle; margin-left: 2px;
         }
 
-        /* Скроллбар */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-panel); }
-        ::-webkit-scrollbar-thumb { background: #2a3042; border-radius: 4px; }
+        /* Оверлей результатов */
+        .result-banner {
+            position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
+            padding: 8px 20px; border-radius: 6px; font-weight: 800; font-size: 14px;
+            opacity: 0; transition: 0.3s; z-index: 20; text-transform: uppercase;
+        }
+        .result-banner.win { opacity: 1; background: var(--accent-green); color: #000; box-shadow: 0 0 15px var(--accent-green); }
+        .result-banner.lose { opacity: 1; background: var(--accent-red); color: #fff; box-shadow: 0 0 15px var(--accent-red); }
     </style>
 </head>
 <body>
 
+<div class="top-bar">
+    <div style="font-weight: 800; font-size: 15px; text-transform: uppercase; letter-spacing: 1px;">🎁 NFT UPGRADER PLATFORM</div>
+    <div class="freebet-display">FREEBET BALANCE: <span id="balance-amount">5000</span> ⭐️</div>
+</div>
+
 <div class="app-container">
+    
     <div class="top-section">
         
-        <div class="panel input-panel">
-            <div class="info-text">Select skins or skins and balance to use<br><span style="font-size:10px; font-weight:400;">You can select multiple skins</span></div>
-            
-            <div class="chevron-icon">
-                <svg viewBox="0 0 24 24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
-                <svg viewBox="0 0 24 24" style="margin-top:-15px;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
-                <svg viewBox="0 0 24 24" style="margin-top:-15px;"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
-            </div>
-
-            <div class="balance-slider-container">
-                <div class="slider-labels">
-                    <span>Balance amount:</span>
-                    <span class="yellow">0.00 <i class="coin-icon"></i> <span style="color:var(--text-muted); font-size:9px;">(max 0.00)</span></span>
-                </div>
-                <div class="slider-bar">
-                    <div class="slider-handle"></div>
+        <div class="panel input-panel" id="panel-left">
+            <div class="info-text">Выберите предмет из инвентаря ниже 👇</div>
+            <div class="slot-preview" id="preview-left">
+                <div class="chevron-icon">
+                    <svg viewBox="0 0 24 24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
+                    <svg viewBox="0 0 24 24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
                 </div>
             </div>
         </div>
 
         <div class="panel center-panel">
+            <div class="result-banner" id="res-banner">УСПЕХ!</div>
             <div class="circle-container">
                 <div class="circle-ticks">
                     <div class="tick-label tick-50-l">50%</div>
@@ -429,36 +374,34 @@
                     <div class="tick-label tick-50-r">50%</div>
                 </div>
                 
-                <div class="upgrader-wheel" id="wheel">
+                <div class="upgrader-wheel" id="wheel-canvas">
+                    <div class="wheel-ticker" id="wheel-ticker">
+                        <div class="ticker-dot"></div>
+                    </div>
                     <div class="wheel-inner">
-                        <div class="wheel-percent wheel-percent-yellow" id="chance-val">50.00%</div>
-                        <div class="wheel-text" id="chance-text">medium chance</div>
+                        <div class="wheel-percent" id="chance-display">0.00%</div>
+                        <div class="wheel-text" id="chance-status">выберите предметы</div>
                     </div>
                 </div>
                 <div class="arrow-indicator"></div>
             </div>
 
-            <button class="btn-upgrade">
-                <svg viewBox="0 0 24 24"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z"/></svg>
+            <button class="btn-upgrade" id="btn-upgrade-main" disabled onclick="startUpgrade()">
                 UPGRADE
             </button>
-
-            <div class="multipliers">
-                <div>x4</div>
-                <div>x8</div>
-                <div>x25</div>
-                <div>35%</div>
-                <div>40%</div>
-                <div>75%</div>
-                <div>⚙️</div>
-            </div>
         </div>
 
-        <div class="panel target-panel">
-            <div class="item-type">★ Gut Knife</div>
-            <div class="item-name">Fade Factory New</div>
-            <img src="https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbWsD1hzIQOQhcGzK8Rlw52Fkvf1PL_FqWNU6dNoxOrAo9rw2VC3qUs6amj7doLAJAU8YA2C_lbqyeu6hZW07Z_BwHcxuycg-z-DyIJ2h4If/360fx360f" alt="Fade Knife">
-            <div class="item-price">12 690.12 <i class="coin-icon"></i></div>
+        <div class="panel target-panel" id="panel-right">
+            <div id="preview-right-content" style="display: none; width:100%; height:100%;">
+                <div class="item-type" id="target-tier-name">NFT Gift</div>
+                <div class="item-name" id="target-title">Название</div>
+                <div class="target-emoji" id="target-emoji">🍬</div>
+                <button class="btn-buy-store" id="btn-buy" onclick="buyTargetToInventory()">Купить в инвентарь</button>
+                <div class="item-price"><span id="target-price">0</span> ⭐️</div>
+            </div>
+            <div id="preview-right-empty" style="margin: auto; color: var(--text-muted); font-size: 13px; font-weight:600;">
+                Выберите цель из магазина справа 👉
+            </div>
         </div>
     </div>
 
@@ -466,102 +409,219 @@
         
         <div class="panel">
             <div class="inventory-header">
-                <div class="inventory-title">
-                    <svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2Z"/></svg>
-                    My skins
-                </div>
-                <div class="inventory-stats">
-                    <div>Skins total: <span class="price">471.87 <i class="coin-icon"></i></span></div>
-                </div>
+                <div class="inventory-title">🎒 Мой инвентарь</div>
+                <div class="inventory-stats">Предметов: <span id="inv-count">0</span></div>
             </div>
-            <div class="grid-container" id="my-skins-grid">
-                <div class="skin-card selected">
-                    <div class="rarity-line rarity-restricted"></div>
-                    <div class="card-top">
-                        <span class="price">471.87 <i class="coin-icon"></i></span>
-                        <span class="condition">WW</span>
-                    </div>
-                    <img src="https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpotrG0A1RXxTnHVb-H_9mkkL-HnvD8J_WEwz1R6pAmiO6U89j2jgfj_EVrMmD0ctORcQ43M1vSrlO4xrvt0cW1uZ-dyiBivCUk4XrDnAv330-E5_XxxA/360fx360f" alt="PP-Bizon">
-                    <div class="name">Breaker Box</div>
-                </div>
-                </div>
+            <div class="grid-container" id="my-inventory-grid"></div>
         </div>
 
         <div class="panel">
             <div class="inventory-header">
-                <div class="inventory-title">
-                    <svg viewBox="0 0 24 24"><path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z"/></svg>
-                    Select skin
-                </div>
-                <div class="inventory-stats">
-                    <span style="color:var(--text-muted)">Price</span>
-                    <div style="display:flex; gap: 10px; background: #1c202d; padding: 4px 10px; border-radius: 6px;">
-                        <span class="price">12628 <i class="coin-icon"></i></span> - 
-                        <span class="price">13957 <i class="coin-icon"></i></span>
-                    </div>
-                    <div>🔍</div>
-                </div>
+                <div class="inventory-title">🛒 Магазин NFT подарков</div>
+                <div class="inventory-stats">Выберите цель для улучшения</div>
             </div>
-            <div class="grid-container" id="shop-skins-grid">
-                </div>
+            <div class="grid-container" id="shop-grid"></div>
         </div>
 
     </div>
 </div>
 
 <script>
-    // Генерация пустых ячеек для левого инвентаря (чтобы сетка была заполнена как на фото)
-    const mySkinsGrid = document.getElementById('my-skins-grid');
-    for(let i=0; i<19; i++) {
-        const div = document.createElement('div');
-        div.className = 'empty-slot';
-        mySkinsGrid.appendChild(div);
+    // База данных NFT Подарков (Эмодзи, Цены, Тиры)
+    const NFT_DATABASE = {
+        "candy": { name: "Candy Cane", emoji: "🍬", price: 50, rarity: "var(--tier-common)", tierName: "Common Gift" },
+        "frog": { name: "Toy Frog", emoji: "🐸", price: 150, rarity: "var(--tier-common)", tierName: "Common Gift" },
+        "pumpkin": { name: "Pumpkin", emoji: "🎃", price: 400, rarity: "var(--tier-rare)", tierName: "Rare Gift" },
+        "star": { name: "Star Badge", emoji: "⭐", price: 1000, rarity: "var(--tier-rare)", tierName: "Rare Gift" },
+        "hoodie": { name: "Durov's Hoodie", emoji: "🧥", price: 2500, rarity: "var(--tier-epic)", tierName: "Epic Gift" },
+        "cap": { name: "Durov's Cap", emoji: "🧢", price: 6000, rarity: "var(--tier-epic)", tierName: "Epic Gift" },
+        "crystal": { name: "TON Crystal", emoji: "💎", price: 15000, rarity: "var(--tier-legendary)", tierName: "Legendary Gift" },
+        "crown": { name: "Durov's Crown", emoji: "👑", price: 50000, rarity: "var(--tier-immortal)", tierName: "Immortal Gift" }
+    };
+
+    // Состояние игры
+    let freebetBalance = 5000;
+    let userInventory = ["candy", "frog"]; // Стартовые предметы
+    let selectedInvIdx = null;
+    let selectedShopKey = null;
+    let calculatedChance = 0;
+    let isUpgrading = false;
+
+    // Инициализация
+    function init() {
+        renderInventory();
+        renderShop();
+        updateWorkspace();
     }
 
-    // Данные для правой сетки (как на скриншоте)
-    const shopSkins = [
-        { price: "12 633.23", cond: "MW", name: "Fade", img: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbWsD1hzIQOQhcGzK8Rlw52Fkvf1PL_FqWNU6dNoxOrAo9rw2VC3qUs6amj7doLAJAU8YA2C_lbqyeu6hZW07Z_BwHcxuycg-z-DyIJ2h4If/360fx360f", rarity: "rarity-yellow" },
-        { price: "12 633.23", cond: "WW", name: "Orion", img: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpoo6m1FBRp3_bNdqNG3-O6laKdlvn1Pa_VqWdU68MmjLHAotrxiwS28ktvYGnxJYfGcwU9ZQrV_wS3yejpgpK7tcjImyNh7CIrsSrenwv330-JzZ6Bjw/360fx360f", rarity: "rarity-classified" },
-        { price: "12 636.23", cond: "WW", name: "Autotronic", img: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbWsD1hzIQOQhcGzK8Rlw52Fkvf1PL_FqWdY781lxOiVpo7zjQXm-kRoYTzycNOQJA85N1nV-AS7wLq7hpW16p-cwSRnvSVxsCrdnRX330-yvT_k8A/360fx360f", rarity: "rarity-yellow" },
-        { price: "12 663.17", cond: "FT", name: "Blue Steel", img: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbWsD1hzIQOQhcGzK8Rlw52Fkvf1PL_FqWZU7Mxkh6fEot-k31DsrUJsYW3yJoOXdgM3NQqFqAS3wbjs1pe7tMybyHA2vnIg7HiOyAv33083BfUexQ/360fx360f", rarity: "rarity-yellow" },
-        { price: "12 672.90", cond: "MW", name: "Wasteland Rebel", img: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpot7HxfDhjxszJemkV092lnYmGmOHLO77QgHIfvpwmiL-QrbP4jVC9vh5yYG-ncI-ddVA3MgvR_la5lOa61pTotZnPnScysnEl-z-DyP4iHl3f/360fx360f", rarity: "rarity-covert" },
-        { price: "12 677.40", cond: "FT", name: "Chocolate Chess", img: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgposbWpLwBzxczbA21G-N2_mYGFmOXLP7LWnn8fvpUki-jEoIrxjQG1_ENrYWHzcIKScQU5ZQ7ZqAe3wr3vjZ-56J_AmSFhsicrtmGdwULm-gPGEg/360fx360f", rarity: "rarity-restricted" },
-        { price: "12 683.38", cond: "FT", name: "Eclipse", img: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpou-6kejhjxszcdD4b09_ziIWFhP77P7ndqW5U68oi3OqR84itjlbiqBA-ZG70cdPGdVJrMFiC-wW5kuvn05C4upXImHI1uyF0ty6Olgv330-n1X_N9g/360fx360f", rarity: "rarity-yellow" },
-        { price: "12 690.12", cond: "FN", name: "Fade", img: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbWsD1hzIQOQhcGzK8Rlw52Fkvf1PL_FqWNU6dNoxOrAo9rw2VC3qUs6amj7doLAJAU8YA2C_lbqyeu6hZW07Z_BwHcxuycg-z-DyIJ2h4If/360fx360f", rarity: "rarity-yellow", selected: true },
-        { price: "12 690.12", cond: "FT", name: "Asiimov", img: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpot7HxfDhjxszJemkV092lnYmGmOHLPr7Vn35cpsB3j7-Qrr700ADirRdrNziidYXJIFBvNQrT-ljrx--91pG0uZSbwHNm73Qi-z-DyE-R5dC2/360fx360f", rarity: "rarity-covert" },
-        { price: "12 697.60", cond: "FN", name: "Freehand", img: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbWsD1hzIQOQhcGzK8Rlw52Fkvf1PL_FqWZU7Mxkh6eWrdTziVLn_0NuZWj3cNWRdlc2ZV_YrlW2kr-6jJO6uJjBzSdjvSVx-z-DyE04B1Gv/360fx360f", rarity: "rarity-yellow" },
-        { price: "12 704.34", cond: "FT", name: "Blue Steel", img: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbWsD1hzIQOQhcGzK8Rlw52Fkvf1PL_FqWZU7Mxkh6fEot-k31DsrUJsYW3yJoOXdgM3NQqFqAS3wbjs1pe7tMybyHA2vnIg7HiOyAv33083BfUexQ/360fx360f", rarity: "rarity-yellow" },
-        { price: "12 710.33", cond: "FT", name: "Bloodsport", img: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpot7HxfDhjxszJemkV092lnYmGmOHLPr7Vn35cppRz3-qTpI-i2wK38xBuYWHxdtOTJwAwZA7S-VG8le--jMDtv5ybnSdmuyEgsC3fzQv330-J8lR_Lw/360fx360f", rarity: "rarity-covert" }
-    ];
+    // Рендер левого инвентаря
+    function renderInventory() {
+        const grid = document.getElementById("my-inventory-grid");
+        grid.innerHTML = "";
+        document.getElementById("inv-count").innerText = userInventory.length;
 
-    const shopGrid = document.getElementById('shop-skins-grid');
-    shopSkins.forEach(skin => {
-        const div = document.createElement('div');
-        div.className = `skin-card ${skin.selected ? 'selected' : ''}`;
-        div.innerHTML = `
-            <div class="rarity-line ${skin.rarity}"></div>
-            <div class="card-top">
-                <span class="price">${skin.price} <i class="coin-icon"></i></span>
-                <span class="condition">${skin.cond}</span>
-            </div>
-            <img src="${skin.img}" alt="${skin.name}">
-            <div class="name">${skin.name}</div>
-        `;
-        shopGrid.appendChild(div);
-    });
+        userInventory.forEach((key, idx) => {
+            const item = NFT_DATABASE[key];
+            if(!item) return;
+            const card = document.createElement("div");
+            card.className = `skin-card ${selectedInvIdx === idx ? 'selected' : ''}`;
+            card.onclick = () => { if(!isUpgrading) selectInventoryItem(idx); };
+            card.innerHTML = `
+                <div class="rarity-line" style="background: ${item.rarity}"></div>
+                <div class="card-top">
+                    <span class="price">${item.price} ⭐️</span>
+                </div>
+                <div class="card-emoji">${item.emoji}</div>
+                <div class="name">${item.name}</div>
+            `;
+            grid.appendChild(card);
+        });
 
-    // Логика отрисовки круга с сектором внизу (Как на 4-м скрине)
-    function setWheelChance(percent) {
-        const wheel = document.getElementById('wheel');
+        // Добиваем пустыми слотами для красоты сетки
+        const emptySlotsCount = Math.max(0, 12 - userInventory.length);
+        for(let i = 0; i < emptySlotsCount; i++) {
+            const slot = document.createElement("div");
+            slot.className = "empty-slot";
+            grid.appendChild(slot);
+        }
+    }
+
+    // Рендер правого магазина
+    function renderShop() {
+        const grid = document.getElementById("shop-grid");
+        grid.innerHTML = "";
+
+        Object.keys(NFT_DATABASE).forEach(key => {
+            const item = NFT_DATABASE[key];
+            const card = document.createElement("div");
+            card.className = `skin-card ${selectedShopKey === key ? 'selected' : ''}`;
+            card.onclick = () => { if(!isUpgrading) selectShopItem(key); };
+            card.innerHTML = `
+                <div class="rarity-line" style="background: ${item.rarity}"></div>
+                <div class="card-top">
+                    <span class="price">${item.price} ⭐️</span>
+                </div>
+                <div class="card-emoji">${item.emoji}</div>
+                <div class="name">${item.name}</div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    // Выбор вещи в инвентаре
+    function selectInventoryItem(idx) {
+        selectedInvIdx = (selectedInvIdx === idx) ? null : idx;
+        renderInventory();
+        updateWorkspace();
+    }
+
+    // Выбор вещи в магазине
+    function selectShopItem(key) {
+        selectedShopKey = (selectedShopKey === key) ? null : key;
+        renderShop();
+        updateWorkspace();
+    }
+
+    // Покупка предмета из магазина на баланс фрибета
+    function buyTargetToInventory() {
+        if(!selectedShopKey || isUpgrading) return;
+        const item = NFT_DATABASE[selectedShopKey];
         
-        // Переводим процент (0-100) в градусы (0-360)
-        const degrees = (percent / 100) * 360;
-        
-        // Чтобы шанс рисовался снизу (от стрелки), начинаем дугу с (180 - половина градусов)
-        const startDeg = 180 - (degrees / 2);
-        const endDeg = 180 + (degrees / 2);
-        
-        // CSS фокус: закрашиваем нужный сектор цветом, остальное темным фоном
+        if (freebetBalance >= item.price) {
+            freebetBalance -= item.price;
+            document.getElementById("balance-amount").innerText = freebetBalance;
+            userInventory.push(selectedShopKey);
+            renderInventory();
+            updateWorkspace();
+        } else {
+            alert("Недостаточно ФРИБЕТ звёзд на балансе! Выберите подарок подешевле.");
+        }
+    }
+
+    // Обновление верхних рабочих зон и колеса шансов
+    function updateWorkspace() {
+        // Левый слот
+        const previewLeft = document.getElementById("preview-left");
+        if (selectedInvIdx !== null) {
+            const item = NFT_DATABASE[userInventory[selectedInvIdx]];
+            previewLeft.innerHTML = `
+                <div class="emoji">${item.emoji}</div>
+                <div class="name">${item.name}</div>
+                <div class="price">${item.price} ⭐️</div>
+            `;
+        } else {
+            previewLeft.innerHTML = `
+                <div class="chevron-icon">
+                    <svg viewBox="0 0 24 24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
+                    <svg viewBox="0 0 24 24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
+                </div>
+            `;
+        }
+
+        // Правый слот
+        const rightContent = document.getElementById("preview-right-content");
+        const rightEmpty = document.getElementById("preview-right-empty");
+        const btnBuy = document.getElementById("btn-buy");
+
+        if (selectedShopKey !== null) {
+            const item = NFT_DATABASE[selectedShopKey];
+            rightEmpty.style.display = "none";
+            rightContent.style.display = "block";
+            document.getElementById("target-tier-name").innerText = item.tierName;
+            document.getElementById("target-title").innerText = item.name;
+            document.getElementById("target-emoji").innerText = item.emoji;
+            document.getElementById("target-price").innerText = item.price;
+
+            // Блокировка кнопки покупки, если не хватает баланса
+            btnBuy.disabled = freebetBalance < item.price;
+        } else {
+            rightContent.style.display = "none";
+            rightEmpty.style.display = "margin";
+        }
+
+        // Расчет процентов
+        const btnUpgrade = document.getElementById("btn-upgrade-main");
+        if (selectedInvIdx !== null && selectedShopKey !== null) {
+            const priceFrom = NFT_DATABASE[userInventory[selectedInvIdx]].price;
+            const priceTo = NFT_DATABASE[selectedShopKey].price;
+
+            calculatedChance = Math.min((priceFrom / priceTo) * 100, 100);
+            document.getElementById("chance-display").innerText = calculatedChance.toFixed(2) + "%";
+            
+            if(calculatedChance >= 70) {
+                document.getElementById("chance-status").innerText = "high chance";
+                document.getElementById("chance-display").className = "wheel-percent";
+            } else if(calculatedChance >= 30) {
+                document.getElementById("chance-status").innerText = "medium chance";
+                document.getElementById("chance-display").className = "wheel-percent";
+            } else {
+                document.getElementById("chance-status").innerText = "low chance";
+                document.getElementById("chance-display").className = "wheel-percent wheel-percent-yellow";
+            }
+
+            // Запрещаем крафтить вещь саму в себя или если шанс 100% просто так
+            btnUpgrade.disabled = false;
+            drawWheelSector(calculatedChance);
+        } else {
+            calculatedChance = 0;
+            document.getElementById("chance-display").innerText = "0.00%";
+            document.getElementById("chance-status").innerText = "выберите предметы";
+            btnUpgrade.disabled = true;
+            drawWheelSector(0);
+        }
+    }
+
+    // Отрисовка сектора выигрыша (Строго внизу, центрировано относительно 180 градусов)
+    function drawWheelSector(chance) {
+        const wheel = document.getElementById("wheel-canvas");
+        if (chance <= 0) {
+            wheel.style.background = `#181b24`;
+            return;
+        }
+        const arcDegrees = (chance / 100) * 360;
+        const startDeg = 180 - (arcDegrees / 2);
+        const endDeg = 180 + (arcDegrees / 2);
+
         wheel.style.background = `conic-gradient(from 0deg, 
             #181b24 0deg, 
             #181b24 ${startDeg}deg, 
@@ -572,9 +632,96 @@
         )`;
     }
 
-    // Ставим ровно 50.00% как на скрине
-    setWheelChance(50.00);
+    // Логика апгрейда
+    function startUpgrade() {
+        if (isUpgrading || selectedInvIdx === null || selectedShopKey === null) return;
+        isUpgrading = true;
+        document.getElementById("btn-upgrade-main").disabled = true;
+        document.getElementById("btn-buy").disabled = true;
 
+        const isWin = (Math.random() * 100) <= calculatedChance;
+        const arcDegrees = (calculatedChance / 100) * 360;
+        
+        let targetAngle = 0;
+        if (isWin) {
+            // Должен остановиться внутри нижнего сектора [180 - полудуга, 180 + полудуга]
+            const half = arcDegrees / 2;
+            targetAngle = 180 + (Math.random() * (half * 2) - half);
+        } else {
+            // Должен остановиться вне сектора
+            const half = arcDegrees / 2;
+            const leftSafe = 180 - half;
+            const rightSafe = 180 + half;
+            if (Math.random() > 0.5) {
+                targetAngle = Math.random() * leftSafe;
+            } else {
+                targetAngle = rightSafe + (Math.random() * (360 - rightSafe));
+            }
+        }
+
+        const totalSpins = 3600; // 10 полных оборотов для разгона
+        const finalRotation = totalSpins + targetAngle;
+        
+        const ticker = document.getElementById("wheel-ticker");
+        const banner = document.getElementById("res-banner");
+        banner.className = "result-banner"; // Сброс баннера
+
+        let startTimestamp = null;
+        const duration = 4000; // 4 секунды кручения
+
+        function animate(timestamp) {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const elapsed = timestamp - startTimestamp;
+            const progress = Math.min(elapsed / duration, 1);
+
+            // Кубический ease-out для реалистичного замедления колеса
+            const easeOut = 1 - Math.pow(1 - progress, 4);
+            const currentAngle = finalRotation * easeOut;
+
+            ticker.style.transform = `translateX(-50%) rotate(${currentAngle}deg)`;
+
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                // Финал анимации
+                finishUpgrade(isWin);
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+
+    function finishUpgrade(isWin) {
+        const banner = document.getElementById("res-banner");
+        const itemFromKey = userInventory[selectedInvIdx];
+        const itemToKey = selectedShopKey;
+
+        // Удаляем вещь, которую пустили на крафт в любом случае
+        userInventory.splice(selectedInvIdx, 1);
+
+        if (isWin) {
+            // Добавляем выигранную вещь
+            userInventory.push(itemToKey);
+            banner.innerText = "УСПЕХ!";
+            banner.className = "result-banner win";
+        } else {
+            banner.innerText = "СГОРЕЛ!";
+            banner.className = "result-banner lose";
+        }
+
+        // Сброс выбора
+        selectedInvIdx = null;
+        isUpgrading = false;
+
+        renderInventory();
+        updateWorkspace();
+
+        // Спрятать баннер через 3 секунды
+        setTimeout(() => {
+            banner.className = "result-banner";
+        }, 3000);
+    }
+
+    window.onload = init;
 </script>
 
 </body>
