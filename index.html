@@ -3,112 +3,408 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFT Upgrade</title>
+    <title>Telegram NFT Upgrader</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body {
-            background-color: #12131a;
-            color: white;
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            margin: 0; padding: 20px;
+        :root {
+            --bg-color: #0e1015;
+            --panel-color: #161922;
+            --accent-yellow: #ffb700;
+            --accent-green: #00ff66;
+            --accent-red: #ff3344;
+            --text-main: #ffffff;
+            --text-muted: #62687a;
         }
-        /* Круговой прогресс-бар как на видео */
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0; padding: 10px;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        /* Шапка */
+        .header {
+            text-align: center;
+            padding: 10px 0;
+        }
+        .header h1 {
+            font-size: 20px; margin: 0; color: var(--accent-yellow);
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* Главная рабочая зона (Слоты и Крутилка) */
+        .workspace {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--panel-color);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            border: 1px solid #222735;
+        }
+
+        .slot {
+            width: 30%;
+            height: 110px;
+            background: #1c202c;
+            border: 2px dashed #31374a;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s;
+        }
+        .slot.active {
+            border: 2px solid var(--accent-yellow);
+            background: #232838;
+        }
+        .slot .emoji { font-size: 36px; margin-bottom: 4px; }
+        .slot .name { font-size: 11px; color: var(--text-main); font-weight: bold; }
+        .slot .price { font-size: 12px; color: var(--accent-yellow); font-weight: bold; }
+        .slot .placeholder { font-size: 12px; color: var(--text-muted); padding: 5px; }
+
+        /* Центр: Колесо апгрейда */
+        .center-area {
+            width: 35%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
         .circle-container {
             position: relative;
-            width: 200px; height: 200px;
-            margin: 30px auto;
+            width: 110px; height: 110px;
         }
-        .circle-svg {
-            transform: rotate(-90deg);
-        }
-        .circle-bg {
-            fill: none; stroke: #232533; stroke-width: 12;
-        }
+        .circle-svg { transform: rotate(-90deg); }
+        .circle-bg { fill: none; stroke: #232838; stroke-width: 8; }
         .circle-progress {
-            fill: none; stroke: #00ff66; stroke-width: 12;
-            stroke-dasharray: 565; stroke-dashoffset: 565;
-            transition: stroke-dashoffset 2s cubic-bezier(0.1, 0.8, 0.2, 1);
+            fill: none; stroke: var(--accent-yellow); stroke-width: 8;
+            stroke-dasharray: 314; stroke-dashoffset: 314;
+            transition: stroke-dashoffset 0.5s ease, stroke 0.3s;
+        }
+        .circle-progress.spinning {
+            animation: spinCircle 0.3s linear infinite;
         }
         .percentage {
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 28px; font-weight: bold;
+            font-size: 18px; font-weight: bold;
         }
+
+        /* Кнопка Улучшить */
         .btn-upgrade {
-            background: linear-gradient(90deg, #ffcc00, #ff9900);
-            border: none; color: black; font-weight: bold;
-            padding: 15px 40px; font-size: 18px;
-            border-radius: 10px; cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 153, 0, 0.4);
+            width: 100%;
+            background: linear-gradient(135deg, #ffc800, #ff9000);
+            border: none; color: #000; font-weight: 800;
+            padding: 12px; font-size: 14px; border-radius: 10px;
+            cursor: pointer; margin-top: 10px;
+            text-transform: uppercase; letter-spacing: 1px;
+            transition: transform 0.1s, opacity 0.3s;
         }
-        .btn-upgrade:disabled { background: #444; color: #888; box-shadow: none; }
+        .btn-upgrade:active { transform: scale(0.98); }
+        .btn-upgrade:disabled { background: #2e3344; color: #555; cursor: not-allowed; }
+
+        /* Сетки Инвентаря и Магазина */
+        .section-title {
+            font-size: 14px; font-weight: bold; margin: 15px 0 8px 5px;
+            color: var(--text-muted); display: flex; justify-content: space-between;
+        }
+        .section-title span { color: var(--text-main); }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            max-height: 180px;
+            overflow-y: auto;
+            padding-right: 3px;
+        }
+
+        /* Карточка предмета */
+        .item-card {
+            background: var(--panel-color);
+            border: 1px solid #222735;
+            border-radius: 10px;
+            padding: 8px 4px;
+            text-align: center;
+            position: relative;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .item-card:active { transform: scale(0.95); }
+        .item-card.selected { border-color: var(--accent-yellow); background: #1f2433; }
+        .item-card .item-emoji { font-size: 28px; }
+        .item-card .item-name { font-size: 9px; color: var(--text-muted); margin: 4px 0 2px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .item-card .item-price { font-size: 11px; font-weight: bold; color: #00e5ff; }
+
+        /* Всплывашка результата */
+        .result-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10,12,18,0.9);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .result-overlay.active { opacity: 1; pointer-events: auto; }
+        .result-box { text-align: center; transform: scale(0.7); transition: transform 0.3s; }
+        .result-overlay.active .result-box { transform: scale(1); }
+        .result-status { font-size: 26px; font-weight: 900; margin-bottom: 15px; }
+        .result-gift { font-size: 70px; margin-bottom: 15px; animation: bounce 1s infinite alternate; }
+
+        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
     </style>
 </head>
 <body>
 
-    <h2>⚡ СИМУЛЯТОР АПГРЕЙДА NFT ⚡</h2>
-    <p>Шанс на успех: <span id="chance-text">50</span>%</p>
-
-    <div class="circle-container">
-        <svg class="circle-svg" width="200" height="200">
-            <circle class="circle-bg" cx="100" cy="100" r="90"></circle>
-            <circle class="circle-progress" id="progress" cx="100" cy="100" r="90"></circle>
-        </svg>
-        <div class="percentage" id="percent-display">0%</div>
+    <div class="header">
+        <h1>NFT Gifts Upgrader</h1>
     </div>
 
-    <button class="btn-upgrade" id="upgrade-btn" onclick="startUpgrade()">UPGRADE</button>
-    <h3 id="result" style="margin-top: 20px;"></h3>
+    <div class="workspace">
+        <div class="slot" id="slot-from">
+            <div class="placeholder">Выбери свой подарок ниже 🎒</div>
+        </div>
+
+        <div class="center-area">
+            <div class="circle-container">
+                <svg class="circle-svg" width="110" height="110">
+                    <circle class="circle-bg" cx="55" cy="55" r="50"></circle>
+                    <circle class="circle-progress" id="progress-bar" cx="55" cy="55" r="50"></circle>
+                </svg>
+                <div class="percentage" id="chance-display">0%</div>
+            </div>
+            <button class="btn-upgrade" id="btn-start" disabled onclick="executeUpgrade()">Upgrade</button>
+        </div>
+
+        <div class="slot" id="slot-to">
+            <div class="placeholder">Выбери цель справа 👑</div>
+        </div>
+    </div>
+
+    <div class="section-title">🎒 МОИ NFT ПОДАРКИ <span id="inv-count">0</span></div>
+    <div class="grid" id="inventory-grid"></div>
+
+    <div class="section-title">👑 ВЫБЕРИТЕ ЦЕЛЬ АПГРЕЙДА</div>
+    <div class="grid" id="shop-grid"></div>
+
+    <div class="result-overlay" id="result-screen" onclick="closeResult()">
+        <div class="result-box">
+            <div class="result-status" id="res-title">УСПЕХ!</div>
+            <div class="result-gift" id="res-emoji">👑</div>
+            <div style="font-size: 16px;" id="res-desc">Вы прокачали предмет!</div>
+            <div style="color: var(--text-muted); margin-top: 20px; font-size: 12px;">Нажмите в любое место, чтобы продолжить</div>
+        </div>
+    </div>
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Разворачиваем на весь экран
+        tg.expand();
 
-        let chance = Math.floor(Math.random() * 60) + 15; // Рандомный шанс от 15% до 75%
-        document.getElementById('chance-text').innerText = chance;
+        // Полная база официальных лимитированных подарков Telegram
+        const GIFT_DATABASE = {
+            "candy": { name: "Candy Cane", emoji: "🍬", price: 50 },
+            "tree": { name: "Christmas Tree", emoji: "🎄", price: 120 },
+            "frog": { name: "Toy Frog", emoji: "🐸", price: 300 },
+            "heart": { name: "Love Heart", emoji: "❤️", price: 650 },
+            "star": { name: "Telegram Star", emoji: "⭐", price: 1500 },
+            "duck": { name: "CEO Duck", emoji: "🦆", price: 3500 },
+            "matrix": { name: "Neo Matrix", emoji: "🫙", price: 8000 },
+            "crystal": { name: "TON Crystal", emoji: "💎", price: 18000 },
+            "crown": { name: "Durov Crown", emoji: "👑", price: 50000 }
+        };
 
-        function startUpgrade() {
-            const btn = document.getElementById('upgrade-btn');
-            const progressCircle = document.getElementById('progress');
-            const percentDisplay = document.getElementById('percent-display');
-            const resultText = document.getElementById('result');
-            
-            btn.disabled = true;
-            resultText.innerText = "⚡ Синхронизация с блокчейном...";
-            
-            // Расчет круга (длина окружности 2 * pi * r = 2 * 3.14 * 90 = 565)
-            const maxOffset = 565;
-            const targetOffset = maxOffset - (maxOffset * chance) / 100;
-            
-            // Запускаем плавную анимацию заполнения круга
-            progressCircle.style.strokeDashoffset = targetOffset;
-            
-            // Анимация цифр процентов внутри круга
-            let currentPercent = 0;
-            let interval = setInterval(() => {
-                if (currentPercent >= chance) {
-                    clearInterval(interval);
-                    determineResult();
-                } else {
-                    currentPercent++;
-                    percentDisplay.innerText = currentPercent + "%";
-                }
-            }, 2000 / chance); // подгоняем под 2 секунды анимации CSS
+        // Состояние игры в реальном времени
+        let userInventory = ["candy", "candy", "tree", "frog", "heart"]; 
+        let selectedFromIdx = null;
+        let selectedToKey = null;
+        let calculatedChance = 0;
+
+        // Инициализация сеток
+        function initApp() {
+            renderInventory();
+            renderShop();
+            updateCircle(0);
         }
 
-        function determineResult() {
-            const roll = Math.floor(Math.random() * 100) + 1;
-            const resultText = document.getElementById('result');
+        function renderInventory() {
+            const grid = document.getElementById("inventory-grid");
+            grid.innerHTML = "";
+            document.getElementById("inv-count").innerText = `(${userInventory.length})`;
             
-            if (roll <= chance) {
-                resultText.innerHTML = "<span style='color: #00ff66;'>🎉 УСПЕХ! NFT ПОВЫШЕН!</span>";
-                document.getElementById('progress').style.stroke = "#00ff66";
+            userInventory.forEach((key, idx) => {
+                const item = GIFT_DATABASE[key];
+                const card = document.createElement("div");
+                card.className = `item-card ${selectedFromIdx === idx ? 'selected' : ''}`;
+                card.onclick = () => selectFrom(idx);
+                card.innerHTML = `
+                    <div class="item-emoji">${item.emoji}</div>
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-price">$${item.price}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderShop() {
+            const grid = document.getElementById("shop-grid");
+            grid.innerHTML = "";
+            
+            Object.keys(GIFT_DATABASE).forEach(key => {
+                const item = GIFT_DATABASE[key];
+                const card = document.createElement("div");
+                card.className = `item-card ${selectedToKey === key ? 'selected' : ''}`;
+                card.onclick = () => selectTo(key);
+                card.innerHTML = `
+                    <div class="item-emoji">${item.emoji}</div>
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-price">$${item.price}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function selectFrom(idx) {
+            selectedFromIdx = (selectedFromIdx === idx) ? null : idx;
+            renderInventory();
+            updateSlots();
+        }
+
+        function selectTo(key) {
+            selectedToKey = (selectedToKey === key) ? null : key;
+            renderShop();
+            updateSlots();
+        }
+
+        function updateSlots() {
+            const slotFrom = document.getElementById("slot-from");
+            const slotTo = document.getElementById("slot-to");
+
+            // Левый слот
+            if (selectedFromIdx !== null) {
+                const item = GIFT_DATABASE[userInventory[selectedFromIdx]];
+                slotFrom.className = "slot active";
+                slotFrom.innerHTML = `<div class="emoji">${item.emoji}</div><div class="name">${item.name}</div><div class="price">$${item.price}</div>`;
             } else {
-                resultText.innerHTML = "<span style='color: #ff3333;'>💀 СГОРЕЛ! Ошибка транзакции.</span>";
-                document.getElementById('progress').style.stroke = "#ff3333";
+                slotFrom.className = "slot";
+                slotFrom.innerHTML = `<div class="placeholder">Выбери свой подарок ниже 🎒</div>`;
+            }
+
+            // Правый слот
+            if (selectedToKey !== null) {
+                const item = GIFT_DATABASE[selectedToKey];
+                slotTo.className = "slot active";
+                slotTo.innerHTML = `<div class="emoji">${item.emoji}</div><div class="name">${item.name}</div><div class="price">$${item.price}</div>`;
+            } else {
+                slotTo.className = "slot";
+                slotTo.innerHTML = `<div class="placeholder">Выбери цель справа 👑</div>`;
+            }
+
+            // Шансы
+            if (selectedFromIdx !== null && selectedToKey !== null) {
+                const priceFrom = GIFT_DATABASE[userInventory[selectedFromIdx]].price;
+                const priceTo = GIFT_DATABASE[selectedToKey].price;
+                
+                calculatedChance = Math.min(((priceFrom / priceTo) * 100), 100).toFixed(2);
+                document.getElementById("btn-start").disabled = false;
+                updateCircle(calculatedChance);
+            } else {
+                calculatedChance = 0;
+                document.getElementById("btn-start").disabled = true;
+                updateCircle(0);
             }
         }
+
+        function updateCircle(chance) {
+            document.getElementById("chance-display").innerText = chance + "%";
+            const circle = document.getElementById("progress-bar");
+            // Длина окружности 2 * Math.PI * 50 = 314
+            const offset = 314 - (314 * chance) / 100;
+            circle.style.strokeDashoffset = offset;
+        }
+
+        // КРУТИЛКА ИЗ ВИДЕО (АНИМАЦИЯ)
+        function executeUpgrade() {
+            const btn = document.getElementById("btn-start");
+            const circle = document.getElementById("progress-bar");
+            btn.disabled = true;
+
+            let currentFakeChance = 0;
+            let duration = 2500; // 2.5 секунды кручения
+            let startTime = performance.now();
+
+            // Эффект быстрого тиканья / вращения как в казино
+            function animate(now) {
+                let elapsed = now - startTime;
+                let progress = Math.min(elapsed / duration, 1);
+                
+                // Случайные скачки шкалы во время вращения
+                let fakeChance = Math.floor(Math.random() * 100);
+                updateCircle(fakeChance);
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    // Анимация завершилась, выдаем реальный результат
+                    finalizeUpgrade();
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        function finalizeUpgrade() {
+            const roll = Math.random() * 100;
+            const itemFromKey = userInventory[selectedFromIdx];
+            const itemToKey = selectedToKey;
+
+            // Удаляем предмет-донор
+            userInventory.splice(selectedFromIdx, 1);
+
+            const overlay = document.getElementById("result-screen");
+            const resTitle = document.getElementById("res-title");
+            const resEmoji = document.getElementById("res-emoji");
+            const resDesc = document.getElementById("res-desc");
+
+            if (roll <= calculatedChance) {
+                // Победил
+                userInventory.push(itemToKey);
+                resTitle.innerText = "УСПЕХ!";
+                resTitle.style.color = "var(--accent-green)";
+                resEmoji.innerText = GIFT_DATABASE[itemToKey].emoji;
+                resDesc.innerText = `Вы успешно получили ${GIFT_DATABASE[itemToKey].name}!`;
+            } else {
+                // Проиграл
+                resTitle.innerText = "СГОРЕЛ!";
+                resTitle.style.color = "var(--accent-red)";
+                resEmoji.innerText = "💥";
+                resDesc.innerText = `${GIFT_DATABASE[itemFromKey].name} был уничтожен при апгрейде.`;
+            }
+
+            // Сброс выбора
+            selectedFromIdx = null;
+            selectedToKey = null;
+            updateSlots();
+            initApp();
+
+            overlay.classList.add("active");
+        }
+
+        function closeResult() {
+            document.getElementById("result-screen").classList.remove("active");
+            // Если баланс на нуле, даем утешительную конфету
+            if (userInventory.length === 0) {
+                userInventory.push("candy");
+                initApp();
+            }
+        }
+
+        window.onload = initApp;
     </script>
 </body>
 </html>
