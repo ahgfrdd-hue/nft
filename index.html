@@ -35,6 +35,31 @@
             margin: 0; padding: 0; box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             -webkit-tap-highlight-color: transparent;
+            min-width: 0; /* Фикс для корректного обрезания текста во flex-контейнерах */
+        }
+
+        /* Прикольные анимации при нажатии на любые кликабельные элементы */
+        button:active, .item-slot:active, .item-card:active, .profile-avatar:active, .modal-close:active, .payment-method:active {
+            transform: scale(0.92) !important;
+            transition: transform 0.1s cubic-bezier(0.22, 1, 0.36, 1) !important;
+            filter: brightness(1.2);
+        }
+
+        /* Блокировка выбора подарков по запросу */
+        .slots-container, .items-grid {
+            pointer-events: none;
+        }
+
+        /* Запрет на выпирание текста */
+        .item-sub, .item-title, .p-item-name, .bd-name, #profileEmailDisplay, .ticker-item span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 100%;
+        }
+        .p-item-info, .item-info {
+            min-width: 0;
+            width: 100%;
         }
 
         body {
@@ -174,7 +199,7 @@
         .slot-bg-pepe {
             position: absolute; width: 75%; height: 75%; object-fit: contain;
             filter: brightness(0); opacity: 0.15; z-index: 1; pointer-events: none;
-            animation: floatEffect 4s ease-in-out infinite; /* Добавлена анимация */
+            animation: floatEffect 4s ease-in-out infinite; 
         }
         
         .slot-chevron-container { position: relative; z-index: 2; margin-bottom: 8px; }
@@ -193,7 +218,7 @@
         .wheel-progress {
             stroke-dasharray: 534; stroke-dashoffset: 534; 
             transition: stroke-dashoffset 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-            filter: drop-shadow(0 0 12px var(--accent-secondary)); /* Усилено свечение */
+            filter: drop-shadow(0 0 12px var(--accent-secondary)); 
         }
         
         .arrow-spinner-wrapper {
@@ -241,7 +266,7 @@
         .item-card { 
             background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); 
             padding: 12px; display: flex; flex-direction: column; align-items: center; position: relative; cursor: pointer; 
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy анимация */
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); 
             will-change: transform, box-shadow; 
         }
         .item-card:hover { background: var(--bg-card-hover); transform: translateY(-5px) scale(1.03); box-shadow: 0 10px 25px rgba(0,0,0,0.5); border-color: #4a4a60; }
@@ -251,7 +276,6 @@
         .item-card:hover .item-img-container img { transform: scale(1.1); }
         .item-info { text-align: center; width: 100%; }
         .item-title { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
-        .item-sub { font-size: 12px; font-weight: 700; margin-top: 3px; color: #eee; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
 
         .rarity-epic { border-bottom: 3px solid var(--rarity-epic); }
         .rarity-legendary { border-bottom: 3px solid var(--rarity-legendary); }
@@ -345,7 +369,7 @@
             display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color);
         }
         .bd-img-container img { max-width: 80%; max-height: 80%; object-fit: contain; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
-        .bd-info { flex: 1; display: flex; flex-direction: column; }
+        .bd-info { flex: 1; display: flex; flex-direction: column; min-width: 0; }
         .bd-name { font-size: 16px; font-weight: 800; color: #fff; }
         .bd-rarity { font-size: 12px; font-weight: 700; margin-top: 4px; color: var(--text-muted); }
         .bd-price { font-size: 14px; font-weight: 900; color: #fff; background: rgba(0,0,0,0.4); padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
@@ -357,7 +381,6 @@
         
         .profile-list-item { display: flex; justify-content: space-between; align-items: center; background: var(--bg-card); padding: 12px 16px; border-radius: var(--radius-sm); margin-bottom: 10px; border: 1px solid transparent; border-left: 4px solid transparent; transition: var(--transition); }
         .profile-list-item:hover { border-color: var(--border-color); background: var(--bg-card-hover); transform: translateX(4px); }
-        .p-item-info { display: flex; flex-direction: column; }
         .p-item-name { font-size: 13px; font-weight: 700; color: #fff; }
         .p-item-price { font-size: 11px; color: var(--text-muted); font-weight: bold; margin-top: 2px;}
         .btn-profile-action { padding: 8px 14px; border: none; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; text-transform: uppercase; transition: var(--transition); }
@@ -397,7 +420,7 @@
             <div class="online-count">Онлайн: <span id="onlineCount">1 742</span></div>
         </div>
         <div class="user-area">
-            <button id="headerLoginBtn" class="btn-deposit" style="background: linear-gradient(135deg, #00e5ff, #007bff); font-weight: 800; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.4); display: none;" onclick="openModal('authModal')">Вход по Email</button>
+            <button id="headerLoginBtn" class="btn-deposit" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); font-weight: 800; box-shadow: 0 4px 15px var(--accent-glow); display: none;" onclick="openModal('authModal')">Вход по Email</button>
             
             <div id="headerUserArea" style="display: none; align-items: center; gap: 14px;">
                 <div class="balance-block">
@@ -424,7 +447,7 @@
                             <path fill="#FFCC00" d="M5 50 L25 65 L45 50 L45 60 L25 75 L5 60 Z" />
                         </svg>
                     </div>
-                    <span class="slot-hint">Выбери свой подарок</span>
+                    <span class="slot-hint">Email</span>
                 </div>
                 <div class="item-slot" id="slotRight" onclick="switchTab('shop')">
                     <img src="16201.png" class="slot-bg-pepe">
@@ -435,7 +458,7 @@
                             <path fill="#FFCC00" d="M5 65 L25 50 L45 65 L45 55 L25 40 L5 55 Z" />
                         </svg>
                     </div>
-                    <span class="slot-hint">Выбери цель</span>
+                    <span class="slot-hint">Email</span>
                 </div>
             </div>
 
@@ -481,14 +504,14 @@
             </div>
 
             <div class="action-block">
-                <button class="btn-upgrade" id="btnUpgrade" onclick="executeUpgrade()" disabled>Выберите подарки</button>
+                <button class="btn-upgrade" id="btnUpgrade" onclick="executeUpgrade()" disabled>Email</button>
             </div>
         </section>
 
         <section class="inventory-section">
             <div class="tabs-header">
                 <button class="tab-btn active" id="tabMy" onclick="switchTab('my')">Мой инвентарь</button>
-                <button class="tab-btn" id="tabShop" onclick="switchTab('shop')">Желаемый подарок</button>
+                <button class="tab-btn" id="tabShop" onclick="switchTab('shop')">Email</button>
             </div>
             <div class="items-grid" id="gridContent"></div>
         </section>
@@ -602,7 +625,7 @@
                 <div style="padding-top: 10px;">
                     <input type="text" class="modal-input" id="withdrawDetails" placeholder="Ваш Telegram Username (@username)" style="margin-bottom:10px;">
                     <input type="number" class="modal-input" id="withdrawAmount" placeholder="Сумма (⭐)">
-                    <button class="modal-btn" style="background:linear-gradient(135deg, #0984e3, #74b9ff); margin-top: 10px;" onclick="processWithdraw()">Создать заявку</button>
+                    <button class="modal-btn" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); margin-top: 10px;" onclick="processWithdraw()">Создать заявку</button>
                 </div>
             </div>
         </div>
@@ -641,7 +664,6 @@
         let myInventoryData = JSON.parse(localStorage.getItem('ub_inv')) || [giftPool[0], giftPool[1], giftPool[4], giftPool[8]];
         let stats = JSON.parse(localStorage.getItem('ub_stats')) || { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0 };
         
-        // ИЗМЕНЕНИЕ: Глобальная переменная для отслеживания авторизации
         window.isUserLoggedIn = false;
 
         if(stats.withdrawn === undefined) stats.withdrawn = 0;
@@ -752,7 +774,7 @@
 
             if (!selectedLeft || !selectedRight) {
                 btn.disabled = true;
-                btn.innerText = 'Выберите подарки';
+                btn.innerText = 'Email';
                 btn.style.background = '';
                 btn.style.boxShadow = '';
                 chevrons.style.display = 'block';
@@ -761,19 +783,18 @@
                 return;
             }
 
-            // ИЗМЕНЕНИЕ: Если пользователь не авторизован, меняем кнопку и просим войти
             if (!window.isUserLoggedIn) {
                 btn.disabled = false;
-                btn.innerText = 'Войти для апгрейда';
-                btn.style.background = 'linear-gradient(135deg, #00e5ff, #007bff)';
-                btn.style.boxShadow = '0 8px 25px rgba(0, 229, 255, 0.4)';
+                btn.innerText = 'Email';
+                btn.style.background = 'linear-gradient(135deg, var(--accent-main), #b838ff)';
+                btn.style.boxShadow = '0 8px 25px var(--accent-glow)';
                 chevrons.style.display = 'none';
                 chanceDisplay.style.display = 'block';
                 return;
             }
             
             btn.disabled = false;
-            btn.innerText = 'Прокачать подарок';
+            btn.innerText = 'Email';
             chevrons.style.display = 'none';
             chanceDisplay.style.display = 'block';
 
@@ -861,7 +882,6 @@
         }
 
         function executeUpgrade() {
-            // ИЗМЕНЕНИЕ: Открытие модала логина, если пользователь не авторизован
             if (!window.isUserLoggedIn) {
                 openModal('authModal');
                 return;
@@ -993,7 +1013,7 @@
 
             setTimeout(() => {
                 btn.style.background = '';
-                btn.innerText = 'Выберите подарки';
+                btn.innerText = 'Email';
                 btn.disabled = true;
                 arena.className = 'upgrade-arena'; 
                 
@@ -1011,7 +1031,7 @@
                             <path fill="#FFCC00" d="M5 50 L25 65 L45 50 L45 60 L25 75 L5 60 Z" />
                         </svg>
                     </div>
-                    <span class="slot-hint">Выбери свой подарок</span>
+                    <span class="slot-hint">Email</span>
                 `;
                 document.getElementById('slotLeft').classList.remove('active');
                 
@@ -1024,7 +1044,7 @@
                             <path fill="#FFCC00" d="M5 65 L25 50 L45 65 L45 55 L25 40 L5 55 Z" />
                         </svg>
                     </div>
-                    <span class="slot-hint">Выбери цель</span>
+                    <span class="slot-hint">Email</span>
                 `;
                 document.getElementById('slotRight').classList.remove('active');
                 
@@ -1309,7 +1329,6 @@
             });
         }
 
-        // ИЗМЕНЕНИЕ: Обработка статуса авторизации для управления шапкой и апгрейдами
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 closeModal('authModal');
@@ -1332,12 +1351,12 @@
                     window.syncToDb(window.getCurrentBalance(), window.getCurrentInv(), window.getCurrentStats());
                 }
                 
-                updateChance(); // Обновляем текст кнопки апгрейда
+                updateChance(); 
             } else {
                 window.isUserLoggedIn = false;
                 document.getElementById('headerLoginBtn').style.display = 'block';
                 document.getElementById('headerUserArea').style.display = 'none';
-                updateChance(); // Обновляем текст кнопки апгрейда (просит войти)
+                updateChance(); 
             }
         });
     </script>
