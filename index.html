@@ -35,22 +35,19 @@
             margin: 0; padding: 0; box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             -webkit-tap-highlight-color: transparent;
-            min-width: 0; /* Фикс для корректного обрезания текста во flex-контейнерах */
+            min-width: 0; 
         }
 
-        /* Прикольные анимации при нажатии на любые кликабельные элементы */
         button:active, .item-slot:active, .item-card:active, .profile-avatar:active, .modal-close:active, .payment-method:active {
             transform: scale(0.92) !important;
             transition: transform 0.1s cubic-bezier(0.22, 1, 0.36, 1) !important;
             filter: brightness(1.2);
         }
 
-        /* Блокировка выбора подарков по запросу */
         .slots-container, .items-grid {
             pointer-events: none;
         }
 
-        /* Запрет на выпирание текста */
         .item-sub, .item-title, .p-item-name, .bd-name, #profileEmailDisplay, .ticker-item span {
             overflow: hidden;
             text-overflow: ellipsis;
@@ -70,7 +67,6 @@
             display: flex; flex-direction: column; overflow-x: hidden;
         }
 
-        /* Кнопки авторизации */
         .btn-google {
             background: #fff; color: #000;
             border: none; padding: 12px 24px; border-radius: var(--radius-sm);
@@ -178,7 +174,6 @@
             40%, 80% { transform: translateX(6px); }
         }
 
-        /* Анимация парения для картинок внутри слотов */
         @keyframes floatEffect {
             0% { transform: translateY(0px) scale(1); }
             50% { transform: translateY(-6px) scale(1.02); }
@@ -315,7 +310,7 @@
         }
         .amount-btn:hover { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); transform: translateY(-2px); }
 
-        /* === НОВЫЙ ПРОФИЛЬ (FULLSCREEN ОВЕРЛЕЙ) === */
+        /* === НОВЫЙ ПРОФИЛЬ === */
         .profile-page-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: var(--bg-main); background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, var(--bg-main) 70%);
@@ -420,7 +415,7 @@
             <div class="online-count">Онлайн: <span id="onlineCount">1 742</span></div>
         </div>
         <div class="user-area">
-            <button id="headerLoginBtn" class="btn-deposit" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); font-weight: 800; box-shadow: 0 4px 15px var(--accent-glow); display: none;" onclick="openModal('authModal')">Вход по Email</button>
+            <button id="headerLoginBtn" class="btn-deposit" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); font-weight: 800; box-shadow: 0 4px 15px var(--accent-glow); display: none;" onclick="openModal('authModal')">Вход</button>
             
             <div id="headerUserArea" style="display: none; align-items: center; gap: 14px;">
                 <div class="balance-block">
@@ -447,7 +442,7 @@
                             <path fill="#FFCC00" d="M5 50 L25 65 L45 50 L45 60 L25 75 L5 60 Z" />
                         </svg>
                     </div>
-                    <span class="slot-hint">Email</span>
+                    <span class="slot-hint">Ваш предмет</span>
                 </div>
                 <div class="item-slot" id="slotRight" onclick="switchTab('shop')">
                     <img src="16201.png" class="slot-bg-pepe">
@@ -458,7 +453,7 @@
                             <path fill="#FFCC00" d="M5 65 L25 50 L45 65 L45 55 L25 40 L5 55 Z" />
                         </svg>
                     </div>
-                    <span class="slot-hint">Email</span>
+                    <span class="slot-hint">Желаемый предмет</span>
                 </div>
             </div>
 
@@ -504,14 +499,14 @@
             </div>
 
             <div class="action-block">
-                <button class="btn-upgrade" id="btnUpgrade" onclick="executeUpgrade()" disabled>Email</button>
+                <button class="btn-upgrade" id="btnUpgrade" onclick="executeUpgrade()" disabled>ВЫБЕРИТЕ ПРЕДМЕТЫ</button>
             </div>
         </section>
 
         <section class="inventory-section">
             <div class="tabs-header">
                 <button class="tab-btn active" id="tabMy" onclick="switchTab('my')">Мой инвентарь</button>
-                <button class="tab-btn" id="tabShop" onclick="switchTab('shop')">Email</button>
+                <button class="tab-btn" id="tabShop" onclick="switchTab('shop')">Магазин</button>
             </div>
             <div class="items-grid" id="gridContent"></div>
         </section>
@@ -774,7 +769,7 @@
 
             if (!selectedLeft || !selectedRight) {
                 btn.disabled = true;
-                btn.innerText = 'Email';
+                btn.innerText = 'ВЫБЕРИТЕ ПРЕДМЕТЫ';
                 btn.style.background = '';
                 btn.style.boxShadow = '';
                 chevrons.style.display = 'block';
@@ -785,7 +780,7 @@
 
             if (!window.isUserLoggedIn) {
                 btn.disabled = false;
-                btn.innerText = 'Email';
+                btn.innerText = 'ВОЙТИ ДЛЯ АПГРЕЙДА';
                 btn.style.background = 'linear-gradient(135deg, var(--accent-main), #b838ff)';
                 btn.style.boxShadow = '0 8px 25px var(--accent-glow)';
                 chevrons.style.display = 'none';
@@ -794,7 +789,7 @@
             }
             
             btn.disabled = false;
-            btn.innerText = 'Email';
+            btn.innerText = 'АПГРЕЙД';
             chevrons.style.display = 'none';
             chanceDisplay.style.display = 'block';
 
@@ -1013,7 +1008,7 @@
 
             setTimeout(() => {
                 btn.style.background = '';
-                btn.innerText = 'Email';
+                btn.innerText = 'ВЫБЕРИТЕ ПРЕДМЕТЫ';
                 btn.disabled = true;
                 arena.className = 'upgrade-arena'; 
                 
@@ -1031,7 +1026,7 @@
                             <path fill="#FFCC00" d="M5 50 L25 65 L45 50 L45 60 L25 75 L5 60 Z" />
                         </svg>
                     </div>
-                    <span class="slot-hint">Email</span>
+                    <span class="slot-hint">Ваш предмет</span>
                 `;
                 document.getElementById('slotLeft').classList.remove('active');
                 
@@ -1044,7 +1039,7 @@
                             <path fill="#FFCC00" d="M5 65 L25 50 L45 65 L45 55 L25 40 L5 55 Z" />
                         </svg>
                     </div>
-                    <span class="slot-hint">Email</span>
+                    <span class="slot-hint">Желаемый предмет</span>
                 `;
                 document.getElementById('slotRight').classList.remove('active');
                 
