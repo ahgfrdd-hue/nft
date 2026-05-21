@@ -1,7 +1,13 @@
 {
   "name": "my-telegram-stars-site",
   "version": "1.0.0",
+  "description": "",
+  "main": "stars.js",
+  "scripts": {
+    "start": "node stars.js"
+  },
   "dependencies": {
-    "telegraf": "^4.16.3"
+    "telegraf": "^4.16.3",
+    "uuid": "^10.0.0"
   }
 }
