@@ -45,14 +45,16 @@
             display: flex; flex-direction: column; overflow-x: hidden;
         }
 
-        /* === ЭКРАН АВТОРИЗАЦИИ (НОВОЕ) === */
+        /* === ЭКРАН АВТОРИЗАЦИИ (ИСПРАВЛЕНО) === */
         #auth-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             background: var(--bg-main);
             background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, var(--bg-main) 70%);
             z-index: 9999;
-            display: flex;
+            /* Скрываем по умолчанию, чтобы не мигало */
+            display: none;
+            opacity: 0;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -1239,7 +1241,7 @@
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Если пользователь авторизован, скрываем экран-оверлей
+                // Если пользователь авторизован, скрываем экран-оверлей плавно
                 authOverlay.style.opacity = '0';
                 setTimeout(() => authOverlay.style.display = 'none', 500);
 
@@ -1258,7 +1260,7 @@
                     console.log("Данные игрока:", docSnap.data());
                 }
             } else {
-                // Если пользователь не авторизован, показываем оверлей, блокируя сайт
+                // Если пользователь НЕ авторизован, только тогда показываем оверлей
                 authOverlay.style.display = 'flex';
                 // Небольшая задержка для плавного появления
                 setTimeout(() => authOverlay.style.opacity = '1', 50);
