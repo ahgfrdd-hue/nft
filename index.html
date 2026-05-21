@@ -45,6 +45,52 @@
             display: flex; flex-direction: column; overflow-x: hidden;
         }
 
+        /* === ЭКРАН АВТОРИЗАЦИИ (НОВОЕ) === */
+        #auth-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--bg-main);
+            background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, var(--bg-main) 70%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .auth-box {
+            background: var(--bg-panel);
+            border: 1px solid var(--accent-main);
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            box-shadow: 0 0 30px var(--accent-glow);
+            max-width: 90%;
+            width: 400px;
+        }
+
+        .auth-title {
+            font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 10px;
+        }
+
+        .auth-subtitle {
+            color: var(--text-muted); margin-bottom: 25px; font-size: 14px; line-height: 1.4;
+        }
+
+        .btn-google {
+            background: #fff; color: #000;
+            border: none; padding: 12px 24px; border-radius: var(--radius-sm);
+            font-size: 16px; font-weight: bold; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 10px; margin: 0 auto;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .btn-google:hover {
+            transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,255,255,0.2);
+        }
+
         /* === ХЕДЕР === */
         header {
             display: flex; justify-content: space-between; align-items: center;
@@ -351,6 +397,23 @@
 </head>
 <body>
 
+    <div id="auth-overlay">
+        <div class="auth-box">
+            <div class="logo" style="font-size: 32px; margin-bottom: 10px;">FLASH<span>UPGRADER</span></div>
+            <div class="auth-title">Добро пожаловать!</div>
+            <div class="auth-subtitle">Войдите через Google, чтобы продолжить пользоваться сайтом и сохранять прогресс.</div>
+            <button id="login-btn" class="btn-google">
+                <svg width="20" height="20" viewBox="0 0 48 48">
+                    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
+                    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
+                    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
+                    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
+                </svg>
+                Войти через Google
+            </button>
+        </div>
+    </div>
+
     <header>
         <div class="logo-area">
             <div class="logo">FLASH<span>UPGRADER</span></div>
@@ -469,7 +532,6 @@
         <div class="modal-card">
             <button class="modal-close" onclick="closeModal('depositModal')">×</button>
             <div class="modal-title">Пополнение баланса</div>
-            
             <div style="margin-bottom: 16px;">
                 <label style="font-size: 12px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 8px; display: block;">Выберите способ оплаты</label>
                 <div class="payment-methods">
@@ -479,17 +541,14 @@
                     </div>
                 </div>
             </div>
-
             <label style="font-size: 12px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 8px; display: block;">Сумма (Минимум 10 ⭐)</label>
             <input type="number" class="modal-input" id="depositAmount" placeholder="Введите сумму..." min="10" value="100" style="margin-bottom: 10px;">
-            
             <div class="amount-presets">
                 <button class="amount-btn" onclick="setDepositAmount(50)">50 ⭐</button>
                 <button class="amount-btn" onclick="setDepositAmount(100)">100 ⭐</button>
                 <button class="amount-btn" onclick="setDepositAmount(500)">500 ⭐</button>
                 <button class="amount-btn" onclick="setDepositAmount(1000)">1000 ⭐</button>
             </div>
-
             <button class="modal-btn" id="depositBtn" onclick="processDeposit()">Оплатить <span id="payAmountText">100</span> ⭐</button>
         </div>
     </div>
@@ -503,12 +562,11 @@
             <div style="width: 28px;"></div>
         </div>
         <div class="profile-body">
-
             <div class="profile-top-layout">
                 <div class="p-card-panel">
                     <div style="display: flex; align-items: center; gap: 12px;">
                         <div style="width: 48px; height: 48px; background: var(--bg-card); border: 2px solid var(--accent-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; box-shadow: 0 0 10px var(--accent-glow);">👤</div>
-                        <div style="font-size: 18px; font-weight: 800; color: #fff;">om1a2</div>
+                        <div style="font-size: 18px; font-weight: 800; color: #fff;" id="profileNameDisplay">om1a2</div>
                     </div>
                     
                     <div style="margin-top: 20px; display: flex; align-items: center; justify-content: space-between; background: var(--bg-card); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
@@ -598,7 +656,6 @@
         let myInventoryData = JSON.parse(localStorage.getItem('ub_inv')) || [giftPool[0], giftPool[1], giftPool[4], giftPool[8]];
         let stats = JSON.parse(localStorage.getItem('ub_stats')) || { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0 };
         
-        // Защита для старых сохранений
         if(stats.withdrawn === undefined) stats.withdrawn = 0;
         
         let currentTab = 'my';
@@ -981,7 +1038,6 @@
             const overlay = document.getElementById(id);
             overlay.classList.add('active');
             if(id === 'profileModal') {
-                // ОБНОВЛЕНИЕ НОВОЙ СТАТИСТИКИ
                 document.getElementById('profileTotalWithdrawn').innerText = (stats.withdrawn || 0).toLocaleString('ru-RU') + ' ⭐';
                 document.getElementById('profileTotalUpgradesBlock').innerText = stats.total;
                 
@@ -1021,7 +1077,6 @@
                 return;
             }
             myInventoryData.forEach((item, idx) => {
-                // ИЗМЕНЕНО НА 15%
                 let sellPrice = Math.round(item.price * 0.15);
                 container.innerHTML += `
                     <div class="profile-list-item" style="border-left-color: var(--accent-main);">
@@ -1038,7 +1093,6 @@
         function sellFromProfile(idx) {
             playSound(soundClick);
             let item = myInventoryData[idx];
-            // ИЗМЕНЕНО НА 15%
             balance += item.price * 0.15;
             myInventoryData.splice(idx, 1);
             saveData();
@@ -1120,7 +1174,7 @@
             if(amount > balance) { alert('На балансе недостаточно звезд!'); return; }
             
             balance -= amount;
-            stats.withdrawn += amount; // ДОБАВЛЕНО В СТАТИСТИКУ ВЫВОДА
+            stats.withdrawn += amount;
             saveData();
             updateBalanceUI();
             
@@ -1155,58 +1209,62 @@
         renderGrid();
     </script>
 
-</script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-<button id="login-btn" style="padding: 10px 20px; font-size: 16px; background-color: #4285F4; color: white; border: none; border-radius: 5px; cursor: pointer;">
-  Войти через Google
-</button>
-<div id="user-info" style="color: white; margin-top: 10px; font-family: sans-serif;"></div>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAQrJwnnyrb1Mk_9k8_nQTULWAvLGZ2E4o",
+            authDomain: "flashupgrader.firebaseapp.com",
+            projectId: "flashupgrader",
+            storageBucket: "flashupgrader.firebasestorage.app",
+            messagingSenderId: "336384416642",
+            appId: "1:336384416642:web:f7c66d167d64b2178a4d9b"
+        };
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-  import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-  import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyAQrJwnnyrb1Mk_9k8_nQTULWAvLGZ2E4o",
-    authDomain: "flashupgrader.firebaseapp.com",
-    projectId: "flashupgrader",
-    storageBucket: "flashupgrader.firebasestorage.app",
-    messagingSenderId: "336384416642",
-    appId: "1:336384416642:web:f7c66d167d64b2178a4d9b"
-  };
+        const loginBtn = document.getElementById('login-btn');
+        const authOverlay = document.getElementById('auth-overlay');
+        const profileNameDisplay = document.getElementById('profileNameDisplay');
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-  const provider = new GoogleAuthProvider();
+        loginBtn.addEventListener('click', () => {
+            signInWithPopup(auth, provider).catch(error => {
+                console.error("Ошибка авторизации: ", error);
+            });
+        });
 
-  const loginBtn = document.getElementById('login-btn');
-  const userInfo = document.getElementById('user-info');
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Если пользователь авторизован, скрываем экран-оверлей
+                authOverlay.style.opacity = '0';
+                setTimeout(() => authOverlay.style.display = 'none', 500);
 
-  loginBtn.addEventListener('click', () => {
-    signInWithPopup(auth, provider);
-  });
-
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      loginBtn.style.display = 'none';
-      userInfo.innerText = 'Привет, ' + user.displayName + '!';
-      
-      const userRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(userRef);
-      
-      if (!docSnap.exists()) {
-        await setDoc(userRef, { balance: 0, upgrades: 0 });
-        console.log("Новый игрок создан!");
-      } else {
-        console.log("Данные игрока:", docSnap.data());
-      }
-    } else {
-      loginBtn.style.display = 'block';
-      userInfo.innerText = '';
-    }
-  });
-</script>
+                // Записываем имя в профиль, если оно там есть
+                if (profileNameDisplay) {
+                    profileNameDisplay.innerText = user.displayName || 'Игрок';
+                }
+                
+                const userRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(userRef);
+                
+                if (!docSnap.exists()) {
+                    await setDoc(userRef, { balance: 0, upgrades: 0 });
+                    console.log("Новый игрок создан!");
+                } else {
+                    console.log("Данные игрока:", docSnap.data());
+                }
+            } else {
+                // Если пользователь не авторизован, показываем оверлей, блокируя сайт
+                authOverlay.style.display = 'flex';
+                // Небольшая задержка для плавного появления
+                setTimeout(() => authOverlay.style.opacity = '1', 50);
+            }
+        });
+    </script>
 </body>
 </html>
