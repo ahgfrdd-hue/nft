@@ -278,6 +278,14 @@
         .btn-buy:hover { background: var(--rarity-immortal); color: #fff; }
         .stat-line { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border-color); font-size: 14px; color: var(--text-muted); }
         .stat-line span:last-child { font-weight: bold; color: #fff; font-size: 16px; }
+        
+        /* === ПЕРЕКРАСКА ЖЕЛТЫХ СТРЕЛОЧЕК === */
+        .slot-chevron-container svg path {
+            fill: var(--accent-main) !important;
+        }
+        .slot-chevron-container svg {
+            filter: drop-shadow(0 0 8px var(--accent-glow)) !important;
+        }
     </style>
 </head>
 <body>
@@ -557,6 +565,15 @@
 
             document.getElementById('chanceText').innerText = chance.toFixed(2) + '%';
             document.getElementById('wheelCircle').style.strokeDashoffset = circleCircumference - (circleCircumference * (chance / 100));
+
+            // Проверка на 80%+
+            if (chance >= 80) {
+                btn.disabled = true;
+                btn.innerText = 'ШАНС СЛИШКОМ ВЫСОКИЙ';
+                btn.style.background = 'var(--bg-card)';
+            } else {
+                btn.style.background = '';
+            }
         }
 
         let startRotation = 0;
@@ -607,10 +624,20 @@
             const btn = document.getElementById('btnUpgrade');
             const arrowSpinner = document.getElementById('arrowSpinner');
             
+            let chance = (parseFloat(selectedLeft.price) / parseFloat(selectedRight.price)) * 100;
+            
+            // Прерываем выполнение, если шанс 80% или выше
+            if (chance >= 80) {
+                alert('Максимальный шанс для апгрейда составляет 79.99%!');
+                isProcessing = false;
+                btn.innerText = 'ШАНС СЛИШКОМ ВЫСОКИЙ';
+                btn.style.background = 'var(--bg-card)';
+                return;
+            }
+
             btn.innerText = 'Улучшение...';
             soundSpin.play().catch(() => {});
 
-            let chance = (parseFloat(selectedLeft.price) / parseFloat(selectedRight.price)) * 100;
             if (chance > 95) chance = 95;
             if (chance < 1) chance = 1;
             
