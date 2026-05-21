@@ -44,9 +44,10 @@
             filter: brightness(1.2);
         }
 
-        .slots-container, .items-grid {
+        /* ИСПРАВЛЕНО: Убрано pointer-events: none, чтобы предметы нажимались! */
+        /* .slots-container, .items-grid {
             pointer-events: none;
-        }
+        } */
 
         .item-sub, .item-title, .p-item-name, .bd-name, #profileEmailDisplay, .ticker-item span {
             overflow: hidden;
@@ -277,6 +278,49 @@
         .rarity-mythic { border-bottom: 3px solid var(--rarity-mythic); }
         .rarity-immortal { border-bottom: 3px solid var(--rarity-immortal); }
 
+        /* === ВИТРИНА ДЛЯ НЕАВТОРИЗОВАННЫХ === */
+        #promoDisplay {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 40px 10px;
+            min-height: 250px;
+            position: relative;
+            background: var(--bg-panel);
+            transition: opacity 0.4s ease;
+        }
+        .promo-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.5s ease-in-out;
+            width: 110px;
+        }
+        .promo-item.side {
+            filter: brightness(0);
+            transform: scale(0.65);
+            opacity: 0.6;
+            z-index: 1;
+        }
+        .promo-item.center {
+            transform: scale(1.2);
+            z-index: 5;
+            filter: drop-shadow(0 0 15px var(--accent-glow));
+        }
+        .promo-item img {
+            max-width: 100%;
+            max-height: 80px;
+            object-fit: contain;
+        }
+        .promo-item.center img {
+            animation: floatEffect 4s ease-in-out infinite;
+        }
+        .promo-info { text-align: center; margin-top: 10px; }
+        .promo-sub { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; white-space: nowrap; }
+        .promo-price-tag { font-size: 12px; font-weight: 800; color: #fff; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 8px;}
+
         /* === ФУТЕР === */
         footer { margin-top: auto; padding: 24px 16px; background: var(--bg-panel); border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
         .footer-contacts { display: flex; align-items: center; gap: 10px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: var(--radius-lg); color: var(--text-main); font-size: 14px; font-weight: 700; text-decoration: none; transition: var(--transition); }
@@ -504,7 +548,14 @@
         </section>
 
         <section class="inventory-section">
-            <div class="tabs-header">
+            
+            <div id="promoDisplay" style="display: none;">
+                <div id="promoLeft" class="promo-item side"></div>
+                <div id="promoCenter" class="promo-item center"></div>
+                <div id="promoRight" class="promo-item side"></div>
+            </div>
+
+            <div class="tabs-header" id="inventoryTabs">
                 <button class="tab-btn active" id="tabMy" onclick="switchTab('my')">Мой инвентарь</button>
                 <button class="tab-btn" id="tabShop" onclick="switchTab('shop')">Магазин</button>
             </div>
@@ -669,6 +720,40 @@
         let isProcessing = false;
         let arrowRotation = 0; 
         const circleCircumference = 534; 
+
+        // ЛОГИКА ДЛЯ СЛАЙДЕРА-ВИТРИНЫ
+        let promoInterval = null;
+
+        function startPromoSlider() {
+            if (promoInterval) clearInterval(promoInterval);
+            updatePromoItems();
+            promoInterval = setInterval(updatePromoItems, 5000);
+        }
+
+        function updatePromoItems() {
+            if(giftPool.length < 3) return;
+            const promoDisplay = document.getElementById('promoDisplay');
+            promoDisplay.style.opacity = '0'; // Для плавного эффекта
+            
+            setTimeout(() => {
+                let shuffled = [...giftPool].sort(() => 0.5 - Math.random());
+                let centerItem = shuffled[0];
+                let leftItem = shuffled[1];
+                let rightItem = shuffled[2];
+
+                document.getElementById('promoLeft').innerHTML = `<img src="${leftItem.img}" onerror="this.src='16201.png'">`;
+                document.getElementById('promoCenter').innerHTML = `
+                    <div class="promo-price-tag">${Math.round(centerItem.price)} ⭐</div>
+                    <img src="${centerItem.img}" onerror="this.src='16201.png'">
+                    <div class="promo-info">
+                        <div class="promo-sub">${centerItem.sub}</div>
+                    </div>
+                `;
+                document.getElementById('promoRight').innerHTML = `<img src="${rightItem.img}" onerror="this.src='16201.png'">`;
+                
+                promoDisplay.style.opacity = '1';
+            }, 400); 
+        }
 
         const soundSpin = document.getElementById('soundSpin');
         const soundWin = document.getElementById('soundWin');
@@ -1331,6 +1416,12 @@
                 window.isUserLoggedIn = true;
                 document.getElementById('headerLoginBtn').style.display = 'none';
                 document.getElementById('headerUserArea').style.display = 'flex';
+                
+                // Пользователь авторизован: показываем инвентарь, прячем витрину
+                document.getElementById('promoDisplay').style.display = 'none';
+                document.getElementById('inventoryTabs').style.display = 'flex';
+                document.getElementById('gridContent').style.display = 'grid';
+                if (promoInterval) clearInterval(promoInterval);
 
                 if (profileEmailDisplay) {
                     profileEmailDisplay.innerText = user.email; 
@@ -1351,6 +1442,13 @@
                 window.isUserLoggedIn = false;
                 document.getElementById('headerLoginBtn').style.display = 'block';
                 document.getElementById('headerUserArea').style.display = 'none';
+                
+                // Пользователь НЕ авторизован: показываем витрину, прячем инвентарь
+                document.getElementById('promoDisplay').style.display = 'flex';
+                document.getElementById('inventoryTabs').style.display = 'none';
+                document.getElementById('gridContent').style.display = 'none';
+                startPromoSlider();
+
                 updateChance(); 
             }
         });
