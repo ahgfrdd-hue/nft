@@ -6,7 +6,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <title>FlashUpgrader — Premium Edition</title>
     <style>
-        /* === НОВЫЙ ДИЗАЙН (Стиль референса 2) === */
+        /* === НОВЫЙ ДИЗАЙН === */
         :root {
             --bg-main: #0a0a0f;
             --bg-panel: #13131c;
@@ -168,7 +168,6 @@
         .wheel-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
         
         .wheel-progress {
-            /* Убрали stroke-linecap: round, чтобы размер шкалы идеально совпадал с шансом */
             stroke-dasharray: 534; stroke-dashoffset: 534; 
             transition: stroke-dashoffset 0.4s ease;
         }
@@ -179,7 +178,6 @@
         }
         
         .wheel-arrow {
-            /* Стрелка теперь ровно сверху и указывает вниз */
             position: absolute; top: -14px; left: 50%; transform: translateX(-50%) rotate(180deg);
             width: 24px; height: 38px; filter: drop-shadow(0 0 8px var(--accent-glow));
         }
@@ -275,7 +273,7 @@
         <div class="user-area">
             <div class="balance-block">
                 <span class="balance-label">Баланс</span>
-                <div class="balance" id="userBalance">10 000.00 ₽</div>
+                <div class="balance" id="userBalance">10 000 ⭐</div>
             </div>
             <button class="btn-deposit" onclick="openModal('depositModal')">Пополнить</button>
             <div class="profile-avatar" onclick="openModal('profileModal')">👤</div>
@@ -384,9 +382,9 @@
     <div class="modal-overlay" id="depositModal">
         <div class="modal-card">
             <button class="modal-close" onclick="closeModal('depositModal')">×</button>
-            <div class="modal-title">Пополнение баланса</div>
-            <input type="number" class="modal-input" id="depositAmount" placeholder="Сумма (₽)" min="10">
-            <button class="modal-btn" onclick="processDeposit()">Пополнить</button>
+            <div class="modal-title">Покупка Звезд</div>
+            <input type="number" class="modal-input" id="depositAmount" placeholder="Сумма (⭐)" min="10">
+            <button class="modal-btn" id="depositBtn" onclick="processDeposit()">Оплатить через Telegram</button>
         </div>
     </div>
 
@@ -415,8 +413,8 @@
             </div>
             <div id="pContentPayout" style="display:none;">
                 <div class="modal-title" style="font-size:16px;">Вывод средств</div>
-                <input type="text" class="modal-input" id="withdrawDetails" placeholder="Номер карты/кошелька" style="margin-bottom:10px;">
-                <input type="number" class="modal-input" id="withdrawAmount" placeholder="Сумма (₽)">
+                <input type="text" class="modal-input" id="withdrawDetails" placeholder="Номер кошелька TON" style="margin-bottom:10px;">
+                <input type="number" class="modal-input" id="withdrawAmount" placeholder="Сумма (⭐)">
                 <button class="modal-btn" style="background:linear-gradient(135deg, #0984e3, #74b9ff);" onclick="processWithdraw()">Создать заявку</button>
             </div>
         </div>
@@ -429,19 +427,19 @@
 
     <script>
         const giftPool = [
-            { id: 'frog_purple', title: 'Премиум Подарок', sub: 'Аметистовый Харт', price: '4500.00', rarity: 'rarity-epic', img: '16201.png' },
-            { id: 'frog_aqua', title: 'Премиум Подарок', sub: 'Бирюзовый Лав', price: '8900.00', rarity: 'rarity-legendary', img: '16202.png' },
-            { id: 'frog_love', title: 'Премиум Подарок', sub: 'Влюбленный Пепе', price: '12500.00', rarity: 'rarity-mythic', img: '16203.png' },
-            { id: 'frog_glitter', title: 'Премиум Подарок', sub: 'Звездный Блеск', price: '24000.00', rarity: 'rarity-immortal', img: '16154.jpg' },
-            { id: 'frog_glow', title: 'Мифический', sub: 'Король Пепе', price: '15000.00', rarity: 'rarity-mythic', img: 'frog_glow.png' },
-            { id: 'frog_blue', title: 'Легендарный', sub: 'Пепе Блу Кнопки', price: '9500.00', rarity: 'rarity-legendary', img: 'frog_blue_buttons.png' },
-            { id: 'frog_gold', title: 'Бессмертный', sub: 'Золотой Император', price: '25000.00', rarity: 'rarity-immortal', img: 'frog_gold_buttons.png' },
-            { id: 'frog_ninja', title: 'Бессмертный', sub: 'Пепе-Ниндзя', price: '19000.00', rarity: 'rarity-immortal', img: 'frog_ninja.png' },
-            { id: 'frog_secret', title: 'Эксклюзив', sub: 'Тайный Пепе', price: '28000.00', rarity: 'rarity-immortal', img: '16289.jpg' },
-            { id: 'frog_cosmic', title: 'Эксклюзив', sub: 'Космический Пепе', price: '35000.00', rarity: 'rarity-immortal', img: '16290.jpg' }
+            { id: 'frog_purple', title: 'Премиум Подарок', sub: 'Аметистовый Харт', price: '4500', rarity: 'rarity-epic', img: '16201.png' },
+            { id: 'frog_aqua', title: 'Премиум Подарок', sub: 'Бирюзовый Лав', price: '8900', rarity: 'rarity-legendary', img: '16202.png' },
+            { id: 'frog_love', title: 'Премиум Подарок', sub: 'Влюбленный Пепе', price: '12500', rarity: 'rarity-mythic', img: '16203.png' },
+            { id: 'frog_glitter', title: 'Премиум Подарок', sub: 'Звездный Блеск', price: '24000', rarity: 'rarity-immortal', img: '16154.jpg' },
+            { id: 'frog_glow', title: 'Мифический', sub: 'Король Пепе', price: '15000', rarity: 'rarity-mythic', img: 'frog_glow.png' },
+            { id: 'frog_blue', title: 'Легендарный', sub: 'Пепе Блу Кнопки', price: '9500', rarity: 'rarity-legendary', img: 'frog_blue_buttons.png' },
+            { id: 'frog_gold', title: 'Бессмертный', sub: 'Золотой Император', price: '25000', rarity: 'rarity-immortal', img: 'frog_gold_buttons.png' },
+            { id: 'frog_ninja', title: 'Бессмертный', sub: 'Пепе-Ниндзя', price: '19000', rarity: 'rarity-immortal', img: 'frog_ninja.png' },
+            { id: 'frog_secret', title: 'Эксклюзив', sub: 'Тайный Пепе', price: '28000', rarity: 'rarity-immortal', img: '16289.jpg' },
+            { id: 'frog_cosmic', title: 'Эксклюзив', sub: 'Космический Пепе', price: '35000', rarity: 'rarity-immortal', img: '16290.jpg' }
         ];
 
-        let balance = parseFloat(localStorage.getItem('ub_balance')) || 10143.51;
+        let balance = parseFloat(localStorage.getItem('ub_balance')) || 10000;
         let myInventoryData = JSON.parse(localStorage.getItem('ub_inv')) || [giftPool[0], giftPool[1], giftPool[4], giftPool[8]];
         let stats = JSON.parse(localStorage.getItem('ub_stats')) || { total: 0, wins: 0, losses: 0 };
         
@@ -464,7 +462,10 @@
         }
 
         function playSound(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
-        function updateBalanceUI() { document.getElementById('userBalance').innerText = balance.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$& ') + ' ₽'; }
+        
+        function updateBalanceUI() { 
+            document.getElementById('userBalance').innerText = Math.floor(balance).toLocaleString('ru-RU') + ' ⭐'; 
+        }
 
         function renderGrid() {
             const grid = document.getElementById('gridContent');
@@ -479,7 +480,7 @@
             activeData.forEach((item, idx) => {
                 grid.innerHTML += `
                     <div class="item-card ${item.rarity}" onclick="selectItem(${idx})">
-                        <div class="item-price">${Math.round(item.price)} ₽</div>
+                        <div class="item-price">${Math.round(item.price)} ⭐</div>
                         <div class="item-img-container"><img src="${item.img}" onerror="this.src='16201.png'"></div>
                         <div class="item-info">
                             <div class="item-title">${item.title}</div>
@@ -511,7 +512,7 @@
             const slot = document.getElementById(slotId);
             slot.classList.add('active');
             slot.innerHTML = `
-                <div style="font-size:14px; font-weight:800; color:#fff; position: relative; z-index: 2;">${Math.round(item.price)} ₽</div>
+                <div style="font-size:14px; font-weight:800; color:#fff; position: relative; z-index: 2;">${Math.round(item.price)} ⭐</div>
                 <div style="margin:6px 0; height:60px; display:flex; align-items:center; position: relative; z-index: 2;"><img src="${item.img}" style="max-height:55px;"></div>
                 <div style="font-size:12px; font-weight:700; color:var(--text-muted); text-overflow:ellipsis; overflow:hidden; width:100%; white-space:nowrap; position: relative; z-index: 2;">${item.sub}</div>
             `;
@@ -622,7 +623,6 @@
             let fullRotationDeg = chance * 3.6; 
             let targetSectorDeg;
             
-            /* Исправленная математика: гарантирует 100% совпадение стрелки со шкалой */
             if (isWin) {
                 let pad = fullRotationDeg > 2 ? 1 : 0;
                 targetSectorDeg = pad + Math.random() * (fullRotationDeg - pad * 2); 
@@ -713,7 +713,6 @@
                 
                 selectedLeft = null; selectedRight = null;
                 
-                /* Сбрасываем стрелку строго на старт для следующей игры */
                 arrowRotation = 0;
                 document.getElementById('arrowSpinner').style.transform = `rotate(0deg)`;
                 
@@ -790,7 +789,7 @@
                     <div class="profile-list-item" style="border-left-color: var(--accent-main);">
                         <div class="p-item-info">
                             <span class="p-item-name">${item.sub}</span>
-                            <span class="p-item-price">Цена: ${sellPrice} ₽ (50%)</span>
+                            <span class="p-item-price">Цена: ${sellPrice} ⭐ (50%)</span>
                         </div>
                         <button class="btn-profile-action btn-sell" onclick="sellFromProfile(${idx})">Продать</button>
                     </div>
@@ -817,7 +816,7 @@
                     <div class="profile-list-item" style="border-left-color: var(--rarity-immortal);">
                         <div class="p-item-info">
                             <span class="p-item-name">${item.sub}</span>
-                            <span class="p-item-price">Стоимость: ${Math.round(item.price)} ₽</span>
+                            <span class="p-item-price">Стоимость: ${Math.round(item.price)} ⭐</span>
                         </div>
                         <button class="btn-profile-action btn-buy" onclick="buyFromProfile('${item.id}')">Купить</button>
                     </div>
@@ -831,7 +830,7 @@
             let cost = parseFloat(targetItem.price);
             
             if(balance < cost) {
-                alert('Недостаточно средств на балансе для покупки!');
+                alert('Недостаточно звезд на балансе для покупки!');
                 return;
             }
 
@@ -844,27 +843,35 @@
             alert(`Вы успешно приобрели ${targetItem.sub}! Он добавлен в инвентарь.`);
         }
 
+        // --- ВОТ ТУТ ГЛАВНОЕ ИЗМЕНЕНИЕ ---
         function processDeposit() {
-            const amount = parseFloat(document.getElementById('depositAmount').value);
-            if (!amount || amount < 10) { alert('Минимальная сумма — 10 ₽'); return; }
-            balance += amount;
-            saveData();
-            updateBalanceUI();
-            closeModal('depositModal');
-            alert(`Успешно зачислено ${amount} ₽`);
+            const amount = parseInt(document.getElementById('depositAmount').value);
+            if (!amount || amount < 10) { 
+                alert('Минимальная сумма — 10 ⭐'); 
+                return; 
+            }
+            
+            // Чтобы каждый платеж был уникальным для конкретного пользователя, 
+            // мы отправляем ID пользователя на сервер.
+            // Пока здесь стоит заглушка 'user_123', в будущем вы сможете брать ID из Telegram.
+            const userId = 'user_123';
+            
+            // Эта команда перенаправит пользователя с вашего сайта на ваш сервер Render, 
+            // а сервер сразу откроет окно покупки в Telegram!
+            window.location.href = `https://flashupgrader-1.onrender.com/pay?amount=${amount}&userId=${userId}`;
         }
 
         function processWithdraw() {
-            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const amount = parseInt(document.getElementById('withdrawAmount').value);
             const details = document.getElementById('withdrawDetails').value.trim();
             if(!details || !amount) { alert('Пожалуйста, заполните все поля!'); return; }
-            if(amount > balance) { alert('На балансе недостаточно средств!'); return; }
+            if(amount > balance) { alert('На балансе недостаточно звезд!'); return; }
             
             balance -= amount;
             saveData();
             updateBalanceUI();
             closeModal('profileModal');
-            alert(`Заявка на вывод ${amount} ₽ на реквизиты [${details}] успешно принята!`);
+            alert(`Заявка на вывод ${amount} ⭐ на реквизиты [${details}] успешно принята! Ожидайте зачисления.`);
         }
 
         function updateOnline() {
