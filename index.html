@@ -120,10 +120,10 @@
             transition: stroke-dashoffset 0.4s ease;
         }
         
-        /* Вращающаяся оболочка для золотой стрелки */
+        /* Вращающаяся оболочка для золотой стрелки - УБРАН CSS ПЕРЕХОД */
         .arrow-spinner-wrapper {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 15; transition: transform 3.5s cubic-bezier(0.1, 0.8, 0.1, 1);
+            pointer-events: none; z-index: 15; /* ПЕРЕХОД ТЕПЕРЬ УПРАВЛЯЕТСЯ JS */
         }
         
         /* Золотая стрелка СНИЗУ */
@@ -322,28 +322,37 @@
         </div>
     </div>
 
-    <audio id="soundSpin" src="spin.mp3" preload="auto" loop></audio>
+    <audio id="soundSpin" src="user_spin.mp3" preload="auto" loop></audio>
     <audio id="soundWin" src="win.mp3" preload="auto"></audio>
     <audio id="soundFail" src="lose.mp3" preload="auto"></audio>
     <audio id="soundClick" src="click.mp3" preload="auto"></audio>
 
     <script>
+        // === ПОЛНЫЙ МАССИВ ПОДАРКОВ (ВКЛЮЧАЯ НОВЫЕ ЛЯГУШКИ) ===
         const giftPool = [
+            // Твои старые картинки
             { id: 'frog_purple', title: 'Премиум Подарок', sub: 'Аметистовый Харт', price: '4500.00', rarity: 'rarity-epic', img: '16201.png' },
             { id: 'frog_aqua', title: 'Премиум Подарок', sub: 'Бирюзовый Лав', price: '8900.00', rarity: 'rarity-legendary', img: '16202.png' },
             { id: 'frog_love', title: 'Премиум Подарок', sub: 'Влюбленный Пепе', price: '12500.00', rarity: 'rarity-mythic', img: '16203.png' },
-            { id: 'frog_glitter', title: 'Премиум Подарок', sub: 'Звездный Блеск', price: '24000.00', rarity: 'rarity-immortal', img: '16154.jpg' }
+            { id: 'frog_glitter', title: 'Премиум Подарок', sub: 'Звездный Блеск', price: '24000.00', rarity: 'rarity-immortal', img: '16154.jpg' },
+            // === НОВЫЕ ПРИКРЕПЛЕННЫЕ ПОДАРКИ (ЛЯГУШКИ С КНОПКАМИ) ===
+            { id: 'frog_glow', title: 'Мифический', sub: 'Король Пепе', price: '15000.00', rarity: 'rarity-mythic', img: 'frog_glow.png' },
+            { id: 'frog_blue', title: 'Легендарный', sub: 'Пепе Блу Кнопки', price: '9500.00', rarity: 'rarity-legendary', img: 'frog_blue_buttons.png' },
+            { id: 'frog_gold', title: 'Бессмертный', sub: 'Золотой Император', price: '25000.00', rarity: 'rarity-immortal', img: 'frog_gold_buttons.png' },
+            { id: 'frog_ninja', title: 'Бессмертный', sub: 'Пепе-Ниндзя', price: '19000.00', rarity: 'rarity-immortal', img: 'frog_ninja.png' }
         ];
 
+        // Локальное хранилище данных (Используем новые предметы по умолчанию)
         let balance = parseFloat(localStorage.getItem('ub_balance')) || 10143.51;
-        let myInventoryData = JSON.parse(localStorage.getItem('ub_inv')) || [giftPool[0], giftPool[1]];
+        // Загружаем инвентарь с проверкой на новые подарки, если ub_inv пуст
+        let myInventoryData = JSON.parse(localStorage.getItem('ub_inv')) || [giftPool[0], giftPool[1], giftPool[4], giftPool[5]];
         let stats = JSON.parse(localStorage.getItem('ub_stats')) || { total: 0, wins: 0, losses: 0 };
         
         let currentTab = 'my';
         let selectedLeft = null;
         let selectedRight = null;
         let isProcessing = false;
-        let arrowRotation = 0; 
+        let arrowRotation = 0; // Накопленный градус вращения стрелочки
         const circleCircumference = 534; // Обновленная длина окружности для радиуса 85
 
         const soundSpin = document.getElementById('soundSpin');
@@ -360,6 +369,7 @@
         function playSound(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
         function updateBalanceUI() { document.getElementById('userBalance').innerText = balance.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$& ') + ' ₽'; }
 
+        // Рендер нижних списков для Апгрейда
         function renderGrid() {
             const grid = document.getElementById('gridContent');
             grid.innerHTML = '';
@@ -438,16 +448,68 @@
             document.getElementById('wheelCircle').style.strokeDashoffset = circleCircumference - (circleCircumference * (chance / 100));
         }
 
+        // === ПЕРЕМЕННЫЕ ДЛЯ РУЧНОЙ АНИМАЦИИ ВРАЩЕНИЯ И СИНХРОНИЗАЦИИ ПО ЗВУКУ ===
+        let startRotation = 0;
+        let targetRotation = 0;
+        let baseSpeed = 0.8; // Базовая скорость вращения
+        let damping = 0.98; // Коэффициент затухания для плавного замедления
+        let currentVisualRotation = 0; // Текущий ВИЗУАЛЬНЫЙ угол вращения
+        let volumeFactor = 1.2; // Насколько сильно громкость влияет на "визуальную дрожь"
+        let rotationAnimationRequest; // ID запроса requestAnimationFrame
+
+        // === Web Audio API Переменные ===
+        let audioContext;
+        let analyserNode;
+        let sourceNode;
+        let dataArray;
+        let isAudioSetup = false;
+
+        // Фукнция для начальной настройки Web Audio API (вызывается один раз по клику)
+        function setupAudioAnalysis() {
+            if (isAudioSetup) return;
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyserNode = audioContext.createAnalyser();
+                sourceNode = audioContext.createMediaElementSource(soundSpin);
+                sourceNode.connect(analyserNode);
+                analyserNode.connect(audioContext.destination);
+                analyserNode.fftSize = 256;
+                let bufferLength = analyserNode.frequencyBinCount;
+                dataArray = new Uint8Array(bufferLength);
+                isAudioSetup = true;
+                console.log("Web Audio API настроен успешно.");
+            } catch (error) {
+                console.error("Ошибка при настройке Web Audio API:", error);
+            }
+        }
+
+        // Функция для получения текущей громкости звука (RMS амплитуда)
+        function getAverageVolume() {
+            if (!isAudioSetup) return 0;
+            analyserNode.getByteTimeDomainData(dataArray);
+            let sum = 0;
+            for (let i = 0; i < dataArray.length; i++) {
+                let amplitude = (dataArray[i] - 128) / 128; // Нормализуем к [-1, 1]
+                sum += amplitude * amplitude;
+            }
+            let rms = Math.sqrt(sum / dataArray.length);
+            return rms; // Возвращаем RMS амплитуду
+        }
+
+        // === ИСПРАВЛЕННАЯ ФУНКЦИЯ ПРОКАЧКИ (РУЧНАЯ АНИМАЦИЯ С СИНХРОНИЗАЦИЕЙ С ПО ОРАНЖЕВОМУ СЕКТОРУ) ===
         function executeUpgrade() {
             if (isProcessing || !selectedLeft || !selectedRight) return;
+            setupAudioAnalysis(); // Убеждаемся, что аудио готово
+
             isProcessing = true;
 
             const btn = document.getElementById('btnUpgrade');
             const arena = document.getElementById('arenaBox');
             const arrowSpinner = document.getElementById('arrowSpinner');
             
-            btn.innerText = 'Вращение стрелки...';
-            soundSpin.play().catch(() => {});
+            btn.innerText = 'Улучшение...';
+            // arena.classList.add('spinning'); // CSS анимация убрана
+            soundSpin.play().catch(() => { console.warn("Звук не смог воспроизвестись."); });
 
             let chance = (parseFloat(selectedLeft.price) / parseFloat(selectedRight.price)) * 100;
             if (chance > 95) chance = 95;
@@ -456,61 +518,140 @@
             let roll = Math.random() * 100;
             let isWin = roll <= chance;
 
-            // Расчет вращения (Стрелка стартует снизу (0 градусов относительно обертки), сектор шанса тоже заполняется снизу по часовой)
-            let fullTurnsDeg = 360 * (Math.floor(Math.random() * 5) + 6);
-            let targetSectorDeg = isWin ? (360 * (chance / 100) * Math.random()) : (360 * (chance / 100) + Math.random() * (360 - 360 * (chance / 100)));
+            // === РАСЧЕТ ИСПРАВЛЕННОГО ВРАЩЕНИЯ (ПО ОРАНЖЕВОМУ СЕКТОРУ) ===
+            // 1. Узнаем длину оранжевого сектора в градусах
+            let fullRotationDeg = chance * 3.6; // Каждые 1% шанса — это 3.6 градуса. Оранжевый сектор идет от 0 до fullRotationDeg.
             
-            arrowRotation += fullTurnsDeg + targetSectorDeg;
-            arrowSpinner.style.transform = `rotate(${arrowRotation}deg)`;
-
+            // 2. Рассчитываем конечный сектор (targetSectorDeg) так, чтобы при ПОБЕДЕ стрелка попала ВНУТРЬ оранжевого сектора.
+            // При ПРОИГРЫШЕ — стрелка должна попасть ВНЕ оранжевого сектора (в серую зону от fullRotationDeg до 360).
+            let targetSectorDeg;
+            if (isWin) {
+                targetSectorDeg = Math.random() * fullRotationDeg; // Гарантированно ВНУТРИ оранжевого сектора
+            } else {
+                targetSectorDeg = fullRotationDeg + Math.random() * (360 - fullRotationDeg); // Гарантированно ВНЕ оранжевого сектора (в серой зоне)
+            }
+            
+            // 3. Рассчитываем полный целевой угол, добавляя от 6 до 10 полных оборотов
+            targetRotation = arrowRotation + (360 * (Math.floor(Math.random() * 5) + 6)) + targetSectorDeg;
+            
+            startRotation = arrowRotation; // Запоминаем старт
             stats.total++;
 
-            setTimeout(() => {
-                soundSpin.pause();
-                soundSpin.currentTime = 0;
+            // === ИСПРАВЛЕНИЕ БАГА: УДАЛЕНИЕ ОДНОГО КОНКРЕТНОГО ПРЕДМЕТА ИЗ ИНВЕНТАРЯ ===
+            // Вместо фильтрации по значению, используем splice, чтобы удалить только одно вхождение.
+            const indexToRemove = myInventoryData.indexOf(selectedLeft);
+            if (indexToRemove !== -1) {
+                myInventoryData.splice(indexToRemove, 1);
+            }
+            
+            console.log(`Прокачка: Шанс ${chance.toFixed(2)}%. ПРЕДСКАЗАНО ${isWin ? 'ПОБЕДА' : 'ПРОИГРЫШ'}. Гарантированный стоп на ${targetRotation.toFixed(0)}deg (Сектор: ${targetSectorDeg.toFixed(0)}deg, Зона ${isWin ? 'ОРАНЖЕВАЯ' : 'СЕРАЯ'}).`);
 
-                if (isWin) {
-                    stats.wins++;
-                    btn.style.background = '#2ecc71';
-                    btn.innerText = 'ВЫИГРЫШ!';
-                    arena.classList.add('win-state');
-                    playSound(soundWin);
-                    confetti({ particleCount: 140, spread: 80, origin: { y: 0.6 }, colors: ['#ffcc00', '#2ecc71', '#ffffff'] });
-                    myInventoryData.push(selectedRight);
-                    myInventoryData = myInventoryData.filter(item => item !== selectedLeft);
-                } else {
-                    stats.losses++;
-                    btn.style.background = '#e74c3c';
-                    btn.innerText = 'СГОРЕЛО!';
-                    arena.classList.add('fail-state');
-                    playSound(soundFail);
-                    myInventoryData = myInventoryData.filter(item => item !== selectedLeft);
+            // === ЗАПУСК РУЧНОЙ АНИМАЦИИ С СИНХРОНИЗАЦИЕЙ ПО ЗВУКУ ===
+            currentVisualRotation = startRotation;
+            let animationDuration = 3500; // Фиксированная длительность
+            let animationStartTime = performance.now();
+
+            function animateRotation(timestamp) {
+                let elapsed = timestamp - animationStartTime;
+                
+                // Если время вышло, останавливаем анимацию
+                if (elapsed > animationDuration) {
+                    currentVisualRotation = targetRotation; // Гарантируем точную остановку
+                    arrowSpinner.style.transform = `rotate(${currentVisualRotation}deg)`;
+                    arrowRotation = targetRotation; // Обновляем накопленный градус для следующей прокрутки
+                    soundSpin.pause();
+                    soundSpin.currentTime = 0;
+                    afterSpin(isWin); // Переходим к исходу
+                    return;
                 }
 
-                saveData();
-                updateBalanceUI();
+                // 1. Рассчитываем базовое вращение с плавным замедлением (ease-out-cubic)
+                let progress = elapsed / animationDuration;
+                // Функция ease-out-cubic: c * (1 - t) ^ 3 + b
+                let totalDiff = targetRotation - startRotation;
+                let t = 1 - progress;
+                let currentBaseRotation = startRotation + totalDiff * (1 - t * t * t);
 
-                setTimeout(() => {
-                    btn.style.background = '';
-                    btn.disabled = true;
-                    arena.className = 'upgrade-arena';
-                    selectedLeft = null; selectedRight = null;
-                    document.getElementById('slotLeft').innerHTML = '<span class="slot-hint">Выбери свой подарок</span>';
-                    document.getElementById('slotLeft').classList.remove('active');
-                    document.getElementById('slotRight').innerHTML = '<span class="slot-hint">Выбери цель</span>';
-                    document.getElementById('slotRight').classList.remove('active');
-                    updateChance(); // Эта функция сама вернет галочки в центр, так как слоты пустые
-                    renderGrid();
-                    isProcessing = false;
-                }, 2000);
+                // 2. Рассчитываем ВИЗУАЛЬНУЮ ДРОЖЬ И СИНХРОНИЗАЦИЮ ПО ЗВУКУ
+                let averageVolume = getAverageVolume();
+                // Добавляем дрожь, пропорциональную громкости, к базовому вращению
+                // Громкость RMS лежит в [0, 1]. Отрицательная дрожь, чтобы не обгонять targetRotation.
+                let soundVisualOffset = averageVolume * volumeFactor * -2.0; 
+                
+                // 3. Применяем результирующее вращение
+                currentVisualRotation = currentBaseRotation + soundVisualOffset;
+                arrowSpinner.style.transform = `rotate(${currentVisualRotation}deg)`;
+                
+                // console.log(`Vol: ${averageVolume.toFixed(2)}, Offset: ${soundVisualOffset.toFixed(2)}`);
 
-            }, 3500);
+                rotationAnimationRequest = requestAnimationFrame(animateRotation);
+            }
+
+            requestAnimationFrame(animateRotation); // Запускаем анимацию
         }
 
-        /* === ПРОФИЛЬ, ТОРГОВЛЯ И ТАБЫ === */
-        function openModal(id) { playSound(soundClick); document.getElementById(id).style.display = 'flex'; if(id === 'profileModal') switchProfileTab('stats'); }
+        // Функция исхода (Перенесена в конец ручной анимации)
+        function afterSpin(isWin) {
+            const btn = document.getElementById('btnUpgrade');
+            const arena = document.getElementById('arenaBox');
+            
+            btn.innerText = isWin ? 'ВЫИГРЫШ!' : 'СГОРЕЛО!';
+
+            if (isWin) {
+                stats.wins++;
+                btn.style.background = '#2ecc71';
+                arena.classList.add('win-state'); // Зеленый экран арены
+                playSound(soundWin);
+                
+                confetti({ particleCount: 140, spread: 80, origin: { y: 0.6 }, colors: ['#ffcc00', '#2ecc71', '#ffffff'] });
+
+                myInventoryData.push(selectedRight);
+                
+                console.log(`Исход: ПОБЕДА.`);
+            } else {
+                stats.losses++;
+                btn.style.background = '#e74c3c';
+                arena.classList.add('fail-state'); // Красный экран арены
+                playSound(soundFail);
+                
+                document.getElementById('chanceText').innerText = '0.00%';
+                document.getElementById('wheelCircle').style.strokeDashoffset = 534;
+                console.log(`Исход: СГОРЕЛО.`);
+            }
+
+            saveData();
+            updateBalanceUI();
+
+            // Сброс анимационных стилей и полей через 2 секунды после финиша
+            setTimeout(() => {
+                btn.style.background = '';
+                btn.innerText = 'Выберите подарки';
+                btn.disabled = true;
+                arena.className = 'upgrade-arena'; // Убираем вспышку экрана
+                
+                selectedLeft = null; selectedRight = null;
+                document.getElementById('slotLeft').innerHTML = '<span class="slot-hint">Выбери свой подарок</span>';
+                document.getElementById('slotLeft').classList.remove('active');
+                document.getElementById('slotRight').innerHTML = '<span class="slot-hint">Выбери цель</span>';
+                document.getElementById('slotRight').classList.remove('active');
+                updateChance(); // Функция сама вернет галочки в центр
+                renderGrid();
+                isProcessing = false;
+            }, 2000);
+        }
+
+        /* === ОКНА ПРОФИЛЯ, ПОПОЛНЕНИЯ И ВЫВОДА === */
+        function openModal(id) {
+            setupAudioAnalysis(); // Web Audio API требует клика, инициализируем здесь
+            playSound(soundClick);
+            document.getElementById(id).style.display = 'flex';
+            if(id === 'profileModal') {
+                switchProfileTab('stats');
+            }
+        }
+
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        
+
         function switchProfileTab(pTab) {
             playSound(soundClick);
             const tabs = ['stats', 'sell', 'buy', 'payout'];
@@ -518,53 +659,137 @@
                 document.getElementById(`pTab${t.charAt(0).toUpperCase() + t.slice(1)}`).classList.toggle('active', t === pTab);
                 document.getElementById(`pContent${t.charAt(0).toUpperCase() + t.slice(1)}`).style.display = t === pTab ? 'block' : 'none';
             });
-            if(pTab === 'stats') { document.getElementById('statTotal').innerText = stats.total; document.getElementById('statWins').innerText = stats.wins; document.getElementById('statLosses').innerText = stats.losses; }
-            else if(pTab === 'sell') renderProfileSellList();
-            else if(pTab === 'buy') renderProfileBuyList();
+
+            if(pTab === 'stats') {
+                document.getElementById('statTotal').innerText = stats.total;
+                document.getElementById('statWins').innerText = stats.wins;
+                document.getElementById('statLosses').innerText = stats.losses;
+            }
+            else if(pTab === 'sell') {
+                renderProfileSellList();
+            }
+            else if(pTab === 'buy') {
+                renderProfileBuyList();
+            }
         }
 
+        // Рендер списка продажи в профиле
         function renderProfileSellList() {
-            const container = document.getElementById('profileSellList'); container.innerHTML = '';
-            if(myInventoryData.length === 0) { container.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:15px;">Нет предметов для продажи</div>'; return; }
+            const container = document.getElementById('profileSellList');
+            container.innerHTML = '';
+            if(myInventoryData.length === 0) {
+                container.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:15px;">У вас нет предметов для продажи</div>';
+                return;
+            }
             myInventoryData.forEach((item, idx) => {
-                container.innerHTML += `<div class="profile-list-item" style="border-left-color: var(--accent-gold);"><div class="p-item-info"><span class="p-item-name">${item.sub}</span><span class="p-item-price">Цена: ${Math.round(item.price * 0.5)} ₽</span></div><button class="btn-profile-action btn-sell" onclick="sellFromProfile(${idx})">Продать</button></div>`;
+                let sellPrice = Math.round(item.price * 0.5);
+                container.innerHTML += `
+                    <div class="profile-list-item" style="border-left-color: var(--accent-gold);">
+                        <div class="p-item-info">
+                            <span class="p-item-name">${item.sub}</span>
+                            <span class="p-item-price">Цена: ${sellPrice} ₽ (50%)</span>
+                        </div>
+                        <button class="btn-profile-action btn-sell" onclick="sellFromProfile(${idx})">Продать</button>
+                    </div>
+                `;
             });
         }
-        function sellFromProfile(idx) { playSound(soundClick); balance += myInventoryData[idx].price * 0.5; myInventoryData.splice(idx, 1); saveData(); updateBalanceUI(); renderProfileSellList(); renderGrid(); }
 
+        function sellFromProfile(idx) {
+            playSound(soundClick);
+            let item = myInventoryData[idx];
+            balance += item.price * 0.5;
+            myInventoryData.splice(idx, 1);
+            saveData();
+            updateBalanceUI();
+            renderProfileSellList();
+            renderGrid();
+        }
+
+        // Рендер списка покупок в профиле
         function renderProfileBuyList() {
-            const container = document.getElementById('profileBuyList'); container.innerHTML = '';
+            const container = document.getElementById('profileBuyList');
+            container.innerHTML = '';
             giftPool.forEach((item) => {
-                container.innerHTML += `<div class="profile-list-item" style="border-left-color: #2ecc71;"><div class="p-item-info"><span class="p-item-name">${item.sub}</span><span class="p-item-price">Стоимость: ${Math.round(item.price)} ₽</span></div><button class="btn-profile-action btn-buy" onclick="buyFromProfile('${item.id}')">Купить</button></div>`;
+                container.innerHTML += `
+                    <div class="profile-list-item" style="border-left-color: #2ecc71;">
+                        <div class="p-item-info">
+                            <span class="p-item-name">${item.sub}</span>
+                            <span class="p-item-price">Стоимость: ${Math.round(item.price)} ₽</span>
+                        </div>
+                        <button class="btn-profile-action btn-buy" onclick="buyFromProfile('${item.id}')">Купить</button>
+                    </div>
+                `;
             });
         }
+
         function buyFromProfile(itemId) {
-            playSound(soundClick); const targetItem = giftPool.find(p => p.id === itemId); let cost = parseFloat(targetItem.price);
-            if(balance < cost) { alert('Недостаточно средств!'); return; }
-            balance -= cost; myInventoryData.push(targetItem); saveData(); updateBalanceUI(); renderProfileBuyList(); renderGrid();
+            playSound(soundClick);
+            const targetItem = giftPool.find(p => p.id === itemId);
+            let cost = parseFloat(targetItem.price);
+            
+            if(balance < cost) {
+                alert('Недостаточно средств на балансе для покупки!');
+                return;
+            }
+
+            balance -= cost;
+            myInventoryData.push(targetItem);
+            saveData();
+            updateBalanceUI();
+            renderProfileBuyList();
+            renderGrid();
+            alert(`Вы успешно приобрели ${targetItem.sub}! Он добавлен в инвентарь.`);
         }
 
-        function processDeposit() { const amount = parseFloat(document.getElementById('depositAmount').value); if (!amount || amount < 10) return; balance += amount; saveData(); updateBalanceUI(); closeModal('depositModal'); }
+        function processDeposit() {
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            if (!amount || amount < 10) { alert('Минимальная сумма — 10 ₽'); return; }
+            balance += amount;
+            saveData();
+            updateBalanceUI();
+            closeModal('depositModal');
+            alert(`Успешно зачислено ${amount} ₽`);
+        }
+
         function processWithdraw() {
-            const amount = parseFloat(document.getElementById('withdrawAmount').value); const details = document.getElementById('withdrawDetails').value.trim();
-            if(!details || !amount) return; if(amount > balance) { alert('Недостаточно средств!'); return; }
-            balance -= amount; saveData(); updateBalanceUI(); closeModal('profileModal'); alert('Заявка создана!');
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const details = document.getElementById('withdrawDetails').value.trim();
+            if(!details || !amount) { alert('Пожалуйста, заполните все поля!'); return; }
+            if(amount > balance) { alert('На балансе недостаточно средств!'); return; }
+            
+            balance -= amount;
+            saveData();
+            updateBalanceUI();
+            closeModal('profileModal');
+            alert(`Заявка на вывод ${amount} ₽ на реквизиты [${details}] успешно принята!`);
         }
 
+        // Контроллеры живого окружения
         function updateOnline() {
-            const countNode = document.getElementById('onlineCount'); let current = parseInt(countNode.innerText.replace(/\s/g, ''));
+            const countNode = document.getElementById('onlineCount');
+            let current = parseInt(countNode.innerText.replace(/\s/g, ''));
             current += Math.random() > 0.5 ? Math.floor(Math.random() * 5) : -Math.floor(Math.random() * 5);
-            if(current < 1300) current = 1600; if(current > 2300) current = 1750;
+            if(current < 1300) current = 1600;
+            if(current > 2300) current = 1750;
             countNode.innerText = current.toLocaleString('ru-RU');
         }
+
         function updateTicker() {
-            const ticker = document.getElementById('liveTicker'); const item = giftPool[Math.floor(Math.random() * giftPool.length)]; const isWin = Math.random() > 0.45;
-            ticker.insertAdjacentHTML('afterbegin', `<div class="ticker-item ${isWin ? '' : 'fail'}"><img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'"><span>${item.sub}</span><span>${isWin ? '🔥' : '❌'}</span></div>`);
+            const ticker = document.getElementById('liveTicker');
+            const item = giftPool[Math.floor(Math.random() * giftPool.length)];
+            const isWin = Math.random() > 0.45;
+            const html = `<div class="ticker-item ${isWin ? '' : 'fail'}"><img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'"><span>${item.sub}</span><span>${isWin ? '🔥' : '❌'}</span></div>`;
+            ticker.insertAdjacentHTML('afterbegin', html);
             if (ticker.children.length > 6) ticker.removeChild(ticker.lastChild);
         }
 
-        setInterval(updateOnline, 3000); setInterval(updateTicker, 2200);
-        updateBalanceUI(); renderGrid(); updateChance(); // Вызываем старт
+        setInterval(updateOnline, 3000);
+        setInterval(updateTicker, 2200);
+        
+        // Старт системы
+        updateBalanceUI();
+        renderGrid();
     </script>
 </body>
 </html>
