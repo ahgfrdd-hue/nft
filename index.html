@@ -28,7 +28,6 @@
             --radius-lg: 20px;
             --radius-md: 14px;
             --radius-sm: 8px;
-            /* СДЕЛАНО ПЛАВНЕЕ (Ease-Out-Quint) */
             --transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
@@ -240,7 +239,7 @@
         .footer-contacts:hover { border-color: #2AABEE; background: var(--bg-card-hover); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(42, 171, 238, 0.2); }
         .tg-icon { width: 22px; height: 22px; fill: #2AABEE; }
 
-        /* === МОДАЛКИ (ОБЩИЕ) === */
+        /* === МОДАЛКИ === */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; opacity: 0; transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
         .modal-overlay.active { display: flex; opacity: 1; }
         .modal-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 460px; padding: 28px; position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.8); transform: translateY(20px); transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
@@ -259,7 +258,6 @@
             padding: 12px; border-radius: var(--radius-sm); text-align: center; cursor: pointer; transition: var(--transition);
         }
         .payment-method.active { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); transform: scale(1.02); }
-        .payment-method:hover:not(.active) { border-color: var(--text-muted); }
         .amount-presets { display: flex; gap: 8px; margin-bottom: 16px; }
         .amount-btn {
             flex: 1; background: var(--bg-card); border: 1px solid var(--border-color);
@@ -274,7 +272,6 @@
             background: var(--bg-main); background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, var(--bg-main) 70%);
             z-index: 300; display: none; flex-direction: column; opacity: 0;
             transform: translateX(100%);
-            /* Анимация профиля стала более плавной */
             transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .profile-page-overlay.active { display: flex; opacity: 1; transform: translateX(0); }
@@ -288,20 +285,21 @@
         .profile-title-text { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
         .profile-body { flex: 1; overflow-y: auto; padding: 24px 16px; max-width: 650px; width: 100%; margin: 0 auto; }
         
-        .profile-user-card {
+        /* === НОВАЯ СЕТКА ПРОФИЛЯ === */
+        .profile-top-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        @media (max-width: 380px) {
+            .profile-top-layout { grid-template-columns: 1fr; }
+        }
+        .p-card-panel {
             background: var(--bg-panel); border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg); padding: 20px; display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            border-radius: var(--radius-lg); padding: 16px; display: flex; flex-direction: column; 
+            justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
-        .profile-avatar-lg {
-            width: 64px; height: 64px; background: var(--bg-card);
-            border: 2px solid var(--accent-main); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; font-size: 32px;
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
-        .profile-info-text { display: flex; flex-direction: column; }
-        .profile-info-text .p-name { font-size: 22px; font-weight: 800; color: #fff; }
-        .profile-info-text .p-role { font-size: 12px; color: var(--text-muted); font-weight: 700; margin-top: 4px; background: var(--bg-card); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border-color); display: inline-block; width: fit-content; }
 
         /* === БЛОК ЛУЧШЕГО ДРОПА === */
         .best-drop-card {
@@ -315,79 +313,21 @@
             box-shadow: 0 4px 20px rgba(138, 43, 226, 0.15);
         }
         .bd-header {
-            font-size: 12px;
-            color: var(--accent-secondary);
-            text-transform: uppercase;
-            font-weight: 800;
-            margin-bottom: 12px;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            font-size: 12px; color: var(--accent-secondary); text-transform: uppercase;
+            font-weight: 800; margin-bottom: 12px; letter-spacing: 1px; display: flex; align-items: center; gap: 6px;
         }
-        .bd-content {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
+        .bd-content { display: flex; align-items: center; gap: 16px; }
         .bd-img-container {
-            width: 60px;
-            height: 60px;
-            background: var(--bg-card);
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid var(--border-color);
+            width: 60px; height: 60px; background: var(--bg-card); border-radius: var(--radius-sm);
+            display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color);
         }
-        .bd-img-container img {
-            max-width: 80%;
-            max-height: 80%;
-            object-fit: contain;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
-        }
-        .bd-info {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        .bd-name {
-            font-size: 16px;
-            font-weight: 800;
-            color: #fff;
-        }
-        .bd-rarity {
-            font-size: 12px;
-            font-weight: 700;
-            margin-top: 4px;
-            color: var(--text-muted);
-        }
-        .bd-price {
-            font-size: 14px;
-            font-weight: 900;
-            color: #fff;
-            background: rgba(0,0,0,0.4);
-            padding: 6px 10px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .bd-empty {
-            font-size: 14px;
-            color: var(--text-muted);
-            font-weight: 600;
-            text-align: center;
-            padding: 10px 0;
-        }
+        .bd-img-container img { max-width: 80%; max-height: 80%; object-fit: contain; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
+        .bd-info { flex: 1; display: flex; flex-direction: column; }
+        .bd-name { font-size: 16px; font-weight: 800; color: #fff; }
+        .bd-rarity { font-size: 12px; font-weight: 700; margin-top: 4px; color: var(--text-muted); }
+        .bd-price { font-size: 14px; font-weight: 900; color: #fff; background: rgba(0,0,0,0.4); padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
+        .bd-empty { font-size: 14px; color: var(--text-muted); font-weight: 600; text-align: center; padding: 10px 0; }
         
-        .profile-balance-card {
-            background: linear-gradient(135deg, var(--bg-card), var(--bg-panel));
-            border: 1px solid var(--border-color); border-radius: var(--radius-lg);
-            padding: 20px; margin-bottom: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-        }
-        .profile-balance-card .b-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 1px;}
-        .profile-balance-card .b-value { font-size: 32px; font-weight: 900; color: #fff; margin-top: 8px; text-shadow: 0 2px 10px rgba(255,255,255,0.1); }
-
         .profile-tabs { display: flex; gap: 8px; margin-bottom: 20px; background: #0a0a0f; padding: 6px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); }
         .p-tab-btn { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-muted); font-size: 11px; font-weight: 700; text-transform: uppercase; cursor: pointer; border-radius: 6px; transition: var(--transition); }
         .p-tab-btn.active { background: var(--bg-card); color: #fff; border: 1px solid #333344; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
@@ -563,20 +503,39 @@
             <div style="width: 28px;"></div>
         </div>
         <div class="profile-body">
-            <div class="profile-user-card">
-                <div class="profile-avatar-lg">👤</div>
-                <div class="profile-info-text">
-                    <div class="p-name">om1a2</div>
-                    <div class="p-role">Пользователь</div>
+
+            <div class="profile-top-layout">
+                <div class="p-card-panel">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 48px; height: 48px; background: var(--bg-card); border: 2px solid var(--accent-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; box-shadow: 0 0 10px var(--accent-glow);">👤</div>
+                        <div style="font-size: 18px; font-weight: 800; color: #fff;">om1a2</div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; display: flex; align-items: center; justify-content: space-between; background: var(--bg-card); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                        <div style="display: flex; flex-direction: column;">
+                            <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Баланс</span>
+                            <span style="font-size: 16px; font-weight: 800; color: #fff;" id="profileBalanceVal">10 000 ⭐</span>
+                        </div>
+                        <button onclick="closeModal('profileModal'); openModal('depositModal');" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); color: #fff; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; transition: transform 0.2s;">Пополнить</button>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div class="p-card-panel" style="flex: 1; flex-direction: row; align-items: center; padding: 12px 16px;">
+                        <div style="display: flex; flex-direction: column; flex: 1;">
+                            <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Выведено</span>
+                            <span style="font-size: 18px; font-weight: 800; color: #fff;" id="profileTotalWithdrawn">0 ⭐</span>
+                        </div>
+                        <img src="16201.png" style="width: 45px; height: 45px; object-fit: contain; filter: grayscale(100%) brightness(0.6);">
+                    </div>
+                    <div class="p-card-panel" style="flex: 1; justify-content: center; padding: 12px 16px;">
+                        <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Сделано апгрейдов</span>
+                        <span style="font-size: 18px; font-weight: 800; color: var(--accent-secondary);" id="profileTotalUpgradesBlock">0</span>
+                    </div>
                 </div>
             </div>
             
             <div class="best-drop-card" id="bestDropContainer"></div>
-
-            <div class="profile-balance-card">
-                <div class="b-label">Доступный баланс</div>
-                <div class="b-value"><span id="profileBalanceVal">10 000</span> ⭐</div>
-            </div>
 
             <div class="profile-tabs">
                 <button class="p-tab-btn active" id="pTabStats" onclick="switchProfileTab('stats')">Статистика</button>
@@ -637,7 +596,10 @@
 
         let balance = parseFloat(localStorage.getItem('ub_balance')) || 10000;
         let myInventoryData = JSON.parse(localStorage.getItem('ub_inv')) || [giftPool[0], giftPool[1], giftPool[4], giftPool[8]];
-        let stats = JSON.parse(localStorage.getItem('ub_stats')) || { total: 0, wins: 0, losses: 0, bestDrop: null };
+        let stats = JSON.parse(localStorage.getItem('ub_stats')) || { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0 };
+        
+        // Защита для старых сохранений
+        if(stats.withdrawn === undefined) stats.withdrawn = 0;
         
         let currentTab = 'my';
         let selectedLeft = null;
@@ -664,7 +626,7 @@
             document.getElementById('userBalance').innerText = formatted + ' ⭐'; 
             
             let pBalance = document.getElementById('profileBalanceVal');
-            if(pBalance) pBalance.innerText = formatted;
+            if(pBalance) pBalance.innerText = formatted + ' ⭐';
         }
 
         function renderGrid() {
@@ -922,7 +884,6 @@
                 confetti({ particleCount: 140, spread: 80, origin: { y: 0.6 }, colors: ['#00e5ff', '#8a2be2', '#ffffff'] });
                 myInventoryData.push(selectedRight);
                 
-                // СОХРАНЕНИЕ ЛУЧШЕГО ДРОПА
                 if (!stats.bestDrop || parseFloat(selectedRight.price) > parseFloat(stats.bestDrop.price)) {
                     stats.bestDrop = selectedRight;
                 }
@@ -988,7 +949,6 @@
             }, 2000);
         }
 
-        // ОТРИСОВКА ЛУЧШЕГО ДРОПА
         function renderBestDrop() {
             const container = document.getElementById('bestDropContainer');
             if (!stats.bestDrop) {
@@ -1021,8 +981,12 @@
             const overlay = document.getElementById(id);
             overlay.classList.add('active');
             if(id === 'profileModal') {
+                // ОБНОВЛЕНИЕ НОВОЙ СТАТИСТИКИ
+                document.getElementById('profileTotalWithdrawn').innerText = (stats.withdrawn || 0).toLocaleString('ru-RU') + ' ⭐';
+                document.getElementById('profileTotalUpgradesBlock').innerText = stats.total;
+                
                 switchProfileTab('stats');
-                renderBestDrop(); // Обновляем инфу при открытии
+                renderBestDrop();
             }
         }
 
@@ -1057,12 +1021,13 @@
                 return;
             }
             myInventoryData.forEach((item, idx) => {
-                let sellPrice = Math.round(item.price * 0.5);
+                // ИЗМЕНЕНО НА 15%
+                let sellPrice = Math.round(item.price * 0.15);
                 container.innerHTML += `
                     <div class="profile-list-item" style="border-left-color: var(--accent-main);">
                         <div class="p-item-info">
                             <span class="p-item-name">${item.sub}</span>
-                            <span class="p-item-price">Цена: ${sellPrice} ⭐ (50%)</span>
+                            <span class="p-item-price">Цена: ${sellPrice} ⭐ (15%)</span>
                         </div>
                         <button class="btn-profile-action btn-sell" onclick="sellFromProfile(${idx})">Продать</button>
                     </div>
@@ -1073,7 +1038,8 @@
         function sellFromProfile(idx) {
             playSound(soundClick);
             let item = myInventoryData[idx];
-            balance += item.price * 0.5;
+            // ИЗМЕНЕНО НА 15%
+            balance += item.price * 0.15;
             myInventoryData.splice(idx, 1);
             saveData();
             updateBalanceUI();
@@ -1154,8 +1120,12 @@
             if(amount > balance) { alert('На балансе недостаточно звезд!'); return; }
             
             balance -= amount;
+            stats.withdrawn += amount; // ДОБАВЛЕНО В СТАТИСТИКУ ВЫВОДА
             saveData();
             updateBalanceUI();
+            
+            document.getElementById('profileTotalWithdrawn').innerText = stats.withdrawn.toLocaleString('ru-RU') + ' ⭐';
+            
             closeModal('profileModal');
             alert(`Заявка на вывод ${amount} ⭐ на пользователя [${details}] успешно принята! Ожидайте зачисления.`);
         }
