@@ -45,14 +45,13 @@
             display: flex; flex-direction: column; overflow-x: hidden;
         }
 
-        /* === ЭКРАН АВТОРИЗАЦИИ (ИСПРАВЛЕНО) === */
+        /* === ЭКРАН АВТОРИЗАЦИИ === */
         #auth-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             background: var(--bg-main);
             background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, var(--bg-main) 70%);
             z-index: 9999;
-            /* Скрываем по умолчанию, чтобы не мигало */
             display: none;
             opacity: 0;
             flex-direction: column;
@@ -72,13 +71,8 @@
             width: 400px;
         }
 
-        .auth-title {
-            font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 10px;
-        }
-
-        .auth-subtitle {
-            color: var(--text-muted); margin-bottom: 25px; font-size: 14px; line-height: 1.4;
-        }
+        .auth-title { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 10px; }
+        .auth-subtitle { color: var(--text-muted); margin-bottom: 25px; font-size: 14px; line-height: 1.4; }
 
         .btn-google {
             background: #fff; color: #000;
@@ -89,9 +83,7 @@
             width: 100%;
         }
 
-        .btn-google:hover {
-            transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,255,255,0.2);
-        }
+        .btn-google:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,255,255,0.2); }
 
         /* === ХЕДЕР === */
         header {
@@ -333,7 +325,6 @@
         .profile-title-text { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
         .profile-body { flex: 1; overflow-y: auto; padding: 24px 16px; max-width: 650px; width: 100%; margin: 0 auto; }
         
-        /* === НОВАЯ СЕТКА ПРОФИЛЯ === */
         .profile-top-layout {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -349,7 +340,6 @@
             justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
-        /* === БЛОК ЛУЧШЕГО ДРОПА === */
         .best-drop-card {
             background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(0, 229, 255, 0.05));
             border: 1px solid var(--accent-main);
@@ -402,17 +392,16 @@
     <div id="auth-overlay">
         <div class="auth-box">
             <div class="logo" style="font-size: 32px; margin-bottom: 10px;">FLASH<span>UPGRADER</span></div>
-            <div class="auth-title">Добро пожаловать!</div>
-            <div class="auth-subtitle">Войдите через Google, чтобы продолжить пользоваться сайтом и сохранять прогресс.</div>
-            <button id="login-btn" class="btn-google">
-                <svg width="20" height="20" viewBox="0 0 48 48">
-                    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
-                    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
-                    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
-                    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
-                </svg>
-                Войти через Google
-            </button>
+            <div class="auth-title">Авторизация</div>
+            <div class="auth-subtitle">Войдите или создайте аккаунт, чтобы сохранять прогресс.</div>
+            
+            <input type="email" id="email-input" class="modal-input" placeholder="Email" style="margin-bottom: 12px; padding: 12px;">
+            <input type="password" id="password-input" class="modal-input" placeholder="Пароль" style="padding: 12px;">
+            
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button id="login-btn" class="btn-google" style="background: var(--accent-main); color: #fff;">Войти</button>
+                <button id="register-btn" class="btn-google" style="background: transparent; color: #fff; border: 1px solid var(--border-color);">Создать</button>
+            </div>
         </div>
     </div>
 
@@ -566,12 +555,16 @@
         <div class="profile-body">
             <div class="profile-top-layout">
                 <div class="p-card-panel">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <div style="width: 48px; height: 48px; background: var(--bg-card); border: 2px solid var(--accent-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; box-shadow: 0 0 10px var(--accent-glow);">👤</div>
-                        <div style="font-size: 18px; font-weight: 800; color: #fff;" id="profileNameDisplay">om1a2</div>
-                    </div>
                     
-                    <div style="margin-top: 20px; display: flex; align-items: center; justify-content: space-between; background: var(--bg-card); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;">
+                        <div style="display: flex; flex-direction: column;">
+                            <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Аккаунт</span>
+                            <span style="font-size: 14px; font-weight: 800; color: #fff;" id="profileEmailDisplay">user@email.com</span>
+                        </div>
+                        <button id="logout-btn" style="background: rgba(252, 92, 101, 0.1); color: var(--rarity-mythic); border: 1px solid rgba(252, 92, 101, 0.2); padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: transform 0.2s;">Выйти</button>
+                    </div>
+
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div style="display: flex; flex-direction: column;">
                             <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Баланс</span>
                             <span style="font-size: 16px; font-weight: 800; color: #fff;" id="profileBalanceVal">10 000 ⭐</span>
@@ -672,11 +665,32 @@
         const soundFail = document.getElementById('soundFail');
         const soundClick = document.getElementById('soundClick');
 
+        // ИЗМЕНЕНИЕ: Отправляем данные в базу при сохранении
         function saveData() {
             localStorage.setItem('ub_balance', balance);
             localStorage.setItem('ub_inv', JSON.stringify(myInventoryData));
             localStorage.setItem('ub_stats', JSON.stringify(stats));
+
+            if (window.syncToDb) {
+                window.syncToDb(balance, myInventoryData, stats);
+            }
         }
+
+        // ИЗМЕНЕНИЕ: Загрузка из базы
+        window.loadFromDb = function(dbBalance, dbInv, dbStats) {
+            balance = dbBalance;
+            myInventoryData = dbInv || [];
+            stats = dbStats || { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0 };
+            if(stats.withdrawn === undefined) stats.withdrawn = 0;
+            
+            updateBalanceUI();
+            renderGrid();
+        };
+
+        // Экспорт текущих данных для новых юзеров
+        window.getCurrentBalance = () => balance;
+        window.getCurrentInv = () => myInventoryData;
+        window.getCurrentStats = () => stats;
 
         function playSound(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
         
@@ -1212,7 +1226,8 @@
     </script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        // ИМЕНЕНЫ ИМПОРТЫ ДЛЯ ЛОГИНА ПО ПОЧТЕ/ПАРОЛЮ
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -1227,42 +1242,89 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const provider = new GoogleAuthProvider();
 
         const loginBtn = document.getElementById('login-btn');
+        const registerBtn = document.getElementById('register-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const emailInput = document.getElementById('email-input');
+        const passInput = document.getElementById('password-input');
+        
         const authOverlay = document.getElementById('auth-overlay');
-        const profileNameDisplay = document.getElementById('profileNameDisplay');
+        const profileEmailDisplay = document.getElementById('profileEmailDisplay');
 
+        // Функция синхронизации с базой (вызывается из обычного скрипта)
+        window.syncToDb = async (bal, inv, st) => {
+            if (auth.currentUser) {
+                try {
+                    await setDoc(doc(db, "users", auth.currentUser.uid), {
+                        balance: bal,
+                        inventory: inv,
+                        stats: st
+                    });
+                } catch(e) { console.error("Ошибка сохранения в БД: ", e); }
+            }
+        };
+
+        // ВХОД
         loginBtn.addEventListener('click', () => {
-            signInWithPopup(auth, provider).catch(error => {
-                console.error("Ошибка авторизации: ", error);
+            const email = emailInput.value.trim();
+            const pass = passInput.value.trim();
+            if(!email || !pass) return alert("Введите почту и пароль");
+            
+            loginBtn.innerText = "Вход...";
+            signInWithEmailAndPassword(auth, email, pass).catch(error => {
+                alert("Ошибка входа: Неверный логин или пароль");
+                loginBtn.innerText = "Войти";
             });
         });
 
+        // РЕГИСТРАЦИЯ
+        registerBtn.addEventListener('click', () => {
+            const email = emailInput.value.trim();
+            const pass = passInput.value.trim();
+            if(!email || !pass) return alert("Введите почту и пароль");
+            if(pass.length < 6) return alert("Пароль должен быть минимум 6 символов");
+            
+            registerBtn.innerText = "Создание...";
+            createUserWithEmailAndPassword(auth, email, pass).catch(error => {
+                alert("Ошибка регистрации: " + error.message);
+                registerBtn.innerText = "Создать";
+            });
+        });
+
+        // ВЫХОД
+        if(logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                signOut(auth).then(() => {
+                    localStorage.clear(); // Очищаем локальные данные при выходе
+                    location.reload(); // Перезагружаем страницу, чтобы сбросить состояние
+                });
+            });
+        }
+
+        // СЛЕДИМ ЗА СТАТУСОМ АВТОРИЗАЦИИ
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Если пользователь авторизован, скрываем экран-оверлей плавно
                 authOverlay.style.opacity = '0';
                 setTimeout(() => authOverlay.style.display = 'none', 500);
 
-                // Записываем имя в профиль, если оно там есть
-                if (profileNameDisplay) {
-                    profileNameDisplay.innerText = user.displayName || 'Игрок';
+                if (profileEmailDisplay) {
+                    profileEmailDisplay.innerText = user.email; // Показываем почту в профиле
                 }
                 
                 const userRef = doc(db, "users", user.uid);
                 const docSnap = await getDoc(userRef);
                 
-                if (!docSnap.exists()) {
-                    await setDoc(userRef, { balance: 0, upgrades: 0 });
-                    console.log("Новый игрок создан!");
+                if (docSnap.exists()) {
+                    // ЕСЛИ АККАУНТ ЕСТЬ В БАЗЕ — ЗАГРУЖАЕМ ЕГО
+                    const data = docSnap.data();
+                    window.loadFromDb(data.balance, data.inventory, data.stats);
                 } else {
-                    console.log("Данные игрока:", docSnap.data());
+                    // ЕСЛИ ЭТО НОВЫЙ АККАУНТ — СОХРАНЯЕМ ДЕФОЛТНЫЕ СТАРТОВЫЕ ДАННЫЕ В БАЗУ
+                    window.syncToDb(window.getCurrentBalance(), window.getCurrentInv(), window.getCurrentStats());
                 }
             } else {
-                // Если пользователь НЕ авторизован, только тогда показываем оверлей
                 authOverlay.style.display = 'flex';
-                // Небольшая задержка для плавного появления
                 setTimeout(() => authOverlay.style.opacity = '1', 50);
             }
         });
