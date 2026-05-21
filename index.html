@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <title>FlashUpgrader — Premium Edition</title>
     <style>
@@ -232,7 +233,7 @@
         .footer-contacts:hover { border-color: #2AABEE; background: var(--bg-card-hover); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(42, 171, 238, 0.15); }
         .tg-icon { width: 22px; height: 22px; fill: #2AABEE; }
 
-        /* === МОДАЛКИ === */
+        /* === МОДАЛКИ И СТИЛИ КНОПОК === */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; }
         .modal-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 460px; padding: 28px; position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
         .modal-close { position: absolute; top: 20px; right: 20px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 50%; width: 32px; height: 32px; display:flex; align-items:center; justify-content:center; color: var(--text-muted); font-size: 18px; cursor: pointer; transition: var(--transition); }
@@ -243,6 +244,22 @@
         .modal-btn { width: 100%; background: linear-gradient(135deg, var(--accent-main), #b838ff); color: #fff; border: none; padding: 16px; border-radius: var(--radius-sm); font-size: 15px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: var(--transition); }
         .modal-btn:hover { box-shadow: 0 6px 20px var(--accent-glow); }
         
+        /* Стили для нового меню пополнения */
+        .payment-methods { display: flex; gap: 10px; margin-bottom: 16px; }
+        .payment-method { 
+            flex: 1; background: var(--bg-card); border: 2px solid var(--border-color); 
+            padding: 12px; border-radius: var(--radius-sm); text-align: center; cursor: pointer; transition: var(--transition);
+        }
+        .payment-method.active { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); }
+        .payment-method:hover:not(.active) { border-color: var(--text-muted); }
+        .amount-presets { display: flex; gap: 8px; margin-bottom: 16px; }
+        .amount-btn {
+            flex: 1; background: var(--bg-card); border: 1px solid var(--border-color);
+            padding: 10px 4px; border-radius: 6px; color: var(--text-main); font-size: 13px; font-weight: 700;
+            cursor: pointer; transition: var(--transition);
+        }
+        .amount-btn:hover { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); }
+
         .profile-tabs { display: flex; gap: 8px; margin-bottom: 20px; background: #0a0a0f; padding: 6px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); }
         .p-tab-btn { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-muted); font-size: 11px; font-weight: 700; text-transform: uppercase; cursor: pointer; border-radius: 6px; transition: var(--transition); }
         .p-tab-btn.active { background: var(--bg-card); color: #fff; border: 1px solid #333344; }
@@ -382,9 +399,29 @@
     <div class="modal-overlay" id="depositModal">
         <div class="modal-card">
             <button class="modal-close" onclick="closeModal('depositModal')">×</button>
-            <div class="modal-title">Покупка Звезд</div>
-            <input type="number" class="modal-input" id="depositAmount" placeholder="Сумма (⭐)" min="10">
-            <button class="modal-btn" id="depositBtn" onclick="processDeposit()">Оплатить через Telegram</button>
+            <div class="modal-title">Пополнение баланса</div>
+            
+            <div style="margin-bottom: 16px;">
+                <label style="font-size: 12px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 8px; display: block;">Выберите способ оплаты</label>
+                <div class="payment-methods">
+                    <div class="payment-method active">
+                        <div style="font-size: 24px; margin-bottom: 4px;">⭐</div>
+                        <div style="font-size: 12px; font-weight: 700; color: #fff;">Telegram Stars</div>
+                    </div>
+                </div>
+            </div>
+
+            <label style="font-size: 12px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 8px; display: block;">Сумма (Минимум 10 ⭐)</label>
+            <input type="number" class="modal-input" id="depositAmount" placeholder="Введите сумму..." min="10" value="100" style="margin-bottom: 10px;">
+            
+            <div class="amount-presets">
+                <button class="amount-btn" onclick="setDepositAmount(50)">50 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(100)">100 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(500)">500 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(1000)">1000 ⭐</button>
+            </div>
+
+            <button class="modal-btn" id="depositBtn" onclick="processDeposit()">Оплатить <span id="payAmountText">100</span> ⭐</button>
         </div>
     </div>
 
@@ -413,7 +450,7 @@
             </div>
             <div id="pContentPayout" style="display:none;">
                 <div class="modal-title" style="font-size:16px;">Вывод средств</div>
-                <input type="text" class="modal-input" id="withdrawDetails" placeholder="Номер кошелька TON" style="margin-bottom:10px;">
+                <input type="text" class="modal-input" id="withdrawDetails" placeholder="Ваш Telegram Username (@username)" style="margin-bottom:10px;">
                 <input type="number" class="modal-input" id="withdrawAmount" placeholder="Сумма (⭐)">
                 <button class="modal-btn" style="background:linear-gradient(135deg, #0984e3, #74b9ff);" onclick="processWithdraw()">Создать заявку</button>
             </div>
@@ -843,7 +880,18 @@
             alert(`Вы успешно приобрели ${targetItem.sub}! Он добавлен в инвентарь.`);
         }
 
-        // --- ВОТ ТУТ ГЛАВНОЕ ИЗМЕНЕНИЕ ---
+        // --- ЛОГИКА КНОПОК СУММЫ ---
+        function setDepositAmount(amount) {
+            document.getElementById('depositAmount').value = amount;
+            document.getElementById('payAmountText').innerText = amount;
+        }
+
+        document.getElementById('depositAmount').addEventListener('input', function(e) {
+            let val = e.target.value || 0;
+            document.getElementById('payAmountText').innerText = val;
+        });
+
+        // --- ИСПРАВЛЕННАЯ ФУНКЦИЯ ПОПОЛНЕНИЯ ---
         function processDeposit() {
             const amount = parseInt(document.getElementById('depositAmount').value);
             if (!amount || amount < 10) { 
@@ -851,14 +899,20 @@
                 return; 
             }
             
-            // Чтобы каждый платеж был уникальным для конкретного пользователя, 
-            // мы отправляем ID пользователя на сервер.
-            // Пока здесь стоит заглушка 'user_123', в будущем вы сможете брать ID из Telegram.
-            const userId = 'user_123';
+            // Получаем реальный ID пользователя из Telegram, если доступно
+            let userId = 'user_123';
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
+                userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+            }
             
-            // Эта команда перенаправит пользователя с вашего сайта на ваш сервер Render, 
-            // а сервер сразу откроет окно покупки в Telegram!
-            window.location.href = `https://flashupgrader-1.onrender.com/pay?amount=${amount}&userId=${userId}`;
+            const paymentUrl = `https://flashupgrader-1.onrender.com/pay?amount=${amount}&userId=${userId}`;
+            
+            // Безопасное открытие ссылки внутри Telegram Mini App
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) {
+                window.Telegram.WebApp.openLink(paymentUrl);
+            } else {
+                window.location.href = paymentUrl;
+            }
         }
 
         function processWithdraw() {
@@ -871,7 +925,7 @@
             saveData();
             updateBalanceUI();
             closeModal('profileModal');
-            alert(`Заявка на вывод ${amount} ⭐ на реквизиты [${details}] успешно принята! Ожидайте зачисления.`);
+            alert(`Заявка на вывод ${amount} ⭐ на пользователя [${details}] успешно принята! Ожидайте зачисления.`);
         }
 
         function updateOnline() {
