@@ -34,3 +34,16 @@ bot.on('successful_payment', async (ctx) => {
 
 // Запускаем нашего робота
 bot.launch();
+// --- ЭТОТ КУСОК ДОБАВЛЯЕМ В САМЫЙ КОНЕЦ ФАЙЛА STARS.JS ---
+
+const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 3000; // Render сам передаст нужный порт сюда
+
+app.get('/', (req, res) => {
+    res.send('Бот платежей работает успешно!');
+});
+
+app.listen(PORT, () => {
+    console.log(`Веб-сервер запущен на порту ${PORT}`);
+});
