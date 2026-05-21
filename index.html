@@ -44,11 +44,6 @@
             filter: brightness(1.2);
         }
 
-        /* ИСПРАВЛЕНО: Убрано pointer-events: none, чтобы предметы нажимались! */
-        /* .slots-container, .items-grid {
-            pointer-events: none;
-        } */
-
         .item-sub, .item-title, .p-item-name, .bd-name, #profileEmailDisplay, .ticker-item span {
             overflow: hidden;
             text-overflow: ellipsis;
@@ -248,46 +243,30 @@
         .btn-upgrade:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 12px 35px var(--accent-glow); }
         .btn-upgrade:disabled { background: var(--bg-card); color: #555566; cursor: not-allowed; box-shadow: none; border: 1px solid var(--border-color); transform: none; }
 
-        /* === ТАБЫ И ИНВЕНТАРЬ === */
-        .inventory-section { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; }
-        .tabs-header { display: flex; background: #0c0c12; border-bottom: 1px solid var(--border-color); padding: 8px; gap: 8px; }
-        .tab-btn { flex: 1; padding: 14px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 700; border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition); text-transform: uppercase; letter-spacing: 0.5px;}
-        .tab-btn:hover { color: #fff; background: rgba(255,255,255,0.02); }
-        .tab-btn.active { color: #fff; background: var(--bg-card); border: 1px solid var(--border-color); }
-        
-        .items-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 20px; max-height: 420px; overflow-y: auto; scroll-behavior: smooth; }
-        .items-grid::-webkit-scrollbar { width: 6px; }
-        .items-grid::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
-        
-        .item-card { 
-            background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); 
-            padding: 12px; display: flex; flex-direction: column; align-items: center; position: relative; cursor: pointer; 
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); 
-            will-change: transform, box-shadow; 
+        /* === БЛОК ДЛЯ НЕАВТОРИЗОВАННЫХ === */
+        #unauthPromoBlock {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 30px 10px;
+            overflow: hidden;
+            position: relative;
         }
-        .item-card:hover { background: var(--bg-card-hover); transform: translateY(-5px) scale(1.03); box-shadow: 0 10px 25px rgba(0,0,0,0.5); border-color: #4a4a60; }
-        .item-price { font-size: 11px; font-weight: 800; color: #fff; align-self: flex-end; background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); }
-        .item-img-container { width: 100%; height: 85px; display: flex; align-items: center; justify-content: center; margin: 8px 0; }
-        .item-img-container img { max-width: 90%; max-height: 90%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
-        .item-card:hover .item-img-container img { transform: scale(1.1); }
-        .item-info { text-align: center; width: 100%; }
-        .item-title { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
-
-        .rarity-epic { border-bottom: 3px solid var(--rarity-epic); }
-        .rarity-legendary { border-bottom: 3px solid var(--rarity-legendary); }
-        .rarity-mythic { border-bottom: 3px solid var(--rarity-mythic); }
-        .rarity-immortal { border-bottom: 3px solid var(--rarity-immortal); }
-
-        /* === ВИТРИНА ДЛЯ НЕАВТОРИЗОВАННЫХ === */
+        .unauth-title { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+        .unauth-subtitle { font-size: 13px; color: #6e6e84; font-weight: 600; margin-bottom: 20px; }
+        
         #promoDisplay {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
-            padding: 40px 10px;
-            min-height: 250px;
+            gap: 10px;
+            min-height: 180px;
+            width: 100%;
             position: relative;
-            background: var(--bg-panel);
             transition: opacity 0.4s ease;
         }
         .promo-item {
@@ -296,30 +275,69 @@
             align-items: center;
             justify-content: center;
             transition: all 0.5s ease-in-out;
-            width: 110px;
+            width: 75px;
         }
-        .promo-item.side {
-            filter: brightness(0);
-            transform: scale(0.65);
-            opacity: 0.6;
+        .promo-item.side.near {
+            filter: brightness(0.6);
+            transform: scale(0.75);
+            opacity: 0.8;
+            z-index: 3;
+        }
+        .promo-item.side.far {
+            filter: brightness(0.3);
+            transform: scale(0.55);
+            opacity: 0.4;
             z-index: 1;
         }
         .promo-item.center {
-            transform: scale(1.2);
+            transform: scale(1.15);
             z-index: 5;
             filter: drop-shadow(0 0 15px var(--accent-glow));
+            width: 100px;
         }
         .promo-item img {
             max-width: 100%;
-            max-height: 80px;
+            max-height: 70px;
             object-fit: contain;
         }
         .promo-item.center img {
             animation: floatEffect 4s ease-in-out infinite;
+            max-height: 85px;
         }
         .promo-info { text-align: center; margin-top: 10px; }
-        .promo-sub { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; white-space: nowrap; }
-        .promo-price-tag { font-size: 12px; font-weight: 800; color: #fff; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 8px;}
+        .promo-sub { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; white-space: nowrap; }
+        .promo-price-tag { font-size: 11px; font-weight: 800; color: #fff; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 8px;}
+
+        /* === ТАБЫ И ИНВЕНТАРЬ === */
+        .inventory-section { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; }
+        .tabs-header { display: flex; background: #0c0c12; border-bottom: 1px solid var(--border-color); padding: 8px; gap: 8px; }
+        .tab-btn { flex: 1; padding: 14px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 700; border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition); text-transform: uppercase; letter-spacing: 0.5px;}
+        .tab-btn:hover { color: #fff; background: rgba(255,255,255,0.02); }
+        .tab-btn.active { color: #fff; background: var(--bg-card); border: 1px solid var(--border-color); }
+        
+        .items-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 20px; max-height: 420px; overflow-y: auto; scroll-behavior: smooth; align-items: stretch;}
+        .items-grid::-webkit-scrollbar { width: 6px; }
+        .items-grid::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        
+        .item-card { 
+            background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); 
+            padding: 12px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; position: relative; cursor: pointer; 
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); 
+            will-change: transform, box-shadow; 
+            height: 100%;
+        }
+        .item-card:hover { background: var(--bg-card-hover); transform: translateY(-5px) scale(1.03); box-shadow: 0 10px 25px rgba(0,0,0,0.5); border-color: #4a4a60; }
+        .item-price { font-size: 11px; font-weight: 800; color: #fff; align-self: flex-end; background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); }
+        .item-img-container { width: 100%; height: 85px; display: flex; align-items: center; justify-content: center; margin: 8px 0; }
+        .item-img-container img { max-width: 90%; max-height: 90%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .item-card:hover .item-img-container img { transform: scale(1.1); }
+        .item-info { text-align: center; width: 100%; }
+        .item-title { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 2px;}
+
+        .rarity-epic { border-bottom: 3px solid var(--rarity-epic); }
+        .rarity-legendary { border-bottom: 3px solid var(--rarity-legendary); }
+        .rarity-mythic { border-bottom: 3px solid var(--rarity-mythic); }
+        .rarity-immortal { border-bottom: 3px solid var(--rarity-immortal); }
 
         /* === ФУТЕР === */
         footer { margin-top: auto; padding: 24px 16px; background: var(--bg-panel); border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
@@ -440,8 +458,8 @@
         <div class="modal-card" style="max-width: 400px; text-align: center;">
             <button class="modal-close" onclick="closeModal('authModal')">×</button>
             <div class="logo" style="font-size: 32px; margin-bottom: 10px;">FLASH<span>UPGRADER</span></div>
-            <div class="auth-title">Авторизация</div>
-            <div class="auth-subtitle">Войдите или создайте аккаунт, чтобы сохранять прогресс и делать апгрейды.</div>
+            <div class="auth-title" style="font-size: 20px; font-weight: bold; margin-bottom: 5px;">Авторизация</div>
+            <div class="auth-subtitle" style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Войдите или создайте аккаунт, чтобы сохранять прогресс и делать апгрейды.</div>
             
             <input type="email" id="email-input" class="modal-input" placeholder="Email" style="margin-bottom: 12px; padding: 12px;">
             <input type="password" id="password-input" class="modal-input" placeholder="Пароль" style="padding: 12px;">
@@ -547,14 +565,22 @@
             </div>
         </section>
 
-        <section class="inventory-section">
-            
-            <div id="promoDisplay" style="display: none;">
-                <div id="promoLeft" class="promo-item side"></div>
+        <section id="unauthPromoBlock" style="display: none;">
+            <div class="unauth-title">Вы не авторизированы</div>
+            <div class="unauth-subtitle">Войдите для доступа к апгрейдам</div>
+
+            <div id="promoDisplay">
+                <div id="promoLeft2" class="promo-item side far"></div>
+                <div id="promoLeft1" class="promo-item side near"></div>
                 <div id="promoCenter" class="promo-item center"></div>
-                <div id="promoRight" class="promo-item side"></div>
+                <div id="promoRight1" class="promo-item side near"></div>
+                <div id="promoRight2" class="promo-item side far"></div>
             </div>
 
+            <button class="btn-upgrade" style="background: linear-gradient(135deg, var(--accent-main), var(--accent-secondary)); margin-top: 24px; padding: 14px 30px; font-size: 14px; max-width: 280px; width: 100%; border-radius: 50px;" onclick="openModal('authModal')">ВОЙТИ ПО EMAIL</button>
+        </section>
+
+        <section class="inventory-section" id="inventorySection">
             <div class="tabs-header" id="inventoryTabs">
                 <button class="tab-btn active" id="tabMy" onclick="switchTab('my')">Мой инвентарь</button>
                 <button class="tab-btn" id="tabShop" onclick="switchTab('shop')">Магазин</button>
@@ -721,7 +747,7 @@
         let arrowRotation = 0; 
         const circleCircumference = 534; 
 
-        // ЛОГИКА ДЛЯ СЛАЙДЕРА-ВИТРИНЫ
+        // ЛОГИКА ДЛЯ СЛАЙДЕРА-ВИТРИНЫ (5 элементов)
         let promoInterval = null;
 
         function startPromoSlider() {
@@ -731,17 +757,20 @@
         }
 
         function updatePromoItems() {
-            if(giftPool.length < 3) return;
+            if(giftPool.length < 5) return;
             const promoDisplay = document.getElementById('promoDisplay');
-            promoDisplay.style.opacity = '0'; // Для плавного эффекта
+            promoDisplay.style.opacity = '0'; 
             
             setTimeout(() => {
                 let shuffled = [...giftPool].sort(() => 0.5 - Math.random());
                 let centerItem = shuffled[0];
-                let leftItem = shuffled[1];
-                let rightItem = shuffled[2];
+                let left1 = shuffled[1];
+                let left2 = shuffled[2];
+                let right1 = shuffled[3];
+                let right2 = shuffled[4];
 
-                document.getElementById('promoLeft').innerHTML = `<img src="${leftItem.img}" onerror="this.src='16201.png'">`;
+                document.getElementById('promoLeft2').innerHTML = `<img src="${left2.img}" onerror="this.src='16201.png'">`;
+                document.getElementById('promoLeft1').innerHTML = `<img src="${left1.img}" onerror="this.src='16201.png'">`;
                 document.getElementById('promoCenter').innerHTML = `
                     <div class="promo-price-tag">${Math.round(centerItem.price)} ⭐</div>
                     <img src="${centerItem.img}" onerror="this.src='16201.png'">
@@ -749,7 +778,8 @@
                         <div class="promo-sub">${centerItem.sub}</div>
                     </div>
                 `;
-                document.getElementById('promoRight').innerHTML = `<img src="${rightItem.img}" onerror="this.src='16201.png'">`;
+                document.getElementById('promoRight1').innerHTML = `<img src="${right1.img}" onerror="this.src='16201.png'">`;
+                document.getElementById('promoRight2').innerHTML = `<img src="${right2.img}" onerror="this.src='16201.png'">`;
                 
                 promoDisplay.style.opacity = '1';
             }, 400); 
@@ -800,7 +830,11 @@
             const activeData = currentTab === 'my' ? myInventoryData : giftPool;
 
             if(activeData.length === 0) {
-                grid.innerHTML = `<div style="grid-column:span 3;text-align:center;padding:30px;color:var(--text-muted);">Инвентарь пуст. Зайдите в Профиль, чтобы купить предметы.</div>`;
+                if (!window.isUserLoggedIn && currentTab === 'my') {
+                    grid.innerHTML = `<div style="grid-column:span 3;text-align:center;padding:30px;color:var(--text-muted);">Войдите в аккаунт, чтобы просматривать и делать апгрейды.</div>`;
+                } else {
+                    grid.innerHTML = `<div style="grid-column:span 3;text-align:center;padding:30px;color:var(--text-muted);">Инвентарь пуст. Зайдите в Профиль, чтобы купить предметы.</div>`;
+                }
                 return;
             }
 
@@ -840,7 +874,7 @@
             slot.classList.add('active');
             slot.innerHTML = `
                 <div style="font-size:14px; font-weight:800; color:#fff; position: relative; z-index: 2;">${Math.round(item.price)} ⭐</div>
-                <div style="margin:6px 0; height:60px; display:flex; align-items:center; position: relative; z-index: 2;"><img src="${item.img}" style="max-height:55px;"></div>
+                <div style="margin:6px 0; height:60px; display:flex; align-items:center; justify-content:center; position: relative; z-index: 2;"><img src="${item.img}" style="max-height:55px;"></div>
                 <div style="font-size:12px; font-weight:700; color:var(--text-muted); text-overflow:ellipsis; overflow:hidden; width:100%; white-space:nowrap; position: relative; z-index: 2;">${item.sub}</div>
             `;
         }
@@ -1417,8 +1451,8 @@
                 document.getElementById('headerLoginBtn').style.display = 'none';
                 document.getElementById('headerUserArea').style.display = 'flex';
                 
-                // Пользователь авторизован: показываем инвентарь, прячем витрину
-                document.getElementById('promoDisplay').style.display = 'none';
+                // Авторизован: скрываем витрину-призыв, но ОСТАВЛЯЕМ инвентарь/магазин
+                document.getElementById('unauthPromoBlock').style.display = 'none';
                 document.getElementById('inventoryTabs').style.display = 'flex';
                 document.getElementById('gridContent').style.display = 'grid';
                 if (promoInterval) clearInterval(promoInterval);
@@ -1443,12 +1477,16 @@
                 document.getElementById('headerLoginBtn').style.display = 'block';
                 document.getElementById('headerUserArea').style.display = 'none';
                 
-                // Пользователь НЕ авторизован: показываем витрину, прячем инвентарь
-                document.getElementById('promoDisplay').style.display = 'flex';
-                document.getElementById('inventoryTabs').style.display = 'none';
-                document.getElementById('gridContent').style.display = 'none';
+                // НЕ авторизован: показываем блок с кнопкой и витриной 
+                document.getElementById('unauthPromoBlock').style.display = 'flex';
+                
+                // МАГАЗИН ОСТАЕТСЯ ДОСТУПНЫМ
+                document.getElementById('inventoryTabs').style.display = 'flex';
+                document.getElementById('gridContent').style.display = 'grid';
                 startPromoSlider();
 
+                // Автоматически переключаем на магазин для красоты, если вдруг стоял "мой инвентарь"
+                switchTab('shop'); 
                 updateChance(); 
             }
         });
