@@ -6,26 +6,28 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <title>FlashUpgrader — Premium Edition</title>
     <style>
+        /* === НОВЫЙ ДИЗАЙН (Стиль референса 2) === */
         :root {
-            --bg-main: #060608;
-            --bg-panel: #0b0b0d;
-            --bg-card: #111114;
-            --bg-card-hover: #16161a;
-            --accent-gold: #ffcc00;
-            --accent-gold-glow: rgba(255, 204, 0, 0.3);
+            --bg-main: #0a0a0f;
+            --bg-panel: #13131c;
+            --bg-card: #1a1a24;
+            --bg-card-hover: #22222e;
+            --accent-main: #8a2be2; /* Глубокий неоновый фиолетовый/синий */
+            --accent-glow: rgba(138, 43, 226, 0.4);
+            --accent-secondary: #00e5ff;
             --text-main: #ffffff;
-            --text-muted: #6c6c75;
-            --border-color: #1c1c22;
+            --text-muted: #8b8b9e;
+            --border-color: #272736;
             
-            --rarity-epic: #9b59b6;
-            --rarity-legendary: #e67e22;
-            --rarity-mythic: #e74c3c;
-            --rarity-immortal: #ff007f;
+            --rarity-epic: #a55eea;
+            --rarity-legendary: #fd9644;
+            --rarity-mythic: #fc5c65;
+            --rarity-immortal: #2bcbba;
             
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --radius-sm: 10px;
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --radius-sm: 8px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         * {
@@ -35,7 +37,8 @@
         }
 
         body {
-            background: radial-gradient(circle at 50% 0%, #121217 0%, var(--bg-main) 70%);
+            background: var(--bg-main);
+            background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, var(--bg-main) 70%);
             color: var(--text-main);
             min-height: 100vh;
             display: flex; flex-direction: column; overflow-x: hidden;
@@ -44,81 +47,96 @@
         /* === ХЕДЕР === */
         header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 24px; background: rgba(6, 6, 8, 0.8); backdrop-filter: blur(16px);
+            padding: 16px 24px; background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100;
         }
 
         .logo-area { display: flex; flex-direction: column; }
-        .logo { font-size: 22px; font-weight: 900; color: var(--accent-gold); letter-spacing: 0.5px; text-shadow: 0 0 12px var(--accent-gold-glow); }
+        .logo { font-size: 22px; font-weight: 900; color: var(--accent-main); letter-spacing: 0.5px; text-shadow: 0 0 15px var(--accent-glow); }
         .logo span { color: var(--text-main); text-shadow: none; }
-        .online-count { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
-        .online-count span { color: #2ecc71; font-weight: bold; }
+        .online-count { font-size: 12px; color: var(--text-muted); margin-top: 3px; font-weight: 500; }
+        .online-count span { color: var(--accent-secondary); font-weight: bold; }
 
-        .user-area { display: flex; align-items: center; gap: 16px; }
+        .user-area { display: flex; align-items: center; gap: 14px; }
+        
+        /* ПЕРЕКЛЮЧАТЕЛЬ ЯЗЫКА */
+        .lang-switch {
+            display: flex; align-items: center; gap: 6px; background: var(--bg-card);
+            border: 1px solid var(--border-color); padding: 6px 10px; border-radius: var(--radius-sm);
+            font-size: 12px; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: var(--transition);
+        }
+        .lang-switch:hover { border-color: var(--accent-main); }
+        .lang-switch span.active { color: var(--text-main); }
+        .lang-switch .divider { color: #333; font-weight: 400; }
+
         .balance-block { display: flex; flex-direction: column; align-items: flex-end; }
-        .balance-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; }
-        .balance { font-size: 16px; font-weight: 800; color: var(--accent-gold); }
+        .balance-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .balance { font-size: 16px; font-weight: 800; color: var(--text-main); }
         
         .btn-deposit {
-            background: linear-gradient(135deg, #ffcc00, #ffaa00); color: #000;
+            background: linear-gradient(135deg, var(--accent-main), #b838ff); color: #fff;
             padding: 8px 16px; border: none; border-radius: var(--radius-sm);
-            font-size: 13px; font-weight: 800; cursor: pointer; transition: var(--transition);
+            font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition);
+            box-shadow: 0 4px 15px var(--accent-glow);
         }
-        .btn-deposit:hover { transform: scale(1.05); }
+        .btn-deposit:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--accent-glow); }
+        
         .profile-avatar {
             width: 38px; height: 38px; background: var(--bg-card); border: 2px solid var(--border-color);
             border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
             font-size: 16px; transition: var(--transition);
         }
-        .profile-avatar:hover { border-color: var(--accent-gold); }
+        .profile-avatar:hover { border-color: var(--accent-main); background: var(--bg-card-hover); }
 
         /* === ОСНОВНОЙ КОНТЕНТ === */
         main { flex: 1; display: flex; flex-direction: column; padding: 24px 16px; gap: 24px; max-width: 650px; width: 100%; margin: 0 auto; }
 
         .live-ticker {
-            background: rgba(11, 11, 13, 0.5); border: 1px solid var(--border-color);
-            border-radius: var(--radius-md); padding: 12px; display: flex; gap: 12px;
+            background: var(--bg-panel); border: 1px solid var(--border-color);
+            border-radius: var(--radius-md); padding: 10px; display: flex; gap: 10px;
             overflow-x: auto; white-space: nowrap; scrollbar-width: none; min-height: 56px;
         }
         .live-ticker::-webkit-scrollbar { display: none; }
         
         .ticker-item {
             display: inline-flex; align-items: center; gap: 8px; background: var(--bg-card);
-            padding: 8px 14px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; border-bottom: 2px solid var(--accent-gold);
+            padding: 6px 12px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; border-bottom: 2px solid var(--accent-secondary);
         }
-        .ticker-item.fail { border-bottom-color: #e74c3c; opacity: 0.6; }
-        .ticker-img { width: 20px; height: 20px; object-fit: contain; }
+        .ticker-item.fail { border-bottom-color: var(--rarity-mythic); opacity: 0.5; }
+        .ticker-img { width: 22px; height: 22px; object-fit: contain; }
 
         /* === АРЕНА АПГРЕЙДА === */
         .upgrade-arena {
-            background: linear-gradient(180deg, var(--bg-panel) 0%, #070709 100%);
+            background: linear-gradient(180deg, var(--bg-panel) 0%, #0d0d14 100%);
             border: 1px solid var(--border-color); border-radius: var(--radius-lg);
             padding: 32px 24px; display: flex; flex-direction: column; align-items: center; gap: 28px;
-            box-shadow: 0 16px 40px rgba(0,0,0,0.5); position: relative; transition: background 0.4s ease, box-shadow 0.4s ease; overflow: hidden;
+            position: relative; transition: all 0.4s ease; overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
         }
-        .upgrade-arena.win-state { background: linear-gradient(180deg, #1b5e20 0%, #0c290e 100%) !important; box-shadow: 0 0 40px rgba(46, 204, 113, 0.4); }
-        .upgrade-arena.fail-state { background: linear-gradient(180deg, #b71c1c 0%, #4a0707 100%) !important; box-shadow: 0 0 40px rgba(231, 76, 60, 0.4); }
+        .upgrade-arena.win-state { background: linear-gradient(180deg, #103318 0%, #081a0c 100%) !important; box-shadow: 0 0 40px rgba(43, 203, 186, 0.3); border-color: #2bcbba; }
+        .upgrade-arena.fail-state { background: linear-gradient(180deg, #381216 0%, #1a080a 100%) !important; box-shadow: 0 0 40px rgba(252, 92, 101, 0.3); border-color: #fc5c65; }
 
         .slots-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; z-index: 2; }
         .item-slot {
-            background: var(--bg-card); border: 1px dashed #2c2c35; border-radius: var(--radius-md);
-            height: 130px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: var(--bg-card); border: 1px dashed #3a3a4d; border-radius: var(--radius-md);
+            height: 140px; display: flex; flex-direction: column; justify-content: center; align-items: center;
             padding: 16px; text-align: center; transition: var(--transition); cursor: pointer;
         }
-        .item-slot.active { border: 1px solid rgba(255, 204, 0, 0.3); background: rgba(255, 204, 0, 0.02); }
+        .item-slot:hover { border-color: var(--text-muted); background: var(--bg-card-hover); }
+        .item-slot.active { border: 1px solid var(--accent-main); background: rgba(138, 43, 226, 0.05); box-shadow: 0 0 15px rgba(138,43,226,0.1) inset; }
         .slot-hint { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
 
         /* === КОЛЕСО И СТРЕЛКА === */
         .wheel-container {
-            position: relative; width: 260px; height: 260px; margin: 10px 0;
+            position: relative; width: 280px; height: 280px; margin: 10px 0;
             display: flex; align-items: center; justify-content: center; z-index: 2;
         }
         
         .wheel-box { width: 100%; height: 100%; position: relative; }
-        .wheel-svg { transform: rotate(90deg); width: 100%; height: 100%; }
+        .wheel-svg { transform: rotate(90deg); width: 100%; height: 100%; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
         
         .wheel-progress {
-            stroke-dasharray: 534; stroke-dashoffset: 534; stroke-linecap: butt;
+            stroke-dasharray: 534; stroke-dashoffset: 534; stroke-linecap: round;
             transition: stroke-dashoffset 0.4s ease;
         }
         
@@ -127,10 +145,9 @@
             pointer-events: none; z-index: 15;
         }
         
-        /* Золотая стрелка перенесена ровно вниз */
         .wheel-arrow {
-            position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
-            width: 22px; height: 36px; filter: drop-shadow(0 0 6px rgba(255, 204, 0, 0.5));
+            position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%);
+            width: 24px; height: 38px; filter: drop-shadow(0 0 8px var(--accent-glow));
         }
 
         .wheel-center-content {
@@ -139,60 +156,109 @@
             width: 100%; height: 100%; z-index: 5; text-align: center; pointer-events: none;
         }
 
-        #chanceDisplay h1 { font-size: 34px; font-weight: 900; color: #ffffff; letter-spacing: -1px; }
-        #chanceDisplay p { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
+        #chanceDisplay h1 { font-size: 38px; font-weight: 900; color: #ffffff; letter-spacing: -1px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        #chanceDisplay p { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-top: -4px;}
 
         .action-block { width: 100%; display: flex; flex-direction: column; gap: 12px; z-index: 2; }
         .btn-upgrade {
-            background: linear-gradient(135deg, var(--accent-gold), #e6b800);
-            color: #000; border: none; padding: 18px; font-size: 15px; font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-main), #6b1cb0);
+            color: #fff; border: none; padding: 20px; font-size: 16px; font-weight: 800;
             border-radius: var(--radius-md); cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
-            box-shadow: 0 8px 28px rgba(255, 204, 0, 0.25); transition: var(--transition);
+            box-shadow: 0 8px 25px var(--accent-glow); transition: var(--transition);
         }
-        .btn-upgrade:disabled { background: #1c1c22; color: #4c4c54; cursor: not-allowed; box-shadow: none; }
+        .btn-upgrade:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 30px var(--accent-glow); }
+        .btn-upgrade:disabled { background: var(--bg-card); color: #555566; cursor: not-allowed; box-shadow: none; border: 1px solid var(--border-color); }
 
         /* === ТАБЫ И ИНВЕНТАРЬ === */
         .inventory-section { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; }
-        .tabs-header { display: flex; background: #0e0e11; border-bottom: 1px solid var(--border-color); padding: 6px; gap: 6px; }
-        .tab-btn { flex: 1; padding: 14px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 700; border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition); text-transform: uppercase; }
-        .tab-btn.active { color: #fff; background: var(--bg-card); }
-        .items-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 16px; max-height: 420px; overflow-y: auto; }
+        .tabs-header { display: flex; background: #0c0c12; border-bottom: 1px solid var(--border-color); padding: 8px; gap: 8px; }
+        .tab-btn { flex: 1; padding: 14px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 700; border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition); text-transform: uppercase; letter-spacing: 0.5px;}
+        .tab-btn:hover { color: #fff; }
+        .tab-btn.active { color: #fff; background: var(--bg-card); border: 1px solid var(--border-color); }
+        
+        .items-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 20px; max-height: 420px; overflow-y: auto; }
+        .items-grid::-webkit-scrollbar { width: 6px; }
+        .items-grid::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        
         .item-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; display: flex; flex-direction: column; align-items: center; position: relative; cursor: pointer; transition: var(--transition); }
-        .item-card:hover { background: var(--bg-card-hover); transform: translateY(-4px); }
-        .item-price { font-size: 11px; font-weight: 800; color: var(--accent-gold); align-self: flex-end; background: rgba(0,0,0,0.4); padding: 4px 8px; border-radius: 6px; }
-        .item-img-container { width: 100%; height: 85px; display: flex; align-items: center; justify-content: center; margin: 6px 0; }
-        .item-img-container img { max-width: 90%; max-height: 90%; object-fit: contain; }
+        .item-card:hover { background: var(--bg-card-hover); transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.4); border-color: #3a3a4d; }
+        .item-price { font-size: 11px; font-weight: 800; color: #fff; align-self: flex-end; background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); }
+        .item-img-container { width: 100%; height: 85px; display: flex; align-items: center; justify-content: center; margin: 8px 0; }
+        .item-img-container img { max-width: 90%; max-height: 90%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); }
         .item-info { text-align: center; width: 100%; }
         .item-title { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
-        .item-sub { font-size: 12px; font-weight: 700; margin-top: 1px; color: #eee; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+        .item-sub { font-size: 12px; font-weight: 700; margin-top: 3px; color: #eee; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
 
         .rarity-epic { border-bottom: 3px solid var(--rarity-epic); }
         .rarity-legendary { border-bottom: 3px solid var(--rarity-legendary); }
         .rarity-mythic { border-bottom: 3px solid var(--rarity-mythic); }
         .rarity-immortal { border-bottom: 3px solid var(--rarity-immortal); }
 
+        /* === ФУТЕР === */
+        footer {
+            margin-top: auto;
+            padding: 24px 16px;
+            background: var(--bg-panel);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .footer-contacts {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: var(--radius-lg);
+            color: var(--text-main);
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-contacts:hover {
+            border-color: #2AABEE; /* Цвет Telegram */
+            background: var(--bg-card-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(42, 171, 238, 0.15);
+        }
+
+        .tg-icon {
+            width: 22px;
+            height: 22px;
+            fill: #2AABEE;
+        }
+
         /* === МОДАЛКИ === */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; }
-        .modal-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 460px; padding: 24px; position: relative; max-height: 90vh; overflow-y: auto; }
-        .modal-close { position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; }
-        .modal-title { font-size: 20px; font-weight: 800; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
-        .modal-input { width: 100%; background: var(--bg-card); border: 1px solid var(--border-color); padding: 14px; border-radius: var(--radius-sm); color: #fff; font-size: 16px; margin-bottom: 16px; outline: none; }
-        .modal-btn { width: 100%; background: linear-gradient(135deg, #2ecc71, #27ae60); color: #fff; border: none; padding: 14px; border-radius: var(--radius-sm); font-size: 15px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; }
+        .modal-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 460px; padding: 28px; position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+        .modal-close { position: absolute; top: 20px; right: 20px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 50%; width: 32px; height: 32px; display:flex; align-items:center; justify-content:center; color: var(--text-muted); font-size: 18px; cursor: pointer; transition: var(--transition); }
+        .modal-close:hover { background: var(--rarity-mythic); color: #fff; border-color: var(--rarity-mythic); }
+        .modal-title { font-size: 20px; font-weight: 800; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; color: #fff; }
+        .modal-input { width: 100%; background: var(--bg-card); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-sm); color: #fff; font-size: 16px; margin-bottom: 16px; outline: none; transition: var(--transition); }
+        .modal-input:focus { border-color: var(--accent-main); }
+        .modal-btn { width: 100%; background: linear-gradient(135deg, var(--accent-main), #b838ff); color: #fff; border: none; padding: 16px; border-radius: var(--radius-sm); font-size: 15px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: var(--transition); }
+        .modal-btn:hover { box-shadow: 0 6px 20px var(--accent-glow); }
         
-        .profile-tabs { display: flex; gap: 8px; margin-bottom: 16px; background: #0e0e11; padding: 4px; border-radius: var(--radius-sm); }
-        .p-tab-btn { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-muted); font-size: 11px; font-weight: 700; text-transform: uppercase; cursor: pointer; border-radius: 6px; }
-        .p-tab-btn.active { background: var(--bg-card); color: #fff; }
-        .profile-list-item { display: flex; justify-content: space-between; align-items: center; background: var(--bg-card); padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 8px; border-left: 3px solid transparent; }
+        .profile-tabs { display: flex; gap: 8px; margin-bottom: 20px; background: #0a0a0f; padding: 6px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); }
+        .p-tab-btn { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-muted); font-size: 11px; font-weight: 700; text-transform: uppercase; cursor: pointer; border-radius: 6px; transition: var(--transition); }
+        .p-tab-btn.active { background: var(--bg-card); color: #fff; border: 1px solid #333344; }
+        .profile-list-item { display: flex; justify-content: space-between; align-items: center; background: var(--bg-card); padding: 12px 16px; border-radius: var(--radius-sm); margin-bottom: 10px; border: 1px solid transparent; border-left: 4px solid transparent; transition: var(--transition); }
+        .profile-list-item:hover { border-color: var(--border-color); background: var(--bg-card-hover); }
         .p-item-info { display: flex; flex-direction: column; }
-        .p-item-name { font-size: 13px; font-weight: 700; }
-        .p-item-price { font-size: 11px; color: var(--accent-gold); font-weight: bold; }
-        .btn-profile-action { padding: 6px 12px; border: none; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
-        .btn-sell { background: rgba(231, 76, 60, 0.15); color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.3); }
-        .btn-sell:hover { background: #e74c3c; color: #fff; }
-        .btn-buy { background: rgba(46, 204, 113, 0.15); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.3); }
-        .btn-buy:hover { background: #2ecc71; color: #fff; }
-        .stat-line { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color); font-size: 14px; }
-        .stat-line span:last-child { font-weight: bold; color: var(--accent-gold); }
+        .p-item-name { font-size: 13px; font-weight: 700; color: #fff; }
+        .p-item-price { font-size: 11px; color: var(--text-muted); font-weight: bold; margin-top: 2px;}
+        .btn-profile-action { padding: 8px 14px; border: none; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; text-transform: uppercase; transition: var(--transition); }
+        .btn-sell { background: rgba(252, 92, 101, 0.1); color: var(--rarity-mythic); border: 1px solid rgba(252, 92, 101, 0.2); }
+        .btn-sell:hover { background: var(--rarity-mythic); color: #fff; }
+        .btn-buy { background: rgba(43, 203, 186, 0.1); color: var(--rarity-immortal); border: 1px solid rgba(43, 203, 186, 0.2); }
+        .btn-buy:hover { background: var(--rarity-immortal); color: #fff; }
+        .stat-line { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border-color); font-size: 14px; color: var(--text-muted); }
+        .stat-line span:last-child { font-weight: bold; color: #fff; font-size: 16px; }
     </style>
 </head>
 <body>
@@ -203,6 +269,12 @@
             <div class="online-count">Онлайн: <span id="onlineCount">1 742</span></div>
         </div>
         <div class="user-area">
+            <div class="lang-switch">
+                <span class="active">RU</span>
+                <span class="divider">/</span>
+                <span>EN</span>
+            </div>
+            
             <div class="balance-block">
                 <span class="balance-label">Баланс</span>
                 <div class="balance" id="userBalance">10 000.00 ₽</div>
@@ -226,8 +298,8 @@
                     <svg class="wheel-arrow" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg">
                         <defs>
                             <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" stop-color="#ffea00" />
-                                <stop offset="100%" stop-color="#d4af37" />
+                                <stop offset="0%" stop-color="#a55eea" />
+                                <stop offset="100%" stop-color="#4a00e0" />
                             </linearGradient>
                         </defs>
                         <path d="M12 0 L24 24 L16 20 L16 40 L8 40 L8 20 L0 24 Z" fill="url(#arrowGrad)"/>
@@ -238,20 +310,20 @@
                     <svg class="wheel-svg" viewBox="0 0 260 260">
                         <defs>
                             <linearGradient id="progressGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#ffcc00" />
-                                <stop offset="100%" stop-color="#ff5722" />
+                                <stop offset="0%" stop-color="#8a2be2" />
+                                <stop offset="100%" stop-color="#00e5ff" />
                             </linearGradient>
                         </defs>
-                        <circle cx="130" cy="130" r="120" fill="none" stroke="#2a2a32" stroke-width="6" stroke-dasharray="2 18" />
-                        <circle cx="130" cy="130" r="100" fill="#151518" />
-                        <circle cx="130" cy="130" r="85" fill="none" stroke="#222228" stroke-width="24" />
-                        <circle class="wheel-progress" id="wheelCircle" cx="130" cy="130" r="85" fill="none" stroke="url(#progressGrad)" stroke-width="24" />
+                        <circle cx="130" cy="130" r="120" fill="none" stroke="#272736" stroke-width="4" stroke-dasharray="2 12" />
+                        <circle cx="130" cy="130" r="100" fill="#13131c" />
+                        <circle cx="130" cy="130" r="85" fill="none" stroke="#1a1a24" stroke-width="26" />
+                        <circle class="wheel-progress" id="wheelCircle" cx="130" cy="130" r="85" fill="none" stroke="url(#progressGrad)" stroke-width="26" />
                     </svg>
 
                     <div class="wheel-center-content">
                         <svg id="centerChevrons" width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="display: block;">
-                            <polygon points="15,70 50,40 85,70 85,85 50,55 15,85" fill="#8b7310"/>
-                            <polygon points="15,40 50,10 85,40 85,55 50,25 15,55" fill="#ffea00"/>
+                            <polygon points="15,70 50,40 85,70 85,85 50,55 15,85" fill="#3a1c61"/>
+                            <polygon points="15,40 50,10 85,40 85,55 50,25 15,55" fill="#8a2be2"/>
                         </svg>
 
                         <div id="chanceDisplay" style="display: none;">
@@ -276,6 +348,15 @@
         </section>
     </main>
 
+    <footer>
+        <a href="https://t.me/om1a2" target="_blank" class="footer-contacts">
+            <svg class="tg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.12.03-1.97 1.25-5.56 3.67-.53.36-1.01.54-1.44.53-.47-.01-1.38-.27-2.05-.49-.83-.27-1.49-.41-1.43-.87.03-.23.36-.47 1-.72 3.91-1.7 6.52-2.82 7.84-3.37 3.73-1.56 4.5-1.83 5.01-1.84.11 0 .36.03.49.14.11.1.15.23.16.35-.01.07-.01.16-.03.26z"/>
+            </svg>
+            @om1a2
+        </a>
+    </footer>
+
     <div class="modal-overlay" id="depositModal">
         <div class="modal-card">
             <button class="modal-close" onclick="closeModal('depositModal')">×</button>
@@ -297,22 +378,22 @@
             <div id="pContentStats">
                 <div class="modal-title" style="font-size:16px;">Твои достижения</div>
                 <div class="stat-line"><span>Всего апгрейдов:</span><span id="statTotal">0</span></div>
-                <div class="stat-line"><span>Успешных:</span><span id="statWins" style="color:#2ecc71;">0</span></div>
-                <div class="stat-line"><span>Сгорело:</span><span id="statLosses" style="color:#e74c3c;">0</span></div>
+                <div class="stat-line"><span>Успешных:</span><span id="statWins" style="color:var(--rarity-immortal);">0</span></div>
+                <div class="stat-line"><span>Сгорело:</span><span id="statLosses" style="color:var(--rarity-mythic);">0</span></div>
             </div>
             <div id="pContentSell" style="display:none;">
                 <div class="modal-title" style="font-size:16px;">Инвентарь (Продажа 50%)</div>
-                <div id="profileSellList" style="max-height: 250px; overflow-y:auto;"></div>
+                <div id="profileSellList" style="max-height: 250px; overflow-y:auto; padding-right: 5px;"></div>
             </div>
             <div id="pContentBuy" style="display:none;">
                 <div class="modal-title" style="font-size:16px;">Магазин предметов</div>
-                <div id="profileBuyList" style="max-height: 250px; overflow-y:auto;"></div>
+                <div id="profileBuyList" style="max-height: 250px; overflow-y:auto; padding-right: 5px;"></div>
             </div>
             <div id="pContentPayout" style="display:none;">
                 <div class="modal-title" style="font-size:16px;">Вывод средств</div>
                 <input type="text" class="modal-input" id="withdrawDetails" placeholder="Номер карты/кошелька" style="margin-bottom:10px;">
                 <input type="number" class="modal-input" id="withdrawAmount" placeholder="Сумма (₽)">
-                <button class="modal-btn" style="background:linear-gradient(135deg, #3498db, #2980b9);" onclick="processWithdraw()">Создать заявку</button>
+                <button class="modal-btn" style="background:linear-gradient(135deg, #0984e3, #74b9ff);" onclick="processWithdraw()">Создать заявку</button>
             </div>
         </div>
     </div>
@@ -323,25 +404,21 @@
     <audio id="soundClick" src="click.mp3" preload="auto"></audio>
 
     <script>
-        // === ПОЛНЫЙ МАССИВ ПОДАРКОВ (С ТОЧНЫМИ ИМЕНАМИ ИЗ ТВОЕГО КОДА + 2 НОВЫХ) ===
         const giftPool = [
-            // Твои старые картинки
             { id: 'frog_purple', title: 'Премиум Подарок', sub: 'Аметистовый Харт', price: '4500.00', rarity: 'rarity-epic', img: '16201.png' },
             { id: 'frog_aqua', title: 'Премиум Подарок', sub: 'Бирюзовый Лав', price: '8900.00', rarity: 'rarity-legendary', img: '16202.png' },
             { id: 'frog_love', title: 'Премиум Подарок', sub: 'Влюбленный Пепе', price: '12500.00', rarity: 'rarity-mythic', img: '16203.png' },
             { id: 'frog_glitter', title: 'Премиум Подарок', sub: 'Звездный Блеск', price: '24000.00', rarity: 'rarity-immortal', img: '16154.jpg' },
-            // Прикрепленные подарки (Лягушки с кнопками)
             { id: 'frog_glow', title: 'Мифический', sub: 'Король Пепе', price: '15000.00', rarity: 'rarity-mythic', img: 'frog_glow.png' },
             { id: 'frog_blue', title: 'Легендарный', sub: 'Пепе Блу Кнопки', price: '9500.00', rarity: 'rarity-legendary', img: 'frog_blue_buttons.png' },
             { id: 'frog_gold', title: 'Бессмертный', sub: 'Золотой Император', price: '25000.00', rarity: 'rarity-immortal', img: 'frog_gold_buttons.png' },
             { id: 'frog_ninja', title: 'Бессмертный', sub: 'Пепе-Ниндзя', price: '19000.00', rarity: 'rarity-immortal', img: 'frog_ninja.png' },
-            // === НОВЫЕ ДОБАВЛЕННЫЕ ИЗ ТВОИХ ФАЙЛОВ ===
             { id: 'frog_secret', title: 'Эксклюзив', sub: 'Тайный Пепе', price: '28000.00', rarity: 'rarity-immortal', img: '16289.jpg' },
             { id: 'frog_cosmic', title: 'Эксклюзив', sub: 'Космический Пепе', price: '35000.00', rarity: 'rarity-immortal', img: '16290.jpg' }
         ];
 
         let balance = parseFloat(localStorage.getItem('ub_balance')) || 10143.51;
-        let myInventoryData = JSON.parse(localStorage.getItem('ub_inv')) || [giftPool[0], giftPool[1], giftPool[4], giftPool[8]]; // Добавил новый предмет в стартовый инвентарь
+        let myInventoryData = JSON.parse(localStorage.getItem('ub_inv')) || [giftPool[0], giftPool[1], giftPool[4], giftPool[8]];
         let stats = JSON.parse(localStorage.getItem('ub_stats')) || { total: 0, wins: 0, losses: 0 };
         
         let currentTab = 'my';
@@ -410,9 +487,9 @@
             const slot = document.getElementById(slotId);
             slot.classList.add('active');
             slot.innerHTML = `
-                <div style="font-size:14px; font-weight:800; color:var(--accent-gold);">${Math.round(item.price)} ₽</div>
+                <div style="font-size:14px; font-weight:800; color:#fff;">${Math.round(item.price)} ₽</div>
                 <div style="margin:6px 0; height:60px; display:flex; align-items:center;"><img src="${item.img}" style="max-height:55px;"></div>
-                <div style="font-size:12px; font-weight:700; color:#fff; text-overflow:ellipsis; overflow:hidden; width:100%; white-space:nowrap;">${item.sub}</div>
+                <div style="font-size:12px; font-weight:700; color:var(--text-muted); text-overflow:ellipsis; overflow:hidden; width:100%; white-space:nowrap;">${item.sub}</div>
             `;
         }
 
@@ -559,15 +636,15 @@
 
             if (isWin) {
                 stats.wins++;
-                btn.style.background = '#2ecc71';
+                btn.style.background = 'var(--rarity-immortal)';
                 arena.classList.add('win-state'); 
                 playSound(soundWin);
                 
-                confetti({ particleCount: 140, spread: 80, origin: { y: 0.6 }, colors: ['#ffcc00', '#2ecc71', '#ffffff'] });
+                confetti({ particleCount: 140, spread: 80, origin: { y: 0.6 }, colors: ['#8a2be2', '#00e5ff', '#ffffff'] });
                 myInventoryData.push(selectedRight);
             } else {
                 stats.losses++;
-                btn.style.background = '#e74c3c';
+                btn.style.background = 'var(--rarity-mythic)';
                 arena.classList.add('fail-state'); 
                 playSound(soundFail);
                 
@@ -633,7 +710,7 @@
             myInventoryData.forEach((item, idx) => {
                 let sellPrice = Math.round(item.price * 0.5);
                 container.innerHTML += `
-                    <div class="profile-list-item" style="border-left-color: var(--accent-gold);">
+                    <div class="profile-list-item" style="border-left-color: var(--accent-main);">
                         <div class="p-item-info">
                             <span class="p-item-name">${item.sub}</span>
                             <span class="p-item-price">Цена: ${sellPrice} ₽ (50%)</span>
@@ -660,7 +737,7 @@
             container.innerHTML = '';
             giftPool.forEach((item) => {
                 container.innerHTML += `
-                    <div class="profile-list-item" style="border-left-color: #2ecc71;">
+                    <div class="profile-list-item" style="border-left-color: var(--rarity-immortal);">
                         <div class="p-item-info">
                             <span class="p-item-name">${item.sub}</span>
                             <span class="p-item-price">Стоимость: ${Math.round(item.price)} ₽</span>
@@ -739,4 +816,3 @@
     </script>
 </body>
 </html>
-
