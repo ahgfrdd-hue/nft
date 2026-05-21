@@ -1210,8 +1210,7 @@
     </script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        // Заменили signInWithPopup на signInWithRedirect и getRedirectResult
-        import { getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -1232,16 +1231,10 @@
         const authOverlay = document.getElementById('auth-overlay');
         const profileNameDisplay = document.getElementById('profileNameDisplay');
 
-        // Теперь при клике сайт будет перенаправлять на страницу Google, а не открывать окно
         loginBtn.addEventListener('click', () => {
-            signInWithRedirect(auth, provider).catch(error => {
+            signInWithPopup(auth, provider).catch(error => {
                 console.error("Ошибка авторизации: ", error);
             });
-        });
-
-        // Проверяем результат редиректа при загрузке страницы
-        getRedirectResult(auth).catch(error => {
-            console.error("Ошибка при возврате из Google: ", error);
         });
 
         onAuthStateChanged(auth, async (user) => {
@@ -1271,9 +1264,6 @@
                 setTimeout(() => authOverlay.style.opacity = '1', 50);
             }
         });
-    </script>
-
-    
     </script>
 </body>
 </html>
