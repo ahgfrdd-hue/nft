@@ -12,7 +12,7 @@
             --bg-panel: #13131c;
             --bg-card: #1a1a24;
             --bg-card-hover: #22222e;
-            --accent-main: #8a2be2; /* Глубокий неоновый фиолетовый/синий */
+            --accent-main: #8a2be2; 
             --accent-glow: rgba(138, 43, 226, 0.4);
             --accent-secondary: #00e5ff;
             --text-main: #ffffff;
@@ -59,7 +59,6 @@
 
         .user-area { display: flex; align-items: center; gap: 14px; }
         
-        /* ПЕРЕКЛЮЧАТЕЛЬ ЯЗЫКА (стили) */
         .lang-switch {
             display: flex; align-items: center; gap: 6px; background: var(--bg-card);
             border: 1px solid var(--border-color); padding: 6px 10px; border-radius: var(--radius-sm);
@@ -105,7 +104,7 @@
         .ticker-item.fail { border-bottom-color: var(--rarity-mythic); opacity: 0.5; }
         .ticker-img { width: 22px; height: 22px; object-fit: contain; }
 
-        /* === АРЕНА АПГРЕЙДА С НОВЫМИ АНИМАЦИЯМИ === */
+        /* === АРЕНА АПГРЕЙДА === */
         .upgrade-arena {
             background: linear-gradient(180deg, var(--bg-panel) 0%, #0d0d14 100%);
             border: 1px solid var(--border-color); border-radius: var(--radius-lg);
@@ -158,7 +157,7 @@
         .slot-chevron-container { position: relative; z-index: 2; margin-bottom: 8px; }
         .slot-hint { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; position: relative; z-index: 2; }
 
-        /* === КОЛЕСО И СТРЕЛКА (ИСправлено позиционирование SVG) === */
+        /* === КОЛЕСО И СТРЕЛКА === */
         .wheel-container {
             position: relative; width: 280px; height: 280px; margin: 10px 0;
             display: flex; align-items: center; justify-content: center; z-index: 2;
@@ -166,11 +165,11 @@
         
         .wheel-box { width: 100%; height: 100%; position: relative; }
         
-        /* Убрали rotate(90deg) из CSS, чтобы не конфликтовало с браузерами */
         .wheel-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
         
         .wheel-progress {
-            stroke-dasharray: 534; stroke-dashoffset: 534; stroke-linecap: round;
+            /* Убрали stroke-linecap: round, чтобы размер шкалы идеально совпадал с шансом */
+            stroke-dasharray: 534; stroke-dashoffset: 534; 
             transition: stroke-dashoffset 0.4s ease;
         }
         
@@ -180,7 +179,8 @@
         }
         
         .wheel-arrow {
-            position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%);
+            /* Стрелка теперь ровно сверху и указывает вниз */
+            position: absolute; top: -14px; left: 50%; transform: translateX(-50%) rotate(180deg);
             width: 24px; height: 38px; filter: drop-shadow(0 0 8px var(--accent-glow));
         }
 
@@ -261,7 +261,6 @@
         .stat-line { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border-color); font-size: 14px; color: var(--text-muted); }
         .stat-line span:last-child { font-weight: bold; color: #fff; font-size: 16px; }
         
-        /* ПЕРЕКРАСКА ЖЕЛТЫХ СТРЕЛОЧЕК */
         .slot-chevron-container svg path { fill: var(--accent-main) !important; }
         .slot-chevron-container svg { filter: drop-shadow(0 0 8px var(--accent-glow)) !important; }
     </style>
@@ -333,11 +332,10 @@
                                 <stop offset="100%" stop-color="#00e5ff" />
                             </linearGradient>
                         </defs>
-                        <!-- Исправление бага: добавлен жесткий SVG transform="rotate(90 130 130)", чтобы заливка строго стартовала снизу -->
                         <circle cx="130" cy="130" r="120" fill="none" stroke="#272736" stroke-width="4" stroke-dasharray="2 12" />
                         <circle cx="130" cy="130" r="100" fill="#13131c" />
                         <circle cx="130" cy="130" r="85" fill="none" stroke="#1a1a24" stroke-width="26" />
-                        <circle class="wheel-progress" id="wheelCircle" cx="130" cy="130" r="85" fill="none" stroke="url(#progressGrad)" stroke-width="26" transform="rotate(90 130 130)" />
+                        <circle class="wheel-progress" id="wheelCircle" cx="130" cy="130" r="85" fill="none" stroke="url(#progressGrad)" stroke-width="26" transform="rotate(-90 130 130)" />
                     </svg>
 
                     <div class="wheel-center-content">
@@ -622,15 +620,24 @@
             let isWin = roll <= chance;
 
             let fullRotationDeg = chance * 3.6; 
-            
             let targetSectorDeg;
+            
+            /* Исправленная математика: гарантирует 100% совпадение стрелки со шкалой */
             if (isWin) {
-                targetSectorDeg = Math.random() * fullRotationDeg; 
+                let pad = fullRotationDeg > 2 ? 1 : 0;
+                targetSectorDeg = pad + Math.random() * (fullRotationDeg - pad * 2); 
             } else {
-                targetSectorDeg = fullRotationDeg + Math.random() * (360 - fullRotationDeg); 
+                let pad = (360 - fullRotationDeg) > 2 ? 1 : 0;
+                targetSectorDeg = fullRotationDeg + pad + Math.random() * (360 - fullRotationDeg - pad * 2); 
             }
             
-            targetRotation = arrowRotation + (360 * (Math.floor(Math.random() * 5) + 6)) + targetSectorDeg;
+            let extraSpins = 360 * (Math.floor(Math.random() * 5) + 6);
+            let baseRotation = Math.floor(arrowRotation / 360) * 360; 
+            
+            targetRotation = baseRotation + extraSpins + targetSectorDeg;
+            if (targetRotation <= arrowRotation) {
+                targetRotation += 360;
+            }
             startRotation = arrowRotation; 
             stats.total++;
 
@@ -679,16 +686,15 @@
 
             if (isWin) {
                 stats.wins++;
-                btn.style.background = 'var(--accent-secondary)'; /* Неоновый голубой */
+                btn.style.background = 'var(--accent-secondary)';
                 arena.classList.add('win-state'); 
                 playSound(soundWin);
                 
-                /* Обновленные цвета конфетти для премиум дизайна */
                 confetti({ particleCount: 140, spread: 80, origin: { y: 0.6 }, colors: ['#00e5ff', '#8a2be2', '#ffffff'] });
                 myInventoryData.push(selectedRight);
             } else {
                 stats.losses++;
-                btn.style.background = 'var(--rarity-mythic)'; /* Свежий багровый */
+                btn.style.background = 'var(--rarity-mythic)';
                 arena.classList.add('fail-state'); 
                 playSound(soundFail);
                 
@@ -706,6 +712,10 @@
                 arena.className = 'upgrade-arena'; 
                 
                 selectedLeft = null; selectedRight = null;
+                
+                /* Сбрасываем стрелку строго на старт для следующей игры */
+                arrowRotation = 0;
+                document.getElementById('arrowSpinner').style.transform = `rotate(0deg)`;
                 
                 document.getElementById('slotLeft').innerHTML = `
                     <img src="16201.png" class="slot-bg-pepe">
