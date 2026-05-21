@@ -1,0 +1,7 @@
+{
+  "name": "my-telegram-stars-site",
+  "version": "1.0.0",
+  "dependencies": {
+    "telegraf": "^4.16.3"
+  }
+}
