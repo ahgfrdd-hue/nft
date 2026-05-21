@@ -119,7 +119,7 @@
         .profile-avatar:hover { border-color: var(--accent-main); background: var(--bg-card-hover); transform: scale(1.05); }
 
         /* === ОСНОВНОЙ КОНТЕНТ === */
-        main { flex: 1; display: flex; flex-direction: column; padding: 24px 16px; gap: 24px; max-width: 650px; width: 100%; margin: 0 auto; }
+        main { flex: 1; display: flex; flex-direction: column; padding: 24px 16px; gap: 24px; max-width: 1000px; width: 100%; margin: 0 auto; }
 
         .live-ticker {
             background: var(--bg-panel); border: 1px solid var(--border-color);
@@ -142,6 +142,7 @@
             padding: 32px 24px; display: flex; flex-direction: column; align-items: center; gap: 28px;
             position: relative; transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1); overflow: hidden;
             box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+            max-width: 650px; margin: 0 auto; width: 100%;
         }
         
         .upgrade-arena.win-state { 
@@ -209,7 +210,7 @@
         .wheel-progress {
             stroke-dasharray: 534; stroke-dashoffset: 534; 
             transition: stroke-dashoffset 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-            filter: drop-shadow(0 0 12px var(--accent-secondary)); 
+            filter: drop-shadow(0 0 12px var(--accent-main)); 
         }
         
         .arrow-spinner-wrapper {
@@ -243,11 +244,30 @@
         .btn-upgrade:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 12px 35px var(--accent-glow); }
         .btn-upgrade:disabled { background: var(--bg-card); color: #555566; cursor: not-allowed; box-shadow: none; border: 1px solid var(--border-color); transform: none; }
 
+        /* === СПЛИТ-ЛЕЙАУТ (ВИТРИНА СЛЕВА, МАГАЗИН СПРАВА) === */
+        .content-split {
+            display: flex;
+            gap: 24px;
+            width: 100%;
+            align-items: stretch;
+        }
+        .content-split > section {
+            flex: 1;
+            margin: 0;
+            min-width: 0;
+        }
+        @media (max-width: 800px) {
+            .content-split {
+                flex-direction: column;
+            }
+        }
+
         /* === БЛОК ДЛЯ НЕАВТОРИЗОВАННЫХ === */
         #unauthPromoBlock {
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             text-align: center;
             background: var(--bg-panel);
             border: 1px solid var(--border-color);
@@ -277,14 +297,18 @@
             transition: all 0.5s ease-in-out;
             width: 75px;
         }
+        .promo-item.side.near img {
+            filter: brightness(0) !important;
+        }
         .promo-item.side.near {
-            filter: brightness(0.6);
             transform: scale(0.75);
             opacity: 0.8;
             z-index: 3;
         }
+        .promo-item.side.far img {
+            filter: brightness(0) !important;
+        }
         .promo-item.side.far {
-            filter: brightness(0.3);
             transform: scale(0.55);
             opacity: 0.4;
             z-index: 1;
@@ -311,9 +335,6 @@
         /* === ТАБЫ И ИНВЕНТАРЬ === */
         .inventory-section { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; }
         .tabs-header { display: flex; background: #0c0c12; border-bottom: 1px solid var(--border-color); padding: 8px; gap: 8px; }
-        .tab-btn { flex: 1; padding: 14px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 700; border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition); text-transform: uppercase; letter-spacing: 0.5px;}
-        .tab-btn:hover { color: #fff; background: rgba(255,255,255,0.02); }
-        .tab-btn.active { color: #fff; background: var(--bg-card); border: 1px solid var(--border-color); }
         
         .items-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 20px; max-height: 420px; overflow-y: auto; scroll-behavior: smooth; align-items: stretch;}
         .items-grid::-webkit-scrollbar { width: 6px; }
@@ -536,8 +557,8 @@
                     <svg class="wheel-svg" viewBox="0 0 260 260">
                         <defs>
                             <linearGradient id="progressGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#8a2be2" />
-                                <stop offset="100%" stop-color="#00e5ff" />
+                                <stop offset="0%" stop-color="#a55eea" />
+                                <stop offset="100%" stop-color="#6b1cb0" />
                             </linearGradient>
                         </defs>
                         <circle cx="130" cy="130" r="120" fill="none" stroke="#272736" stroke-width="4" stroke-dasharray="2 12" />
@@ -565,28 +586,30 @@
             </div>
         </section>
 
-        <section id="unauthPromoBlock" style="display: none;">
-            <div class="unauth-title">Вы не авторизированы</div>
-            <div class="unauth-subtitle">Войдите для доступа к апгрейдам</div>
+        <div class="content-split">
+            <section id="unauthPromoBlock" style="display: none;">
+                <div class="unauth-title">Вы не авторизированы</div>
+                <div class="unauth-subtitle">Войдите для доступа к апгрейдам</div>
 
-            <div id="promoDisplay">
-                <div id="promoLeft2" class="promo-item side far"></div>
-                <div id="promoLeft1" class="promo-item side near"></div>
-                <div id="promoCenter" class="promo-item center"></div>
-                <div id="promoRight1" class="promo-item side near"></div>
-                <div id="promoRight2" class="promo-item side far"></div>
-            </div>
+                <div id="promoDisplay">
+                    <div id="promoLeft2" class="promo-item side far"></div>
+                    <div id="promoLeft1" class="promo-item side near"></div>
+                    <div id="promoCenter" class="promo-item center"></div>
+                    <div id="promoRight1" class="promo-item side near"></div>
+                    <div id="promoRight2" class="promo-item side far"></div>
+                </div>
 
-            <button class="btn-upgrade" style="background: linear-gradient(135deg, var(--accent-main), var(--accent-secondary)); margin-top: 24px; padding: 14px 30px; font-size: 14px; max-width: 280px; width: 100%; border-radius: 50px;" onclick="openModal('authModal')">ВОЙТИ ПО EMAIL</button>
-        </section>
+                <button class="btn-upgrade" style="background: linear-gradient(135deg, var(--accent-main), var(--accent-secondary)); margin-top: 24px; padding: 14px 30px; font-size: 14px; max-width: 280px; width: 100%; border-radius: 50px;" onclick="openModal('authModal')">ВОЙТИ ПО EMAIL</button>
+            </section>
 
-        <section class="inventory-section" id="inventorySection">
-            <div class="tabs-header" id="inventoryTabs">
-                <button class="tab-btn active" id="tabMy" onclick="switchTab('my')">Мой инвентарь</button>
-                <button class="tab-btn" id="tabShop" onclick="switchTab('shop')">Магазин</button>
-            </div>
-            <div class="items-grid" id="gridContent"></div>
-        </section>
+            <section class="inventory-section" id="inventorySection">
+                <div class="tabs-header" id="inventoryTabs" style="justify-content: space-between; align-items: center; padding: 10px;">
+                    <div id="shopTitle" style="color: #fff; font-size: 14px; font-weight: bold; padding-left: 10px; letter-spacing: 0.5px;">МАГАЗИН</div>
+                    <input type="number" id="priceSearchInput" placeholder="Поиск по цене..." style="padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-card); color: #fff; outline: none; width: 140px; font-size: 13px;" oninput="renderGrid()">
+                </div>
+                <div class="items-grid" id="gridContent"></div>
+            </section>
+        </div>
     </main>
 
     <footer>
@@ -642,9 +665,10 @@
                 <div class="p-card-panel">
                     
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;">
-                        <div style="display: flex; flex-direction: column;">
-                            <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Аккаунт</span>
-                            <span style="font-size: 14px; font-weight: 800; color: #fff;" id="profileEmailDisplay">user@email.com</span>
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Никнейм</span>
+                            <input type="text" id="profileNickname" placeholder="Ваш ник" style="background: transparent; border: none; border-bottom: 1px solid var(--border-color); color: #fff; font-size: 14px; font-weight: 800; outline: none; padding-bottom: 4px; width: 140px;" onchange="saveNickname(this.value)">
+                            <span style="font-size: 10px; color: var(--text-muted);" id="profileEmailDisplay">user@email.com</span>
                         </div>
                         <button id="logout-btn" style="background: rgba(252, 92, 101, 0.1); color: var(--rarity-mythic); border: 1px solid rgba(252, 92, 101, 0.2); padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: transform 0.2s;">Выйти</button>
                     </div>
@@ -740,12 +764,24 @@
 
         if(stats.withdrawn === undefined) stats.withdrawn = 0;
         
-        let currentTab = 'my';
+        let currentTab = 'shop';
         let selectedLeft = null;
         let selectedRight = null;
         let isProcessing = false;
         let arrowRotation = 0; 
         const circleCircumference = 534; 
+
+        // Инициализация никнейма
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedNick = localStorage.getItem('ub_nickname');
+            if(savedNick && document.getElementById('profileNickname')) {
+                document.getElementById('profileNickname').value = savedNick;
+            }
+        });
+
+        function saveNickname(val) {
+            localStorage.setItem('ub_nickname', val);
+        }
 
         // ЛОГИКА ДЛЯ СЛАЙДЕРА-ВИТРИНЫ (5 элементов)
         let promoInterval = null;
@@ -829,18 +865,25 @@
             grid.innerHTML = '';
             const activeData = currentTab === 'my' ? myInventoryData : giftPool;
 
-            if(activeData.length === 0) {
+            let displayData = activeData;
+            const searchInput = document.getElementById('priceSearchInput');
+            if (searchInput && searchInput.value) {
+                displayData = displayData.filter(item => parseInt(item.price) <= parseInt(searchInput.value) || item.price.includes(searchInput.value));
+            }
+
+            if(displayData.length === 0) {
                 if (!window.isUserLoggedIn && currentTab === 'my') {
                     grid.innerHTML = `<div style="grid-column:span 3;text-align:center;padding:30px;color:var(--text-muted);">Войдите в аккаунт, чтобы просматривать и делать апгрейды.</div>`;
                 } else {
-                    grid.innerHTML = `<div style="grid-column:span 3;text-align:center;padding:30px;color:var(--text-muted);">Инвентарь пуст. Зайдите в Профиль, чтобы купить предметы.</div>`;
+                    grid.innerHTML = `<div style="grid-column:span 3;text-align:center;padding:30px;color:var(--text-muted);">Ничего не найдено.</div>`;
                 }
                 return;
             }
 
-            activeData.forEach((item, idx) => {
+            displayData.forEach((item) => {
+                const originalIdx = activeData.indexOf(item);
                 grid.innerHTML += `
-                    <div class="item-card ${item.rarity}" onclick="selectItem(${idx})">
+                    <div class="item-card ${item.rarity}" onclick="selectItem(${originalIdx})">
                         <div class="item-price">${Math.round(item.price)} ⭐</div>
                         <div class="item-img-container"><img src="${item.img}" onerror="this.src='16201.png'"></div>
                         <div class="item-info">
@@ -855,8 +898,8 @@
         function switchTab(tab) {
             playSound(soundClick);
             currentTab = tab;
-            document.getElementById('tabMy').classList.toggle('active', tab === 'my');
-            document.getElementById('tabShop').classList.toggle('active', tab === 'shop');
+            const title = document.getElementById('shopTitle');
+            if(title) title.innerText = tab === 'my' ? 'ВЫБОР ПРЕДМЕТА' : 'МАГАЗИН';
             renderGrid();
         }
 
@@ -1162,8 +1205,8 @@
                 `;
                 document.getElementById('slotRight').classList.remove('active');
                 
+                switchTab('shop'); 
                 updateChance(); 
-                renderGrid();
                 isProcessing = false;
             }, 2000);
         }
@@ -1485,7 +1528,6 @@
                 document.getElementById('gridContent').style.display = 'grid';
                 startPromoSlider();
 
-                // Автоматически переключаем на магазин для красоты, если вдруг стоял "мой инвентарь"
                 switchTab('shop'); 
                 updateChance(); 
             }
