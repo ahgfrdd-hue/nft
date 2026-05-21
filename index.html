@@ -28,7 +28,8 @@
             --radius-lg: 20px;
             --radius-md: 14px;
             --radius-sm: 8px;
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            /* Сделал анимации еще плавнее за счет cubic-bezier */
+            --transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         * {
@@ -78,6 +79,7 @@
             padding: 8px 16px; border: none; border-radius: var(--radius-sm);
             font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition);
             box-shadow: 0 4px 15px var(--accent-glow);
+            will-change: transform, box-shadow; /* Аппаратное ускорение для кнопок */
         }
         .btn-deposit:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--accent-glow); }
         
@@ -85,8 +87,9 @@
             width: 38px; height: 38px; background: var(--bg-card); border: 2px solid var(--border-color);
             border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
             font-size: 16px; transition: var(--transition);
+            will-change: transform;
         }
-        .profile-avatar:hover { border-color: var(--accent-main); background: var(--bg-card-hover); }
+        .profile-avatar:hover { border-color: var(--accent-main); background: var(--bg-card-hover); transform: scale(1.05); }
 
         /* === ОСНОВНОЙ КОНТЕНТ === */
         main { flex: 1; display: flex; flex-direction: column; padding: 24px 16px; gap: 24px; max-width: 650px; width: 100%; margin: 0 auto; }
@@ -110,7 +113,7 @@
             background: linear-gradient(180deg, var(--bg-panel) 0%, #0d0d14 100%);
             border: 1px solid var(--border-color); border-radius: var(--radius-lg);
             padding: 32px 24px; display: flex; flex-direction: column; align-items: center; gap: 28px;
-            position: relative; transition: all 0.4s ease; overflow: hidden;
+            position: relative; transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); overflow: hidden;
             box-shadow: 0 8px 30px rgba(0,0,0,0.6);
         }
         
@@ -146,9 +149,10 @@
             height: 140px; display: flex; flex-direction: column; justify-content: center; align-items: center;
             padding: 16px; text-align: center; transition: var(--transition); cursor: pointer;
             position: relative; overflow: hidden;
+            will-change: transform, border-color; /* Аппаратное ускорение */
         }
-        .item-slot:hover { border-color: var(--text-muted); background: var(--bg-card-hover); }
-        .item-slot.active { border: 1px solid var(--accent-main); background: rgba(138, 43, 226, 0.05); box-shadow: 0 0 15px rgba(138,43,226,0.1) inset; }
+        .item-slot:hover { border-color: var(--text-muted); background: var(--bg-card-hover); transform: translateY(-3px); }
+        .item-slot.active { border: 1px solid var(--accent-main); background: rgba(138, 43, 226, 0.05); box-shadow: 0 0 15px rgba(138,43,226,0.1) inset; transform: translateY(0); }
         
         .slot-bg-pepe {
             position: absolute; width: 75%; height: 75%; object-fit: contain;
@@ -170,12 +174,13 @@
         
         .wheel-progress {
             stroke-dasharray: 534; stroke-dashoffset: 534; 
-            transition: stroke-dashoffset 0.4s ease;
+            transition: stroke-dashoffset 0.6s cubic-bezier(0.25, 1, 0.5, 1);
         }
         
         .arrow-spinner-wrapper {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 15;
+            will-change: transform; /* Идеальная плавность колеса */
         }
         
         .wheel-arrow {
@@ -189,8 +194,8 @@
             width: 100%; height: 100%; z-index: 5; text-align: center; pointer-events: none;
         }
 
-        #chanceDisplay h1 { font-size: 38px; font-weight: 900; color: #ffffff; letter-spacing: -1px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-        #chanceDisplay p { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-top: -4px;}
+        #chanceDisplay h1 { font-size: 38px; font-weight: 900; color: #ffffff; letter-spacing: -1px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); transition: var(--transition); }
+        #chanceDisplay p { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 800; margin-top: -4px; transition: var(--transition); }
 
         .action-block { width: 100%; display: flex; flex-direction: column; gap: 12px; z-index: 2; }
         .btn-upgrade {
@@ -198,26 +203,28 @@
             color: #fff; border: none; padding: 20px; font-size: 16px; font-weight: 800;
             border-radius: var(--radius-md); cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
             box-shadow: 0 8px 25px var(--accent-glow); transition: var(--transition);
+            will-change: transform, box-shadow;
         }
-        .btn-upgrade:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 30px var(--accent-glow); }
-        .btn-upgrade:disabled { background: var(--bg-card); color: #555566; cursor: not-allowed; box-shadow: none; border: 1px solid var(--border-color); }
+        .btn-upgrade:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 12px 35px var(--accent-glow); }
+        .btn-upgrade:disabled { background: var(--bg-card); color: #555566; cursor: not-allowed; box-shadow: none; border: 1px solid var(--border-color); transform: none; }
 
         /* === ТАБЫ И ИНВЕНТАРЬ === */
         .inventory-section { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; }
         .tabs-header { display: flex; background: #0c0c12; border-bottom: 1px solid var(--border-color); padding: 8px; gap: 8px; }
         .tab-btn { flex: 1; padding: 14px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 700; border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition); text-transform: uppercase; letter-spacing: 0.5px;}
-        .tab-btn:hover { color: #fff; }
+        .tab-btn:hover { color: #fff; background: rgba(255,255,255,0.02); }
         .tab-btn.active { color: #fff; background: var(--bg-card); border: 1px solid var(--border-color); }
         
-        .items-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 20px; max-height: 420px; overflow-y: auto; }
+        .items-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 20px; max-height: 420px; overflow-y: auto; scroll-behavior: smooth; }
         .items-grid::-webkit-scrollbar { width: 6px; }
         .items-grid::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
         
-        .item-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; display: flex; flex-direction: column; align-items: center; position: relative; cursor: pointer; transition: var(--transition); }
-        .item-card:hover { background: var(--bg-card-hover); transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.4); border-color: #3a3a4d; }
+        .item-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; display: flex; flex-direction: column; align-items: center; position: relative; cursor: pointer; transition: var(--transition); will-change: transform, box-shadow; }
+        .item-card:hover { background: var(--bg-card-hover); transform: translateY(-5px) scale(1.02); box-shadow: 0 10px 25px rgba(0,0,0,0.5); border-color: #4a4a60; }
         .item-price { font-size: 11px; font-weight: 800; color: #fff; align-self: flex-end; background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); }
         .item-img-container { width: 100%; height: 85px; display: flex; align-items: center; justify-content: center; margin: 8px 0; }
-        .item-img-container img { max-width: 90%; max-height: 90%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); }
+        .item-img-container img { max-width: 90%; max-height: 90%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); transition: transform 0.3s; }
+        .item-card:hover .item-img-container img { transform: scale(1.08); }
         .item-info { text-align: center; width: 100%; }
         .item-title { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
         .item-sub { font-size: 12px; font-weight: 700; margin-top: 3px; color: #eee; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
@@ -230,27 +237,28 @@
         /* === ФУТЕР === */
         footer { margin-top: auto; padding: 24px 16px; background: var(--bg-panel); border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
         .footer-contacts { display: flex; align-items: center; gap: 10px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: var(--radius-lg); color: var(--text-main); font-size: 14px; font-weight: 700; text-decoration: none; transition: var(--transition); }
-        .footer-contacts:hover { border-color: #2AABEE; background: var(--bg-card-hover); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(42, 171, 238, 0.15); }
+        .footer-contacts:hover { border-color: #2AABEE; background: var(--bg-card-hover); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(42, 171, 238, 0.2); }
         .tg-icon { width: 22px; height: 22px; fill: #2AABEE; }
 
         /* === МОДАЛКИ И СТИЛИ КНОПОК === */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; }
-        .modal-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 460px; padding: 28px; position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; opacity: 0; transition: opacity 0.3s; }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 460px; padding: 28px; position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.8); transform: translateY(20px); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
+        .modal-overlay.active .modal-card { transform: translateY(0); }
         .modal-close { position: absolute; top: 20px; right: 20px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 50%; width: 32px; height: 32px; display:flex; align-items:center; justify-content:center; color: var(--text-muted); font-size: 18px; cursor: pointer; transition: var(--transition); }
-        .modal-close:hover { background: var(--rarity-mythic); color: #fff; border-color: var(--rarity-mythic); }
+        .modal-close:hover { background: var(--rarity-mythic); color: #fff; border-color: var(--rarity-mythic); transform: rotate(90deg); }
         .modal-title { font-size: 20px; font-weight: 800; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; color: #fff; }
         .modal-input { width: 100%; background: var(--bg-card); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-sm); color: #fff; font-size: 16px; margin-bottom: 16px; outline: none; transition: var(--transition); }
-        .modal-input:focus { border-color: var(--accent-main); }
+        .modal-input:focus { border-color: var(--accent-main); box-shadow: 0 0 10px rgba(138, 43, 226, 0.2); }
         .modal-btn { width: 100%; background: linear-gradient(135deg, var(--accent-main), #b838ff); color: #fff; border: none; padding: 16px; border-radius: var(--radius-sm); font-size: 15px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: var(--transition); }
-        .modal-btn:hover { box-shadow: 0 6px 20px var(--accent-glow); }
+        .modal-btn:hover { box-shadow: 0 6px 20px var(--accent-glow); transform: translateY(-2px); }
         
-        /* Стили для нового меню пополнения */
         .payment-methods { display: flex; gap: 10px; margin-bottom: 16px; }
         .payment-method { 
             flex: 1; background: var(--bg-card); border: 2px solid var(--border-color); 
             padding: 12px; border-radius: var(--radius-sm); text-align: center; cursor: pointer; transition: var(--transition);
         }
-        .payment-method.active { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); }
+        .payment-method.active { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); transform: scale(1.02); }
         .payment-method:hover:not(.active) { border-color: var(--text-muted); }
         .amount-presets { display: flex; gap: 8px; margin-bottom: 16px; }
         .amount-btn {
@@ -258,21 +266,21 @@
             padding: 10px 4px; border-radius: 6px; color: var(--text-main); font-size: 13px; font-weight: 700;
             cursor: pointer; transition: var(--transition);
         }
-        .amount-btn:hover { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); }
+        .amount-btn:hover { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); transform: translateY(-2px); }
 
         .profile-tabs { display: flex; gap: 8px; margin-bottom: 20px; background: #0a0a0f; padding: 6px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); }
         .p-tab-btn { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-muted); font-size: 11px; font-weight: 700; text-transform: uppercase; cursor: pointer; border-radius: 6px; transition: var(--transition); }
-        .p-tab-btn.active { background: var(--bg-card); color: #fff; border: 1px solid #333344; }
+        .p-tab-btn.active { background: var(--bg-card); color: #fff; border: 1px solid #333344; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
         .profile-list-item { display: flex; justify-content: space-between; align-items: center; background: var(--bg-card); padding: 12px 16px; border-radius: var(--radius-sm); margin-bottom: 10px; border: 1px solid transparent; border-left: 4px solid transparent; transition: var(--transition); }
-        .profile-list-item:hover { border-color: var(--border-color); background: var(--bg-card-hover); }
+        .profile-list-item:hover { border-color: var(--border-color); background: var(--bg-card-hover); transform: translateX(4px); }
         .p-item-info { display: flex; flex-direction: column; }
         .p-item-name { font-size: 13px; font-weight: 700; color: #fff; }
         .p-item-price { font-size: 11px; color: var(--text-muted); font-weight: bold; margin-top: 2px;}
         .btn-profile-action { padding: 8px 14px; border: none; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; text-transform: uppercase; transition: var(--transition); }
         .btn-sell { background: rgba(252, 92, 101, 0.1); color: var(--rarity-mythic); border: 1px solid rgba(252, 92, 101, 0.2); }
-        .btn-sell:hover { background: var(--rarity-mythic); color: #fff; }
+        .btn-sell:hover { background: var(--rarity-mythic); color: #fff; transform: translateY(-2px); }
         .btn-buy { background: rgba(43, 203, 186, 0.1); color: var(--rarity-immortal); border: 1px solid rgba(43, 203, 186, 0.2); }
-        .btn-buy:hover { background: var(--rarity-immortal); color: #fff; }
+        .btn-buy:hover { background: var(--rarity-immortal); color: #fff; transform: translateY(-2px); }
         .stat-line { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border-color); font-size: 14px; color: var(--text-muted); }
         .stat-line span:last-child { font-weight: bold; color: #fff; font-size: 16px; }
         
@@ -361,7 +369,7 @@
 
                         <div id="chanceDisplay" style="display: none;">
                             <h1 id="chanceText">0.00%</h1>
-                            <p>шанс</p>
+                            <p id="chanceLabel">шанс</p>
                         </div>
                     </div>
                 </div>
@@ -463,6 +471,7 @@
     <audio id="soundClick" src="click.mp3" preload="auto"></audio>
 
     <script>
+        // В массив добавлены все твои 8 новых картинок с крутыми названиями и ценами
         const giftPool = [
             { id: 'frog_purple', title: 'Премиум Подарок', sub: 'Аметистовый Харт', price: '4500', rarity: 'rarity-epic', img: '16201.png' },
             { id: 'frog_aqua', title: 'Премиум Подарок', sub: 'Бирюзовый Лав', price: '8900', rarity: 'rarity-legendary', img: '16202.png' },
@@ -473,8 +482,21 @@
             { id: 'frog_gold', title: 'Бессмертный', sub: 'Золотой Император', price: '25000', rarity: 'rarity-immortal', img: 'frog_gold_buttons.png' },
             { id: 'frog_ninja', title: 'Бессмертный', sub: 'Пепе-Ниндзя', price: '19000', rarity: 'rarity-immortal', img: 'frog_ninja.png' },
             { id: 'frog_secret', title: 'Эксклюзив', sub: 'Тайный Пепе', price: '28000', rarity: 'rarity-immortal', img: '16289.jpg' },
-            { id: 'frog_cosmic', title: 'Эксклюзив', sub: 'Космический Пепе', price: '35000', rarity: 'rarity-immortal', img: '16290.jpg' }
+            { id: 'frog_cosmic', title: 'Эксклюзив', sub: 'Космический Пепе', price: '35000', rarity: 'rarity-immortal', img: '16290.jpg' },
+            
+            // НОВЫЕ ПРЕДМЕТЫ ПО ТВОИМ КАРТИНКАМ:
+            { id: 'new_drop_blue', title: 'Обычный', sub: 'Синяя Капля', price: '2500', rarity: 'rarity-epic', img: '1779384748829.png' },
+            { id: 'new_gem_red', title: 'Редкий', sub: 'Красный Осколок', price: '6000', rarity: 'rarity-epic', img: '1779384763664.png' },
+            { id: 'new_sphere_green', title: 'Мифический', sub: 'Изумрудная Сфера', price: '11500', rarity: 'rarity-mythic', img: '1779384784150.png' },
+            { id: 'new_crystal_blue', title: 'Легендарный', sub: 'Небесный Кристалл', price: '16000', rarity: 'rarity-legendary', img: '1779384804515.png' },
+            { id: 'new_star_purple', title: 'Бессмертный', sub: 'Пурпурная Звезда', price: '22000', rarity: 'rarity-immortal', img: '1779384818636.png' },
+            { id: 'new_shield_gold', title: 'Эксклюзив', sub: 'Золотой Щит', price: '38000', rarity: 'rarity-immortal', img: '1779384968361.png' },
+            { id: 'new_flame_orange', title: 'Божественный', sub: 'Огненная Вспышка', price: '55000', rarity: 'rarity-immortal', img: '1779384992327.png' },
+            { id: 'new_sun_yellow', title: 'Артефакт', sub: 'Солнечный Знак', price: '100000', rarity: 'rarity-immortal', img: '1779385012050.png' }
         ];
+
+        // Чтобы новые предметы сразу отрендерились правильно (сортировка по цене)
+        giftPool.sort((a, b) => parseInt(a.price) - parseInt(b.price));
 
         let balance = parseFloat(localStorage.getItem('ub_balance')) || 10000;
         let myInventoryData = JSON.parse(localStorage.getItem('ub_inv')) || [giftPool[0], giftPool[1], giftPool[4], giftPool[8]];
@@ -559,6 +581,7 @@
             const btn = document.getElementById('btnUpgrade');
             const chevrons = document.getElementById('centerChevrons');
             const chanceDisplay = document.getElementById('chanceDisplay');
+            const chanceLabel = document.getElementById('chanceLabel');
 
             if (!selectedLeft || !selectedRight) {
                 btn.disabled = true;
@@ -581,11 +604,24 @@
             document.getElementById('chanceText').innerText = chance.toFixed(2) + '%';
             document.getElementById('wheelCircle').style.strokeDashoffset = circleCircumference - (circleCircumference * (chance / 100));
 
-            if (chance >= 80) {
+            // Логика текста шансов по твоим условиям
+            if (chance >= 75) {
+                chanceLabel.innerText = "ВЫСОКИЙ ШАНС";
+                chanceLabel.style.color = "var(--rarity-immortal)";
                 btn.disabled = true;
                 btn.innerText = 'ШАНС СЛИШКОМ ВЫСОКИЙ';
                 btn.style.background = 'var(--bg-card)';
+            } else if (chance >= 50) {
+                chanceLabel.innerText = "СРЕДНИЙ ШАНС";
+                chanceLabel.style.color = "var(--rarity-legendary)";
+                btn.style.background = '';
+            } else if (chance >= 25) {
+                chanceLabel.innerText = "МАЛЕНЬКИЙ ШАНС";
+                chanceLabel.style.color = "var(--rarity-epic)";
+                btn.style.background = '';
             } else {
+                chanceLabel.innerText = "ОЧЕНЬ МАЛЕНЬКИЙ ШАНС";
+                chanceLabel.style.color = "var(--rarity-mythic)";
                 btn.style.background = '';
             }
         }
@@ -736,6 +772,7 @@
                 playSound(soundFail);
                 
                 document.getElementById('chanceText').innerText = '0.00%';
+                document.getElementById('chanceLabel').innerText = 'шанс';
                 document.getElementById('wheelCircle').style.strokeDashoffset = 534;
             }
 
@@ -788,11 +825,14 @@
         function openModal(id) {
             setupAudioAnalysis(); 
             playSound(soundClick);
-            document.getElementById(id).style.display = 'flex';
+            const overlay = document.getElementById(id);
+            overlay.classList.add('active');
             if(id === 'profileModal') switchProfileTab('stats');
         }
 
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function closeModal(id) { 
+            document.getElementById(id).classList.remove('active');
+        }
 
         function switchProfileTab(pTab) {
             playSound(soundClick);
