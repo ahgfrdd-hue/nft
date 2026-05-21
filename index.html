@@ -105,7 +105,7 @@
         .ticker-item.fail { border-bottom-color: var(--rarity-mythic); opacity: 0.5; }
         .ticker-img { width: 22px; height: 22px; object-fit: contain; }
 
-        /* === АРЕНА АПГРЕЙДА === */
+        /* === АРЕНА АПГРЕЙДА С НОВЫМИ АНИМАЦИЯМИ === */
         .upgrade-arena {
             background: linear-gradient(180deg, var(--bg-panel) 0%, #0d0d14 100%);
             border: 1px solid var(--border-color); border-radius: var(--radius-lg);
@@ -113,8 +113,32 @@
             position: relative; transition: all 0.4s ease; overflow: hidden;
             box-shadow: 0 8px 30px rgba(0,0,0,0.6);
         }
-        .upgrade-arena.win-state { background: linear-gradient(180deg, #103318 0%, #081a0c 100%) !important; box-shadow: 0 0 40px rgba(43, 203, 186, 0.3); border-color: #2bcbba; }
-        .upgrade-arena.fail-state { background: linear-gradient(180deg, #381216 0%, #1a080a 100%) !important; box-shadow: 0 0 40px rgba(252, 92, 101, 0.3); border-color: #fc5c65; }
+        
+        .upgrade-arena.win-state { 
+            background: linear-gradient(180deg, rgba(0, 229, 255, 0.15) 0%, #081a20 100%) !important; 
+            box-shadow: 0 0 50px rgba(0, 229, 255, 0.3); 
+            border-color: var(--accent-secondary); 
+            animation: winPulse 1.2s ease-out;
+        }
+        
+        .upgrade-arena.fail-state { 
+            background: linear-gradient(180deg, rgba(252, 92, 101, 0.15) 0%, #1a080a 100%) !important; 
+            box-shadow: 0 0 40px rgba(252, 92, 101, 0.2); 
+            border-color: var(--rarity-mythic); 
+            animation: lossShake 0.5s ease-in-out;
+        }
+
+        @keyframes winPulse {
+            0% { transform: scale(1); box-shadow: 0 0 20px rgba(0, 229, 255, 0.1); }
+            50% { transform: scale(1.03); box-shadow: 0 0 60px rgba(0, 229, 255, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 0 50px rgba(0, 229, 255, 0.3); }
+        }
+
+        @keyframes lossShake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
 
         .slots-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; z-index: 2; }
         .item-slot {
@@ -127,32 +151,23 @@
         .item-slot.active { border: 1px solid var(--accent-main); background: rgba(138, 43, 226, 0.05); box-shadow: 0 0 15px rgba(138,43,226,0.1) inset; }
         
         .slot-bg-pepe {
-            position: absolute;
-            width: 75%;
-            height: 75%;
-            object-fit: contain;
-            filter: brightness(0);
-            opacity: 0.15;
-            z-index: 1;
-            pointer-events: none;
+            position: absolute; width: 75%; height: 75%; object-fit: contain;
+            filter: brightness(0); opacity: 0.15; z-index: 1; pointer-events: none;
         }
         
-        .slot-chevron-container {
-            position: relative;
-            z-index: 2;
-            margin-bottom: 8px;
-        }
-
+        .slot-chevron-container { position: relative; z-index: 2; margin-bottom: 8px; }
         .slot-hint { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; position: relative; z-index: 2; }
 
-        /* === КОЛЕСО И СТРЕЛКА === */
+        /* === КОЛЕСО И СТРЕЛКА (ИСправлено позиционирование SVG) === */
         .wheel-container {
             position: relative; width: 280px; height: 280px; margin: 10px 0;
             display: flex; align-items: center; justify-content: center; z-index: 2;
         }
         
         .wheel-box { width: 100%; height: 100%; position: relative; }
-        .wheel-svg { transform: rotate(90deg); width: 100%; height: 100%; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
+        
+        /* Убрали rotate(90deg) из CSS, чтобы не конфликтовало с браузерами */
+        .wheel-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
         
         .wheel-progress {
             stroke-dasharray: 534; stroke-dashoffset: 534; stroke-linecap: round;
@@ -214,43 +229,10 @@
         .rarity-immortal { border-bottom: 3px solid var(--rarity-immortal); }
 
         /* === ФУТЕР === */
-        footer {
-            margin-top: auto;
-            padding: 24px 16px;
-            background: var(--bg-panel);
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .footer-contacts {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            padding: 10px 20px;
-            border-radius: var(--radius-lg);
-            color: var(--text-main);
-            font-size: 14px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .footer-contacts:hover {
-            border-color: #2AABEE; /* Цвет Telegram */
-            background: var(--bg-card-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(42, 171, 238, 0.15);
-        }
-
-        .tg-icon {
-            width: 22px;
-            height: 22px;
-            fill: #2AABEE;
-        }
+        footer { margin-top: auto; padding: 24px 16px; background: var(--bg-panel); border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .footer-contacts { display: flex; align-items: center; gap: 10px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: var(--radius-lg); color: var(--text-main); font-size: 14px; font-weight: 700; text-decoration: none; transition: var(--transition); }
+        .footer-contacts:hover { border-color: #2AABEE; background: var(--bg-card-hover); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(42, 171, 238, 0.15); }
+        .tg-icon { width: 22px; height: 22px; fill: #2AABEE; }
 
         /* === МОДАЛКИ === */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; }
@@ -279,13 +261,9 @@
         .stat-line { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border-color); font-size: 14px; color: var(--text-muted); }
         .stat-line span:last-child { font-weight: bold; color: #fff; font-size: 16px; }
         
-        /* === ПЕРЕКРАСКА ЖЕЛТЫХ СТРЕЛОЧЕК === */
-        .slot-chevron-container svg path {
-            fill: var(--accent-main) !important;
-        }
-        .slot-chevron-container svg {
-            filter: drop-shadow(0 0 8px var(--accent-glow)) !important;
-        }
+        /* ПЕРЕКРАСКА ЖЕЛТЫХ СТРЕЛОЧЕК */
+        .slot-chevron-container svg path { fill: var(--accent-main) !important; }
+        .slot-chevron-container svg { filter: drop-shadow(0 0 8px var(--accent-glow)) !important; }
     </style>
 </head>
 <body>
@@ -355,10 +333,11 @@
                                 <stop offset="100%" stop-color="#00e5ff" />
                             </linearGradient>
                         </defs>
+                        <!-- Исправление бага: добавлен жесткий SVG transform="rotate(90 130 130)", чтобы заливка строго стартовала снизу -->
                         <circle cx="130" cy="130" r="120" fill="none" stroke="#272736" stroke-width="4" stroke-dasharray="2 12" />
                         <circle cx="130" cy="130" r="100" fill="#13131c" />
                         <circle cx="130" cy="130" r="85" fill="none" stroke="#1a1a24" stroke-width="26" />
-                        <circle class="wheel-progress" id="wheelCircle" cx="130" cy="130" r="85" fill="none" stroke="url(#progressGrad)" stroke-width="26" />
+                        <circle class="wheel-progress" id="wheelCircle" cx="130" cy="130" r="85" fill="none" stroke="url(#progressGrad)" stroke-width="26" transform="rotate(90 130 130)" />
                     </svg>
 
                     <div class="wheel-center-content">
@@ -425,7 +404,7 @@
             <div id="pContentStats">
                 <div class="modal-title" style="font-size:16px;">Твои достижения</div>
                 <div class="stat-line"><span>Всего апгрейдов:</span><span id="statTotal">0</span></div>
-                <div class="stat-line"><span>Успешных:</span><span id="statWins" style="color:var(--rarity-immortal);">0</span></div>
+                <div class="stat-line"><span>Успешных:</span><span id="statWins" style="color:var(--accent-secondary);">0</span></div>
                 <div class="stat-line"><span>Сгорело:</span><span id="statLosses" style="color:var(--rarity-mythic);">0</span></div>
             </div>
             <div id="pContentSell" style="display:none;">
@@ -566,7 +545,6 @@
             document.getElementById('chanceText').innerText = chance.toFixed(2) + '%';
             document.getElementById('wheelCircle').style.strokeDashoffset = circleCircumference - (circleCircumference * (chance / 100));
 
-            // Проверка на 80%+
             if (chance >= 80) {
                 btn.disabled = true;
                 btn.innerText = 'ШАНС СЛИШКОМ ВЫСОКИЙ';
@@ -626,7 +604,6 @@
             
             let chance = (parseFloat(selectedLeft.price) / parseFloat(selectedRight.price)) * 100;
             
-            // Прерываем выполнение, если шанс 80% или выше
             if (chance >= 80) {
                 alert('Максимальный шанс для апгрейда составляет 79.99%!');
                 isProcessing = false;
@@ -702,15 +679,16 @@
 
             if (isWin) {
                 stats.wins++;
-                btn.style.background = 'var(--rarity-immortal)';
+                btn.style.background = 'var(--accent-secondary)'; /* Неоновый голубой */
                 arena.classList.add('win-state'); 
                 playSound(soundWin);
                 
-                confetti({ particleCount: 140, spread: 80, origin: { y: 0.6 }, colors: ['#8a2be2', '#00e5ff', '#ffffff'] });
+                /* Обновленные цвета конфетти для премиум дизайна */
+                confetti({ particleCount: 140, spread: 80, origin: { y: 0.6 }, colors: ['#00e5ff', '#8a2be2', '#ffffff'] });
                 myInventoryData.push(selectedRight);
             } else {
                 stats.losses++;
-                btn.style.background = 'var(--rarity-mythic)';
+                btn.style.background = 'var(--rarity-mythic)'; /* Свежий багровый */
                 arena.classList.add('fail-state'); 
                 playSound(soundFail);
                 
@@ -729,7 +707,6 @@
                 
                 selectedLeft = null; selectedRight = null;
                 
-                // Восстанавливаем новый HTML при сбросе 
                 document.getElementById('slotLeft').innerHTML = `
                     <img src="16201.png" class="slot-bg-pepe">
                     <div class="slot-chevron-container">
