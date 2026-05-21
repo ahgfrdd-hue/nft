@@ -28,7 +28,6 @@
             --radius-lg: 20px;
             --radius-md: 14px;
             --radius-sm: 8px;
-            /* Сделал анимации еще плавнее за счет cubic-bezier */
             --transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
@@ -79,7 +78,7 @@
             padding: 8px 16px; border: none; border-radius: var(--radius-sm);
             font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition);
             box-shadow: 0 4px 15px var(--accent-glow);
-            will-change: transform, box-shadow; /* Аппаратное ускорение для кнопок */
+            will-change: transform, box-shadow;
         }
         .btn-deposit:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--accent-glow); }
         
@@ -149,7 +148,7 @@
             height: 140px; display: flex; flex-direction: column; justify-content: center; align-items: center;
             padding: 16px; text-align: center; transition: var(--transition); cursor: pointer;
             position: relative; overflow: hidden;
-            will-change: transform, border-color; /* Аппаратное ускорение */
+            will-change: transform, border-color;
         }
         .item-slot:hover { border-color: var(--text-muted); background: var(--bg-card-hover); transform: translateY(-3px); }
         .item-slot.active { border: 1px solid var(--accent-main); background: rgba(138, 43, 226, 0.05); box-shadow: 0 0 15px rgba(138,43,226,0.1) inset; transform: translateY(0); }
@@ -180,7 +179,7 @@
         .arrow-spinner-wrapper {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 15;
-            will-change: transform; /* Идеальная плавность колеса */
+            will-change: transform;
         }
         
         .wheel-arrow {
@@ -240,7 +239,7 @@
         .footer-contacts:hover { border-color: #2AABEE; background: var(--bg-card-hover); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(42, 171, 238, 0.2); }
         .tg-icon { width: 22px; height: 22px; fill: #2AABEE; }
 
-        /* === МОДАЛКИ И СТИЛИ КНОПОК === */
+        /* === МОДАЛКИ (ОБЩИЕ) === */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; opacity: 0; transition: opacity 0.3s; }
         .modal-overlay.active { display: flex; opacity: 1; }
         .modal-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 460px; padding: 28px; position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.8); transform: translateY(20px); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
@@ -268,9 +267,52 @@
         }
         .amount-btn:hover { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); transform: translateY(-2px); }
 
+        /* === НОВЫЙ ПРОФИЛЬ (FULLSCREEN ОВЕРЛЕЙ) === */
+        .profile-page-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--bg-main); background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, var(--bg-main) 70%);
+            z-index: 300; display: none; flex-direction: column; opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .profile-page-overlay.active { display: flex; opacity: 1; transform: translateX(0); }
+        .profile-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 24px; background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .profile-back { background: transparent; border: none; cursor: pointer; padding: 5px; display: flex; align-items: center; justify-content: center; }
+        .profile-title-text { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
+        .profile-body { flex: 1; overflow-y: auto; padding: 24px 16px; max-width: 650px; width: 100%; margin: 0 auto; }
+        
+        .profile-user-card {
+            background: var(--bg-panel); border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); padding: 20px; display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        .profile-avatar-lg {
+            width: 64px; height: 64px; background: var(--bg-card);
+            border: 2px solid var(--accent-main); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 32px;
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+        .profile-info-text { display: flex; flex-direction: column; }
+        .profile-info-text .p-name { font-size: 22px; font-weight: 800; color: #fff; }
+        .profile-info-text .p-role { font-size: 12px; color: var(--text-muted); font-weight: 700; margin-top: 4px; background: var(--bg-card); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border-color); display: inline-block; width: fit-content; }
+        
+        .profile-balance-card {
+            background: linear-gradient(135deg, var(--bg-card), var(--bg-panel));
+            border: 1px solid var(--border-color); border-radius: var(--radius-lg);
+            padding: 20px; margin-bottom: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+        .profile-balance-card .b-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 1px;}
+        .profile-balance-card .b-value { font-size: 32px; font-weight: 900; color: #fff; margin-top: 8px; text-shadow: 0 2px 10px rgba(255,255,255,0.1); }
+
         .profile-tabs { display: flex; gap: 8px; margin-bottom: 20px; background: #0a0a0f; padding: 6px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); }
         .p-tab-btn { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-muted); font-size: 11px; font-weight: 700; text-transform: uppercase; cursor: pointer; border-radius: 6px; transition: var(--transition); }
         .p-tab-btn.active { background: var(--bg-card); color: #fff; border: 1px solid #333344; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        
         .profile-list-item { display: flex; justify-content: space-between; align-items: center; background: var(--bg-card); padding: 12px 16px; border-radius: var(--radius-sm); margin-bottom: 10px; border: 1px solid transparent; border-left: 4px solid transparent; transition: var(--transition); }
         .profile-list-item:hover { border-color: var(--border-color); background: var(--bg-card-hover); transform: translateX(4px); }
         .p-item-info { display: flex; flex-direction: column; }
@@ -281,8 +323,8 @@
         .btn-sell:hover { background: var(--rarity-mythic); color: #fff; transform: translateY(-2px); }
         .btn-buy { background: rgba(43, 203, 186, 0.1); color: var(--rarity-immortal); border: 1px solid rgba(43, 203, 186, 0.2); }
         .btn-buy:hover { background: var(--rarity-immortal); color: #fff; transform: translateY(-2px); }
-        .stat-line { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border-color); font-size: 14px; color: var(--text-muted); }
-        .stat-line span:last-child { font-weight: bold; color: #fff; font-size: 16px; }
+        .stat-line { display: flex; justify-content: space-between; padding: 16px 0; border-bottom: 1px dashed var(--border-color); font-size: 14px; color: var(--text-muted); }
+        .stat-line span:last-child { font-weight: bold; color: #fff; font-size: 18px; }
         
         .slot-chevron-container svg path { fill: var(--accent-main) !important; }
         .slot-chevron-container svg { filter: drop-shadow(0 0 8px var(--accent-glow)) !important; }
@@ -433,34 +475,52 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="profileModal">
-        <div class="modal-card">
-            <button class="modal-close" onclick="closeModal('profileModal')">×</button>
+    <div class="profile-page-overlay" id="profileModal">
+        <div class="profile-header">
+            <button class="profile-back" onclick="closeModal('profileModal')">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <div class="profile-title-text">ПРОФИЛЬ</div>
+            <div style="width: 28px;"></div>
+        </div>
+        <div class="profile-body">
+            <div class="profile-user-card">
+                <div class="profile-avatar-lg">👤</div>
+                <div class="profile-info-text">
+                    <div class="p-name">om1a2</div>
+                    <div class="p-role">Пользователь</div>
+                </div>
+            </div>
+            
+            <div class="profile-balance-card">
+                <div class="b-label">Доступный баланс</div>
+                <div class="b-value"><span id="profileBalanceVal">10 000</span> ⭐</div>
+            </div>
+
             <div class="profile-tabs">
                 <button class="p-tab-btn active" id="pTabStats" onclick="switchProfileTab('stats')">Статистика</button>
                 <button class="p-tab-btn" id="pTabSell" onclick="switchProfileTab('sell')">Продать</button>
                 <button class="p-tab-btn" id="pTabBuy" onclick="switchProfileTab('buy')">Купить</button>
                 <button class="p-tab-btn" id="pTabPayout" onclick="switchProfileTab('payout')">Вывод</button>
             </div>
+            
             <div id="pContentStats">
-                <div class="modal-title" style="font-size:16px;">Твои достижения</div>
                 <div class="stat-line"><span>Всего апгрейдов:</span><span id="statTotal">0</span></div>
                 <div class="stat-line"><span>Успешных:</span><span id="statWins" style="color:var(--accent-secondary);">0</span></div>
                 <div class="stat-line"><span>Сгорело:</span><span id="statLosses" style="color:var(--rarity-mythic);">0</span></div>
             </div>
             <div id="pContentSell" style="display:none;">
-                <div class="modal-title" style="font-size:16px;">Инвентарь (Продажа 50%)</div>
-                <div id="profileSellList" style="max-height: 250px; overflow-y:auto; padding-right: 5px;"></div>
+                <div id="profileSellList" style="max-height: 350px; overflow-y:auto; padding-right: 5px;"></div>
             </div>
             <div id="pContentBuy" style="display:none;">
-                <div class="modal-title" style="font-size:16px;">Магазин предметов</div>
-                <div id="profileBuyList" style="max-height: 250px; overflow-y:auto; padding-right: 5px;"></div>
+                <div id="profileBuyList" style="max-height: 350px; overflow-y:auto; padding-right: 5px;"></div>
             </div>
             <div id="pContentPayout" style="display:none;">
-                <div class="modal-title" style="font-size:16px;">Вывод средств</div>
-                <input type="text" class="modal-input" id="withdrawDetails" placeholder="Ваш Telegram Username (@username)" style="margin-bottom:10px;">
-                <input type="number" class="modal-input" id="withdrawAmount" placeholder="Сумма (⭐)">
-                <button class="modal-btn" style="background:linear-gradient(135deg, #0984e3, #74b9ff);" onclick="processWithdraw()">Создать заявку</button>
+                <div style="padding-top: 10px;">
+                    <input type="text" class="modal-input" id="withdrawDetails" placeholder="Ваш Telegram Username (@username)" style="margin-bottom:10px;">
+                    <input type="number" class="modal-input" id="withdrawAmount" placeholder="Сумма (⭐)">
+                    <button class="modal-btn" style="background:linear-gradient(135deg, #0984e3, #74b9ff); margin-top: 10px;" onclick="processWithdraw()">Создать заявку</button>
+                </div>
             </div>
         </div>
     </div>
@@ -471,7 +531,6 @@
     <audio id="soundClick" src="click.mp3" preload="auto"></audio>
 
     <script>
-        // В массив добавлены все твои 8 новых картинок с крутыми названиями и ценами
         const giftPool = [
             { id: 'frog_purple', title: 'Премиум Подарок', sub: 'Аметистовый Харт', price: '4500', rarity: 'rarity-epic', img: '16201.png' },
             { id: 'frog_aqua', title: 'Премиум Подарок', sub: 'Бирюзовый Лав', price: '8900', rarity: 'rarity-legendary', img: '16202.png' },
@@ -483,8 +542,6 @@
             { id: 'frog_ninja', title: 'Бессмертный', sub: 'Пепе-Ниндзя', price: '19000', rarity: 'rarity-immortal', img: 'frog_ninja.png' },
             { id: 'frog_secret', title: 'Эксклюзив', sub: 'Тайный Пепе', price: '28000', rarity: 'rarity-immortal', img: '16289.jpg' },
             { id: 'frog_cosmic', title: 'Эксклюзив', sub: 'Космический Пепе', price: '35000', rarity: 'rarity-immortal', img: '16290.jpg' },
-            
-            // НОВЫЕ ПРЕДМЕТЫ ПО ТВОИМ КАРТИНКАМ:
             { id: 'new_drop_blue', title: 'Обычный', sub: 'Синяя Капля', price: '2500', rarity: 'rarity-epic', img: '1779384748829.png' },
             { id: 'new_gem_red', title: 'Редкий', sub: 'Красный Осколок', price: '6000', rarity: 'rarity-epic', img: '1779384763664.png' },
             { id: 'new_sphere_green', title: 'Мифический', sub: 'Изумрудная Сфера', price: '11500', rarity: 'rarity-mythic', img: '1779384784150.png' },
@@ -495,7 +552,6 @@
             { id: 'new_sun_yellow', title: 'Артефакт', sub: 'Солнечный Знак', price: '100000', rarity: 'rarity-immortal', img: '1779385012050.png' }
         ];
 
-        // Чтобы новые предметы сразу отрендерились правильно (сортировка по цене)
         giftPool.sort((a, b) => parseInt(a.price) - parseInt(b.price));
 
         let balance = parseFloat(localStorage.getItem('ub_balance')) || 10000;
@@ -522,8 +578,13 @@
 
         function playSound(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
         
+        // ОБНОВЛЕННАЯ ФУНКЦИЯ ДЛЯ ВЫВОДА БАЛАНСА ВЕЗДЕ
         function updateBalanceUI() { 
-            document.getElementById('userBalance').innerText = Math.floor(balance).toLocaleString('ru-RU') + ' ⭐'; 
+            let formatted = Math.floor(balance).toLocaleString('ru-RU');
+            document.getElementById('userBalance').innerText = formatted + ' ⭐'; 
+            
+            let pBalance = document.getElementById('profileBalanceVal');
+            if(pBalance) pBalance.innerText = formatted;
         }
 
         function renderGrid() {
@@ -582,6 +643,7 @@
             const chevrons = document.getElementById('centerChevrons');
             const chanceDisplay = document.getElementById('chanceDisplay');
             const chanceLabel = document.getElementById('chanceLabel');
+            const chanceText = document.getElementById('chanceText');
 
             if (!selectedLeft || !selectedRight) {
                 btn.disabled = true;
@@ -601,27 +663,40 @@
             if (chance > 95) chance = 95;
             if (chance < 1) chance = 1;
 
-            document.getElementById('chanceText').innerText = chance.toFixed(2) + '%';
+            chanceText.innerText = chance.toFixed(2) + '%';
             document.getElementById('wheelCircle').style.strokeDashoffset = circleCircumference - (circleCircumference * (chance / 100));
 
-            // Логика текста шансов по твоим условиям
+            // ОБНОВЛЕННАЯ ЛОГИКА: Затемнение и изменение размеров в зависимости от процентов
             if (chance >= 75) {
                 chanceLabel.innerText = "ВЫСОКИЙ ШАНС";
-                chanceLabel.style.color = "var(--rarity-immortal)";
+                chanceLabel.style.color = "rgba(43, 203, 186, 0.5)"; 
+                chanceLabel.style.fontSize = "13px";
+                chanceText.style.opacity = "0.9";
+                chanceText.style.fontSize = "38px";
+                
                 btn.disabled = true;
                 btn.innerText = 'ШАНС СЛИШКОМ ВЫСОКИЙ';
                 btn.style.background = 'var(--bg-card)';
             } else if (chance >= 50) {
                 chanceLabel.innerText = "СРЕДНИЙ ШАНС";
-                chanceLabel.style.color = "var(--rarity-legendary)";
+                chanceLabel.style.color = "rgba(253, 150, 68, 0.6)";
+                chanceLabel.style.fontSize = "12px";
+                chanceText.style.opacity = "0.8";
+                chanceText.style.fontSize = "35px";
                 btn.style.background = '';
             } else if (chance >= 25) {
                 chanceLabel.innerText = "МАЛЕНЬКИЙ ШАНС";
-                chanceLabel.style.color = "var(--rarity-epic)";
+                chanceLabel.style.color = "rgba(165, 94, 234, 0.7)";
+                chanceLabel.style.fontSize = "11px";
+                chanceText.style.opacity = "0.7";
+                chanceText.style.fontSize = "32px";
                 btn.style.background = '';
             } else {
                 chanceLabel.innerText = "ОЧЕНЬ МАЛЕНЬКИЙ ШАНС";
-                chanceLabel.style.color = "var(--rarity-mythic)";
+                chanceLabel.style.color = "rgba(252, 92, 101, 0.8)";
+                chanceLabel.style.fontSize = "10px";
+                chanceText.style.opacity = "0.6";
+                chanceText.style.fontSize = "28px";
                 btn.style.background = '';
             }
         }
@@ -754,6 +829,8 @@
         function afterSpin(isWin) {
             const btn = document.getElementById('btnUpgrade');
             const arena = document.getElementById('arenaBox');
+            const chanceText = document.getElementById('chanceText');
+            const chanceLabel = document.getElementById('chanceLabel');
             
             btn.innerText = isWin ? 'ВЫИГРЫШ!' : 'СГОРЕЛО!';
 
@@ -771,8 +848,14 @@
                 arena.classList.add('fail-state'); 
                 playSound(soundFail);
                 
-                document.getElementById('chanceText').innerText = '0.00%';
-                document.getElementById('chanceLabel').innerText = 'шанс';
+                // Возвращаем дефолтные стили при проигрыше
+                chanceText.innerText = '0.00%';
+                chanceText.style.opacity = "1";
+                chanceText.style.fontSize = "38px";
+                chanceLabel.innerText = 'шанс';
+                chanceLabel.style.color = "var(--text-muted)";
+                chanceLabel.style.fontSize = "11px";
+                
                 document.getElementById('wheelCircle').style.strokeDashoffset = 534;
             }
 
@@ -920,7 +1003,6 @@
             alert(`Вы успешно приобрели ${targetItem.sub}! Он добавлен в инвентарь.`);
         }
 
-        // --- ЛОГИКА КНОПОК СУММЫ ---
         function setDepositAmount(amount) {
             document.getElementById('depositAmount').value = amount;
             document.getElementById('payAmountText').innerText = amount;
@@ -931,7 +1013,6 @@
             document.getElementById('payAmountText').innerText = val;
         });
 
-        // --- ИСПРАВЛЕННАЯ ФУНКЦИЯ ПОПОЛНЕНИЯ ---
         function processDeposit() {
             const amount = parseInt(document.getElementById('depositAmount').value);
             if (!amount || amount < 10) { 
@@ -939,7 +1020,6 @@
                 return; 
             }
             
-            // Получаем реальный ID пользователя из Telegram, если доступно
             let userId = 'user_123';
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
                 userId = window.Telegram.WebApp.initDataUnsafe.user.id;
@@ -947,7 +1027,6 @@
             
             const paymentUrl = `https://flashupgrader-1.onrender.com/pay?amount=${amount}&userId=${userId}`;
             
-            // Безопасное открытие ссылки внутри Telegram Mini App
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) {
                 window.Telegram.WebApp.openLink(paymentUrl);
             } else {
