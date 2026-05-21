@@ -45,35 +45,7 @@
             display: flex; flex-direction: column; overflow-x: hidden;
         }
 
-        /* === ЭКРАН АВТОРИЗАЦИИ === */
-        #auth-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: var(--bg-main);
-            background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, var(--bg-main) 70%);
-            z-index: 9999;
-            display: none;
-            opacity: 0;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.5s ease;
-        }
-
-        .auth-box {
-            background: var(--bg-panel);
-            border: 1px solid var(--accent-main);
-            padding: 40px;
-            border-radius: var(--radius-lg);
-            text-align: center;
-            box-shadow: 0 0 30px var(--accent-glow);
-            max-width: 90%;
-            width: 400px;
-        }
-
-        .auth-title { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 10px; }
-        .auth-subtitle { color: var(--text-muted); margin-bottom: 25px; font-size: 14px; line-height: 1.4; }
-
+        /* Кнопки авторизации */
         .btn-google {
             background: #fff; color: #000;
             border: none; padding: 12px 24px; border-radius: var(--radius-sm);
@@ -82,7 +54,6 @@
             transition: var(--transition);
             width: 100%;
         }
-
         .btn-google:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,255,255,0.2); }
 
         /* === ХЕДЕР === */
@@ -98,7 +69,7 @@
         .online-count { font-size: 12px; color: var(--text-muted); margin-top: 3px; font-weight: 500; }
         .online-count span { color: var(--accent-secondary); font-weight: bold; }
 
-        .user-area { display: flex; align-items: center; gap: 14px; }
+        .user-area { display: flex; align-items: center; gap: 14px; min-height: 38px;}
         
         .lang-switch {
             display: flex; align-items: center; gap: 6px; background: var(--bg-card);
@@ -182,6 +153,13 @@
             40%, 80% { transform: translateX(6px); }
         }
 
+        /* Анимация парения для картинок внутри слотов */
+        @keyframes floatEffect {
+            0% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-6px) scale(1.02); }
+            100% { transform: translateY(0px) scale(1); }
+        }
+
         .slots-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; z-index: 2; }
         .item-slot {
             background: var(--bg-card); border: 1px dashed #3a3a4d; border-radius: var(--radius-md);
@@ -196,6 +174,7 @@
         .slot-bg-pepe {
             position: absolute; width: 75%; height: 75%; object-fit: contain;
             filter: brightness(0); opacity: 0.15; z-index: 1; pointer-events: none;
+            animation: floatEffect 4s ease-in-out infinite; /* Добавлена анимация */
         }
         
         .slot-chevron-container { position: relative; z-index: 2; margin-bottom: 8px; }
@@ -214,6 +193,7 @@
         .wheel-progress {
             stroke-dasharray: 534; stroke-dashoffset: 534; 
             transition: stroke-dashoffset 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            filter: drop-shadow(0 0 12px var(--accent-secondary)); /* Усилено свечение */
         }
         
         .arrow-spinner-wrapper {
@@ -258,12 +238,17 @@
         .items-grid::-webkit-scrollbar { width: 6px; }
         .items-grid::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
         
-        .item-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; display: flex; flex-direction: column; align-items: center; position: relative; cursor: pointer; transition: var(--transition); will-change: transform, box-shadow; }
-        .item-card:hover { background: var(--bg-card-hover); transform: translateY(-5px) scale(1.02); box-shadow: 0 10px 25px rgba(0,0,0,0.5); border-color: #4a4a60; }
+        .item-card { 
+            background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); 
+            padding: 12px; display: flex; flex-direction: column; align-items: center; position: relative; cursor: pointer; 
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy анимация */
+            will-change: transform, box-shadow; 
+        }
+        .item-card:hover { background: var(--bg-card-hover); transform: translateY(-5px) scale(1.03); box-shadow: 0 10px 25px rgba(0,0,0,0.5); border-color: #4a4a60; }
         .item-price { font-size: 11px; font-weight: 800; color: #fff; align-self: flex-end; background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); }
         .item-img-container { width: 100%; height: 85px; display: flex; align-items: center; justify-content: center; margin: 8px 0; }
-        .item-img-container img { max-width: 90%; max-height: 90%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); transition: transform 0.3s; }
-        .item-card:hover .item-img-container img { transform: scale(1.08); }
+        .item-img-container img { max-width: 90%; max-height: 90%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .item-card:hover .item-img-container img { transform: scale(1.1); }
         .item-info { text-align: center; width: 100%; }
         .item-title { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
         .item-sub { font-size: 12px; font-weight: 700; margin-top: 3px; color: #eee; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
@@ -389,11 +374,12 @@
 </head>
 <body>
 
-    <div id="auth-overlay">
-        <div class="auth-box">
+    <div class="modal-overlay" id="authModal">
+        <div class="modal-card" style="max-width: 400px; text-align: center;">
+            <button class="modal-close" onclick="closeModal('authModal')">×</button>
             <div class="logo" style="font-size: 32px; margin-bottom: 10px;">FLASH<span>UPGRADER</span></div>
             <div class="auth-title">Авторизация</div>
-            <div class="auth-subtitle">Войдите или создайте аккаунт, чтобы сохранять прогресс.</div>
+            <div class="auth-subtitle">Войдите или создайте аккаунт, чтобы сохранять прогресс и делать апгрейды.</div>
             
             <input type="email" id="email-input" class="modal-input" placeholder="Email" style="margin-bottom: 12px; padding: 12px;">
             <input type="password" id="password-input" class="modal-input" placeholder="Пароль" style="padding: 12px;">
@@ -411,12 +397,16 @@
             <div class="online-count">Онлайн: <span id="onlineCount">1 742</span></div>
         </div>
         <div class="user-area">
-            <div class="balance-block">
-                <span class="balance-label">Баланс</span>
-                <div class="balance" id="userBalance">10 000 ⭐</div>
+            <button id="headerLoginBtn" class="btn-deposit" style="background: linear-gradient(135deg, #00e5ff, #007bff); font-weight: 800; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.4); display: none;" onclick="openModal('authModal')">Вход по Email</button>
+            
+            <div id="headerUserArea" style="display: none; align-items: center; gap: 14px;">
+                <div class="balance-block">
+                    <span class="balance-label">Баланс</span>
+                    <div class="balance" id="userBalance">10 000 ⭐</div>
+                </div>
+                <button class="btn-deposit" onclick="openModal('depositModal')">Пополнить</button>
+                <div class="profile-avatar" onclick="openModal('profileModal')">👤</div>
             </div>
-            <button class="btn-deposit" onclick="openModal('depositModal')">Пополнить</button>
-            <div class="profile-avatar" onclick="openModal('profileModal')">👤</div>
         </div>
     </header>
 
@@ -651,6 +641,9 @@
         let myInventoryData = JSON.parse(localStorage.getItem('ub_inv')) || [giftPool[0], giftPool[1], giftPool[4], giftPool[8]];
         let stats = JSON.parse(localStorage.getItem('ub_stats')) || { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0 };
         
+        // ИЗМЕНЕНИЕ: Глобальная переменная для отслеживания авторизации
+        window.isUserLoggedIn = false;
+
         if(stats.withdrawn === undefined) stats.withdrawn = 0;
         
         let currentTab = 'my';
@@ -665,7 +658,6 @@
         const soundFail = document.getElementById('soundFail');
         const soundClick = document.getElementById('soundClick');
 
-        // ИЗМЕНЕНИЕ: Отправляем данные в базу при сохранении
         function saveData() {
             localStorage.setItem('ub_balance', balance);
             localStorage.setItem('ub_inv', JSON.stringify(myInventoryData));
@@ -676,7 +668,6 @@
             }
         }
 
-        // ИЗМЕНЕНИЕ: Загрузка из базы
         window.loadFromDb = function(dbBalance, dbInv, dbStats) {
             balance = dbBalance;
             myInventoryData = dbInv || [];
@@ -687,7 +678,6 @@
             renderGrid();
         };
 
-        // Экспорт текущих данных для новых юзеров
         window.getCurrentBalance = () => balance;
         window.getCurrentInv = () => myInventoryData;
         window.getCurrentStats = () => stats;
@@ -763,9 +753,22 @@
             if (!selectedLeft || !selectedRight) {
                 btn.disabled = true;
                 btn.innerText = 'Выберите подарки';
+                btn.style.background = '';
+                btn.style.boxShadow = '';
                 chevrons.style.display = 'block';
                 chanceDisplay.style.display = 'none';
                 document.getElementById('wheelCircle').style.strokeDashoffset = circleCircumference;
+                return;
+            }
+
+            // ИЗМЕНЕНИЕ: Если пользователь не авторизован, меняем кнопку и просим войти
+            if (!window.isUserLoggedIn) {
+                btn.disabled = false;
+                btn.innerText = 'Войти для апгрейда';
+                btn.style.background = 'linear-gradient(135deg, #00e5ff, #007bff)';
+                btn.style.boxShadow = '0 8px 25px rgba(0, 229, 255, 0.4)';
+                chevrons.style.display = 'none';
+                chanceDisplay.style.display = 'block';
                 return;
             }
             
@@ -798,6 +801,7 @@
                 chanceText.style.opacity = "0.8";
                 chanceText.style.fontSize = "35px";
                 btn.style.background = '';
+                btn.style.boxShadow = '';
             } else if (chance >= 25) {
                 chanceLabel.innerText = "МАЛЕНЬКИЙ ШАНС";
                 chanceLabel.style.color = "rgba(165, 94, 234, 0.7)";
@@ -805,6 +809,7 @@
                 chanceText.style.opacity = "0.7";
                 chanceText.style.fontSize = "32px";
                 btn.style.background = '';
+                btn.style.boxShadow = '';
             } else {
                 chanceLabel.innerText = "ОЧЕНЬ МАЛЕНЬКИЙ ШАНС";
                 chanceLabel.style.color = "rgba(252, 92, 101, 0.8)";
@@ -812,6 +817,7 @@
                 chanceText.style.opacity = "0.6";
                 chanceText.style.fontSize = "28px";
                 btn.style.background = '';
+                btn.style.boxShadow = '';
             }
         }
 
@@ -855,6 +861,12 @@
         }
 
         function executeUpgrade() {
+            // ИЗМЕНЕНИЕ: Открытие модала логина, если пользователь не авторизован
+            if (!window.isUserLoggedIn) {
+                openModal('authModal');
+                return;
+            }
+
             if (isProcessing || !selectedLeft || !selectedRight) return;
             setupAudioAnalysis(); 
 
@@ -1052,7 +1064,7 @@
             setupAudioAnalysis(); 
             playSound(soundClick);
             const overlay = document.getElementById(id);
-            overlay.classList.add('active');
+            if (overlay) overlay.classList.add('active');
             if(id === 'profileModal') {
                 document.getElementById('profileTotalWithdrawn').innerText = (stats.withdrawn || 0).toLocaleString('ru-RU') + ' ⭐';
                 document.getElementById('profileTotalUpgradesBlock').innerText = stats.total;
@@ -1063,7 +1075,8 @@
         }
 
         function closeModal(id) { 
-            document.getElementById(id).classList.remove('active');
+            const overlay = document.getElementById(id);
+            if (overlay) overlay.classList.remove('active');
         }
 
         function switchProfileTab(pTab) {
@@ -1226,7 +1239,6 @@
     </script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        // ИМЕНЕНЫ ИМПОРТЫ ДЛЯ ЛОГИНА ПО ПОЧТЕ/ПАРОЛЮ
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
@@ -1249,10 +1261,8 @@
         const emailInput = document.getElementById('email-input');
         const passInput = document.getElementById('password-input');
         
-        const authOverlay = document.getElementById('auth-overlay');
         const profileEmailDisplay = document.getElementById('profileEmailDisplay');
 
-        // Функция синхронизации с базой (вызывается из обычного скрипта)
         window.syncToDb = async (bal, inv, st) => {
             if (auth.currentUser) {
                 try {
@@ -1265,7 +1275,6 @@
             }
         };
 
-        // ВХОД
         loginBtn.addEventListener('click', () => {
             const email = emailInput.value.trim();
             const pass = passInput.value.trim();
@@ -1278,7 +1287,6 @@
             });
         });
 
-        // РЕГИСТРАЦИЯ
         registerBtn.addEventListener('click', () => {
             const email = emailInput.value.trim();
             const pass = passInput.value.trim();
@@ -1292,40 +1300,44 @@
             });
         });
 
-        // ВЫХОД
         if(logoutBtn) {
             logoutBtn.addEventListener('click', () => {
                 signOut(auth).then(() => {
-                    localStorage.clear(); // Очищаем локальные данные при выходе
-                    location.reload(); // Перезагружаем страницу, чтобы сбросить состояние
+                    localStorage.clear(); 
+                    location.reload(); 
                 });
             });
         }
 
-        // СЛЕДИМ ЗА СТАТУСОМ АВТОРИЗАЦИИ
+        // ИЗМЕНЕНИЕ: Обработка статуса авторизации для управления шапкой и апгрейдами
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                authOverlay.style.opacity = '0';
-                setTimeout(() => authOverlay.style.display = 'none', 500);
+                closeModal('authModal');
+                
+                window.isUserLoggedIn = true;
+                document.getElementById('headerLoginBtn').style.display = 'none';
+                document.getElementById('headerUserArea').style.display = 'flex';
 
                 if (profileEmailDisplay) {
-                    profileEmailDisplay.innerText = user.email; // Показываем почту в профиле
+                    profileEmailDisplay.innerText = user.email; 
                 }
                 
                 const userRef = doc(db, "users", user.uid);
                 const docSnap = await getDoc(userRef);
                 
                 if (docSnap.exists()) {
-                    // ЕСЛИ АККАУНТ ЕСТЬ В БАЗЕ — ЗАГРУЖАЕМ ЕГО
                     const data = docSnap.data();
                     window.loadFromDb(data.balance, data.inventory, data.stats);
                 } else {
-                    // ЕСЛИ ЭТО НОВЫЙ АККАУНТ — СОХРАНЯЕМ ДЕФОЛТНЫЕ СТАРТОВЫЕ ДАННЫЕ В БАЗУ
                     window.syncToDb(window.getCurrentBalance(), window.getCurrentInv(), window.getCurrentStats());
                 }
+                
+                updateChance(); // Обновляем текст кнопки апгрейда
             } else {
-                authOverlay.style.display = 'flex';
-                setTimeout(() => authOverlay.style.opacity = '1', 50);
+                window.isUserLoggedIn = false;
+                document.getElementById('headerLoginBtn').style.display = 'block';
+                document.getElementById('headerUserArea').style.display = 'none';
+                updateChance(); // Обновляем текст кнопки апгрейда (просит войти)
             }
         });
     </script>
