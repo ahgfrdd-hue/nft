@@ -1154,5 +1154,58 @@
         updateBalanceUI();
         renderGrid();
     </script>
+<button id="login-btn" style="padding: 10px 20px; font-size: 16px; background-color: #4285F4; color: white; border: none; border-radius: 5px; cursor: pointer;">
+  Войти через Google
+</button>
+
+<div id="user-info" style="color: white; margin-top: 10px; font-family: sans-serif;"></div>
+
+<script type="module">
+  // Импортируем официальные функции Google Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+  // Твоя ОБНОВЛЕННАЯ конфигурация с нового скриншота
+  const firebaseConfig = {
+    apiKey: "AIzaSyAQrJwnnyrb1Mk_9k8_nQTULWAvLGZ2E4o",
+    authDomain: "flashupgrader.firebaseapp.com",
+    projectId: "flashupgrader",
+    storageBucket: "flashupgrader.firebasestorage.app",
+    messagingSenderId: "336384416642",
+    appId: "1:336384416642:web:f7c66d167d64b2178a4d9b" // Новый ID здесь!
+  };
+
+  // Запуск Firebase на твоем сайте
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  const loginBtn = document.getElementById('login-btn');
+  const userInfo = document.getElementById('user-info');
+
+  // Логика при клике на кнопку «Войти через Google»
+  loginBtn.addEventListener('click', () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        console.log("Успешный вход пользователя:", result.user.displayName);
+      }).catch((error) => {
+        console.error("Ошибка при входе:", error);
+      });
+  });
+
+  // Отслеживание состояния: если пользователь уже входил ранее, сайт это запомнит
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // Если вошел: прячем кнопку входа и пишем приветствие
+      loginBtn.style.display = 'none';
+      userInfo.innerText = 'Привет, ' + user.displayName + '!';
+    } else {
+      // Если не вошел: показываем кнопку
+      loginBtn.style.display = 'block';
+      userInfo.innerText = '';
+    }
+  });
+</script>
+
 </body>
 </html>
