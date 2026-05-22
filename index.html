@@ -87,6 +87,15 @@
         .online-count span { color: var(--text-muted); font-weight: bold; } 
 
         .user-area { display: flex; align-items: center; gap: 14px; min-height: 38px;}
+        
+        .lang-switch {
+            display: flex; align-items: center; gap: 6px; background: var(--bg-card);
+            border: 1px solid var(--border-color); padding: 6px 10px; border-radius: var(--radius-sm);
+            font-size: 12px; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: var(--transition);
+        }
+        .lang-switch:hover { border-color: var(--accent-main); }
+        .lang-switch span.active { color: var(--text-main); }
+        .lang-switch .divider { color: #333; font-weight: 400; }
 
         .balance-block { display: flex; flex-direction: column; align-items: flex-end; }
         .balance-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
@@ -245,18 +254,25 @@
             animation: floatEffect 5s ease-in-out infinite; 
         }
         
-        /* === ТРИ СТРЕЛОЧКИ В КАРТОЧКАХ === */
-        .slot-arrow-wrapper { 
-            position: relative; z-index: 2; margin-bottom: 8px; 
-            display: flex; justify-content: center; align-items: center; gap: 4px;
+        /* === АНИМИРОВАННЫЕ ТРОЙНЫЕ СТРЕЛОЧКИ В СЛОТАХ === */
+        .slot-arrow-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            margin-bottom: 8px;
+            gap: 2px;
         }
-        .slot-arrow {
-            width: 12px; height: 35px; 
+        .slot-arrow-container.down { animation: floatArrowDown 1.5s ease-in-out infinite; }
+        .slot-arrow-container.up { animation: floatArrowUp 1.5s ease-in-out infinite; }
+        
+        .slot-arrow-sub {
+            width: 14px; height: 16px;
             filter: drop-shadow(0 0 8px var(--accent-glow));
         }
-        .slot-arrow-wrapper.down .slot-arrow { transform: rotate(180deg); }
-        .slot-arrow-wrapper.down { animation: floatArrowDown 1.5s ease-in-out infinite; }
-        .slot-arrow-wrapper.up { animation: floatArrowUp 1.5s ease-in-out infinite; }
+        .slot-arrow-container.down .slot-arrow-sub { transform: rotate(180deg); }
         
         @keyframes floatArrowDown {
             0%, 100% { transform: translateY(0); }
@@ -432,6 +448,14 @@
 
         /* === ФУТЕР === */
         footer { margin-top: auto; padding: 24px 16px; background: var(--bg-panel); border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .lang-switch-footer {
+            display: flex; align-items: center; gap: 6px; background: var(--bg-card);
+            border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 30px;
+            font-size: 13px; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: var(--transition);
+        }
+        .lang-switch-footer:hover { border-color: var(--accent-main); }
+        .lang-switch-footer span.active { color: var(--text-main); }
+        .lang-switch-footer .divider { color: #333; font-weight: 400; }
         
         .footer-contacts { display: flex; align-items: center; gap: 10px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 12px 24px; border-radius: 30px; color: var(--text-main); font-size: 14px; font-weight: 700; text-decoration: none; transition: var(--transition); }
         .footer-contacts:hover { border-color: #2AABEE; background: var(--bg-card-hover); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(42, 171, 238, 0.2); }
@@ -464,7 +488,7 @@
         }
         .amount-btn:hover { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); transform: translateY(-2px); }
 
-        /* === ПРОФИЛЬ === */
+        /* === НОВЫЙ ПРОФИЛЬ === */
         .profile-page-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(10, 10, 15, 0.96); backdrop-filter: blur(20px);
@@ -608,10 +632,10 @@
                 <div class="arena-row">
                     <div class="item-slot" id="slotLeft" onclick="playSound('sfxClick'); document.getElementById('gridMyContent').scrollIntoView({behavior: 'smooth'})">
                         <img src="16201.png" class="slot-bg-pepe">
-                        <div class="slot-arrow-wrapper down">
-                            <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                            <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                            <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                        <div class="slot-arrow-container down">
+                            <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                            <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                            <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
                         </div>
                         <span class="slot-hint">Ваш предмет</span>
                     </div>
@@ -658,10 +682,10 @@
 
                     <div class="item-slot" id="slotRight" onclick="playSound('sfxClick'); document.getElementById('gridShopContent').scrollIntoView({behavior: 'smooth'})">
                         <img src="16201.png" class="slot-bg-pepe">
-                        <div class="slot-arrow-wrapper up">
-                            <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                            <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                            <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                        <div class="slot-arrow-container up">
+                            <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                            <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                            <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
                         </div>
                         <span class="slot-hint">Желаемый предмет</span>
                     </div>
@@ -872,16 +896,21 @@
         giftPool.sort((a, b) => parseInt(a.price) - parseInt(b.price));
 
         let balance = 10000;
-        let myInventoryData = [giftPool[0], giftPool[1], giftPool[4], giftPool[8]];
-        let stats = { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0, nickname: '' };
+        localStorage.setItem('ub_balance', 10000);
+        
+        let myInventoryData = JSON.parse(localStorage.getItem('ub_inv')) || [giftPool[0], giftPool[1], giftPool[4], giftPool[8]];
+        let stats = JSON.parse(localStorage.getItem('ub_stats')) || { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0, nickname: '' };
         
         window.isUserLoggedIn = localStorage.getItem('ub_logged_in') === 'true';
 
+        if(stats.withdrawn === undefined) stats.withdrawn = 0;
+        
         let selectedLeft = null;
         let selectedRight = null;
         let isProcessing = false;
         let arrowRotation = 0; 
         const circleCircumference = 534; 
+
         let promoInterval = null;
 
         const avatarUpload = document.getElementById('avatarUpload');
@@ -901,8 +930,10 @@
         function updateAvatarDisplay() {
             let avatarData = localStorage.getItem('ub_avatar');
             const defaultAvatarHtml = `<img src="frog_ninja.png" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+            
             const hd = document.getElementById('headerAvatar');
             const md = document.getElementById('modalAvatar');
+            
             if(avatarData) {
                 const imgHtml = `<img src="${avatarData}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
                 if(hd) hd.innerHTML = imgHtml;
@@ -944,12 +975,17 @@
                 `;
                 document.getElementById('promoRight1').innerHTML = `<img src="${right1.img}" onerror="this.src='16201.png'">`;
                 document.getElementById('promoRight2').innerHTML = `<img src="${right2.img}" onerror="this.src='16201.png'">`;
+                
                 promoDisplay.style.opacity = '1';
             }, 500);
         }
 
         function saveData() {
-            if (window.syncToDb && window.isUserLoggedIn) {
+            localStorage.setItem('ub_balance', balance);
+            localStorage.setItem('ub_inv', JSON.stringify(myInventoryData));
+            localStorage.setItem('ub_stats', JSON.stringify(stats));
+
+            if (window.syncToDb) {
                 window.syncToDb(balance, myInventoryData, stats);
             }
         }
@@ -960,6 +996,7 @@
             stats = dbStats || { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0, nickname: '' };
             if(stats.withdrawn === undefined) stats.withdrawn = 0;
             
+            saveData(); 
             updateBalanceUI();
             updateProfileName();
             renderGrid();
@@ -972,6 +1009,7 @@
         function updateBalanceUI() { 
             let formatted = Math.floor(balance).toLocaleString('ru-RU');
             document.getElementById('userBalance').innerText = formatted + ' ⭐'; 
+            
             let pBalance = document.getElementById('profileBalanceVal');
             if(pBalance) pBalance.innerText = formatted + ' ⭐';
         }
@@ -998,6 +1036,7 @@
         function renderGrid() {
             const combined = document.getElementById('combinedInventory');
             const promoBlock = document.getElementById('unauthPromoBlock');
+            
             const priceFromStr = document.getElementById('priceFrom')?.value;
             const priceToStr = document.getElementById('priceTo')?.value;
             const pFrom = priceFromStr ? parseInt(priceFromStr) : 0;
@@ -1020,6 +1059,7 @@
 
             const gridMy = document.getElementById('gridMyContent');
             const gridShop = document.getElementById('gridShopContent');
+
             gridMy.innerHTML = '';
             
             myInventoryData.forEach((item, idx) => {
@@ -1043,7 +1083,9 @@
                     gridMy.innerHTML += `
                         <div class="item-card empty-slot" style="opacity: 0.5; pointer-events: none; border-color: var(--border-color); cursor: default;">
                             <div class="item-img-container"><img src="16201.png" style="filter: brightness(0); opacity: 0.8;"></div>
-                            <div class="item-info"><div class="item-sub" style="color: #555;"></div></div>
+                            <div class="item-info">
+                                <div class="item-sub" style="color: #555;"></div>
+                            </div>
                         </div>
                     `;
                 }
@@ -1067,6 +1109,7 @@
 
         function selectItem(index, type) {
             if (isProcessing) return;
+            
             const priceFromStr = document.getElementById('priceFrom')?.value;
             const priceToStr = document.getElementById('priceTo')?.value;
             const pFrom = priceFromStr ? parseInt(priceFromStr) : 0;
@@ -1086,15 +1129,11 @@
 
         function renderSlot(slotId, item, arrowDir) {
             const slot = document.getElementById(slotId);
-            slot.className = `item-slot active ${item.rarity}`;
+            slot.classList.remove('rarity-epic', 'rarity-legendary', 'rarity-mythic', 'rarity-immortal');
+            slot.classList.add('active', item.rarity);
             
             slot.innerHTML = `
                 <div style="font-size:12px; font-weight:800; color:#fff; position: relative; z-index: 2; margin-bottom: auto;">${item.sub}</div>
-                <div class="slot-arrow-wrapper ${arrowDir}">
-                    <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                    <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                    <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                </div>
                 <div style="margin: 8px 0; flex: 1; display:flex; align-items:center; justify-content:center; position: relative; z-index: 2;">
                     <img src="${item.img}" class="slot-item-img" style="max-height:80px; max-width:90%; object-fit:contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
                 </div>
@@ -1112,22 +1151,28 @@
             if (!selectedLeft || !selectedRight) {
                 btn.disabled = true;
                 btn.innerText = 'ВЫБЕРИТЕ ПРЕДМЕТЫ';
-                btn.style.background = ''; btn.style.boxShadow = '';
-                bars.style.display = 'block'; chanceDisplay.style.display = 'none';
+                btn.style.background = '';
+                btn.style.boxShadow = '';
+                bars.style.display = 'block';
+                chanceDisplay.style.display = 'none';
                 document.getElementById('wheelCircle').style.strokeDashoffset = circleCircumference;
                 return;
             }
 
             if (!window.isUserLoggedIn) {
-                btn.disabled = false; btn.innerText = 'ВОЙТИ ДЛЯ АПГРЕЙДА';
+                btn.disabled = false;
+                btn.innerText = 'ВОЙТИ ДЛЯ АПГРЕЙДА';
                 btn.style.background = 'linear-gradient(135deg, var(--accent-main), #b838ff)';
                 btn.style.boxShadow = '0 8px 25px var(--accent-glow)';
-                bars.style.display = 'none'; chanceDisplay.style.display = 'block';
+                bars.style.display = 'none';
+                chanceDisplay.style.display = 'block';
                 return;
             }
             
-            btn.disabled = false; btn.innerText = 'АПГРЕЙД';
-            bars.style.display = 'none'; chanceDisplay.style.display = 'block';
+            btn.disabled = false;
+            btn.innerText = 'АПГРЕЙД';
+            bars.style.display = 'none';
+            chanceDisplay.style.display = 'block';
 
             let chance = (parseFloat(selectedLeft.price) / parseFloat(selectedRight.price)) * 100;
             if (chance > 95) chance = 95;
@@ -1137,17 +1182,39 @@
             document.getElementById('wheelCircle').style.strokeDashoffset = circleCircumference - (circleCircumference * (chance / 100));
 
             if (chance >= 75) {
-                chanceLabel.innerText = "ВЫСОКИЙ ШАНС"; chanceLabel.style.color = "rgba(43, 203, 186, 0.5)"; 
-                btn.disabled = true; btn.innerText = 'ШАНС СЛИШКОМ ВЫСОКИЙ'; btn.style.background = 'var(--bg-card)';
+                chanceLabel.innerText = "ВЫСОКИЙ ШАНС";
+                chanceLabel.style.color = "rgba(43, 203, 186, 0.5)"; 
+                chanceLabel.style.fontSize = "13px";
+                chanceText.style.opacity = "0.9";
+                chanceText.style.fontSize = "32px";
+                
+                btn.disabled = true;
+                btn.innerText = 'ШАНС СЛИШКОМ ВЫСОКИЙ';
+                btn.style.background = 'var(--bg-card)';
             } else if (chance >= 50) {
-                chanceLabel.innerText = "СРЕДНИЙ ШАНС"; chanceLabel.style.color = "rgba(253, 150, 68, 0.6)";
-                btn.style.background = ''; btn.style.boxShadow = '';
+                chanceLabel.innerText = "СРЕДНИЙ ШАНС";
+                chanceLabel.style.color = "rgba(253, 150, 68, 0.6)";
+                chanceLabel.style.fontSize = "12px";
+                chanceText.style.opacity = "0.8";
+                chanceText.style.fontSize = "32px";
+                btn.style.background = '';
+                btn.style.boxShadow = '';
             } else if (chance >= 25) {
-                chanceLabel.innerText = "МАЛЕНЬКИЙ ШАНС"; chanceLabel.style.color = "rgba(165, 94, 234, 0.7)";
-                btn.style.background = ''; btn.style.boxShadow = '';
+                chanceLabel.innerText = "МАЛЕНЬКИЙ ШАНС";
+                chanceLabel.style.color = "rgba(165, 94, 234, 0.7)";
+                chanceLabel.style.fontSize = "11px";
+                chanceText.style.opacity = "0.7";
+                chanceText.style.fontSize = "32px";
+                btn.style.background = '';
+                btn.style.boxShadow = '';
             } else {
-                chanceLabel.innerText = "ОЧЕНЬ МАЛЕНЬКИЙ ШАНС"; chanceLabel.style.color = "rgba(252, 92, 101, 0.8)";
-                btn.style.background = ''; btn.style.boxShadow = '';
+                chanceLabel.innerText = "ОЧЕНЬ МАЛЕНЬКИЙ ШАНС";
+                chanceLabel.style.color = "rgba(252, 92, 101, 0.8)";
+                chanceLabel.style.fontSize = "10px";
+                chanceText.style.opacity = "0.6";
+                chanceText.style.fontSize = "28px";
+                btn.style.background = '';
+                btn.style.boxShadow = '';
             }
         }
 
@@ -1157,8 +1224,11 @@
 
         function executeUpgrade() {
             if (!window.isUserLoggedIn) {
-                playSound('sfxClick'); openModal('authModal'); return;
+                playSound('sfxClick');
+                openModal('authModal');
+                return;
             }
+
             if (isProcessing || !selectedLeft || !selectedRight) return;
             
             isProcessing = true;
@@ -1169,18 +1239,26 @@
             const isFastUpgrade = document.getElementById('fastUpgradeCheck').checked;
             
             let chance = (parseFloat(selectedLeft.price) / parseFloat(selectedRight.price)) * 100;
+            
             if (chance >= 80) {
                 alert('Максимальный шанс для апгрейда составляет 79.99%!');
                 isProcessing = false;
+                btn.innerText = 'ШАНС СЛИШКОМ ВЫСОКИЙ';
+                btn.style.background = 'var(--bg-card)';
                 return;
             }
 
             btn.innerText = 'Улучшение...';
             
             let sndSpin = document.getElementById('sfxSpin');
-            if(sndSpin) { sndSpin.currentTime = 0; sndSpin.loop = true; sndSpin.play().catch(()=>{}); }
+            if(sndSpin) {
+                sndSpin.currentTime = 0;
+                sndSpin.loop = true;
+                sndSpin.play().catch(()=>{});
+            }
 
             let animationDuration = isFastUpgrade ? 800 : 3800;
+            
             if (chance > 95) chance = 95;
             if (chance < 1) chance = 1;
             
@@ -1202,31 +1280,40 @@
             let baseRotation = Math.floor(arrowRotation / 360) * 360; 
             
             targetRotation = baseRotation + extraSpins + targetSectorDeg;
-            if (targetRotation <= arrowRotation) targetRotation += 360;
+            if (targetRotation <= arrowRotation) {
+                targetRotation += 360;
+            }
             startRotation = arrowRotation; 
             stats.total++;
 
             const indexToRemove = myInventoryData.indexOf(selectedLeft);
-            if (indexToRemove !== -1) myInventoryData.splice(indexToRemove, 1);
+            if (indexToRemove !== -1) {
+                myInventoryData.splice(indexToRemove, 1);
+            }
 
             let animationStartTime = performance.now();
 
             function animateRotation(timestamp) {
                 let elapsed = timestamp - animationStartTime;
+                
                 if (elapsed > animationDuration) {
                     arrowSpinner.style.transform = `rotate(${targetRotation}deg)`;
                     arrowRotation = targetRotation; 
                     afterSpin(isWin); 
                     return;
                 }
+
                 let progress = elapsed / animationDuration;
                 let totalDiff = targetRotation - startRotation;
+                
                 let t = 1 - progress;
                 let currentVisualRotation = startRotation + totalDiff * (1 - t * t * t);
                 
                 arrowSpinner.style.transform = `rotate(${currentVisualRotation}deg)`;
+                
                 rotationAnimationRequest = requestAnimationFrame(animateRotation);
             }
+
             requestAnimationFrame(animateRotation); 
         }
 
@@ -1250,36 +1337,37 @@
                 let rightItemImg = rightSlot.querySelector('.slot-item-img');
                 if(rightItemImg) rightItemImg.classList.add('win-item-anim');
                 
-                // Рассчитываем конфетти строго внутри правой карточки предмета
-                let rect = rightSlot.getBoundingClientRect();
-                let x = (rect.left + rect.width / 2) / window.innerWidth;
-                let y = (rect.top + rect.height / 2) / window.innerHeight;
+                // ВЗРЫВ КОНФЕТТИ НА ВЕСЬ ЭКРАН (ИЗ ЦЕНТРА)
                 if(window.confetti) {
                     confetti({
-                        particleCount: 80, 
-                        spread: 60,
-                        origin: { x: x, y: y },
+                        particleCount: 150, 
+                        spread: 100,
+                        origin: { x: 0.5, y: 0.5 },
                         colors: ['#a55eea', '#00e5ff', '#ffffff']
                     });
                 }
                 
                 myInventoryData.push(selectedRight);
+                
                 if (!stats.bestDrop || parseFloat(selectedRight.price) > parseFloat(stats.bestDrop.price)) {
                     stats.bestDrop = selectedRight;
                 }
 
-                // Проверка закрепа в Live-ленте при твоем выигрыше
-                if (parseFloat(selectedRight.price) >= 100000) {
-                    pinToLiveTicker(selectedRight, chanceText.innerText);
-                }
+                // Закреп топового выигрыша в ленте, если подарок стоит больше 100 000
+                pinToLiveTicker(selectedRight, chanceText.innerText);
 
             } else {
                 stats.losses++;
                 btn.style.background = 'var(--rarity-mythic)';
                 btn.style.boxShadow = '0 8px 25px rgba(252, 92, 101, 0.5)';
+                
                 chanceText.innerText = '0.00%';
+                chanceText.style.opacity = "1";
+                chanceText.style.fontSize = "32px";
                 chanceLabel.innerText = 'шанс';
                 chanceLabel.style.color = "var(--text-muted)";
+                chanceLabel.style.fontSize = "11px";
+                
                 document.getElementById('wheelCircle').style.strokeDashoffset = 534;
             }
 
@@ -1287,19 +1375,24 @@
             updateBalanceUI();
 
             setTimeout(() => {
-                btn.style.background = ''; btn.style.boxShadow = '';
-                btn.innerText = 'ВЫБЕРИТЕ ПРЕДМЕТЫ'; btn.disabled = true;
+                btn.style.background = '';
+                btn.style.boxShadow = '';
+                btn.innerText = 'ВЫБЕРИТЕ ПРЕДМЕТЫ';
+                btn.disabled = true;
                 arena.className = 'upgrade-arena'; 
+                
                 selectedLeft = null; selectedRight = null;
+                
+                // ИСПРАВЛЕНА АНИМАЦИЯ: Сброс углов вращения для корректного следующего цикла
                 arrowRotation = 0;
                 document.getElementById('arrowSpinner').style.transform = `rotate(0deg)`;
                 
                 document.getElementById('slotLeft').innerHTML = `
                     <img src="16201.png" class="slot-bg-pepe">
-                    <div class="slot-arrow-wrapper down">
-                        <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                        <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                        <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                    <div class="slot-arrow-container down">
+                        <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                        <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                        <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
                     </div>
                     <span class="slot-hint">Ваш предмет</span>
                 `;
@@ -1307,19 +1400,22 @@
                 
                 document.getElementById('slotRight').innerHTML = `
                     <img src="16201.png" class="slot-bg-pepe">
-                    <div class="slot-arrow-wrapper up">
-                        <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                        <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                        <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                    <div class="slot-arrow-container up">
+                        <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                        <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                        <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
                     </div>
                     <span class="slot-hint">Желаемый предмет</span>
                 `;
                 document.getElementById('slotRight').className = 'item-slot';
                 
-                updateChance(); renderGrid(); isProcessing = false;
+                updateChance(); 
+                renderGrid();
+                isProcessing = false;
             }, 2500); 
         }
 
+        // РЕНДЕР ЛУЧШЕГО ДРОПА (БЕЗ ОТОБРАЖЕНИЯ ЦЕНЫ ПОДАРКА)
         function renderBestDrop() {
             const container = document.getElementById('bestDropContainer');
             if (!stats.bestDrop) {
@@ -1329,12 +1425,15 @@
                 `;
                 return;
             }
+            
             let item = stats.bestDrop;
             container.innerHTML = `
                 <div class="bd-header">👑 Лучший дроп</div>
                 <div class="bd-content" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                     <div style="display: flex; align-items: center; gap: 16px; min-width: 0;">
-                        <div class="bd-img-container" style="flex-shrink: 0;"><img src="${item.img}" onerror="this.src='16201.png'"></div>
+                        <div class="bd-img-container" style="flex-shrink: 0;">
+                            <img src="${item.img}" onerror="this.src='16201.png'">
+                        </div>
                         <div class="bd-info" style="min-width: 0; overflow: hidden;">
                             <div class="bd-name" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.sub}</div>
                             <div class="bd-rarity">${item.title}</div>
@@ -1350,6 +1449,7 @@
             if(id === 'profileModal') {
                 document.getElementById('profileTotalUpgradesBlock').innerText = stats.total;
                 updateProfileName();
+                
                 switchProfileTab('stats');
                 renderBestDrop();
             }
@@ -1404,7 +1504,10 @@
             let item = myInventoryData[idx];
             balance += item.price * 0.15;
             myInventoryData.splice(idx, 1);
-            saveData(); updateBalanceUI(); renderProfileSellList(); renderGrid();
+            saveData();
+            updateBalanceUI();
+            renderProfileSellList();
+            renderGrid();
         }
 
         function renderProfileBuyList() {
@@ -1426,10 +1529,18 @@
         function buyFromProfile(itemId) {
             const targetItem = giftPool.find(p => p.id === itemId);
             let cost = parseFloat(targetItem.price);
-            if(cost > balance) { alert('Недостаточно звезд на балансе для покупки!'); return; }
+            
+            if(cost > balance) {
+                alert('Недостаточно звезд на балансе для покупки!');
+                return;
+            }
+
             balance -= cost;
             myInventoryData.push(targetItem);
-            saveData(); updateBalanceUI(); renderProfileBuyList(); renderGrid();
+            saveData();
+            updateBalanceUI();
+            renderProfileBuyList();
+            renderGrid();
             alert(`Вы успешно приобрели ${targetItem.sub}! Он добавлен в инвентарь.`);
         }
 
@@ -1445,15 +1556,23 @@
 
         function processDeposit() {
             const amount = parseInt(document.getElementById('depositAmount').value);
-            if (!amount || amount < 10) { alert('Минимальная сумма — 10 ⭐'); return; }
+            if (!amount || amount < 10) { 
+                alert('Минимальная сумма — 10 ⭐'); 
+                return; 
+            }
+            
             let userId = 'user_123';
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
                 userId = window.Telegram.WebApp.initDataUnsafe.user.id;
             }
+            
             const paymentUrl = `https://flashupgrader-1.onrender.com/pay?amount=${amount}&userId=${userId}`;
+            
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) {
                 window.Telegram.WebApp.openLink(paymentUrl);
-            } else { window.location.href = paymentUrl; }
+            } else {
+                window.location.href = paymentUrl;
+            }
         }
 
         function processWithdraw() {
@@ -1461,8 +1580,13 @@
             const details = document.getElementById('withdrawDetails').value.trim();
             if(!details || !amount) { alert('Пожалуйста, заполните все поля!'); return; }
             if(amount > balance) { alert('На балансе недостаточно звезд!'); return; }
-            balance -= amount; stats.withdrawn += amount;
-            saveData(); updateBalanceUI(); closeModal('profileModal');
+            
+            balance -= amount;
+            stats.withdrawn += amount;
+            saveData();
+            updateBalanceUI();
+            
+            closeModal('profileModal');
             alert(`Заявка на вывод ${amount} ⭐ на пользователя [${details}] успешно принята! Ожидайте зачисления.`);
         }
 
@@ -1475,39 +1599,38 @@
             countNode.innerText = current.toLocaleString('ru-RU');
         }
 
-        // Функция фиксации и закрепа ТОП дропов в лайв ленте (sticky-закреп)
+        // ФУНКЦИЯ ЗАКРЕПА ТОПОВОГО ВЫИГРЫША (> 100K ⭐) В ЛАЙВ-ЛЕНТЕ
         function pinToLiveTicker(item, chanceStr) {
+            if (parseFloat(item.price) < 100000) return; // Условие закрепа строго от 100к звезд
+
             const ticker = document.getElementById('liveTicker');
             const existingPin = document.getElementById('pinnedLiveDrop');
             if (existingPin) existingPin.remove();
 
             const html = `
-                <div id="pinnedLiveDrop" class="ticker-item success-stripe" style="border-left-color: #ffcc00; background: rgba(255, 204, 0, 0.15); border: 1px solid #ffcc00; position: sticky; left: 0; z-index: 10;">
+                <div id="pinnedLiveDrop" class="ticker-item success-stripe" style="border-left-color: #ffcc00; background: rgba(255, 204, 0, 0.15); border: 2px solid #ffcc00; position: sticky; left: 0; z-index: 10;">
                     <span style="font-size:10px; background:#ffcc00; color:#000; padding:2px 4px; border-radius:4px; font-weight:900;">📌 ТОП ДРОП</span>
                     <img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'">
                     <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 90px;">${item.sub}</span>
                     <span class="ticker-chance" style="color: #ffcc00; background: rgba(255,204,0,0.2); border-color: rgba(255,204,0,0.4);">${chanceStr}</span>
                 </div>
             `;
+            
             ticker.insertAdjacentHTML('afterbegin', html);
+            
             setTimeout(() => {
                 const el = document.getElementById('pinnedLiveDrop');
                 if(el) el.remove();
-            }, 30000);
+            }, 20000); // Закреп держится 20 секунд
         }
 
         function updateTicker() {
             const ticker = document.getElementById('liveTicker');
             const item = giftPool[Math.floor(Math.random() * giftPool.length)];
             const chance = (Math.random() * 80 + 1).toFixed(2);
+            
             const color = rarityColors[item.rarity] || '#00e5ff';
             
-            // Если фейковый дроп из общего пула стоит больше 100к - триггерим его закреп
-            if (parseFloat(item.price) >= 100000) {
-                pinToLiveTicker(item, chance + '%');
-                return;
-            }
-
             const html = `
                 <div class="ticker-item success-stripe" style="border-left-color: ${color};">
                     <img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'">
@@ -1517,8 +1640,11 @@
             `;
             
             const pinnedNode = document.getElementById('pinnedLiveDrop');
-            if (pinnedNode) { pinnedNode.insertAdjacentHTML('afterend', html); } 
-            else { ticker.insertAdjacentHTML('afterbegin', html); }
+            if (pinnedNode) {
+                pinnedNode.insertAdjacentHTML('afterend', html);
+            } else {
+                ticker.insertAdjacentHTML('afterbegin', html);
+            }
             
             const maxItems = window.innerWidth > 900 ? 15 : 6;
             if (ticker.children.length > maxItems) ticker.removeChild(ticker.lastChild);
@@ -1526,9 +1652,10 @@
 
         setInterval(updateOnline, 3000);
         setInterval(updateTicker, 2200);
-        updateBalanceUI(); renderGrid();
+        
+        updateBalanceUI();
+        renderGrid();
     </script>
-    
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -1545,7 +1672,9 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        
         setPersistence(auth, browserLocalPersistence);
+
         window.auth = auth;
         const db = getFirestore(app);
 
@@ -1559,7 +1688,9 @@
             if (auth.currentUser) {
                 try {
                     await setDoc(doc(db, "users", auth.currentUser.uid), {
-                        balance: bal, inventory: inv, stats: st
+                        balance: bal,
+                        inventory: inv,
+                        stats: st
                     });
                 } catch(e) { console.error("Ошибка сохранения в БД: ", e); }
             }
@@ -1570,6 +1701,7 @@
             const email = emailInput.value.trim();
             const pass = passInput.value.trim();
             if(!email || !pass) return alert("Введите почту и пароль");
+            
             loginBtn.innerText = "Вход...";
             signInWithEmailAndPassword(auth, email, pass).catch(error => {
                 alert("Ошибка входа: Неверный логин или пароль");
@@ -1583,6 +1715,7 @@
             const pass = passInput.value.trim();
             if(!email || !pass) return alert("Введите почту и пароль");
             if(pass.length < 6) return alert("Пароль должен быть минимум 6 символов");
+            
             registerBtn.innerText = "Создание...";
             createUserWithEmailAndPassword(auth, email, pass).catch(error => {
                 alert("Ошибка регистрации: " + error.message);
@@ -1594,8 +1727,9 @@
             logoutBtn.addEventListener('click', () => {
                 playSound('sfxClick');
                 signOut(auth).then(() => {
+                    // ИСПРАВЛЕНО: Вместо localStorage.clear() сбрасываем только флаги сессии.
+                    // Данные профиля в БД больше не затрутся пустыми значениями.
                     localStorage.setItem('ub_logged_in', 'false');
-                    // Очищаем только сессионные стейты, не трогая саму структуру БД
                     location.reload(); 
                 });
             });
@@ -1604,6 +1738,7 @@
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 closeModal('authModal');
+                
                 window.isUserLoggedIn = true;
                 localStorage.setItem('ub_logged_in', 'true');
                 
@@ -1619,13 +1754,18 @@
                 } else {
                     window.syncToDb(window.getCurrentBalance(), window.getCurrentInv(), window.getCurrentStats());
                 }
-                renderGrid(); updateChance(); 
+                
+                renderGrid();
+                updateChance(); 
             } else {
                 window.isUserLoggedIn = false;
                 localStorage.setItem('ub_logged_in', 'false');
+                
                 document.getElementById('headerLoginBtn').style.display = 'block';
                 document.getElementById('headerUserArea').style.display = 'none';
-                renderGrid(); updateChance(); 
+                
+                renderGrid();
+                updateChance(); 
             }
         });
     </script>
