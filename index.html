@@ -28,7 +28,7 @@
             --radius-lg: 20px;
             --radius-md: 14px;
             --radius-sm: 8px;
-            --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); /* Улучшенная плавная анимация */
         }
 
         * {
@@ -174,85 +174,17 @@
             box-shadow: 0 8px 30px rgba(0,0,0,0.6);
         }
         
-        /* ОБНОВЛЕННЫЙ БЛОК УПРАВЛЕНИЯ (ИЗ ВТОРОГО ФОТО В СТИЛЕ ПЕРВОГО) */
-        .top-left-controls { 
+        .fast-upgrade-wrapper { 
             position: absolute; top: 16px; left: 16px; z-index: 10; 
-            display: flex; gap: 14px; align-items: center;
-            background: #16161f; padding: 6px 14px; border-radius: 30px;
-            border: 1px solid #22222e;
         }
-        .control-icon {
-            background: transparent; border: none; cursor: pointer; color: #5a5a6e; 
-            font-size: 16px; transition: 0.3s; display: flex; align-items: center; justify-content: center;
-        }
-        .control-icon:hover { transform: scale(1.1); }
-        .control-icon.gear-btn { color: #5a5a6e; }
-        .control-icon.sound-btn { color: #ffcc00; }
-        
         .fast-upgrade-label { cursor: pointer; display: flex; align-items: center; }
         .fast-upgrade-label input { display: none; }
         .lightning-icon { 
-            width: 18px; height: 18px; fill: #5a5a6e; 
-            transition: all 0.3s;
+            width: 26px; height: 26px; fill: var(--text-muted); 
+            transition: all 0.3s; filter: drop-shadow(0 0 0 transparent);
         }
         .fast-upgrade-label input:checked + .lightning-icon { 
-            fill: #ffcc00; transform: scale(1.1);
-        }
-        .controls-divider {
-            width: 1px; height: 14px; background-color: #2c2c3d; margin: 0 2px;
-        }
-
-        /* КОМПОНЕНТЫ НАСТРОЕК В СТИЛЕ ТРЕТЬЕГО СКРИНШОТА */
-        .settings-section-title {
-            font-size: 11px; font-weight: 800; color: var(--text-muted);
-            text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; margin-top: 14px;
-        }
-        .settings-section-title:first-of-type { margin-top: 0; }
-        .settings-grid-buttons {
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 14px;
-        }
-        .settings-opt-btn {
-            background: #1a1a26; border: 1px solid #2b2b3d; color: var(--text-main);
-            padding: 10px 4px; border-radius: 8px; font-size: 13px; font-weight: 700;
-            cursor: pointer; transition: var(--transition); text-align: center;
-        }
-        .settings-opt-btn.active {
-            background: var(--accent-main); border-color: var(--accent-main); color: #fff;
-        }
-        .settings-toggle-row {
-            display: flex; justify-content: space-between; align-items: center;
-            background: #1a1a26; border: 1px solid #2b2b3d; padding: 12px 14px;
-            border-radius: 10px; margin-bottom: 12px;
-        }
-        .settings-toggle-label {
-            font-size: 13px; font-weight: 700; color: var(--text-main);
-        }
-        .settings-switch-box {
-            display: flex; background: #13131c; border-radius: 6px; padding: 2px; border: 1px solid #22222e;
-        }
-        .settings-switch-item {
-            padding: 6px 12px; font-size: 11px; font-weight: 800; text-transform: uppercase;
-            border-radius: 4px; color: var(--text-muted); cursor: pointer; transition: 0.2s;
-        }
-        .settings-switch-item.active {
-            background: #222230; color: #fff;
-        }
-        .settings-save-btn {
-            width: 100%; background: #ffcc00; color: #000; border: none; padding: 14px;
-            border-radius: 10px; font-size: 14px; font-weight: 800; cursor: pointer;
-            text-transform: uppercase; letter-spacing: 0.5px; margin-top: 16px; transition: var(--transition);
-        }
-        .settings-save-btn:hover { background: #e6b800; }
-
-        @media (max-width: 650px) {
-            .arena-row {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 20px;
-            }
-            #slotLeft { grid-column: 1; grid-row: 1; max-width: none; flex: auto; }
-            #slotRight { grid-column: 2; grid-row: 1; max-width: none; flex: auto; }
-            .wheel-container { grid-column: 1 / 3; grid-row: 2; margin: 20px auto 0; }
+            fill: #FFD700; filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6)); transform: scale(1.1);
         }
 
         @keyframes floatEffect {
@@ -261,6 +193,7 @@
             100% { transform: translateY(0px) scale(1); }
         }
 
+        /* Анимация победы на самом предмете */
         @keyframes winItemPop {
             0% { transform: scale(1) translateX(0); filter: drop-shadow(0 0 0 transparent); }
             20% { transform: scale(1.25) translateX(-8px) rotate(-5deg); filter: drop-shadow(0 0 30px var(--accent-main)); }
@@ -280,7 +213,7 @@
             justify-content: space-between;
             width: 100%;
             z-index: 2;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         .item-slot {
@@ -294,15 +227,16 @@
         
         .item-slot:hover { border-color: var(--text-muted); background: var(--bg-card-hover); transform: translateY(-3px); }
         
+        /* ЦВЕТА РЕДКОСТИ ДЛЯ СЛОТОВ */
         .item-slot.active.rarity-epic { border: 2px solid var(--rarity-epic); background: rgba(165, 94, 234, 0.05); box-shadow: 0 0 20px rgba(165, 94, 234, 0.2) inset; transform: translateY(0); }
         .item-slot.active.rarity-legendary { border: 2px solid var(--rarity-legendary); background: rgba(253, 150, 68, 0.05); box-shadow: 0 0 20px rgba(253, 150, 68, 0.2) inset; transform: translateY(0); }
         .item-slot.active.rarity-mythic { border: 2px solid var(--rarity-mythic); background: rgba(252, 92, 101, 0.05); box-shadow: 0 0 20px rgba(252, 92, 101, 0.2) inset; transform: translateY(0); }
         .item-slot.active.rarity-immortal { border: 2px solid var(--rarity-immortal); background: rgba(43, 203, 186, 0.05); box-shadow: 0 0 20px rgba(43, 203, 186, 0.2) inset; transform: translateY(0); }
 
+        /* Пепа вернулась в цвете, но полупрозрачная */
         .slot-bg-pepe {
             position: absolute; width: 75%; height: 75%; object-fit: contain;
-            opacity: 0.1; z-index: 1; pointer-events: none;
-            filter: brightness(0); 
+            opacity: 0.15; z-index: 1; pointer-events: none;
             animation: floatEffect 4s ease-in-out infinite; 
         }
         
@@ -342,10 +276,9 @@
             will-change: transform;
         }
         
-        /* УЗКАЯ СТРЕЛКА */
         .wheel-arrow {
             position: absolute; top: 15px; left: 50%; transform: translateX(-50%) rotate(180deg);
-            width: 8px; height: 34px; filter: drop-shadow(0 0 6px var(--accent-glow));
+            width: 10px; height: 32px; filter: drop-shadow(0 0 6px var(--accent-glow));
             transform-origin: center;
         }
 
@@ -355,9 +288,6 @@
             width: 100%; height: 100%; z-index: 5; text-align: center; pointer-events: none;
             padding: 0 10px;
         }
-
-        @keyframes slowSpin { 100% { transform: rotate(360deg); } }
-        .spin-anim { animation: slowSpin 4s linear infinite; }
 
         #chanceDisplay { width: 100%; }
         #chanceDisplay h1 { 
@@ -378,6 +308,17 @@
         }
         .btn-upgrade:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 12px 35px var(--accent-glow); }
         .btn-upgrade:disabled { background: var(--bg-card); color: #555566; cursor: not-allowed; box-shadow: none; border: 1px solid var(--border-color); transform: none; }
+
+        @media (max-width: 650px) {
+            .arena-row {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+            #slotLeft { grid-column: 1; grid-row: 1; max-width: none; flex: auto; }
+            #slotRight { grid-column: 2; grid-row: 1; max-width: none; flex: auto; }
+            .wheel-container { grid-column: 1 / 3; grid-row: 2; margin: 20px auto 0; }
+        }
 
         /* === БЛОК ДЛЯ НЕАВТОРИЗОВАННЫХ === */
         #unauthPromoBlock {
@@ -405,42 +346,16 @@
         .promo-sub { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; white-space: nowrap; }
         .promo-price-tag { font-size: 11px; font-weight: 800; color: #fff; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 8px;}
 
-        /* === ИНВЕНТАРЬ И МАГАЗИН (РАЗДЕЛЕНИЕ) === */
+        /* === ИНВЕНТАРЬ === */
         .inventory-section { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; }
         
-        #combinedInventory { padding: 16px; max-height: 550px; overflow-y: auto; scroll-behavior: smooth; display: none; }
+        #combinedInventory { padding: 16px; max-height: 480px; overflow-y: auto; scroll-behavior: smooth; }
         #combinedInventory::-webkit-scrollbar { width: 6px; }
         #combinedInventory::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
         
-        .inventory-split { display: flex; gap: 20px; align-items: flex-start; }
-        .inv-col { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-        
-        @media (max-width: 768px) {
-            .inventory-split { flex-direction: column; }
-        }
-
         .inv-header-title { font-size: 15px; font-weight: 800; color: #fff; margin: 10px 0 16px; padding-left: 5px; text-transform: uppercase; letter-spacing: 0.5px; border-left: 3px solid var(--accent-main); padding-left: 10px; }
 
-        /* ОБНОВЛЕННЫЙ ФИЛЬТР ЦЕНЫ */
-        .filter-row {
-            display: flex; gap: 8px; margin-bottom: 15px; align-items: center; 
-            background: var(--bg-card); padding: 8px 12px; border-radius: 12px; 
-            border: 1px solid var(--border-color);
-        }
-        .filter-row span { font-size: 11px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; }
-        .filter-input {
-            width: 100%; background: transparent; border: none; color: #fff; 
-            outline: none; font-size: 13px; text-align: center;
-        }
-        .filter-input::placeholder { color: #555; }
-        .filter-btn-search {
-            background: var(--accent-main); border: none; color: white; width: 32px; height: 32px; 
-            border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; transition: var(--transition);
-        }
-        .filter-btn-search:hover { transform: scale(1.05); box-shadow: 0 0 10px var(--accent-glow); }
-
-        .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; align-items: stretch;}
+        .items-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; align-items: stretch;}
         
         .item-card { 
             background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); 
@@ -451,11 +366,12 @@
         }
         .item-card:hover:not(.empty-slot) { background: var(--bg-card-hover); transform: translateY(-5px) scale(1.03); box-shadow: 0 10px 25px rgba(0,0,0,0.5); border-color: #4a4a60; }
         .item-price { font-size: 11px; font-weight: 800; color: #fff; align-self: flex-end; background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); }
-        .item-img-container { width: 100%; height: 75px; display: flex; align-items: center; justify-content: center; margin: 8px 0; }
+        .item-img-container { width: 100%; height: 85px; display: flex; align-items: center; justify-content: center; margin: 8px 0; }
         .item-img-container img { max-width: 90%; max-height: 90%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); transition: var(--transition); }
         .item-card:hover:not(.empty-slot) .item-img-container img { transform: scale(1.1); }
         .item-info { text-align: center; width: 100%; }
         
+        /* Красивые плашки с редкостями */
         .item-rarity-text { 
             font-size: 9px; text-transform: uppercase; font-weight: 800; margin-bottom: 4px;
             padding: 3px 8px; border-radius: 6px; display: inline-block;
@@ -603,12 +519,12 @@
         <div class="user-area">
             <button id="headerLoginBtn" class="btn-deposit" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); font-weight: 800; box-shadow: 0 4px 15px var(--accent-glow); display: none;" onclick="openModal('authModal')">Вход</button>
             
-            <div id="headerUserArea" style="none; align-items: center; gap: 14px;">
+            <div id="headerUserArea" style="display: none; align-items: center; gap: 14px;">
                 <div class="balance-block">
                     <span class="balance-label">Баланс</span>
-                    <div class="balance" id="userBalance">0 ⭐</div>
+                    <div class="balance" id="userBalance">10 000 ⭐</div>
                 </div>
-                <button class="btn-deposit" onclick="openModal('depositModal')">Пополниться</button>
+                <button class="btn-deposit" onclick="openModal('depositModal')">Пополнить</button>
                 <div class="profile-avatar" id="headerAvatar" onclick="openModal('profileModal')">👤</div>
             </div>
         </div>
@@ -619,12 +535,9 @@
 
         <div class="main-content">
             <section class="upgrade-arena" id="arenaBox">
-                <div class="top-left-controls">
-                    <button class="control-icon gear-btn" onclick="openModal('settingsModal')" title="Настройки">⚙️</button>
-                    <button class="control-icon sound-btn" onclick="toggleSound()" id="soundToggleBtn" title="Звук">🔊</button>
-                    <div class="controls-divider"></div>
+                <div class="fast-upgrade-wrapper">
                     <label class="fast-upgrade-label" title="Быстрый апгрейд">
-                        <input type="checkbox" id="fastUpgradeCheck" onchange="syncLightningCheckbox(this.checked)">
+                        <input type="checkbox" id="fastUpgradeCheck">
                         <svg class="lightning-icon" viewBox="0 0 24 24">
                             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                         </svg>
@@ -636,9 +549,9 @@
                         <img src="16201.png" class="slot-bg-pepe">
                         <div class="slot-chevron-container">
                             <svg class="chevron-down" viewBox="0 0 50 75" width="45" height="65">
-                                <path fill="var(--accent-main)" d="M5 10 L25 25 L45 10 L45 20 L25 35 L5 20 Z" />
-                                <path fill="var(--accent-main)" d="M5 30 L25 45 L45 30 L45 40 L25 55 L5 40 Z" />
-                                <path fill="var(--accent-main)" d="M5 50 L25 65 L45 50 L45 60 L25 75 L5 60 Z" />
+                                <path fill="#FFCC00" d="M5 10 L25 25 L45 10 L45 20 L25 35 L5 20 Z" />
+                                <path fill="#FFCC00" d="M5 30 L25 45 L45 30 L45 40 L25 55 L5 40 Z" />
+                                <path fill="#FFCC00" d="M5 50 L25 65 L45 50 L45 60 L25 75 L5 60 Z" />
                             </svg>
                         </div>
                         <span class="slot-hint">Ваш предмет</span>
@@ -658,7 +571,7 @@
                                         <stop offset="100%" stop-color="#4a00e0" />
                                     </linearGradient>
                                 </defs>
-                                <path d="M12 0 L15 32 L13 28 L13 40 L11 40 L11 28 L9 32 Z" fill="url(#arrowGrad)"/>
+                                <path d="M12 0 L18 32 L14 28 L14 40 L10 40 L10 28 L6 32 Z" fill="url(#arrowGrad)"/>
                             </svg>
                         </div>
                         
@@ -677,8 +590,9 @@
                             </svg>
 
                             <div class="wheel-center-content">
-                                <svg id="centerChevrons" class="spin-anim" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
-                                    <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/>
+                                <svg id="centerChevrons" width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="display: block;">
+                                    <polygon points="15,70 50,40 85,70 85,85 50,55 15,85" fill="#3a1c61"/>
+                                    <polygon points="15,40 50,10 85,40 85,55 50,25 15,55" fill="#8a2be2"/>
                                 </svg>
 
                                 <div id="chanceDisplay" style="display: none;">
@@ -693,9 +607,9 @@
                         <img src="16201.png" class="slot-bg-pepe">
                         <div class="slot-chevron-container">
                             <svg class="chevron-up" viewBox="0 0 50 75" width="45" height="65">
-                                <path fill="var(--accent-main)" d="M5 25 L25 10 L45 25 L45 15 L25 0 L5 15 Z" />
-                                <path fill="var(--accent-main)" d="M5 45 L25 30 L45 45 L45 35 L25 20 L5 35 Z" />
-                                <path fill="var(--accent-main)" d="M5 65 L25 50 L45 65 L45 55 L25 40 L5 55 Z" />
+                                <path fill="#FFCC00" d="M5 25 L25 10 L45 25 L45 15 L25 0 L5 15 Z" />
+                                <path fill="#FFCC00" d="M5 45 L25 30 L45 45 L45 35 L25 20 L5 35 Z" />
+                                <path fill="#FFCC00" d="M5 65 L25 50 L45 65 L45 55 L25 40 L5 55 Z" />
                             </svg>
                         </div>
                         <span class="slot-hint">Желаемый предмет</span>
@@ -723,28 +637,12 @@
                     <button class="btn-upgrade" style="background: linear-gradient(135deg, var(--accent-main), var(--accent-secondary)); margin-top: 24px; padding: 14px 30px; font-size: 14px; max-width: 280px; width: 100%; border-radius: 50px;" onclick="openModal('authModal')">ВОЙТИ ПО EMAIL</button>
                 </div>
 
-                <div id="combinedInventory">
-                    <div class="inventory-split">
-                        <div class="inv-col">
-                            <div class="inv-header-title">Мой инвентарь</div>
-                            <div class="items-grid" id="gridMyContent" style="margin-bottom: 24px;"></div>
-                        </div>
-                        <div class="inv-col">
-                            <div class="inv-header-title">Магазин предметов</div>
-                            
-                            <div class="filter-row">
-                                <span>Цена</span>
-                                <input type="number" id="priceFrom" class="filter-input" placeholder="От" oninput="renderGrid()">
-                                <span style="color:var(--border-color);">|</span>
-                                <input type="number" id="priceTo" class="filter-input" placeholder="До" oninput="renderGrid()">
-                                <button class="filter-btn-search" onclick="renderGrid()">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                                </button>
-                            </div>
-
-                            <div class="items-grid" id="gridShopContent"></div>
-                        </div>
-                    </div>
+                <div id="combinedInventory" style="display: none;">
+                    <div class="inv-header-title">Мой инвентарь</div>
+                    <div class="items-grid" id="gridMyContent" style="margin-bottom: 24px;"></div>
+                    
+                    <div class="inv-header-title">Магазин предметов</div>
+                    <div class="items-grid" id="gridShopContent"></div>
                 </div>
             </section>
         </div>
@@ -764,47 +662,6 @@
             @om1a2
         </a>
     </footer>
-
-    <div class="modal-overlay" id="settingsModal">
-        <div class="modal-card" style="max-width: 420px;">
-            <button class="modal-close" onclick="closeModal('settingsModal')">×</button>
-            <div class="modal-title" style="margin-bottom: 16px;">Настройки</div>
-            
-            <div class="settings-section-title">Quick Selection (Multiplier)</div>
-            <div class="settings-grid-buttons">
-                <button class="settings-opt-btn" onclick="selectSettingOpt(this, 'mult', '1.5')">x1.5</button>
-                <button class="settings-opt-btn" onclick="selectSettingOpt(this, 'mult', '2')">x2</button>
-                <button class="settings-opt-btn" onclick="selectSettingOpt(this, 'mult', '5')">x5</button>
-                <button class="settings-opt-btn" onclick="selectSettingOpt(this, 'mult', '10')">x10</button>
-            </div>
-
-            <div class="settings-section-title">Quick Selection (Chance)</div>
-            <div class="settings-grid-buttons">
-                <button class="settings-opt-btn" onclick="selectSettingOpt(this, 'chance', '10')">10%</button>
-                <button class="settings-opt-btn" onclick="selectSettingOpt(this, 'chance', '25')">25%</button>
-                <button class="settings-opt-btn" onclick="selectSettingOpt(this, 'chance', '50')">50%</button>
-                <button class="settings-opt-btn" onclick="selectSettingOpt(this, 'chance', '90')">90%</button>
-            </div>
-
-            <div class="settings-toggle-row">
-                <div class="settings-toggle-label">Sound in upgrade</div>
-                <div class="settings-switch-box">
-                    <div class="settings-switch-item id-sound-on active" onclick="setSettingToggle('sound', true)">Enabled</div>
-                    <div class="settings-switch-item id-sound-off" onclick="setSettingToggle('sound', false)">Disabled</div>
-                </div>
-            </div>
-
-            <div class="settings-toggle-row">
-                <div class="settings-toggle-label">Scroll type</div>
-                <div class="settings-switch-box">
-                    <div class="settings-switch-item id-scroll-normal active" onclick="setSettingToggle('scroll', 'normal')">Normal</div>
-                    <div class="settings-switch-item id-scroll-fast" onclick="setSettingToggle('scroll', 'fast')">Fast</div>
-                </div>
-            </div>
-
-            <button class="settings-save-btn" onclick="closeModal('settingsModal')">Save and close</button>
-        </div>
-    </div>
 
     <div class="modal-overlay" id="depositModal">
         <div class="modal-card">
@@ -856,7 +713,7 @@
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div style="display: flex; flex-direction: column;">
                             <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Баланс</span>
-                            <span style="font-size: 18px; font-weight: 900; color: #fff; margin-top: 4px;" id="profileBalanceVal">0 ⭐</span>
+                            <span style="font-size: 18px; font-weight: 900; color: #fff; margin-top: 4px;" id="profileBalanceVal">10 000 ⭐</span>
                         </div>
                         <button onclick="closeModal('profileModal'); openModal('depositModal');" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); color: #fff; border: none; padding: 10px 14px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; transition: transform 0.2s; box-shadow: 0 4px 15px var(--accent-glow);">Пополнить</button>
                     </div>
@@ -883,7 +740,6 @@
                 <div class="stat-line"><span>Всего апгрейдов:</span><span id="statTotal">0</span></div>
                 <div class="stat-line"><span>Успешных:</span><span id="statWins" style="color:var(--accent-secondary);">0</span></div>
                 <div class="stat-line"><span>Сгорело:</span><span id="statLosses" style="color:var(--rarity-mythic);">0</span></div>
-                <div class="stat-line"><span>Выведено:</span><span id="statWithdrawn" style="color:var(--rarity-legendary);">0 ⭐</span></div>
             </div>
             <div id="pContentSell" style="display:none;">
                 <div id="profileSellList" style="max-height: 350px; overflow-y:auto; padding-right: 5px;"></div>
@@ -937,9 +793,7 @@
 
         giftPool.sort((a, b) => parseInt(a.price) - parseInt(b.price));
 
-        let balance = 0;
-        localStorage.setItem('ub_balance', 0);
-        
+        let balance = parseFloat(localStorage.getItem('ub_balance')) || 10000;
         let myInventoryData = JSON.parse(localStorage.getItem('ub_inv')) || [giftPool[0], giftPool[1], giftPool[4], giftPool[8]];
         let stats = JSON.parse(localStorage.getItem('ub_stats')) || { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0, nickname: '' };
         
@@ -1020,71 +874,6 @@
         const soundWin = document.getElementById('soundWin');
         const soundFail = document.getElementById('soundFail');
         const soundClick = document.getElementById('soundClick');
-        
-        let soundEnabled = true;
-        function toggleSound() {
-            soundEnabled = !soundEnabled;
-            document.getElementById('soundToggleBtn').innerText = soundEnabled ? '🔊' : '🔇';
-            
-            // Синхронизация табов в модалке настроек
-            document.querySelector('.id-sound-on').classList.toggle('active', soundEnabled);
-            document.querySelector('.id-sound-off').classList.toggle('active', !soundEnabled);
-
-            soundSpin.muted = !soundEnabled;
-            soundWin.muted = !soundEnabled;
-            soundFail.muted = !soundEnabled;
-            soundClick.muted = !soundEnabled;
-        }
-
-        // Функции управления новыми опциями настроек
-        function selectSettingOpt(btn, type, value) {
-            playSound(soundClick);
-            const parent = btn.parentElement;
-            parent.querySelectorAll('.settings-opt-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            if (type === 'chance') {
-                let targetPercent = parseFloat(value);
-                if (selectedLeft) {
-                    let requiredPrice = selectedLeft.price / (targetPercent / 100);
-                    let closestItem = giftPool.reduce((prev, curr) => {
-                        return (Math.abs(curr.price - requiredPrice) < Math.abs(prev.price - requiredPrice) ? curr : prev);
-                    });
-                    selectedRight = closestItem;
-                    renderSlot('slotRight', closestItem);
-                    updateChance();
-                }
-            } else if (type === 'mult') {
-                let multiplier = parseFloat(value);
-                if (selectedLeft) {
-                    let requiredPrice = selectedLeft.price * multiplier;
-                    let closestItem = giftPool.reduce((prev, curr) => {
-                        return (Math.abs(curr.price - requiredPrice) < Math.abs(prev.price - requiredPrice) ? curr : prev);
-                    });
-                    selectedRight = closestItem;
-                    renderSlot('slotRight', closestItem);
-                    updateChance();
-                }
-            }
-        }
-
-        function setSettingToggle(type, value) {
-            playSound(soundClick);
-            if (type === 'sound') {
-                if (soundEnabled !== value) {
-                    toggleSound();
-                }
-            } else if (type === 'scroll') {
-                document.querySelector('.id-scroll-normal').classList.toggle('active', value === 'normal');
-                document.querySelector('.id-scroll-fast').classList.toggle('active', value === 'fast');
-                document.getElementById('fastUpgradeCheck').checked = (value === 'fast');
-            }
-        }
-
-        function syncLightningCheckbox(isChecked) {
-            document.querySelector('.id-scroll-normal').classList.toggle('active', !isChecked);
-            document.querySelector('.id-scroll-fast').classList.toggle('active', isChecked);
-        }
 
         function saveData() {
             localStorage.setItem('ub_balance', balance);
@@ -1112,7 +901,7 @@
         window.getCurrentInv = () => myInventoryData;
         window.getCurrentStats = () => stats;
 
-        function playSound(audio) { if(soundEnabled) { audio.currentTime = 0; audio.play().catch(() => {}); } }
+        function playSound(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
         
         function updateBalanceUI() { 
             let formatted = Math.floor(balance).toLocaleString('ru-RU');
@@ -1143,11 +932,6 @@
         function renderGrid() {
             const combined = document.getElementById('combinedInventory');
             const promoBlock = document.getElementById('unauthPromoBlock');
-            
-            const priceFromStr = document.getElementById('priceFrom')?.value;
-            const priceToStr = document.getElementById('priceTo')?.value;
-            const pFrom = priceFromStr ? parseInt(priceFromStr) : 0;
-            const pTo = priceToStr ? parseInt(priceToStr) : Infinity;
 
             if (!window.isUserLoggedIn) {
                 document.getElementById('headerLoginBtn').style.display = 'block';
@@ -1170,7 +954,6 @@
             gridMy.innerHTML = '';
             
             myInventoryData.forEach((item, idx) => {
-                if (item.price < pFrom || item.price > pTo) return;
                 gridMy.innerHTML += `
                     <div class="item-card ${item.rarity}" onclick="selectItem(${idx}, 'my')">
                         <div class="item-price">${Math.round(item.price)} ⭐</div>
@@ -1184,7 +967,7 @@
             });
             
             const minCells = 9;
-            if (myInventoryData.length < minCells && pFrom === 0 && pTo === Infinity) {
+            if (myInventoryData.length < minCells) {
                 const emptyCount = minCells - myInventoryData.length;
                 for(let i=0; i<emptyCount; i++) {
                     gridMy.innerHTML += `
@@ -1200,7 +983,6 @@
 
             gridShop.innerHTML = '';
             giftPool.forEach((item, idx) => {
-                if (item.price < pFrom || item.price > pTo) return;
                 gridShop.innerHTML += `
                     <div class="item-card ${item.rarity}" onclick="selectItem(${idx}, 'shop')">
                         <div class="item-price">${Math.round(item.price)} ⭐</div>
@@ -1217,19 +999,11 @@
         function selectItem(index, type) {
             if (isProcessing) return;
             playSound(soundClick);
-            
-            const priceFromStr = document.getElementById('priceFrom')?.value;
-            const priceToStr = document.getElementById('priceTo')?.value;
-            const pFrom = priceFromStr ? parseInt(priceFromStr) : 0;
-            const pTo = priceToStr ? parseInt(priceToStr) : Infinity;
-
             if (type === 'my') { 
-                let filteredMy = myInventoryData.filter(item => item.price >= pFrom && item.price <= pTo);
-                const item = filteredMy[index] || myInventoryData[index];
+                const item = myInventoryData[index];
                 selectedLeft = item; renderSlot('slotLeft', item); 
             } else { 
-                let filteredShop = giftPool.filter(item => item.price >= pFrom && item.price <= pTo);
-                const item = filteredShop[index] || giftPool[index];
+                const item = giftPool[index];
                 selectedRight = item; renderSlot('slotRight', item); 
             }
             updateChance();
@@ -1338,7 +1112,7 @@
         let isAudioSetup = false;
 
         function setupAudioAnalysis() {
-            if (isAudioSetup || !soundEnabled) return;
+            if (isAudioSetup) return;
             try {
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 analyserNode = audioContext.createAnalyser();
@@ -1355,7 +1129,7 @@
         }
 
         function getAverageVolume() {
-            if (!isAudioSetup || !soundEnabled) return 0;
+            if (!isAudioSetup) return 0;
             analyserNode.getByteTimeDomainData(dataArray);
             let sum = 0;
             for (let i = 0; i < dataArray.length; i++) {
@@ -1396,7 +1170,7 @@
             if (isFastUpgrade) soundSpin.playbackRate = 2.0;
             else soundSpin.playbackRate = 1.0;
             
-            if (soundEnabled) soundSpin.play().catch(() => {});
+            soundSpin.play().catch(() => {});
 
             if (chance > 95) chance = 95;
             if (chance < 1) chance = 1;
@@ -1474,6 +1248,7 @@
                 btn.style.background = 'var(--accent-secondary)';
                 
                 let rightSlot = document.getElementById('slotRight');
+                // Анимация победы ТОЛЬКО на подарке
                 let rightItemImg = rightSlot.querySelector('.slot-item-img');
                 if(rightItemImg) rightItemImg.classList.add('win-item-anim');
                 
@@ -1530,9 +1305,9 @@
                     <img src="16201.png" class="slot-bg-pepe">
                     <div class="slot-chevron-container">
                         <svg class="chevron-down" viewBox="0 0 50 75" width="45" height="65">
-                            <path fill="var(--accent-main)" d="M5 10 L25 25 L45 10 L45 20 L25 35 L5 20 Z" />
-                            <path fill="var(--accent-main)" d="M5 30 L25 45 L45 30 L45 40 L25 55 L5 40 Z" />
-                            <path fill="var(--accent-main)" d="M5 50 L25 65 L45 50 L45 60 L25 75 L5 60 Z" />
+                            <path fill="#FFCC00" d="M5 10 L25 25 L45 10 L45 20 L25 35 L5 20 Z" />
+                            <path fill="#FFCC00" d="M5 30 L25 45 L45 30 L45 40 L25 55 L5 40 Z" />
+                            <path fill="#FFCC00" d="M5 50 L25 65 L45 50 L45 60 L25 75 L5 60 Z" />
                         </svg>
                     </div>
                     <span class="slot-hint">Ваш предмет</span>
@@ -1543,9 +1318,9 @@
                     <img src="16201.png" class="slot-bg-pepe">
                     <div class="slot-chevron-container">
                         <svg class="chevron-up" viewBox="0 0 50 75" width="45" height="65">
-                            <path fill="var(--accent-main)" d="M5 25 L25 10 L45 25 L45 15 L25 0 L5 15 Z" />
-                            <path fill="var(--accent-main)" d="M5 45 L25 30 L45 45 L45 35 L25 20 L5 35 Z" />
-                            <path fill="var(--accent-main)" d="M5 65 L25 50 L45 65 L45 55 L25 40 L5 55 Z" />
+                            <path fill="#FFCC00" d="M5 25 L25 10 L45 25 L45 15 L25 0 L5 15 Z" />
+                            <path fill="#FFCC00" d="M5 45 L25 30 L45 45 L45 35 L25 20 L5 35 Z" />
+                            <path fill="#FFCC00" d="M5 65 L25 50 L45 65 L45 55 L25 40 L5 55 Z" />
                         </svg>
                     </div>
                     <span class="slot-hint">Желаемый предмет</span>
@@ -1571,17 +1346,17 @@
             let item = stats.bestDrop;
             container.innerHTML = `
                 <div class="bd-header">👑 Лучший дроп</div>
-                <div class="bd-content" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                    <div style="display: flex; align-items: center; gap: 16px; min-width: 0;">
-                        <div class="bd-img-container" style="flex-shrink: 0;">
+                <div class="bd-content" style="justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <div class="bd-img-container">
                             <img src="${item.img}" onerror="this.src='16201.png'">
                         </div>
-                        <div class="bd-info" style="min-width: 0; overflow: hidden;">
-                            <div class="bd-name" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.sub}</div>
+                        <div class="bd-info">
+                            <div class="bd-name">${item.sub}</div>
                             <div class="bd-rarity">${item.title}</div>
                         </div>
                     </div>
-                    <div class="bd-price" style="white-space: nowrap; flex-shrink: 0; margin-left: 12px;">${Math.round(item.price)} ⭐</div>
+                    <div class="bd-price">${Math.round(item.price)} ⭐</div>
                 </div>
             `;
         }
@@ -1597,10 +1372,6 @@
                 
                 switchProfileTab('stats');
                 renderBestDrop();
-            }
-            if (id === 'settingsModal') {
-                // Очистка активных классов при открытии окон выбора множителей
-                document.getElementById('settingsModal').querySelectorAll('.settings-opt-btn').forEach(b => b.classList.remove('active'));
             }
         }
 
@@ -1621,7 +1392,6 @@
                 document.getElementById('statTotal').innerText = stats.total;
                 document.getElementById('statWins').innerText = stats.wins;
                 document.getElementById('statLosses').innerText = stats.losses;
-                document.getElementById('statWithdrawn').innerText = stats.withdrawn + ' ⭐';
             } else if(pTab === 'sell') {
                 renderProfileSellList();
             } else if(pTab === 'buy') {
