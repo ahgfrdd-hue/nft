@@ -70,10 +70,10 @@
         }
 
         .logo-area { display: flex; flex-direction: column; }
-        .logo { font-size: 20px; font-weight: 900; color: var(--accent-main); letter-spacing: 0.5px; transition: var(--transition); }
-        .logo span { color: var(--text-main); }
+        .logo { font-size: 20px; font-weight: 900; color: var(--accent-main); letter-spacing: 0.5px; transition: var(--transition); text-shadow: 0 0 10px var(--accent-glow); }
+        .logo span { color: var(--text-main); text-shadow: none; }
         .online-count { font-size: 11px; color: var(--text-muted); margin-top: 2px; font-weight: 600; }
-        .online-count span { color: var(--accent-secondary); font-weight: bold; } 
+        .online-count span { color: var(--text-muted); font-weight: bold; } /* ИЗМЕНЕНО: Серый цвет онлайна */
 
         .user-area { display: flex; align-items: center; gap: 12px; min-height: 38px;}
         
@@ -85,15 +85,16 @@
             background: var(--accent-main); color: #fff;
             padding: 8px 14px; border: none; border-radius: var(--radius-sm);
             font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition);
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.3); /* ИЗМЕНЕНО: Добавлено свечение */
         }
-        .btn-deposit:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .btn-deposit:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 0 15px rgba(138, 43, 226, 0.6); }
         
         .profile-avatar {
             width: 36px; height: 36px; background: var(--bg-card); border: 2px solid var(--border-color);
             border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
             transition: var(--transition); overflow: hidden; flex-shrink: 0;
         }
-        .profile-avatar:hover { border-color: var(--accent-main); }
+        .profile-avatar:hover { border-color: var(--accent-main); box-shadow: 0 0 10px var(--accent-glow); }
 
         /* === ОСНОВНОЙ КОНТЕНТ === */
         main { 
@@ -140,6 +141,7 @@
             border: 1px solid var(--border-color); border-radius: var(--radius-lg);
             padding: 24px 16px; display: flex; flex-direction: column; align-items: center; gap: 24px;
             position: relative; transition: var(--transition); overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
         }
         
         .top-left-controls { 
@@ -149,15 +151,19 @@
         .fast-upgrade-label { cursor: pointer; display: flex; align-items: center; background: var(--bg-card); padding: 6px; border-radius: 8px; border: 1px solid var(--border-color); }
         .fast-upgrade-label input { display: none; }
         .lightning-icon { width: 16px; height: 16px; fill: #5a5a6e; transition: var(--transition); }
-        .fast-upgrade-label input:checked + .lightning-icon { fill: #ffcc00; transform: scale(1.1); filter: drop-shadow(0 0 4px rgba(255, 204, 0, 0.4)); }
+        .fast-upgrade-label input:checked + .lightning-icon { fill: #ffcc00; transform: scale(1.1); filter: drop-shadow(0 0 6px rgba(255, 204, 0, 0.6)); }
 
-        .arena-row { display: flex; align-items: center; justify-content: space-between; width: 100%; z-index: 2; margin-top: 10px; gap: 15px;}
+        .arena-row { display: flex; align-items: center; justify-content: space-between; width: 100%; z-index: 2; margin-top: 10px; gap: 20px;}
         
         @media (max-width: 650px) {
-            .arena-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+            .arena-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
             #slotLeft { grid-column: 1; grid-row: 1; max-width: none; flex: auto; }
-            #slotRight { grid-column: 2; grid-row: 1; max-width: none; flex: auto; }
+            .right-slot-wrapper { grid-column: 2; grid-row: 1; max-width: none; flex: auto; }
             .wheel-container { grid-column: 1 / 3; grid-row: 2; margin: 10px auto 0; }
+        }
+
+        .right-slot-wrapper {
+            display: flex; flex-direction: column; flex: 1; max-width: 170px; width: 100%;
         }
 
         .item-slot {
@@ -168,15 +174,17 @@
         }
         .slot-confetti { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
         
-        .item-slot:hover { border-color: var(--text-muted); background: var(--bg-card-hover); transform: translateY(-2px); }
+        .item-slot:hover { border-color: var(--text-muted); background: var(--bg-card-hover); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
         
+        /* ИЗМЕНЕНО: Добавлено свечение для активных слотов */
         .item-slot.active { border-style: solid; border-width: 2px; }
-        .item-slot.active.rarity-epic { border-color: var(--rarity-epic); background: rgba(165, 94, 234, 0.05); }
-        .item-slot.active.rarity-legendary { border-color: var(--rarity-legendary); background: rgba(253, 150, 68, 0.05); }
-        .item-slot.active.rarity-mythic { border-color: var(--rarity-mythic); background: rgba(252, 92, 101, 0.05); }
-        .item-slot.active.rarity-immortal { border-color: var(--rarity-immortal); background: rgba(43, 203, 186, 0.05); }
+        .item-slot.active.rarity-epic { border-color: var(--rarity-epic); background: rgba(165, 94, 234, 0.05); box-shadow: 0 0 15px rgba(165, 94, 234, 0.25); }
+        .item-slot.active.rarity-legendary { border-color: var(--rarity-legendary); background: rgba(253, 150, 68, 0.05); box-shadow: 0 0 15px rgba(253, 150, 68, 0.25); }
+        .item-slot.active.rarity-mythic { border-color: var(--rarity-mythic); background: rgba(252, 92, 101, 0.05); box-shadow: 0 0 15px rgba(252, 92, 101, 0.25); }
+        .item-slot.active.rarity-immortal { border-color: var(--rarity-immortal); background: rgba(43, 203, 186, 0.05); box-shadow: 0 0 15px rgba(43, 203, 186, 0.25); }
 
-        .slot-bg-pepe { position: absolute; width: 60%; height: 60%; object-fit: contain; opacity: 0.05; z-index: 1; pointer-events: none; filter: brightness(0); animation: floatEffect 5s ease-in-out infinite; }
+        /* ИЗМЕНЕНО: Пепе теперь отлично видно */
+        .slot-bg-pepe { position: absolute; width: 65%; height: 65%; object-fit: contain; opacity: 0.25; z-index: 1; pointer-events: none; animation: floatEffect 5s ease-in-out infinite; }
         
         .slot-chevron-container { position: relative; z-index: 2; margin: auto 0; display: flex; align-items: center; justify-content: center; height: 50px; }
         .slot-hint { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; position: relative; z-index: 2; margin-top: auto; }
@@ -193,25 +201,28 @@
             50% { opacity: 1; transform: translateY(2px); filter: drop-shadow(0 0 5px var(--accent-main)); }
         }
 
-        /* === БАР МНОЖИТЕЛЕЙ === */
+        /* ИЗМЕНЕНО: Ровная сетка для множителей иксов */
         .multiplier-bar {
-            display: flex; gap: 4px; justify-content: center; width: 100%; margin-top: 12px; flex-wrap: wrap;
-            background: var(--bg-card); padding: 6px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px; 
+            width: 100%; margin-top: 12px;
+            background: var(--bg-card); padding: 8px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);
         }
         .multiplier-btn {
             background: var(--bg-panel); color: var(--text-muted); border: 1px solid var(--border-color);
-            padding: 6px 10px; font-size: 11px; font-weight: 800; border-radius: 6px; cursor: pointer; flex: 1; text-align: center;
+            padding: 6px 0; font-size: 11px; font-weight: 800; border-radius: 6px; cursor: pointer; text-align: center;
             transition: var(--transition);
         }
-        .multiplier-btn:hover { background: var(--accent-main); color: #fff; border-color: var(--accent-main); }
-        .multiplier-btn.pct-btn { color: var(--accent-secondary); }
-        .multiplier-btn.pct-btn:hover { background: var(--accent-secondary); color: #000; }
+        .multiplier-btn:hover { background: var(--accent-main); color: #fff; border-color: var(--accent-main); box-shadow: 0 0 8px var(--accent-glow); }
+        .multiplier-btn.pct-btn { grid-column: 1 / -1; color: var(--accent-secondary); padding: 8px 0; }
+        .multiplier-btn.pct-btn:hover { background: var(--accent-secondary); color: #000; box-shadow: 0 0 8px rgba(0, 229, 255, 0.4); }
 
         /* === КОЛЕСО И СТРЕЛКА === */
         .wheel-container { position: relative; width: 200px; height: 200px; margin: 0; display: flex; align-items: center; justify-content: center; z-index: 2; flex-shrink: 0; }
-        .wheel-box { width: 100%; height: 100%; position: relative; }
+        .wheel-box { width: 100%; height: 100%; position: relative; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
         .wheel-svg { width: 100%; height: 100%; }
-        .wheel-progress { stroke-dasharray: 534; stroke-dashoffset: 534; transition: stroke-dashoffset 0.8s cubic-bezier(0.3, 1, 0.3, 1); filter: drop-shadow(0 0 8px var(--accent-main)); }
+        .wheel-progress { stroke-dasharray: 534; stroke-dashoffset: 534; transition: stroke-dashoffset 0.8s cubic-bezier(0.3, 1, 0.3, 1); filter: drop-shadow(0 0 10px var(--accent-main)); }
 
         .wheel-marker { position: absolute; font-size: 9px; font-weight: 800; color: var(--text-muted); z-index: 10; pointer-events: none; opacity: 0.6; }
         .marker-top { top: 20px; left: 50%; transform: translateX(-50%); }
@@ -221,18 +232,17 @@
         
         .arrow-spinner-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15; will-change: transform; }
         
-        /* ОБНОВЛЕННАЯ СТРЕЛКА */
         .wheel-arrow { 
             position: absolute; 
-            top: 10px; /* Вернулась на внешнюю часть */
+            top: 10px; 
             left: 50%; 
             margin-left: -7px;
-            width: 14px; /* Меньше */
+            width: 14px; 
             height: 22px; 
-            fill: var(--accent-main); /* Цвет по дизайну сайта */
-            transform-origin: center 90px; /* Центр вращения - колесо 200x200, радиус 100. Если стрелка на top: 10, origin = 90 */
-            transform: rotate(180deg); /* Развернута на 180 градусов */
-            filter: drop-shadow(0 0 4px var(--accent-glow));
+            fill: var(--accent-main); 
+            transform-origin: center 90px; 
+            transform: rotate(180deg); 
+            filter: drop-shadow(0 0 6px var(--accent-glow));
         }
 
         .wheel-center-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; z-index: 5; text-align: center; pointer-events: none; }
@@ -241,17 +251,19 @@
         .bars-anim { animation: slowBarsAnim 2s ease-in-out infinite; }
 
         #chanceDisplay { width: 100%; }
-        #chanceDisplay h1 { font-size: 28px; font-weight: 900; color: #ffffff; letter-spacing: -0.5px; transition: var(--transition); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; margin: 0 auto; }
+        #chanceDisplay h1 { font-size: 28px; font-weight: 900; color: #ffffff; letter-spacing: -0.5px; transition: var(--transition); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; margin: 0 auto; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
         #chanceDisplay p { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; margin-top: 0px; transition: var(--transition); }
 
-        .action-block { width: 100%; display: flex; flex-direction: column; gap: 10px; z-index: 2; }
+        .action-block { width: 100%; display: flex; flex-direction: column; gap: 10px; z-index: 2; margin-top: 5px; }
         
+        /* ИЗМЕНЕНО: Неоновое свечение кнопки апгрейда */
         .btn-upgrade { background: var(--accent-main); color: #fff; border: none; padding: 16px; font-size: 14px; font-weight: 800; border-radius: var(--radius-md); cursor: pointer; text-transform: uppercase; transition: var(--transition); }
-        .btn-upgrade:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.1); }
-        .btn-upgrade:disabled { background: var(--bg-card); color: var(--text-muted); cursor: not-allowed; border: 1px solid var(--border-color); transform: none; filter: none; }
+        .btn-upgrade:not(:disabled) { box-shadow: 0 0 15px var(--accent-glow); }
+        .btn-upgrade:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 0 25px rgba(138, 43, 226, 0.6); }
+        .btn-upgrade:disabled { background: var(--bg-card); color: var(--text-muted); cursor: not-allowed; border: 1px solid var(--border-color); transform: none; filter: none; box-shadow: none; }
 
         @keyframes floatEffect { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-4px); } }
-        @keyframes winItemPop { 0% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); } 50% { transform: scale(1.15); filter: drop-shadow(0 0 15px var(--accent-main)); } 100% { transform: scale(1); filter: drop-shadow(0 0 10px var(--accent-main)); } }
+        @keyframes winItemPop { 0% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); } 50% { transform: scale(1.15); filter: drop-shadow(0 0 20px var(--accent-main)); } 100% { transform: scale(1); filter: drop-shadow(0 0 15px var(--accent-main)); } }
         .win-item-anim { animation: winItemPop 1.2s cubic-bezier(0.3, 1, 0.3, 1) forwards !important; z-index: 20; }
 
         /* === БЛОК ДЛЯ НЕАВТОРИЗОВАННЫХ === */
@@ -286,12 +298,12 @@
         .filter-row span { font-size: 10px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; }
         .filter-input { width: 100%; background: transparent; border: none; color: #fff; outline: none; font-size: 12px; text-align: center; }
         .filter-btn-search { background: var(--accent-main); border: none; color: white; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: var(--transition); }
-        .filter-btn-search:hover { filter: brightness(1.1); }
+        .filter-btn-search:hover { filter: brightness(1.1); box-shadow: 0 0 8px var(--accent-glow); }
 
         .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; align-items: stretch;}
         
         .item-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; cursor: pointer; transition: var(--transition); height: 100%; position: relative; overflow: hidden; }
-        .item-card:hover:not(.empty-slot) { background: var(--bg-card-hover); transform: translateY(-2px); border-color: #3a3a4d; }
+        .item-card:hover:not(.empty-slot) { background: var(--bg-card-hover); transform: translateY(-2px); border-color: #3a3a4d; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .item-price { font-size: 10px; font-weight: 800; color: #fff; align-self: flex-end; background: var(--bg-panel); padding: 3px 6px; border-radius: 4px; border: 1px solid var(--border-color); }
         .item-img-container { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; margin: 8px 0; }
         .item-img-container img { max-width: 85%; max-height: 85%; object-fit: contain; transition: var(--transition); }
@@ -320,7 +332,7 @@
         .footer-contacts:hover { background: var(--bg-card-hover); border-color: #2AABEE; }
         .tg-icon { width: 18px; height: 18px; fill: #2AABEE; }
 
-        /* === МОДАЛКИ И ПРОФИЛЬ (РОВНЫЙ ДИЗАЙН БЕЗ ЛИШНЕГО СВЕЧЕНИЯ) === */
+        /* === МОДАЛКИ И ПРОФИЛЬ === */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; opacity: 0; transition: opacity 0.4s ease; }
         .modal-overlay.active { display: flex; opacity: 1; }
         .modal-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 420px; padding: 24px; position: relative; max-height: 90vh; overflow-y: auto; transform: translateY(20px); transition: transform 0.4s ease; }
@@ -329,9 +341,9 @@
         .modal-close:hover { background: var(--bg-card-hover); color: #fff; }
         .modal-title { font-size: 18px; font-weight: 800; margin-bottom: 16px; color: #fff; text-transform: uppercase; }
         .modal-input { width: 100%; background: var(--bg-card); border: 1px solid var(--border-color); padding: 12px; border-radius: var(--radius-sm); color: #fff; font-size: 14px; margin-bottom: 12px; outline: none; transition: var(--transition); }
-        .modal-input:focus { border-color: var(--accent-main); }
-        .modal-btn { width: 100%; background: var(--accent-main); color: #fff; border: none; padding: 14px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: var(--transition); }
-        .modal-btn:hover { filter: brightness(1.1); }
+        .modal-input:focus { border-color: var(--accent-main); box-shadow: 0 0 8px var(--accent-glow); }
+        .modal-btn { width: 100%; background: var(--accent-main); color: #fff; border: none; padding: 14px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: var(--transition); box-shadow: 0 0 10px rgba(138, 43, 226, 0.3); }
+        .modal-btn:hover { filter: brightness(1.1); box-shadow: 0 0 15px rgba(138, 43, 226, 0.6); }
         
         .payment-methods { display: flex; gap: 8px; margin-bottom: 12px; }
         .payment-method { flex: 1; background: var(--bg-card); border: 1px solid var(--border-color); padding: 10px; border-radius: var(--radius-sm); text-align: center; cursor: pointer; transition: var(--transition); }
@@ -340,7 +352,7 @@
         .amount-btn { flex: 1; min-width: 70px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 8px; border-radius: 6px; color: var(--text-main); font-size: 12px; font-weight: 700; cursor: pointer; transition: var(--transition); text-align: center; }
         .amount-btn:hover { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); }
 
-        /* === ПЕРЕДЕЛАННЫЙ ПРОФИЛЬ (СТРОГИЙ И РОВНЫЙ) === */
+        /* === ПЕРЕДЕЛАННЫЙ ПРОФИЛЬ === */
         .profile-page-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-main); z-index: 300; display: none; flex-direction: column; opacity: 0; transform: translateX(100%); transition: transform 0.4s ease, opacity 0.4s ease; }
         .profile-page-overlay.active { display: flex; opacity: 1; transform: translateX(0); }
         .profile-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: var(--bg-panel); border-bottom: 1px solid var(--border-color); }
@@ -497,7 +509,7 @@
                         </div>
                     </div>
 
-                    <div style="display: flex; flex-direction: column; flex: 1; max-width: 170px;">
+                    <div class="right-slot-wrapper">
                         <div class="item-slot" id="slotRight" onclick="document.getElementById('gridShopContent').scrollIntoView({behavior: 'smooth'})" style="max-width: 100%; width: 100%;">
                             <canvas class="slot-confetti"></canvas>
                             <img src="16201.png" class="slot-bg-pepe">
@@ -1130,9 +1142,8 @@
 
                 let t = elapsed / animationDuration;
                 
-                // Эффект перекатывания/недокатывания
                 let p = t - 1; 
-                let progress = 1 + p * p * ((1.70158 + 1) * p + 1.70158); // easeOutBack
+                let progress = 1 + p * p * ((1.70158 + 1) * p + 1.70158); 
                 
                 let totalDiff = targetRotation - startRotation;
                 let currentVisualRotation = startRotation + totalDiff * progress;
@@ -1174,7 +1185,7 @@
                 
                 if (!stats.bestDrop || parseFloat(selectedRight.price) > parseFloat(stats.bestDrop.price)) {
                     stats.bestDrop = selectedRight;
-                    renderBestDrop(); // Update profile instantly
+                    renderBestDrop(); 
                 }
             } else {
                 playSound('lose');
@@ -1423,7 +1434,6 @@
             const ticker = document.getElementById('liveTicker');
             const item = giftPool[Math.floor(Math.random() * giftPool.length)];
             
-            // Очень редко выводим предметы дороже 100к
             if (parseInt(item.price) > 100000 && Math.random() > 0.05) return;
 
             const chance = (Math.random() * 79 + 1).toFixed(2);
