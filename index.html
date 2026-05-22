@@ -131,6 +131,7 @@
             background: var(--bg-panel); border: 1px solid var(--border-color);
             border-radius: var(--radius-md); padding: 10px; display: flex; gap: 10px;
             overflow-x: auto; white-space: nowrap; scrollbar-width: none; min-height: 56px;
+            position: relative;
         }
         .live-ticker::-webkit-scrollbar { display: none; }
         
@@ -308,12 +309,13 @@
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 15;
             will-change: transform;
+            /* Важно для корректного вращения центральной стрелки */
+            transform-origin: center center;
         }
         
         .wheel-arrow {
             position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
             width: 8px; height: 40px; filter: drop-shadow(0 0 6px var(--accent-glow));
-            transform-origin: center;
         }
 
         .wheel-center-content {
@@ -556,6 +558,11 @@
 </head>
 <body>
 
+    <audio id="sfxClick" src="click.mp3" preload="auto"></audio>
+    <audio id="sfxSpin" src="spin.mp3" preload="auto"></audio>
+    <audio id="sfxWin" src="win.mp3" preload="auto"></audio>
+    <audio id="sfxLose" src="lose.mp3" preload="auto"></audio>
+
     <svg style="display: none;">
         <defs>
             <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -569,7 +576,7 @@
 
     <div class="modal-overlay" id="authModal">
         <div class="modal-card" style="max-width: 400px; text-align: center;">
-            <button class="modal-close" onclick="closeModal('authModal')">×</button>
+            <button class="modal-close" onclick="closeModal('authModal'); playSound('sfxClick')">×</button>
             <div class="logo" style="font-size: 32px; margin-bottom: 10px;">FLASH<span>UPGRADER</span></div>
             <div class="auth-title" style="font-size: 20px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase;">Авторизация</div>
             <div class="auth-subtitle" style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Войдите или создайте аккаунт, чтобы сохранять прогресс и делать апгрейды.</div>
@@ -578,8 +585,8 @@
             <input type="password" id="password-input" class="modal-input" placeholder="Пароль" style="padding: 12px;">
             
             <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button id="login-btn" class="modal-btn" style="background: var(--accent-main); color: #fff; flex: 1;">Войти</button>
-                <button id="register-btn" class="modal-btn" style="background: transparent; color: #fff; border: 1px solid var(--border-color); flex: 1; box-shadow: none;">Создать</button>
+                <button id="login-btn" class="modal-btn" style="background: var(--accent-main); color: #fff; flex: 1;" onclick="playSound('sfxClick')">Войти</button>
+                <button id="register-btn" class="modal-btn" style="background: transparent; color: #fff; border: 1px solid var(--border-color); flex: 1; box-shadow: none;" onclick="playSound('sfxClick')">Создать</button>
             </div>
         </div>
     </div>
@@ -590,15 +597,15 @@
             <div class="online-count">Онлайн: <span id="onlineCount">1 742</span></div>
         </div>
         <div class="user-area">
-            <button id="headerLoginBtn" class="btn-deposit" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); font-weight: 800; box-shadow: 0 4px 15px var(--accent-glow); display: none;" onclick="openModal('authModal')">Вход</button>
+            <button id="headerLoginBtn" class="btn-deposit" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); font-weight: 800; box-shadow: 0 4px 15px var(--accent-glow); display: none;" onclick="openModal('authModal'); playSound('sfxClick')">Вход</button>
             
-            <div id="headerUserArea" style="none; align-items: center; gap: 14px;">
+            <div id="headerUserArea" style="display: none; align-items: center; gap: 14px;">
                 <div class="balance-block">
                     <span class="balance-label">Баланс</span>
                     <div class="balance" id="userBalance">10 000 ⭐</div>
                 </div>
-                <button class="btn-deposit" onclick="openModal('depositModal')">Пополниться</button>
-                <div class="profile-avatar" id="headerAvatar" onclick="openModal('profileModal')"><img src="frog_ninja.png" style="width:100%; height:100%; border-radius:50%; object-fit:cover;"></div>
+                <button class="btn-deposit" onclick="openModal('depositModal'); playSound('sfxClick')">Пополниться</button>
+                <div class="profile-avatar" id="headerAvatar" onclick="openModal('profileModal'); playSound('sfxClick')"><img src="frog_ninja.png" style="width:100%; height:100%; border-radius:50%; object-fit:cover;"></div>
             </div>
         </div>
     </header>
@@ -609,7 +616,7 @@
         <div class="main-content">
             <section class="upgrade-arena" id="arenaBox">
                 <div class="top-left-controls">
-                    <label class="fast-upgrade-label" title="Быстрый апгрейд">
+                    <label class="fast-upgrade-label" title="Быстрый апгрейд" onclick="playSound('sfxClick')">
                         <input type="checkbox" id="fastUpgradeCheck">
                         <svg class="lightning-icon" viewBox="0 0 24 24">
                             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
@@ -618,7 +625,7 @@
                 </div>
 
                 <div class="arena-row">
-                    <div class="item-slot" id="slotLeft" onclick="document.getElementById('gridMyContent').scrollIntoView({behavior: 'smooth'})">
+                    <div class="item-slot" id="slotLeft" onclick="playSound('sfxClick'); document.getElementById('gridMyContent').scrollIntoView({behavior: 'smooth'})">
                         <img src="16201.png" class="slot-bg-pepe">
                         <div class="slot-arrow-wrapper down">
                             <svg class="slot-arrow" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg">
@@ -668,7 +675,7 @@
                         </div>
                     </div>
 
-                    <div class="item-slot" id="slotRight" onclick="document.getElementById('gridShopContent').scrollIntoView({behavior: 'smooth'})">
+                    <div class="item-slot" id="slotRight" onclick="playSound('sfxClick'); document.getElementById('gridShopContent').scrollIntoView({behavior: 'smooth'})">
                         <img src="16201.png" class="slot-bg-pepe">
                         <div class="slot-arrow-wrapper up">
                             <svg class="slot-arrow" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg">
@@ -697,7 +704,7 @@
                         <div id="promoRight2" class="promo-item side far"></div>
                     </div>
 
-                    <button class="modal-btn" style="margin-top: 24px; padding: 14px 30px; font-size: 14px; max-width: 280px; width: 100%; border-radius: 50px;" onclick="openModal('authModal')">ВОЙТИ ПО EMAIL</button>
+                    <button class="modal-btn" style="margin-top: 24px; padding: 14px 30px; font-size: 14px; max-width: 280px; width: 100%; border-radius: 50px;" onclick="openModal('authModal'); playSound('sfxClick')">ВОЙТИ ПО EMAIL</button>
                 </div>
 
                 <div id="combinedInventory">
@@ -714,7 +721,7 @@
                                 <input type="number" id="priceFrom" class="filter-input" placeholder="От" oninput="renderGrid()">
                                 <span style="color:var(--border-color);">|</span>
                                 <input type="number" id="priceTo" class="filter-input" placeholder="До" oninput="renderGrid()">
-                                <button class="filter-btn-search" onclick="renderGrid()">
+                                <button class="filter-btn-search" onclick="playSound('sfxClick'); renderGrid()">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                                 </button>
                             </div>
@@ -744,7 +751,7 @@
 
     <div class="modal-overlay" id="depositModal">
         <div class="modal-card">
-            <button class="modal-close" onclick="closeModal('depositModal')">×</button>
+            <button class="modal-close" onclick="closeModal('depositModal'); playSound('sfxClick')">×</button>
             <div class="modal-title">Пополнение баланса</div>
             <div style="margin-bottom: 16px;">
                 <label style="font-size: 12px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 8px; display: block; letter-spacing: 0.5px;">Выберите способ оплаты</label>
@@ -758,18 +765,18 @@
             <label style="font-size: 12px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 8px; display: block; letter-spacing: 0.5px;">Сумма (Минимум 10 ⭐)</label>
             <input type="number" class="modal-input" id="depositAmount" placeholder="Введите сумму..." min="10" value="100" style="margin-bottom: 10px;">
             <div class="amount-presets">
-                <button class="amount-btn" onclick="setDepositAmount(50)">50 ⭐</button>
-                <button class="amount-btn" onclick="setDepositAmount(100)">100 ⭐</button>
-                <button class="amount-btn" onclick="setDepositAmount(500)">500 ⭐</button>
-                <button class="amount-btn" onclick="setDepositAmount(1000)">1000 ⭐</button>
+                <button class="amount-btn" onclick="playSound('sfxClick'); setDepositAmount(50)">50 ⭐</button>
+                <button class="amount-btn" onclick="playSound('sfxClick'); setDepositAmount(100)">100 ⭐</button>
+                <button class="amount-btn" onclick="playSound('sfxClick'); setDepositAmount(500)">500 ⭐</button>
+                <button class="amount-btn" onclick="playSound('sfxClick'); setDepositAmount(1000)">1000 ⭐</button>
             </div>
-            <button class="modal-btn" id="depositBtn" onclick="processDeposit()">Оплатить <span id="payAmountText">100</span> ⭐</button>
+            <button class="modal-btn" id="depositBtn" onclick="playSound('sfxClick'); processDeposit()">Оплатить <span id="payAmountText">100</span> ⭐</button>
         </div>
     </div>
 
     <div class="profile-page-overlay" id="profileModal">
         <div class="profile-header">
-            <button class="profile-back" onclick="closeModal('profileModal')">
+            <button class="profile-back" onclick="closeModal('profileModal'); playSound('sfxClick')">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
             </button>
             <div class="profile-title-text">ПРОФИЛЬ</div>
@@ -780,21 +787,21 @@
                 <div class="p-card-panel">
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 18px;">
                         <div style="display: flex; align-items: center; gap: 12px;">
-                            <div class="profile-avatar" id="modalAvatar" style="width: 48px; height: 48px;" onclick="document.getElementById('avatarUpload').click()" title="Нажми, чтобы изменить аватар"><img src="frog_ninja.png" style="width:100%; height:100%; border-radius:50%; object-fit:cover;"></div>
+                            <div class="profile-avatar" id="modalAvatar" style="width: 48px; height: 48px;" onclick="playSound('sfxClick'); document.getElementById('avatarUpload').click()" title="Нажми, чтобы изменить аватар"><img src="frog_ninja.png" style="width:100%; height:100%; border-radius:50%; object-fit:cover;"></div>
                             <div style="display: flex; flex-direction: column;">
                                 <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Аккаунт</span>
                                 <span style="font-size: 15px; font-weight: 800; color: #fff; cursor: pointer; margin-top: 4px;" id="profileEmailDisplay" title="Нажми, чтобы изменить ник">user@email.com <span style="font-size:12px; opacity:0.7; margin-left:6px;">✎</span></span>
                             </div>
                         </div>
-                        <button id="logout-btn" style="background: rgba(252, 92, 101, 0.1); color: var(--rarity-mythic); border: 1px solid rgba(252, 92, 101, 0.2); padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: var(--transition); text-transform: uppercase;">Выйти</button>
+                        <button id="logout-btn" onclick="playSound('sfxClick')" style="background: rgba(252, 92, 101, 0.1); color: var(--rarity-mythic); border: 1px solid rgba(252, 92, 101, 0.2); padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: var(--transition); text-transform: uppercase;">Выйти</button>
                     </div>
 
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div style="display: flex; flex-direction: column;">
                             <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Баланс</span>
-                            <span style="font-size: 18px; font-weight: 900; color: #fff; margin-top: 4px; text-shadow: 0 0 8px var(--accent-secondary);" id="profileBalanceVal">10 000 ⭐</span>
+                            <span style="font-size: 18px; font-weight: 900; color: #fff; margin-top: 4px; text-shadow: 0 0 10px rgba(255,255,255,0.4);" id="profileBalanceVal">10 000 ⭐</span>
                         </div>
-                        <button onclick="closeModal('profileModal'); openModal('depositModal');" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); color: #fff; border: none; padding: 10px 14px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; transition: var(--transition); box-shadow: 0 4px 15px var(--accent-glow); text-transform: uppercase;">Пополнить</button>
+                        <button onclick="playSound('sfxClick'); closeModal('profileModal'); openModal('depositModal');" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); color: #fff; border: none; padding: 10px 14px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; transition: var(--transition); box-shadow: 0 4px 15px var(--accent-glow); text-transform: uppercase;">Пополнить</button>
                     </div>
                 </div>
 
@@ -809,10 +816,10 @@
             <div class="best-drop-card" id="bestDropContainer"></div>
 
             <div class="profile-tabs">
-                <button class="p-tab-btn active" id="pTabStats" onclick="switchProfileTab('stats')">Статистика</button>
-                <button class="p-tab-btn" id="pTabSell" onclick="switchProfileTab('sell')">Продать</button>
-                <button class="p-tab-btn" id="pTabBuy" onclick="switchProfileTab('buy')">Купить</button>
-                <button class="p-tab-btn" id="pTabPayout" onclick="switchProfileTab('payout')">Вывод</button>
+                <button class="p-tab-btn active" id="pTabStats" onclick="playSound('sfxClick'); switchProfileTab('stats')">Статистика</button>
+                <button class="p-tab-btn" id="pTabSell" onclick="playSound('sfxClick'); switchProfileTab('sell')">Продать</button>
+                <button class="p-tab-btn" id="pTabBuy" onclick="playSound('sfxClick'); switchProfileTab('buy')">Купить</button>
+                <button class="p-tab-btn" id="pTabPayout" onclick="playSound('sfxClick'); switchProfileTab('payout')">Вывод</button>
             </div>
             
             <div id="pContentStats">
@@ -831,13 +838,28 @@
                 <div style="padding-top: 10px;">
                     <input type="text" class="modal-input" id="withdrawDetails" placeholder="Ваш Telegram Username (@username)" style="margin-bottom:12px;">
                     <input type="number" class="modal-input" id="withdrawAmount" placeholder="Сумма (⭐)" style="margin-bottom:12px;">
-                    <button class="modal-btn" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); padding: 18px;" onclick="processWithdraw()">Создать заявку</button>
+                    <button class="modal-btn" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); padding: 18px;" onclick="playSound('sfxClick'); processWithdraw()">Создать заявку</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        function playSound(id) {
+            let snd = document.getElementById(id);
+            if(snd) {
+                snd.currentTime = 0;
+                snd.play().catch(e => console.log('Audio blocked:', e));
+            }
+        }
+        function stopSound(id) {
+            let snd = document.getElementById(id);
+            if(snd) {
+                snd.pause();
+                snd.currentTime = 0;
+            }
+        }
+
         const rarityColors = {
             'rarity-epic': '#a55eea',
             'rarity-legendary': '#fd9644',
@@ -868,7 +890,6 @@
 
         giftPool.sort((a, b) => parseInt(a.price) - parseInt(b.price));
 
-        // ИЗМЕНЕНИЕ БАЛАНСА ПО УМОЛЧАНИЮ НА 10 000
         let balance = 10000;
         localStorage.setItem('ub_balance', 10000);
         
@@ -997,6 +1018,7 @@
         }
 
         document.getElementById('profileEmailDisplay').addEventListener('click', () => {
+            playSound('sfxClick');
             let currentName = stats.nickname || (window.auth && auth.currentUser ? auth.currentUser.email : "Игрок");
             let newNick = prompt("Введите новый никнейм:", currentName);
             if (newNick && newNick.trim() !== "") {
@@ -1038,7 +1060,7 @@
             myInventoryData.forEach((item, idx) => {
                 if (item.price < pFrom || item.price > pTo) return;
                 gridMy.innerHTML += `
-                    <div class="item-card ${item.rarity}" onclick="selectItem(${idx}, 'my')">
+                    <div class="item-card ${item.rarity}" onclick="playSound('sfxClick'); selectItem(${idx}, 'my')">
                         <div class="item-price">${Math.round(item.price)} ⭐</div>
                         <div class="item-img-container"><img src="${item.img}" onerror="this.src='16201.png'"></div>
                         <div class="item-info">
@@ -1068,7 +1090,7 @@
             giftPool.forEach((item, idx) => {
                 if (item.price < pFrom || item.price > pTo) return;
                 gridShop.innerHTML += `
-                    <div class="item-card ${item.rarity}" onclick="selectItem(${idx}, 'shop')">
+                    <div class="item-card ${item.rarity}" onclick="playSound('sfxClick'); selectItem(${idx}, 'shop')">
                         <div class="item-price">${Math.round(item.price)} ⭐</div>
                         <div class="item-img-container"><img src="${item.img}" onerror="this.src='16201.png'"></div>
                         <div class="item-info">
@@ -1197,6 +1219,7 @@
 
         function executeUpgrade() {
             if (!window.isUserLoggedIn) {
+                playSound('sfxClick');
                 openModal('authModal');
                 return;
             }
@@ -1204,6 +1227,7 @@
             if (isProcessing || !selectedLeft || !selectedRight) return;
             
             isProcessing = true;
+            playSound('sfxClick');
 
             const btn = document.getElementById('btnUpgrade');
             const arrowSpinner = document.getElementById('arrowSpinner');
@@ -1221,6 +1245,14 @@
 
             btn.innerText = 'Улучшение...';
             
+            // Запуск звука прокрутки
+            let sndSpin = document.getElementById('sfxSpin');
+            if(sndSpin) {
+                sndSpin.currentTime = 0;
+                sndSpin.loop = true;
+                sndSpin.play().catch(()=>{});
+            }
+
             let animationDuration = isFastUpgrade ? 800 : 3800;
             
             if (chance > 95) chance = 95;
@@ -1282,6 +1314,9 @@
         }
 
         function afterSpin(isWin) {
+            stopSound('sfxSpin');
+            playSound(isWin ? 'sfxWin' : 'sfxLose');
+
             const btn = document.getElementById('btnUpgrade');
             const arena = document.getElementById('arenaBox');
             const chanceText = document.getElementById('chanceText');
@@ -1315,6 +1350,10 @@
                 if (!stats.bestDrop || parseFloat(selectedRight.price) > parseFloat(stats.bestDrop.price)) {
                     stats.bestDrop = selectedRight;
                 }
+
+                // Закреп топового выигрыша в ленте
+                pinToLiveTicker(selectedRight, chanceText.innerText);
+
             } else {
                 stats.losses++;
                 btn.style.background = 'var(--rarity-mythic)';
@@ -1396,7 +1435,7 @@
                             <div class="bd-rarity">${item.title}</div>
                         </div>
                     </div>
-                    <div class="bd-price" style="white-space: nowrap; flex-shrink: 0; margin-left: 12px;">${Math.round(item.price)} ⭐</div>
+                    <div class="bd-price" style="white-space: nowrap; flex-shrink: 0; margin-left: 12px; font-size: 16px; font-weight: 900; color: #fff; background: rgba(0,0,0,0.5); padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">${Math.round(item.price)} ⭐</div>
                 </div>
             `;
         }
@@ -1452,7 +1491,7 @@
                             <span class="p-item-name">${item.sub}</span>
                             <span class="p-item-price">Цена: ${sellPrice} ⭐ (15%)</span>
                         </div>
-                        <button class="btn-profile-action btn-sell" onclick="sellFromProfile(${idx})">Продать</button>
+                        <button class="btn-profile-action btn-sell" onclick="playSound('sfxClick'); sellFromProfile(${idx})">Продать</button>
                     </div>
                 `;
             });
@@ -1478,7 +1517,7 @@
                             <span class="p-item-name">${item.sub}</span>
                             <span class="p-item-price">Стоимость: ${Math.round(item.price)} ⭐</span>
                         </div>
-                        <button class="btn-profile-action btn-buy" onclick="buyFromProfile('${item.id}')">Купить</button>
+                        <button class="btn-profile-action btn-buy" onclick="playSound('sfxClick'); buyFromProfile('${item.id}')">Купить</button>
                     </div>
                 `;
             });
@@ -1557,6 +1596,31 @@
             countNode.innerText = current.toLocaleString('ru-RU');
         }
 
+        // Функция закрепа в лайв ленте
+        function pinToLiveTicker(item, chanceStr) {
+            const ticker = document.getElementById('liveTicker');
+            const existingPin = document.getElementById('pinnedLiveDrop');
+            if (existingPin) existingPin.remove();
+
+            const html = `
+                <div id="pinnedLiveDrop" class="ticker-item success-stripe" style="border-left-color: #ffcc00; background: rgba(255, 204, 0, 0.15); border: 1px solid #ffcc00; position: sticky; left: 0; z-index: 10;">
+                    <span style="font-size:10px; background:#ffcc00; color:#000; padding:2px 4px; border-radius:4px; font-weight:900;">📌 ТОП ДРОП</span>
+                    <img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'">
+                    <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 90px;">${item.sub}</span>
+                    <span class="ticker-chance" style="color: #ffcc00; background: rgba(255,204,0,0.2); border-color: rgba(255,204,0,0.4);">${chanceStr}</span>
+                </div>
+            `;
+            
+            // Вставляем закреп самым первым элементом
+            ticker.insertAdjacentHTML('afterbegin', html);
+            
+            // Удаляем через 20 секунд
+            setTimeout(() => {
+                const el = document.getElementById('pinnedLiveDrop');
+                if(el) el.remove();
+            }, 20000);
+        }
+
         function updateTicker() {
             const ticker = document.getElementById('liveTicker');
             const item = giftPool[Math.floor(Math.random() * giftPool.length)];
@@ -1571,7 +1635,14 @@
                     <span class="ticker-chance" style="color: ${color}; background: ${color}22; border-color: ${color}44;">${chance}%</span>
                 </div>
             `;
-            ticker.insertAdjacentHTML('afterbegin', html);
+            
+            // Если есть закреп, вставляем обычные дропы после него
+            const pinnedNode = document.getElementById('pinnedLiveDrop');
+            if (pinnedNode) {
+                pinnedNode.insertAdjacentHTML('afterend', html);
+            } else {
+                ticker.insertAdjacentHTML('afterbegin', html);
+            }
             
             const maxItems = window.innerWidth > 900 ? 15 : 6;
             if (ticker.children.length > maxItems) ticker.removeChild(ticker.lastChild);
@@ -1624,6 +1695,7 @@
         };
 
         loginBtn.addEventListener('click', () => {
+            playSound('sfxClick');
             const email = emailInput.value.trim();
             const pass = passInput.value.trim();
             if(!email || !pass) return alert("Введите почту и пароль");
@@ -1636,6 +1708,7 @@
         });
 
         registerBtn.addEventListener('click', () => {
+            playSound('sfxClick');
             const email = emailInput.value.trim();
             const pass = passInput.value.trim();
             if(!email || !pass) return alert("Введите почту и пароль");
@@ -1650,6 +1723,7 @@
 
         if(logoutBtn) {
             logoutBtn.addEventListener('click', () => {
+                playSound('sfxClick');
                 signOut(auth).then(() => {
                     localStorage.setItem('ub_logged_in', 'false');
                     localStorage.clear(); 
