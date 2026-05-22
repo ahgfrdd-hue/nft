@@ -28,6 +28,7 @@
             --radius-lg: 20px;
             --radius-md: 14px;
             --radius-sm: 8px;
+            /* СДЕЛАЛИ АНИМАЦИИ ПЛАВНЕЕ */
             --transition: all 0.5s cubic-bezier(0.3, 1, 0.3, 1);
         }
 
@@ -151,6 +152,7 @@
             padding: 2px 6px; border-radius: 4px; border: 1px solid transparent;
         }
 
+        /* АДАПТИВ ПК */
         @media (min-width: 900px) {
             main { flex-direction: row; align-items: flex-start; justify-content: center; }
             .live-ticker { 
@@ -173,6 +175,7 @@
             box-shadow: 0 8px 30px rgba(0,0,0,0.6);
         }
         
+        /* УБРАЛИ ШЕСТЕРЕНКУ И ЗВУК, ОСТАВИЛИ ТОЛЬКО МОЛНИЮ */
         .top-left-controls { 
             position: absolute; top: 16px; left: 16px; z-index: 10; 
             display: flex; gap: 8px; align-items: center;
@@ -253,28 +256,7 @@
             animation: floatEffect 5s ease-in-out infinite; 
         }
         
-        /* === НОВЫЕ СТРЕЛОЧКИ В СЛОТАХ === */
-        .slot-arrow-wrapper { 
-            position: relative; z-index: 2; margin-bottom: 8px; 
-            display: flex; justify-content: center; align-items: center;
-        }
-        .slot-arrow {
-            width: 14px; height: 45px; 
-            filter: drop-shadow(0 0 8px var(--accent-glow));
-        }
-        .slot-arrow-wrapper.down .slot-arrow { transform: rotate(180deg); }
-        .slot-arrow-wrapper.down { animation: floatArrowDown 1.5s ease-in-out infinite; }
-        .slot-arrow-wrapper.up { animation: floatArrowUp 1.5s ease-in-out infinite; }
-        
-        @keyframes floatArrowDown {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(6px); }
-        }
-        @keyframes floatArrowUp {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-        }
-
+        .slot-chevron-container { position: relative; z-index: 2; margin-bottom: 8px; }
         .slot-hint { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; position: relative; z-index: 2; }
 
         /* === КОЛЕСО И СТРЕЛКА === */
@@ -310,6 +292,7 @@
             will-change: transform;
         }
         
+        /* УЗКАЯ СТРЕЛКА СМОТРИТ ВВЕРХ */
         .wheel-arrow {
             position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
             width: 8px; height: 40px; filter: drop-shadow(0 0 6px var(--accent-glow));
@@ -372,7 +355,7 @@
         .promo-sub { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; white-space: nowrap; }
         .promo-price-tag { font-size: 11px; font-weight: 800; color: #fff; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 8px;}
 
-        /* === ИНВЕНТАРЬ И МАГАЗИН === */
+        /* === ИНВЕНТАРЬ И МАГАЗИН (РАЗДЕЛЕНИЕ) === */
         .inventory-section { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; }
         
         #combinedInventory { padding: 16px; max-height: 550px; overflow-y: auto; scroll-behavior: smooth; display: none; }
@@ -388,6 +371,7 @@
 
         .inv-header-title { font-size: 15px; font-weight: 800; color: #fff; margin: 10px 0 16px; padding-left: 5px; text-transform: uppercase; letter-spacing: 0.5px; border-left: 3px solid var(--accent-main); padding-left: 10px; }
 
+        /* ОБНОВЛЕННЫЙ ФИЛЬТР ЦЕНЫ */
         .filter-row {
             display: flex; gap: 8px; margin-bottom: 15px; align-items: center; 
             background: var(--bg-card); padding: 8px 12px; border-radius: 12px; 
@@ -480,7 +464,7 @@
         }
         .amount-btn:hover { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); transform: translateY(-2px); }
 
-        /* === НОВЫЙ ПРОФИЛЬ === */
+        /* === НОВЫЙ ПРОФИЛЬ (ОБНОВЛЕННЫЙ ДИЗАЙН) === */
         .profile-page-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(10, 10, 15, 0.96); backdrop-filter: blur(20px);
@@ -516,6 +500,7 @@
         }
         .p-card-panel:hover { box-shadow: 0 15px 50px rgba(138, 43, 226, 0.3); }
 
+        /* ОБНОВЛЕННЫЙ ДИЗАЙН ЛУЧШЕГО ДРОПА */
         .best-drop-card {
             background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(0, 229, 255, 0.1));
             border: 1px solid rgba(138, 43, 226, 0.6); border-radius: var(--radius-lg);
@@ -540,6 +525,7 @@
         .p-tab-btn { flex: 1; padding: 14px; border: none; background: transparent; color: var(--text-muted); font-size: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; border-radius: 12px; transition: var(--transition); letter-spacing: 0.5px; }
         .p-tab-btn.active { background: rgba(255,255,255,0.1); color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border-color: rgba(138, 43, 226, 0.4); }
         
+        /* ОБНОВЛЕННЫЙ ДИЗАЙН ЭЛЕМЕНТОВ СПИСКА */
         .profile-list-item { display: flex; justify-content: space-between; align-items: center; background: rgba(30,30,45,0.6); padding: 18px; border-radius: var(--radius-lg); margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05); border-left: 4px solid transparent; transition: var(--transition); }
         .profile-list-item:hover { border-color: rgba(138, 43, 226, 0.4); background: rgba(40,40,55,0.8); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(138, 43, 226, 0.2); }
         .p-item-name { font-size: 15px; font-weight: 800; color: #fff; text-shadow: 0 0 5px rgba(255,255,255,0.3); }
@@ -555,15 +541,6 @@
     </style>
 </head>
 <body>
-
-    <svg style="display: none;">
-        <defs>
-            <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#a55eea" />
-                <stop offset="100%" stop-color="#4a00e0" />
-            </linearGradient>
-        </defs>
-    </svg>
 
     <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
 
@@ -595,7 +572,7 @@
             <div id="headerUserArea" style="none; align-items: center; gap: 14px;">
                 <div class="balance-block">
                     <span class="balance-label">Баланс</span>
-                    <div class="balance" id="userBalance">10 000 ⭐</div>
+                    <div class="balance" id="userBalance">0 ⭐</div>
                 </div>
                 <button class="btn-deposit" onclick="openModal('depositModal')">Пополниться</button>
                 <div class="profile-avatar" id="headerAvatar" onclick="openModal('profileModal')"><img src="frog_ninja.png" style="width:100%; height:100%; border-radius:50%; object-fit:cover;"></div>
@@ -620,9 +597,11 @@
                 <div class="arena-row">
                     <div class="item-slot" id="slotLeft" onclick="document.getElementById('gridMyContent').scrollIntoView({behavior: 'smooth'})">
                         <img src="16201.png" class="slot-bg-pepe">
-                        <div class="slot-arrow-wrapper down">
-                            <svg class="slot-arrow" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/>
+                        <div class="slot-chevron-container">
+                            <svg class="chevron-down" viewBox="0 0 50 75" width="45" height="65">
+                                <path fill="var(--accent-main)" d="M5 10 L25 25 L45 10 L45 20 L25 35 L5 20 Z" />
+                                <path fill="var(--accent-main)" d="M5 30 L25 45 L45 30 L45 40 L25 55 L5 40 Z" />
+                                <path fill="var(--accent-main)" d="M5 50 L25 65 L45 50 L45 60 L25 75 L5 60 Z" />
                             </svg>
                         </div>
                         <span class="slot-hint">Ваш предмет</span>
@@ -636,6 +615,12 @@
 
                         <div class="arrow-spinner-wrapper" id="arrowSpinner">
                             <svg class="wheel-arrow" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" stop-color="#a55eea" />
+                                        <stop offset="100%" stop-color="#4a00e0" />
+                                    </linearGradient>
+                                </defs>
                                 <path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/>
                             </svg>
                         </div>
@@ -670,9 +655,11 @@
 
                     <div class="item-slot" id="slotRight" onclick="document.getElementById('gridShopContent').scrollIntoView({behavior: 'smooth'})">
                         <img src="16201.png" class="slot-bg-pepe">
-                        <div class="slot-arrow-wrapper up">
-                            <svg class="slot-arrow" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/>
+                        <div class="slot-chevron-container">
+                            <svg class="chevron-up" viewBox="0 0 50 75" width="45" height="65">
+                                <path fill="var(--accent-main)" d="M5 25 L25 10 L45 25 L45 15 L25 0 L5 15 Z" />
+                                <path fill="var(--accent-main)" d="M5 45 L25 30 L45 45 L45 35 L25 20 L5 35 Z" />
+                                <path fill="var(--accent-main)" d="M5 65 L25 50 L45 65 L45 55 L25 40 L5 55 Z" />
                             </svg>
                         </div>
                         <span class="slot-hint">Желаемый предмет</span>
@@ -792,7 +779,7 @@
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div style="display: flex; flex-direction: column;">
                             <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Баланс</span>
-                            <span style="font-size: 18px; font-weight: 900; color: #fff; margin-top: 4px; text-shadow: 0 0 8px var(--accent-secondary);" id="profileBalanceVal">10 000 ⭐</span>
+                            <span style="font-size: 18px; font-weight: 900; color: #fff; margin-top: 4px; text-shadow: 0 0 8px var(--accent-secondary);" id="profileBalanceVal">0 ⭐</span>
                         </div>
                         <button onclick="closeModal('profileModal'); openModal('depositModal');" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); color: #fff; border: none; padding: 10px 14px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; transition: var(--transition); box-shadow: 0 4px 15px var(--accent-glow); text-transform: uppercase;">Пополнить</button>
                     </div>
@@ -868,9 +855,8 @@
 
         giftPool.sort((a, b) => parseInt(a.price) - parseInt(b.price));
 
-        // ИЗМЕНЕНИЕ БАЛАНСА ПО УМОЛЧАНИЮ НА 10 000
-        let balance = 10000;
-        localStorage.setItem('ub_balance', 10000);
+        let balance = 0;
+        localStorage.setItem('ub_balance', 0);
         
         let myInventoryData = JSON.parse(localStorage.getItem('ub_inv')) || [giftPool[0], giftPool[1], giftPool[4], giftPool[8]];
         let stats = JSON.parse(localStorage.getItem('ub_stats')) || { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0, nickname: '' };
@@ -903,6 +889,7 @@
 
         function updateAvatarDisplay() {
             let avatarData = localStorage.getItem('ub_avatar');
+            // ЭМОДЗИ ЗАМЕНЕНО НА placeholder-изображение
             const defaultAvatarHtml = `<img src="frog_ninja.png" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
             
             const hd = document.getElementById('headerAvatar');
@@ -913,6 +900,7 @@
                 if(hd) hd.innerHTML = imgHtml;
                 if(md) md.innerHTML = imgHtml;
             } else {
+                // Если нет загруженного, ставим Placeholder по умолчанию
                 if(hd) hd.innerHTML = defaultAvatarHtml;
                 if(md) md.innerHTML = defaultAvatarHtml;
             }
@@ -951,8 +939,10 @@
                 document.getElementById('promoRight2').innerHTML = `<img src="${right2.img}" onerror="this.src='16201.png'">`;
                 
                 promoDisplay.style.opacity = '1';
-            }, 500);
+            }, 500); // ЧУТЬ МЕДЛЕННЕЕ ДЛЯ ПЛАВНОСТИ
         }
+
+        // УДАЛЕНЫ ЗВУКОВЫЕ ОБЪЕКТЫ И ФУНКЦИИ
 
         function saveData() {
             localStorage.setItem('ub_balance', balance);
@@ -965,7 +955,7 @@
         }
 
         window.loadFromDb = function(dbBalance, dbInv, dbStats) {
-            balance = dbBalance !== undefined ? dbBalance : 10000;
+            balance = dbBalance;
             myInventoryData = dbInv || [];
             stats = dbStats || { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0, nickname: '' };
             if(stats.withdrawn === undefined) stats.withdrawn = 0;
@@ -979,6 +969,8 @@
         window.getCurrentBalance = () => balance;
         window.getCurrentInv = () => myInventoryData;
         window.getCurrentStats = () => stats;
+
+        // toggleSound И playSound УДАЛЕНЫ
 
         function updateBalanceUI() { 
             let formatted = Math.floor(balance).toLocaleString('ru-RU');
@@ -1082,6 +1074,7 @@
 
         function selectItem(index, type) {
             if (isProcessing) return;
+            // soundClick УДАЛЕН
             
             const priceFromStr = document.getElementById('priceFrom')?.value;
             const priceToStr = document.getElementById('priceTo')?.value;
@@ -1221,7 +1214,7 @@
 
             btn.innerText = 'Улучшение...';
             
-            let animationDuration = isFastUpgrade ? 800 : 3800;
+            let animationDuration = isFastUpgrade ? 800 : 3800; // СДЕЛАЛИ ПЛАВНЕЕ
             
             if (chance > 95) chance = 95;
             if (chance < 1) chance = 1;
@@ -1270,6 +1263,7 @@
                 let progress = elapsed / animationDuration;
                 let totalDiff = targetRotation - startRotation;
                 
+                // ПЛАВНАЯ КРИВАЯ cubic-bezier(0.3, 1, 0.3, 1)
                 let t = 1 - progress;
                 let currentVisualRotation = startRotation + totalDiff * (1 - t * t * t);
                 
@@ -1303,7 +1297,7 @@
                 let y = (rect.top + rect.height / 2) / window.innerHeight;
                 if(window.confetti) {
                     confetti({
-                        particleCount: 100, 
+                        particleCount: 100, // БОЛЬШЕ КОНФЕТТИ
                         spread: 90,
                         origin: { x: x, y: y },
                         colors: ['#a55eea', '#00e5ff', '#ffffff']
@@ -1347,9 +1341,11 @@
                 
                 document.getElementById('slotLeft').innerHTML = `
                     <img src="16201.png" class="slot-bg-pepe">
-                    <div class="slot-arrow-wrapper down">
-                        <svg class="slot-arrow" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/>
+                    <div class="slot-chevron-container">
+                        <svg class="chevron-down" viewBox="0 0 50 75" width="45" height="65">
+                            <path fill="var(--accent-main)" d="M5 10 L25 25 L45 10 L45 20 L25 35 L5 20 Z" />
+                            <path fill="var(--accent-main)" d="M5 30 L25 45 L45 30 L45 40 L25 55 L5 40 Z" />
+                            <path fill="var(--accent-main)" d="M5 50 L25 65 L45 50 L45 60 L25 75 L5 60 Z" />
                         </svg>
                     </div>
                     <span class="slot-hint">Ваш предмет</span>
@@ -1358,9 +1354,11 @@
                 
                 document.getElementById('slotRight').innerHTML = `
                     <img src="16201.png" class="slot-bg-pepe">
-                    <div class="slot-arrow-wrapper up">
-                        <svg class="slot-arrow" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/>
+                    <div class="slot-chevron-container">
+                        <svg class="chevron-up" viewBox="0 0 50 75" width="45" height="65">
+                            <path fill="var(--accent-main)" d="M5 25 L25 10 L45 25 L45 15 L25 0 L5 15 Z" />
+                            <path fill="var(--accent-main)" d="M5 45 L25 30 L45 45 L45 35 L25 20 L5 35 Z" />
+                            <path fill="var(--accent-main)" d="M5 65 L25 50 L45 65 L45 55 L25 40 L5 55 Z" />
                         </svg>
                     </div>
                     <span class="slot-hint">Желаемый предмет</span>
@@ -1370,7 +1368,7 @@
                 updateChance(); 
                 renderGrid();
                 isProcessing = false;
-            }, 2500); 
+            }, 2500); // ЧУТЬ БОЛЬШЕ ЗАДЕРЖКА ДЛЯ ПЛАВНОСТИ
         }
 
         function renderBestDrop() {
@@ -1402,6 +1400,7 @@
         }
 
         function openModal(id) {
+            // soundClick УДАЛЕН
             const overlay = document.getElementById(id);
             if (overlay) overlay.classList.add('active');
             if(id === 'profileModal') {
@@ -1419,6 +1418,7 @@
         }
 
         function switchProfileTab(pTab) {
+            // soundClick УДАЛЕН
             const tabs = ['stats', 'sell', 'buy', 'payout'];
             tabs.forEach(t => {
                 document.getElementById(`pTab${t.charAt(0).toUpperCase() + t.slice(1)}`).classList.toggle('active', t === pTab);
@@ -1459,6 +1459,7 @@
         }
 
         function sellFromProfile(idx) {
+            // soundClick УДАЛЕН
             let item = myInventoryData[idx];
             balance += item.price * 0.15;
             myInventoryData.splice(idx, 1);
@@ -1485,6 +1486,7 @@
         }
 
         function buyFromProfile(itemId) {
+            // soundClick УДАЛЕН
             const targetItem = giftPool.find(p => p.id === itemId);
             let cost = parseFloat(targetItem.price);
             
