@@ -186,16 +186,21 @@
 
         .item-slot {
             background: var(--bg-card); border: 1px dashed #3a3a4d; border-radius: var(--radius-md);
-            height: 140px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center;
             padding: 16px; text-align: center; transition: var(--transition); cursor: pointer;
             position: relative; overflow: hidden;
-            flex: 1; max-width: 150px;
+            flex: 1; max-width: 180px;
             will-change: transform, border-color;
         }
         
         .item-slot:hover { border-color: var(--text-muted); background: var(--bg-card-hover); transform: translateY(-3px); }
-        .item-slot.active { border: 1px solid var(--accent-main); background: rgba(138, 43, 226, 0.05); box-shadow: 0 0 15px rgba(138,43,226,0.1) inset; transform: translateY(0); }
         
+        /* ЦВЕТА РЕДКОСТИ ДЛЯ СЛОТОВ */
+        .item-slot.active.rarity-epic { border: 2px solid var(--rarity-epic); background: rgba(165, 94, 234, 0.05); box-shadow: 0 0 20px rgba(165, 94, 234, 0.2) inset; transform: translateY(0); }
+        .item-slot.active.rarity-legendary { border: 2px solid var(--rarity-legendary); background: rgba(253, 150, 68, 0.05); box-shadow: 0 0 20px rgba(253, 150, 68, 0.2) inset; transform: translateY(0); }
+        .item-slot.active.rarity-mythic { border: 2px solid var(--rarity-mythic); background: rgba(252, 92, 101, 0.05); box-shadow: 0 0 20px rgba(252, 92, 101, 0.2) inset; transform: translateY(0); }
+        .item-slot.active.rarity-immortal { border: 2px solid var(--rarity-immortal); background: rgba(43, 203, 186, 0.05); box-shadow: 0 0 20px rgba(43, 203, 186, 0.2) inset; transform: translateY(0); }
+
         .slot-bg-pepe {
             position: absolute; width: 75%; height: 75%; object-fit: contain;
             filter: brightness(0); opacity: 0.15; z-index: 1; pointer-events: none;
@@ -207,7 +212,7 @@
 
         /* === КОЛЕСО И СТРЕЛКА === */
         .wheel-container {
-            position: relative; width: 280px; height: 280px; margin: 10px 0;
+            position: relative; width: 220px; height: 220px; margin: 10px 0;
             display: flex; align-items: center; justify-content: center; z-index: 2;
             flex-shrink: 0;
         }
@@ -219,7 +224,7 @@
         .wheel-progress {
             stroke-dasharray: 534; stroke-dashoffset: 534; 
             transition: stroke-dashoffset 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-            filter: drop-shadow(0 0 12px var(--accent-secondary)); 
+            filter: drop-shadow(0 0 12px var(--accent-main)); 
         }
         
         .arrow-spinner-wrapper {
@@ -243,6 +248,17 @@
         #chanceDisplay p { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 800; margin-top: -4px; transition: var(--transition); }
 
         .action-block { width: 100%; display: flex; flex-direction: column; gap: 12px; z-index: 2; }
+        
+        /* === БЫСТРЫЙ АПГРЕЙД ТУМБЛЕР === */
+        .fast-upgrade-wrapper { display: flex; justify-content: center; align-items: center; margin-bottom: -4px; z-index: 2;}
+        .fast-upgrade-label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; transition: var(--transition); }
+        .fast-upgrade-label:hover { color: #fff; }
+        .fast-upgrade-label input { display: none; }
+        .toggle-switch { width: 36px; height: 20px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; position: relative; transition: 0.3s; }
+        .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; background: var(--text-muted); border-radius: 50%; transition: 0.3s; }
+        .fast-upgrade-label input:checked + .toggle-switch { background: var(--accent-main); border-color: var(--accent-main); }
+        .fast-upgrade-label input:checked + .toggle-switch::after { left: 18px; background: #fff; box-shadow: 0 0 5px #fff; }
+
         .btn-upgrade {
             background: linear-gradient(135deg, var(--accent-main), #6b1cb0);
             color: #fff; border: none; padding: 20px; font-size: 16px; font-weight: 800;
@@ -541,8 +557,8 @@
                         <svg class="wheel-svg" viewBox="0 0 260 260">
                             <defs>
                                 <linearGradient id="progressGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#8a2be2" />
-                                    <stop offset="100%" stop-color="#00e5ff" />
+                                    <stop offset="0%" stop-color="#b838ff" />
+                                    <stop offset="100%" stop-color="#8a2be2" />
                                 </linearGradient>
                             </defs>
                             <circle cx="130" cy="130" r="120" fill="none" stroke="#272736" stroke-width="4" stroke-dasharray="2 12" />
@@ -579,6 +595,13 @@
             </div>
 
             <div class="action-block">
+                <div class="fast-upgrade-wrapper">
+                    <label class="fast-upgrade-label">
+                        <input type="checkbox" id="fastUpgradeCheck">
+                        <div class="toggle-switch"></div>
+                        Быстрый апгрейд
+                    </label>
+                </div>
                 <button class="btn-upgrade" id="btnUpgrade" onclick="executeUpgrade()" disabled>ВЫБЕРИТЕ ПРЕДМЕТЫ</button>
             </div>
         </section>
@@ -825,6 +848,7 @@
             stats = dbStats || { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0 };
             if(stats.withdrawn === undefined) stats.withdrawn = 0;
             
+            saveData(); // Принудительно перезаписываем localStorage из Firebase (чтобы работало без куки)
             updateBalanceUI();
             renderGrid();
         };
@@ -900,11 +924,15 @@
 
         function renderSlot(slotId, item) {
             const slot = document.getElementById(slotId);
-            slot.classList.add('active');
+            slot.classList.remove('rarity-epic', 'rarity-legendary', 'rarity-mythic', 'rarity-immortal');
+            slot.classList.add('active', item.rarity);
+            
             slot.innerHTML = `
-                <div style="font-size:14px; font-weight:800; color:#fff; position: relative; z-index: 2;">${Math.round(item.price)} ⭐</div>
-                <div style="margin:6px 0; height:60px; display:flex; align-items:center; justify-content:center; position: relative; z-index: 2;"><img src="${item.img}" style="max-height:55px;"></div>
-                <div style="font-size:12px; font-weight:700; color:var(--text-muted); text-overflow:ellipsis; overflow:hidden; width:100%; white-space:nowrap; position: relative; z-index: 2;">${item.sub}</div>
+                <div style="font-size:12px; font-weight:800; color:#fff; position: relative; z-index: 2; margin-bottom: auto;">${item.sub}</div>
+                <div style="margin: 8px 0; flex: 1; display:flex; align-items:center; justify-content:center; position: relative; z-index: 2;">
+                    <img src="${item.img}" style="max-height:80px; max-width:90%; object-fit:contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
+                </div>
+                <div style="font-size:13px; font-weight:900; color:#fff; background: rgba(0,0,0,0.5); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 2; margin-top: auto;">${Math.round(item.price)} ⭐</div>
             `;
         }
 
@@ -1037,6 +1065,7 @@
 
             const btn = document.getElementById('btnUpgrade');
             const arrowSpinner = document.getElementById('arrowSpinner');
+            const isFastUpgrade = document.getElementById('fastUpgradeCheck').checked;
             
             let chance = (parseFloat(selectedLeft.price) / parseFloat(selectedRight.price)) * 100;
             
@@ -1049,7 +1078,10 @@
             }
 
             btn.innerText = 'Улучшение...';
-            soundSpin.play().catch(() => {});
+            
+            if (!isFastUpgrade) {
+                soundSpin.play().catch(() => {});
+            }
 
             if (chance > 95) chance = 95;
             if (chance < 1) chance = 1;
@@ -1081,6 +1113,13 @@
             const indexToRemove = myInventoryData.indexOf(selectedLeft);
             if (indexToRemove !== -1) {
                 myInventoryData.splice(indexToRemove, 1);
+            }
+
+            if (isFastUpgrade) {
+                arrowSpinner.style.transform = `rotate(${targetRotation}deg)`;
+                arrowRotation = targetRotation; 
+                afterSpin(isWin);
+                return;
             }
 
             let animationDuration = 3500; 
@@ -1176,7 +1215,7 @@
                     </div>
                     <span class="slot-hint">Ваш предмет</span>
                 `;
-                document.getElementById('slotLeft').classList.remove('active');
+                document.getElementById('slotLeft').classList.remove('active', 'rarity-epic', 'rarity-legendary', 'rarity-mythic', 'rarity-immortal');
                 
                 document.getElementById('slotRight').innerHTML = `
                     <img src="16201.png" class="slot-bg-pepe">
@@ -1189,7 +1228,7 @@
                     </div>
                     <span class="slot-hint">Желаемый предмет</span>
                 `;
-                document.getElementById('slotRight').classList.remove('active');
+                document.getElementById('slotRight').classList.remove('active', 'rarity-epic', 'rarity-legendary', 'rarity-mythic', 'rarity-immortal');
                 
                 updateChance(); 
                 renderGrid();
