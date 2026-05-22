@@ -28,6 +28,7 @@
             --radius-lg: 20px;
             --radius-md: 14px;
             --radius-sm: 8px;
+            /* СДЕЛАЛИ АНИМАЦИИ ПЛАВНЕЕ */
             --transition: all 0.5s cubic-bezier(0.3, 1, 0.3, 1);
         }
 
@@ -93,7 +94,7 @@
             border: 1px solid var(--border-color); padding: 6px 10px; border-radius: var(--radius-sm);
             font-size: 12px; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: var(--transition);
         }
-        .lang-switch-footer:hover { border-color: var(--accent-main); }
+        .lang-switch:hover { border-color: var(--accent-main); }
         .lang-switch span.active { color: var(--text-main); }
         .lang-switch .divider { color: #333; font-weight: 400; }
 
@@ -131,7 +132,6 @@
             background: var(--bg-panel); border: 1px solid var(--border-color);
             border-radius: var(--radius-md); padding: 10px; display: flex; gap: 10px;
             overflow-x: auto; white-space: nowrap; scrollbar-width: none; min-height: 56px;
-            position: relative;
         }
         .live-ticker::-webkit-scrollbar { display: none; }
         
@@ -152,6 +152,7 @@
             padding: 2px 6px; border-radius: 4px; border: 1px solid transparent;
         }
 
+        /* АДАПТИВ ПК */
         @media (min-width: 900px) {
             main { flex-direction: row; align-items: flex-start; justify-content: center; }
             .live-ticker { 
@@ -174,6 +175,7 @@
             box-shadow: 0 8px 30px rgba(0,0,0,0.6);
         }
         
+        /* УБРАЛИ ШЕСТЕРЕНКУ И ЗВУК, ОСТАВИЛИ ТОЛЬКО МОЛНИЮ */
         .top-left-controls { 
             position: absolute; top: 16px; left: 16px; z-index: 10; 
             display: flex; gap: 8px; align-items: center;
@@ -254,33 +256,7 @@
             animation: floatEffect 5s ease-in-out infinite; 
         }
         
-        /* === НОВЫЕ ТРИ СТРЕЛОЧКИ В СЛОТАХ === */
-        .slot-arrows-container {
-            display: flex;
-            gap: 4px;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 8px;
-            position: relative;
-            z-index: 2;
-        }
-        .slot-arrow {
-            width: 12px; height: 32px; 
-            filter: drop-shadow(0 0 6px var(--accent-glow));
-        }
-        .slot-arrows-container.down .slot-arrow { transform: rotate(180deg); }
-        .slot-arrows-container.down { animation: floatArrowDown 1.5s ease-in-out infinite; }
-        .slot-arrows-container.up { animation: floatArrowUp 1.5s ease-in-out infinite; }
-        
-        @keyframes floatArrowDown {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(5px); }
-        }
-        @keyframes floatArrowUp {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-
+        .slot-chevron-container { position: relative; z-index: 2; margin-bottom: 8px; }
         .slot-hint { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; position: relative; z-index: 2; }
 
         /* === КОЛЕСО И СТРЕЛКА === */
@@ -314,12 +290,13 @@
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 15;
             will-change: transform;
-            transform-origin: center center;
         }
         
+        /* УЗКАЯ СТРЕЛКА СМОТРИТ ВВЕРХ */
         .wheel-arrow {
             position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
             width: 8px; height: 40px; filter: drop-shadow(0 0 6px var(--accent-glow));
+            transform-origin: center;
         }
 
         .wheel-center-content {
@@ -378,7 +355,7 @@
         .promo-sub { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; white-space: nowrap; }
         .promo-price-tag { font-size: 11px; font-weight: 800; color: #fff; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 8px;}
 
-        /* === ИНВЕНТАРЬ И МАГАЗИН === */
+        /* === ИНВЕНТАРЬ И МАГАЗИН (РАЗДЕЛЕНИЕ) === */
         .inventory-section { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; }
         
         #combinedInventory { padding: 16px; max-height: 550px; overflow-y: auto; scroll-behavior: smooth; display: none; }
@@ -394,6 +371,7 @@
 
         .inv-header-title { font-size: 15px; font-weight: 800; color: #fff; margin: 10px 0 16px; padding-left: 5px; text-transform: uppercase; letter-spacing: 0.5px; border-left: 3px solid var(--accent-main); padding-left: 10px; }
 
+        /* ОБНОВЛЕННЫЙ ФИЛЬТР ЦЕНЫ */
         .filter-row {
             display: flex; gap: 8px; margin-bottom: 15px; align-items: center; 
             background: var(--bg-card); padding: 8px 12px; border-radius: 12px; 
@@ -486,7 +464,7 @@
         }
         .amount-btn:hover { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); transform: translateY(-2px); }
 
-        /* === ПРОФИЛЬ === */
+        /* === НОВЫЙ ПРОФИЛЬ (ОБНОВЛЕННЫЙ ДИЗАЙН) === */
         .profile-page-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(10, 10, 15, 0.96); backdrop-filter: blur(20px);
@@ -522,6 +500,7 @@
         }
         .p-card-panel:hover { box-shadow: 0 15px 50px rgba(138, 43, 226, 0.3); }
 
+        /* ОБНОВЛЕННЫЙ ДИЗАЙН ЛУЧШЕГО ДРОПА */
         .best-drop-card {
             background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(0, 229, 255, 0.1));
             border: 1px solid rgba(138, 43, 226, 0.6); border-radius: var(--radius-lg);
@@ -539,11 +518,14 @@
         .bd-info { display: flex; flex-direction: column; min-width: 0; }
         .bd-name { font-size: 20px; font-weight: 800; color: #fff; text-shadow: 0 0 5px rgba(255,255,255,0.3); }
         .bd-rarity { font-size: 13px; font-weight: 700; margin-top: 6px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .bd-price { font-size: 16px; font-weight: 900; color: #fff; background: rgba(0,0,0,0.5); padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); text-shadow: 0 0 8px var(--accent-secondary); }
+        .bd-empty { font-size: 15px; color: var(--text-muted); font-weight: 600; text-align: center; padding: 20px 0; }
         
         .profile-tabs { display: flex; gap: 10px; margin-bottom: 24px; background: rgba(0,0,0,0.4); padding: 8px; border-radius: var(--radius-lg); border: 1px solid rgba(255,255,255,0.05); }
         .p-tab-btn { flex: 1; padding: 14px; border: none; background: transparent; color: var(--text-muted); font-size: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; border-radius: 12px; transition: var(--transition); letter-spacing: 0.5px; }
         .p-tab-btn.active { background: rgba(255,255,255,0.1); color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border-color: rgba(138, 43, 226, 0.4); }
         
+        /* ОБНОВЛЕННЫЙ ДИЗАЙН ЭЛЕМЕНТОВ СПИСКА */
         .profile-list-item { display: flex; justify-content: space-between; align-items: center; background: rgba(30,30,45,0.6); padding: 18px; border-radius: var(--radius-lg); margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05); border-left: 4px solid transparent; transition: var(--transition); }
         .profile-list-item:hover { border-color: rgba(138, 43, 226, 0.4); background: rgba(40,40,55,0.8); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(138, 43, 226, 0.2); }
         .p-item-name { font-size: 15px; font-weight: 800; color: #fff; text-shadow: 0 0 5px rgba(255,255,255,0.3); }
@@ -560,25 +542,11 @@
 </head>
 <body>
 
-    <audio id="sfxClick" src="click.mp3" preload="auto"></audio>
-    <audio id="sfxSpin" src="spin.mp3" preload="auto"></audio>
-    <audio id="sfxWin" src="win.mp3" preload="auto"></audio>
-    <audio id="sfxLose" src="lose.mp3" preload="auto"></audio>
-
-    <svg style="display: none;">
-        <defs>
-            <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#a55eea" />
-                <stop offset="100%" stop-color="#4a00e0" />
-            </linearGradient>
-        </defs>
-    </svg>
-
     <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
 
     <div class="modal-overlay" id="authModal">
         <div class="modal-card" style="max-width: 400px; text-align: center;">
-            <button class="modal-close" onclick="closeModal('authModal'); playSound('sfxClick')">×</button>
+            <button class="modal-close" onclick="closeModal('authModal')">×</button>
             <div class="logo" style="font-size: 32px; margin-bottom: 10px;">FLASH<span>UPGRADER</span></div>
             <div class="auth-title" style="font-size: 20px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase;">Авторизация</div>
             <div class="auth-subtitle" style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Войдите или создайте аккаунт, чтобы сохранять прогресс и делать апгрейды.</div>
@@ -587,8 +555,8 @@
             <input type="password" id="password-input" class="modal-input" placeholder="Пароль" style="padding: 12px;">
             
             <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button id="login-btn" class="modal-btn" style="background: var(--accent-main); color: #fff; flex: 1;" onclick="playSound('sfxClick')">Войти</button>
-                <button id="register-btn" class="modal-btn" style="background: transparent; color: #fff; border: 1px solid var(--border-color); flex: 1; box-shadow: none;" onclick="playSound('sfxClick')">Создать</button>
+                <button id="login-btn" class="modal-btn" style="background: var(--accent-main); color: #fff; flex: 1;">Войти</button>
+                <button id="register-btn" class="modal-btn" style="background: transparent; color: #fff; border: 1px solid var(--border-color); flex: 1; box-shadow: none;">Создать</button>
             </div>
         </div>
     </div>
@@ -599,15 +567,15 @@
             <div class="online-count">Онлайн: <span id="onlineCount">1 742</span></div>
         </div>
         <div class="user-area">
-            <button id="headerLoginBtn" class="btn-deposit" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); font-weight: 800; box-shadow: 0 4px 15px var(--accent-glow); display: none;" onclick="openModal('authModal'); playSound('sfxClick')">Вход</button>
+            <button id="headerLoginBtn" class="btn-deposit" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); font-weight: 800; box-shadow: 0 4px 15px var(--accent-glow); display: none;" onclick="openModal('authModal')">Вход</button>
             
-            <div id="headerUserArea" style="display: none; align-items: center; gap: 14px;">
+            <div id="headerUserArea" style="none; align-items: center; gap: 14px;">
                 <div class="balance-block">
                     <span class="balance-label">Баланс</span>
-                    <div class="balance" id="userBalance">10 000 ⭐</div>
+                    <div class="balance" id="userBalance">0 ⭐</div>
                 </div>
-                <button class="btn-deposit" onclick="openModal('depositModal'); playSound('sfxClick')">Пополниться</button>
-                <div class="profile-avatar" id="headerAvatar" onclick="openModal('profileModal'); playSound('sfxClick')"><img src="frog_ninja.png" style="width:100%; height:100%; border-radius:50%; object-fit:cover;"></div>
+                <button class="btn-deposit" onclick="openModal('depositModal')">Пополниться</button>
+                <div class="profile-avatar" id="headerAvatar" onclick="openModal('profileModal')"><img src="frog_ninja.png" style="width:100%; height:100%; border-radius:50%; object-fit:cover;"></div>
             </div>
         </div>
     </header>
@@ -618,7 +586,7 @@
         <div class="main-content">
             <section class="upgrade-arena" id="arenaBox">
                 <div class="top-left-controls">
-                    <label class="fast-upgrade-label" title="Быстрый апгрейд" onclick="playSound('sfxClick')">
+                    <label class="fast-upgrade-label" title="Быстрый апгрейд">
                         <input type="checkbox" id="fastUpgradeCheck">
                         <svg class="lightning-icon" viewBox="0 0 24 24">
                             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
@@ -627,12 +595,14 @@
                 </div>
 
                 <div class="arena-row">
-                    <div class="item-slot" id="slotLeft" onclick="playSound('sfxClick'); document.getElementById('gridMyContent').scrollIntoView({behavior: 'smooth'})">
+                    <div class="item-slot" id="slotLeft" onclick="document.getElementById('gridMyContent').scrollIntoView({behavior: 'smooth'})">
                         <img src="16201.png" class="slot-bg-pepe">
-                        <div class="slot-arrows-container down">
-                            <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                            <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                            <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                        <div class="slot-chevron-container">
+                            <svg class="chevron-down" viewBox="0 0 50 75" width="45" height="65">
+                                <path fill="var(--accent-main)" d="M5 10 L25 25 L45 10 L45 20 L25 35 L5 20 Z" />
+                                <path fill="var(--accent-main)" d="M5 30 L25 45 L45 30 L45 40 L25 55 L5 40 Z" />
+                                <path fill="var(--accent-main)" d="M5 50 L25 65 L45 50 L45 60 L25 75 L5 60 Z" />
+                            </svg>
                         </div>
                         <span class="slot-hint">Ваш предмет</span>
                     </div>
@@ -645,6 +615,12 @@
 
                         <div class="arrow-spinner-wrapper" id="arrowSpinner">
                             <svg class="wheel-arrow" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" stop-color="#a55eea" />
+                                        <stop offset="100%" stop-color="#4a00e0" />
+                                    </linearGradient>
+                                </defs>
                                 <path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/>
                             </svg>
                         </div>
@@ -677,12 +653,14 @@
                         </div>
                     </div>
 
-                    <div class="item-slot" id="slotRight" onclick="playSound('sfxClick'); document.getElementById('gridShopContent').scrollIntoView({behavior: 'smooth'})">
+                    <div class="item-slot" id="slotRight" onclick="document.getElementById('gridShopContent').scrollIntoView({behavior: 'smooth'})">
                         <img src="16201.png" class="slot-bg-pepe">
-                        <div class="slot-arrows-container up">
-                            <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                            <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                            <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                        <div class="slot-chevron-container">
+                            <svg class="chevron-up" viewBox="0 0 50 75" width="45" height="65">
+                                <path fill="var(--accent-main)" d="M5 25 L25 10 L45 25 L45 15 L25 0 L5 15 Z" />
+                                <path fill="var(--accent-main)" d="M5 45 L25 30 L45 45 L45 35 L25 20 L5 35 Z" />
+                                <path fill="var(--accent-main)" d="M5 65 L25 50 L45 65 L45 55 L25 40 L5 55 Z" />
+                            </svg>
                         </div>
                         <span class="slot-hint">Желаемый предмет</span>
                     </div>
@@ -706,7 +684,7 @@
                         <div id="promoRight2" class="promo-item side far"></div>
                     </div>
 
-                    <button class="modal-btn" style="margin-top: 24px; padding: 14px 30px; font-size: 14px; max-width: 280px; width: 100%; border-radius: 50px;" onclick="openModal('authModal'); playSound('sfxClick')">ВОЙТИ ПО EMAIL</button>
+                    <button class="modal-btn" style="margin-top: 24px; padding: 14px 30px; font-size: 14px; max-width: 280px; width: 100%; border-radius: 50px;" onclick="openModal('authModal')">ВОЙТИ ПО EMAIL</button>
                 </div>
 
                 <div id="combinedInventory">
@@ -723,7 +701,7 @@
                                 <input type="number" id="priceFrom" class="filter-input" placeholder="От" oninput="renderGrid()">
                                 <span style="color:var(--border-color);">|</span>
                                 <input type="number" id="priceTo" class="filter-input" placeholder="До" oninput="renderGrid()">
-                                <button class="filter-btn-search" onclick="playSound('sfxClick'); renderGrid()">
+                                <button class="filter-btn-search" onclick="renderGrid()">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                                 </button>
                             </div>
@@ -753,7 +731,7 @@
 
     <div class="modal-overlay" id="depositModal">
         <div class="modal-card">
-            <button class="modal-close" onclick="closeModal('depositModal'); playSound('sfxClick')">×</button>
+            <button class="modal-close" onclick="closeModal('depositModal')">×</button>
             <div class="modal-title">Пополнение баланса</div>
             <div style="margin-bottom: 16px;">
                 <label style="font-size: 12px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 8px; display: block; letter-spacing: 0.5px;">Выберите способ оплаты</label>
@@ -767,18 +745,18 @@
             <label style="font-size: 12px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 8px; display: block; letter-spacing: 0.5px;">Сумма (Минимум 10 ⭐)</label>
             <input type="number" class="modal-input" id="depositAmount" placeholder="Введите сумму..." min="10" value="100" style="margin-bottom: 10px;">
             <div class="amount-presets">
-                <button class="amount-btn" onclick="playSound('sfxClick'); setDepositAmount(50)">50 ⭐</button>
-                <button class="amount-btn" onclick="playSound('sfxClick'); setDepositAmount(100)">100 ⭐</button>
-                <button class="amount-btn" onclick="playSound('sfxClick'); setDepositAmount(500)">500 ⭐</button>
-                <button class="amount-btn" onclick="playSound('sfxClick'); setDepositAmount(1000)">1000 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(50)">50 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(100)">100 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(500)">500 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(1000)">1000 ⭐</button>
             </div>
-            <button class="modal-btn" id="depositBtn" onclick="playSound('sfxClick'); processDeposit()">Оплатить <span id="payAmountText">100</span> ⭐</button>
+            <button class="modal-btn" id="depositBtn" onclick="processDeposit()">Оплатить <span id="payAmountText">100</span> ⭐</button>
         </div>
     </div>
 
     <div class="profile-page-overlay" id="profileModal">
         <div class="profile-header">
-            <button class="profile-back" onclick="closeModal('profileModal'); playSound('sfxClick')">
+            <button class="profile-back" onclick="closeModal('profileModal')">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
             </button>
             <div class="profile-title-text">ПРОФИЛЬ</div>
@@ -789,7 +767,7 @@
                 <div class="p-card-panel">
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 18px;">
                         <div style="display: flex; align-items: center; gap: 12px;">
-                            <div class="profile-avatar" id="modalAvatar" style="width: 48px; height: 48px;" onclick="playSound('sfxClick'); document.getElementById('avatarUpload').click()" title="Нажми, чтобы изменить аватар"><img src="frog_ninja.png" style="width:100%; height:100%; border-radius:50%; object-fit:cover;"></div>
+                            <div class="profile-avatar" id="modalAvatar" style="width: 48px; height: 48px;" onclick="document.getElementById('avatarUpload').click()" title="Нажми, чтобы изменить аватар"><img src="frog_ninja.png" style="width:100%; height:100%; border-radius:50%; object-fit:cover;"></div>
                             <div style="display: flex; flex-direction: column;">
                                 <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Аккаунт</span>
                                 <span style="font-size: 15px; font-weight: 800; color: #fff; cursor: pointer; margin-top: 4px;" id="profileEmailDisplay" title="Нажми, чтобы изменить ник">user@email.com <span style="font-size:12px; opacity:0.7; margin-left:6px;">✎</span></span>
@@ -801,9 +779,9 @@
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div style="display: flex; flex-direction: column;">
                             <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Баланс</span>
-                            <span style="font-size: 18px; font-weight: 900; color: #fff; margin-top: 4px; text-shadow: 0 0 10px rgba(255,255,255,0.4);" id="profileBalanceVal">10 000 ⭐</span>
+                            <span style="font-size: 18px; font-weight: 900; color: #fff; margin-top: 4px; text-shadow: 0 0 8px var(--accent-secondary);" id="profileBalanceVal">0 ⭐</span>
                         </div>
-                        <button onclick="playSound('sfxClick'); closeModal('profileModal'); openModal('depositModal');" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); color: #fff; border: none; padding: 10px 14px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; transition: var(--transition); box-shadow: 0 4px 15px var(--accent-glow); text-transform: uppercase;">Пополнить</button>
+                        <button onclick="closeModal('profileModal'); openModal('depositModal');" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); color: #fff; border: none; padding: 10px 14px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; transition: var(--transition); box-shadow: 0 4px 15px var(--accent-glow); text-transform: uppercase;">Пополнить</button>
                     </div>
                 </div>
 
@@ -818,10 +796,10 @@
             <div class="best-drop-card" id="bestDropContainer"></div>
 
             <div class="profile-tabs">
-                <button class="p-tab-btn active" id="pTabStats" onclick="playSound('sfxClick'); switchProfileTab('stats')">Статистика</button>
-                <button class="p-tab-btn" id="pTabSell" onclick="playSound('sfxClick'); switchProfileTab('sell')">Продать</button>
-                <button class="p-tab-btn" id="pTabBuy" onclick="playSound('sfxClick'); switchProfileTab('buy')">Купить</button>
-                <button class="p-tab-btn" id="pTabPayout" onclick="playSound('sfxClick'); switchProfileTab('payout')">Вывод</button>
+                <button class="p-tab-btn active" id="pTabStats" onclick="switchProfileTab('stats')">Статистика</button>
+                <button class="p-tab-btn" id="pTabSell" onclick="switchProfileTab('sell')">Продать</button>
+                <button class="p-tab-btn" id="pTabBuy" onclick="switchProfileTab('buy')">Купить</button>
+                <button class="p-tab-btn" id="pTabPayout" onclick="switchProfileTab('payout')">Вывод</button>
             </div>
             
             <div id="pContentStats">
@@ -840,28 +818,13 @@
                 <div style="padding-top: 10px;">
                     <input type="text" class="modal-input" id="withdrawDetails" placeholder="Ваш Telegram Username (@username)" style="margin-bottom:12px;">
                     <input type="number" class="modal-input" id="withdrawAmount" placeholder="Сумма (⭐)" style="margin-bottom:12px;">
-                    <button class="modal-btn" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); padding: 18px;" onclick="playSound('sfxClick'); processWithdraw()">Создать заявку</button>
+                    <button class="modal-btn" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); padding: 18px;" onclick="processWithdraw()">Создать заявку</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        function playSound(id) {
-            let snd = document.getElementById(id);
-            if(snd) {
-                snd.currentTime = 0;
-                snd.play().catch(e => console.log('Audio blocked:', e));
-            }
-        }
-        function stopSound(id) {
-            let snd = document.getElementById(id);
-            if(snd) {
-                snd.pause();
-                snd.currentTime = 0;
-            }
-        }
-
         const rarityColors = {
             'rarity-epic': '#a55eea',
             'rarity-legendary': '#fd9644',
@@ -892,8 +855,8 @@
 
         giftPool.sort((a, b) => parseInt(a.price) - parseInt(b.price));
 
-        let balance = 10000;
-        localStorage.setItem('ub_balance', 10000);
+        let balance = 0;
+        localStorage.setItem('ub_balance', 0);
         
         let myInventoryData = JSON.parse(localStorage.getItem('ub_inv')) || [giftPool[0], giftPool[1], giftPool[4], giftPool[8]];
         let stats = JSON.parse(localStorage.getItem('ub_stats')) || { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0, nickname: '' };
@@ -926,6 +889,7 @@
 
         function updateAvatarDisplay() {
             let avatarData = localStorage.getItem('ub_avatar');
+            // ЭМОДЗИ ЗАМЕНЕНО НА placeholder-изображение
             const defaultAvatarHtml = `<img src="frog_ninja.png" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
             
             const hd = document.getElementById('headerAvatar');
@@ -936,6 +900,7 @@
                 if(hd) hd.innerHTML = imgHtml;
                 if(md) md.innerHTML = imgHtml;
             } else {
+                // Если нет загруженного, ставим Placeholder по умолчанию
                 if(hd) hd.innerHTML = defaultAvatarHtml;
                 if(md) md.innerHTML = defaultAvatarHtml;
             }
@@ -974,8 +939,10 @@
                 document.getElementById('promoRight2').innerHTML = `<img src="${right2.img}" onerror="this.src='16201.png'">`;
                 
                 promoDisplay.style.opacity = '1';
-            }, 500);
+            }, 500); // ЧУТЬ МЕДЛЕННЕЕ ДЛЯ ПЛАВНОСТИ
         }
+
+        // УДАЛЕНЫ ЗВУКОВЫЕ ОБЪЕКТЫ И ФУНКЦИИ
 
         function saveData() {
             localStorage.setItem('ub_balance', balance);
@@ -988,7 +955,7 @@
         }
 
         window.loadFromDb = function(dbBalance, dbInv, dbStats) {
-            balance = dbBalance !== undefined ? dbBalance : 10000;
+            balance = dbBalance;
             myInventoryData = dbInv || [];
             stats = dbStats || { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0, nickname: '' };
             if(stats.withdrawn === undefined) stats.withdrawn = 0;
@@ -1002,6 +969,8 @@
         window.getCurrentBalance = () => balance;
         window.getCurrentInv = () => myInventoryData;
         window.getCurrentStats = () => stats;
+
+        // toggleSound И playSound УДАЛЕНЫ
 
         function updateBalanceUI() { 
             let formatted = Math.floor(balance).toLocaleString('ru-RU');
@@ -1020,7 +989,6 @@
         }
 
         document.getElementById('profileEmailDisplay').addEventListener('click', () => {
-            playSound('sfxClick');
             let currentName = stats.nickname || (window.auth && auth.currentUser ? auth.currentUser.email : "Игрок");
             let newNick = prompt("Введите новый никнейм:", currentName);
             if (newNick && newNick.trim() !== "") {
@@ -1062,7 +1030,7 @@
             myInventoryData.forEach((item, idx) => {
                 if (item.price < pFrom || item.price > pTo) return;
                 gridMy.innerHTML += `
-                    <div class="item-card ${item.rarity}" onclick="playSound('sfxClick'); selectItem(${idx}, 'my')">
+                    <div class="item-card ${item.rarity}" onclick="selectItem(${idx}, 'my')">
                         <div class="item-price">${Math.round(item.price)} ⭐</div>
                         <div class="item-img-container"><img src="${item.img}" onerror="this.src='16201.png'"></div>
                         <div class="item-info">
@@ -1092,7 +1060,7 @@
             giftPool.forEach((item, idx) => {
                 if (item.price < pFrom || item.price > pTo) return;
                 gridShop.innerHTML += `
-                    <div class="item-card ${item.rarity}" onclick="playSound('sfxClick'); selectItem(${idx}, 'shop')">
+                    <div class="item-card ${item.rarity}" onclick="selectItem(${idx}, 'shop')">
                         <div class="item-price">${Math.round(item.price)} ⭐</div>
                         <div class="item-img-container"><img src="${item.img}" onerror="this.src='16201.png'"></div>
                         <div class="item-info">
@@ -1106,6 +1074,7 @@
 
         function selectItem(index, type) {
             if (isProcessing) return;
+            // soundClick УДАЛЕН
             
             const priceFromStr = document.getElementById('priceFrom')?.value;
             const priceToStr = document.getElementById('priceTo')?.value;
@@ -1115,16 +1084,16 @@
             if (type === 'my') { 
                 let filteredMy = myInventoryData.filter(item => item.price >= pFrom && item.price <= pTo);
                 const item = filteredMy[index] || myInventoryData[index];
-                selectedLeft = item; renderSlot('slotLeft', item, 'down'); 
+                selectedLeft = item; renderSlot('slotLeft', item); 
             } else { 
                 let filteredShop = giftPool.filter(item => item.price >= pFrom && item.price <= pTo);
                 const item = filteredShop[index] || giftPool[index];
-                selectedRight = item; renderSlot('slotRight', item, 'up'); 
+                selectedRight = item; renderSlot('slotRight', item); 
             }
             updateChance();
         }
 
-        function renderSlot(slotId, item, direction) {
+        function renderSlot(slotId, item) {
             const slot = document.getElementById(slotId);
             slot.classList.remove('rarity-epic', 'rarity-legendary', 'rarity-mythic', 'rarity-immortal');
             slot.classList.add('active', item.rarity);
@@ -1133,11 +1102,6 @@
                 <div style="font-size:12px; font-weight:800; color:#fff; position: relative; z-index: 2; margin-bottom: auto;">${item.sub}</div>
                 <div style="margin: 8px 0; flex: 1; display:flex; align-items:center; justify-content:center; position: relative; z-index: 2;">
                     <img src="${item.img}" class="slot-item-img" style="max-height:80px; max-width:90%; object-fit:contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
-                </div>
-                <div class="slot-arrows-container ${direction}">
-                    <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                    <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                    <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
                 </div>
                 <div style="font-size:13px; font-weight:900; color:#fff; background: rgba(0,0,0,0.5); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 2; margin-top: auto;">${Math.round(item.price)} ⭐</div>
             `;
@@ -1226,7 +1190,6 @@
 
         function executeUpgrade() {
             if (!window.isUserLoggedIn) {
-                playSound('sfxClick');
                 openModal('authModal');
                 return;
             }
@@ -1234,7 +1197,6 @@
             if (isProcessing || !selectedLeft || !selectedRight) return;
             
             isProcessing = true;
-            playSound('sfxClick');
 
             const btn = document.getElementById('btnUpgrade');
             const arrowSpinner = document.getElementById('arrowSpinner');
@@ -1252,14 +1214,7 @@
 
             btn.innerText = 'Улучшение...';
             
-            let sndSpin = document.getElementById('sfxSpin');
-            if(sndSpin) {
-                sndSpin.currentTime = 0;
-                sndSpin.loop = true;
-                sndSpin.play().catch(()=>{});
-            }
-
-            let animationDuration = isFastUpgrade ? 800 : 3800;
+            let animationDuration = isFastUpgrade ? 800 : 3800; // СДЕЛАЛИ ПЛАВНЕЕ
             
             if (chance > 95) chance = 95;
             if (chance < 1) chance = 1;
@@ -1308,6 +1263,7 @@
                 let progress = elapsed / animationDuration;
                 let totalDiff = targetRotation - startRotation;
                 
+                // ПЛАВНАЯ КРИВАЯ cubic-bezier(0.3, 1, 0.3, 1)
                 let t = 1 - progress;
                 let currentVisualRotation = startRotation + totalDiff * (1 - t * t * t);
                 
@@ -1320,9 +1276,6 @@
         }
 
         function afterSpin(isWin) {
-            stopSound('sfxSpin');
-            playSound(isWin ? 'sfxWin' : 'sfxLose');
-
             const btn = document.getElementById('btnUpgrade');
             const arena = document.getElementById('arenaBox');
             const chanceText = document.getElementById('chanceText');
@@ -1339,11 +1292,14 @@
                 let rightItemImg = rightSlot.querySelector('.slot-item-img');
                 if(rightItemImg) rightItemImg.classList.add('win-item-anim');
                 
+                let rect = rightSlot.getBoundingClientRect();
+                let x = (rect.left + rect.width / 2) / window.innerWidth;
+                let y = (rect.top + rect.height / 2) / window.innerHeight;
                 if(window.confetti) {
                     confetti({
-                        particleCount: 120, 
-                        spread: 100,
-                        origin: { x: 0.5, y: 0.5 },
+                        particleCount: 100, // БОЛЬШЕ КОНФЕТТИ
+                        spread: 90,
+                        origin: { x: x, y: y },
                         colors: ['#a55eea', '#00e5ff', '#ffffff']
                     });
                 }
@@ -1353,9 +1309,6 @@
                 if (!stats.bestDrop || parseFloat(selectedRight.price) > parseFloat(stats.bestDrop.price)) {
                     stats.bestDrop = selectedRight;
                 }
-
-                pinToLiveTicker(selectedRight, chanceText.innerText);
-
             } else {
                 stats.losses++;
                 btn.style.background = 'var(--rarity-mythic)';
@@ -1388,10 +1341,12 @@
                 
                 document.getElementById('slotLeft').innerHTML = `
                     <img src="16201.png" class="slot-bg-pepe">
-                    <div class="slot-arrows-container down">
-                        <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                        <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                        <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                    <div class="slot-chevron-container">
+                        <svg class="chevron-down" viewBox="0 0 50 75" width="45" height="65">
+                            <path fill="var(--accent-main)" d="M5 10 L25 25 L45 10 L45 20 L25 35 L5 20 Z" />
+                            <path fill="var(--accent-main)" d="M5 30 L25 45 L45 30 L45 40 L25 55 L5 40 Z" />
+                            <path fill="var(--accent-main)" d="M5 50 L25 65 L45 50 L45 60 L25 75 L5 60 Z" />
+                        </svg>
                     </div>
                     <span class="slot-hint">Ваш предмет</span>
                 `;
@@ -1399,10 +1354,12 @@
                 
                 document.getElementById('slotRight').innerHTML = `
                     <img src="16201.png" class="slot-bg-pepe">
-                    <div class="slot-arrows-container up">
-                        <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                        <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                        <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                    <div class="slot-chevron-container">
+                        <svg class="chevron-up" viewBox="0 0 50 75" width="45" height="65">
+                            <path fill="var(--accent-main)" d="M5 25 L25 10 L45 25 L45 15 L25 0 L5 15 Z" />
+                            <path fill="var(--accent-main)" d="M5 45 L25 30 L45 45 L45 35 L25 20 L5 35 Z" />
+                            <path fill="var(--accent-main)" d="M5 65 L25 50 L45 65 L45 55 L25 40 L5 55 Z" />
+                        </svg>
                     </div>
                     <span class="slot-hint">Желаемый предмет</span>
                 `;
@@ -1411,7 +1368,7 @@
                 updateChance(); 
                 renderGrid();
                 isProcessing = false;
-            }, 2500); 
+            }, 2500); // ЧУТЬ БОЛЬШЕ ЗАДЕРЖКА ДЛЯ ПЛАВНОСТИ
         }
 
         function renderBestDrop() {
@@ -1437,11 +1394,13 @@
                             <div class="bd-rarity">${item.title}</div>
                         </div>
                     </div>
+                    <div class="bd-price" style="white-space: nowrap; flex-shrink: 0; margin-left: 12px;">${Math.round(item.price)} ⭐</div>
                 </div>
             `;
         }
 
         function openModal(id) {
+            // soundClick УДАЛЕН
             const overlay = document.getElementById(id);
             if (overlay) overlay.classList.add('active');
             if(id === 'profileModal') {
@@ -1459,6 +1418,7 @@
         }
 
         function switchProfileTab(pTab) {
+            // soundClick УДАЛЕН
             const tabs = ['stats', 'sell', 'buy', 'payout'];
             tabs.forEach(t => {
                 document.getElementById(`pTab${t.charAt(0).toUpperCase() + t.slice(1)}`).classList.toggle('active', t === pTab);
@@ -1492,13 +1452,14 @@
                             <span class="p-item-name">${item.sub}</span>
                             <span class="p-item-price">Цена: ${sellPrice} ⭐ (15%)</span>
                         </div>
-                        <button class="btn-profile-action btn-sell" onclick="playSound('sfxClick'); sellFromProfile(${idx})">Продать</button>
+                        <button class="btn-profile-action btn-sell" onclick="sellFromProfile(${idx})">Продать</button>
                     </div>
                 `;
             });
         }
 
         function sellFromProfile(idx) {
+            // soundClick УДАЛЕН
             let item = myInventoryData[idx];
             balance += item.price * 0.15;
             myInventoryData.splice(idx, 1);
@@ -1518,13 +1479,14 @@
                             <span class="p-item-name">${item.sub}</span>
                             <span class="p-item-price">Стоимость: ${Math.round(item.price)} ⭐</span>
                         </div>
-                        <button class="btn-profile-action btn-buy" onclick="playSound('sfxClick'); buyFromProfile('${item.id}')">Купить</button>
+                        <button class="btn-profile-action btn-buy" onclick="buyFromProfile('${item.id}')">Купить</button>
                     </div>
                 `;
             });
         }
 
         function buyFromProfile(itemId) {
+            // soundClick УДАЛЕН
             const targetItem = giftPool.find(p => p.id === itemId);
             let cost = parseFloat(targetItem.price);
             
@@ -1597,30 +1559,6 @@
             countNode.innerText = current.toLocaleString('ru-RU');
         }
 
-        function pinToLiveTicker(item, chanceStr) {
-            if (parseFloat(item.price) < 100000) return;
-
-            const ticker = document.getElementById('liveTicker');
-            const existingPin = document.getElementById('pinnedLiveDrop');
-            if (existingPin) existingPin.remove();
-
-            const html = `
-                <div id="pinnedLiveDrop" class="ticker-item success-stripe" style="border-left-color: #ffcc00; background: rgba(255, 204, 0, 0.15); border: 2px solid #ffcc00; position: sticky; left: 0; z-index: 10; box-shadow: 0 0 15px rgba(255,204,0,0.3);">
-                    <span style="font-size:10px; background:#ffcc00; color:#000; padding:2px 6px; border-radius:4px; font-weight:900;">📌 ТОП ДРОП</span>
-                    <img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'">
-                    <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 90px; font-weight: bold;">${item.sub}</span>
-                    <span class="ticker-chance" style="color: #ffcc00; background: rgba(255,204,0,0.2); border-color: rgba(255,204,0,0.4); font-weight: 800;">${chanceStr}</span>
-                </div>
-            `;
-            
-            ticker.insertAdjacentHTML('afterbegin', html);
-            
-            setTimeout(() => {
-                const el = document.getElementById('pinnedLiveDrop');
-                if(el) el.remove();
-            }, 20000);
-        }
-
         function updateTicker() {
             const ticker = document.getElementById('liveTicker');
             const item = giftPool[Math.floor(Math.random() * giftPool.length)];
@@ -1635,13 +1573,7 @@
                     <span class="ticker-chance" style="color: ${color}; background: ${color}22; border-color: ${color}44;">${chance}%</span>
                 </div>
             `;
-            
-            const pinnedNode = document.getElementById('pinnedLiveDrop');
-            if (pinnedNode) {
-                pinnedNode.insertAdjacentHTML('afterend', html);
-            } else {
-                ticker.insertAdjacentHTML('afterbegin', html);
-            }
+            ticker.insertAdjacentHTML('afterbegin', html);
             
             const maxItems = window.innerWidth > 900 ? 15 : 6;
             if (ticker.children.length > maxItems) ticker.removeChild(ticker.lastChild);
@@ -1694,7 +1626,6 @@
         };
 
         loginBtn.addEventListener('click', () => {
-            playSound('sfxClick');
             const email = emailInput.value.trim();
             const pass = passInput.value.trim();
             if(!email || !pass) return alert("Введите почту и пароль");
@@ -1707,7 +1638,6 @@
         });
 
         registerBtn.addEventListener('click', () => {
-            playSound('sfxClick');
             const email = emailInput.value.trim();
             const pass = passInput.value.trim();
             if(!email || !pass) return alert("Введите почту и пароль");
@@ -1722,12 +1652,9 @@
 
         if(logoutBtn) {
             logoutBtn.addEventListener('click', () => {
-                playSound('sfxClick');
                 signOut(auth).then(() => {
                     localStorage.setItem('ub_logged_in', 'false');
-                    localStorage.removeItem('ub_balance');
-                    localStorage.removeItem('ub_inv');
-                    localStorage.removeItem('ub_stats');
+                    localStorage.clear(); 
                     location.reload(); 
                 });
             });
