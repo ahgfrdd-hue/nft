@@ -150,28 +150,28 @@
         }
         
         .top-left-controls { 
-            position: absolute; top: 8px; left: 8px; z-index: 10; 
-            display: flex; gap: 8px; align-items: center; transform: scale(0.85); transform-origin: top left;
+            position: absolute; top: 12px; left: 12px; z-index: 10; 
+            display: flex; gap: 8px; align-items: center; 
         }
-        .fast-upgrade-label { cursor: pointer; display: flex; align-items: center; background: var(--bg-card); padding: 6px; border-radius: 8px; border: 1px solid var(--border-color); }
+        .fast-upgrade-label { cursor: pointer; display: flex; align-items: center; background: var(--bg-card); padding: 4px 6px; border-radius: 6px; border: 1px solid var(--border-color); }
         .fast-upgrade-label input { display: none; }
-        .lightning-icon { width: 16px; height: 16px; fill: #5a5a6e; transition: var(--transition); }
+        .lightning-icon { width: 12px; height: 12px; fill: #5a5a6e; transition: var(--transition); }
         .fast-upgrade-label input:checked + .lightning-icon { fill: #ffcc00; transform: scale(1.1); filter: drop-shadow(0 0 6px rgba(255, 204, 0, 0.6)); }
 
         .arena-row { 
-            display: flex; align-items: center; justify-content: center; 
-            width: 100%; z-index: 2; margin-top: 10px; gap: 24px; flex-wrap: nowrap;
+            display: flex; align-items: flex-start; justify-content: center; 
+            width: 100%; z-index: 2; margin-top: 10px; gap: 24px; flex-wrap: wrap;
         }
         
-        .right-slot-wrapper {
-            display: flex; flex-direction: column; flex: 1; max-width: 260px; width: 100%; min-width: 110px;
+        .left-slot-wrapper, .right-slot-wrapper {
+            display: flex; flex-direction: column; flex: 1; max-width: 260px; width: 100%; min-width: 130px; gap: 10px;
         }
 
         .item-slot {
             background: var(--bg-card); border: 1px dashed var(--border-color); border-radius: var(--radius-md);
             height: 220px; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
             padding: 16px; text-align: center; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s, box-shadow 0.3s; cursor: pointer;
-            position: relative; overflow: hidden; flex: 1; max-width: 260px; min-width: 110px;
+            position: relative; overflow: hidden; width: 100%;
         }
         .slot-confetti { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
         
@@ -200,31 +200,44 @@
             50% { opacity: 1; transform: translateY(2px); filter: drop-shadow(0 0 5px var(--accent-main)); }
         }
 
+        .balance-boost-container {
+            background: var(--bg-card); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); 
+            display: none; flex-direction: column; gap: 8px; transition: var(--transition); width: 100%;
+        }
+
+        .boost-slider {
+            -webkit-appearance: none; width: 100%; height: 6px; background: var(--bg-main); border-radius: 4px; outline: none; opacity: 0.9; transition: var(--transition); border: 1px solid var(--border-color);
+        }
+        .boost-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent-main); cursor: pointer; box-shadow: 0 0 10px var(--accent-glow); transition: transform 0.2s;
+        }
+        .boost-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
         .multiplier-bar {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 6px; 
-            width: 100%; margin-top: 10px;
+            width: 100%;
             background: var(--bg-card); padding: 6px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);
         }
         .multiplier-btn {
             background: var(--bg-panel); color: var(--text-muted); border: 1px solid var(--border-color);
-            padding: 6px 0; font-size: 11px; font-weight: 800; border-radius: 6px; cursor: pointer; text-align: center;
+            padding: 8px 0; font-size: 11px; font-weight: 800; border-radius: 6px; cursor: pointer; text-align: center;
             transition: var(--transition);
         }
         .multiplier-btn:hover { background: var(--accent-main); color: #fff; border-color: var(--accent-main); box-shadow: 0 0 8px var(--accent-glow); }
 
         /* === КОЛЕСО И СТРЕЛКА === */
-        .wheel-container { position: relative; width: 220px; height: 220px; margin: 0; display: flex; align-items: center; justify-content: center; z-index: 2; flex-shrink: 0; transition: var(--transition); }
+        .wheel-container { position: relative; width: 220px; height: 220px; margin: 0 auto; display: flex; align-items: center; justify-content: center; z-index: 2; flex-shrink: 0; transition: var(--transition); }
         .wheel-box { width: 100%; height: 100%; position: relative; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
         .wheel-svg { width: 100%; height: 100%; }
         .wheel-progress { stroke-dasharray: 534; stroke-dashoffset: 534; transition: stroke-dashoffset 0.8s cubic-bezier(0.3, 1, 0.3, 1); filter: drop-shadow(0 0 10px var(--accent-main)); }
 
-        .wheel-marker { position: absolute; font-size: 9px; font-weight: 800; color: var(--text-muted); z-index: 10; pointer-events: none; opacity: 0.6; }
-        .marker-top { top: 20px; left: 50%; transform: translateX(-50%); }
-        .marker-bottom { bottom: 20px; left: 50%; transform: translateX(-50%); }
-        .marker-left { top: 50%; left: 20px; transform: translateY(-50%); }
-        .marker-right { top: 50%; right: 20px; transform: translateY(-50%); }
+        .wheel-marker { position: absolute; font-size: 9px; font-weight: 800; color: var(--text-muted); z-index: 10; pointer-events: none; opacity: 0.8; }
+        .marker-top { top: 6px; left: 50%; transform: translateX(-50%); }
+        .marker-bottom { bottom: 6px; left: 50%; transform: translateX(-50%); }
+        .marker-left { top: 50%; left: 6px; transform: translateY(-50%); }
+        .marker-right { top: 50%; right: 6px; transform: translateY(-50%); }
         
         .arrow-spinner-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15; will-change: transform; }
         
@@ -258,17 +271,9 @@
         }
         #chanceDisplay p { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; margin-top: 4px; transition: var(--transition); }
 
-        .action-block { width: 100%; display: flex; flex-direction: column; gap: 10px; z-index: 2; margin-top: 5px; }
+        .action-block { width: 100%; display: flex; flex-direction: column; gap: 10px; z-index: 2; margin-top: 10px; }
         
-        .boost-slider {
-            -webkit-appearance: none; width: 100%; height: 6px; background: var(--bg-main); border-radius: 4px; outline: none; opacity: 0.9; transition: var(--transition); border: 1px solid var(--border-color);
-        }
-        .boost-slider::-webkit-slider-thumb {
-            -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--accent-main); cursor: pointer; box-shadow: 0 0 10px var(--accent-glow); transition: transform 0.2s;
-        }
-        .boost-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
-
-        .btn-upgrade { background: var(--accent-main); color: #fff; border: none; padding: 16px; font-size: 14px; font-weight: 800; border-radius: var(--radius-md); cursor: pointer; text-transform: uppercase; transition: var(--transition); }
+        .btn-upgrade { background: var(--accent-main); color: #fff; border: none; padding: 16px; font-size: 14px; font-weight: 800; border-radius: var(--radius-md); cursor: pointer; text-transform: uppercase; transition: var(--transition); width: 100%; max-width: 600px; margin: 0 auto; }
         .btn-upgrade:not(:disabled) { box-shadow: 0 0 15px var(--accent-glow); }
         .btn-upgrade:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 0 25px rgba(138, 43, 226, 0.6); }
         .btn-upgrade:disabled { background: var(--bg-card); color: var(--text-muted); cursor: not-allowed; border: 1px solid var(--border-color); transform: none; filter: none; box-shadow: none; }
@@ -278,21 +283,21 @@
         .win-item-anim { animation: winItemPop 1.2s cubic-bezier(0.3, 1, 0.3, 1) forwards !important; z-index: 20; }
 
         /* === АДАПТИВ ПОД МОБИЛКИ === */
-        @media (max-width: 650px) {
-            .arena-row { flex-direction: row; flex-wrap: nowrap; gap: 8px; }
-            #slotLeft, .right-slot-wrapper { max-width: 50%; flex: 1; }
-            .item-slot { height: 150px; padding: 8px; }
-            .wheel-container { width: 130px; height: 130px; }
-            .wheel-svg { width: 130px; height: 130px; }
+        @media (max-width: 768px) {
+            .arena-row { gap: 16px; }
+            .left-slot-wrapper, .right-slot-wrapper { max-width: 48%; min-width: 140px; }
+            .wheel-container { order: -1; margin-bottom: 10px; } /* Колесо сверху на мобилках */
+            .item-slot { height: 180px; padding: 10px; }
+        }
+
+        @media (max-width: 450px) {
+            .left-slot-wrapper, .right-slot-wrapper { max-width: 100%; min-width: 100%; }
+            .wheel-container { width: 180px; height: 180px; }
+            .wheel-svg { width: 180px; height: 180px; }
             .wheel-center-content { width: 90%; height: 90%; }
-            #chanceDisplay h1 { font-size: 20px; }
-            #chanceDisplay p { font-size: 9px; }
-            .slot-item-img { max-height: 50px; }
-            .multiplier-bar { gap: 4px; }
-            .multiplier-btn { font-size: 10px; padding: 4px 0; }
-            .wheel-arrow { top: 15px; width: 12px; height: 18px; }
-            .marker-top { top: 10px; } .marker-bottom { bottom: 10px; }
-            .marker-left { left: 10px; } .marker-right { right: 10px; }
+            #chanceDisplay h1 { font-size: 26px; }
+            #chanceDisplay p { font-size: 10px; }
+            .slot-item-img { max-height: 60px; }
         }
 
         /* === БЛОК ДЛЯ НЕАВТОРИЗОВАННЫХ === */
@@ -491,17 +496,27 @@
                 </div>
 
                 <div class="arena-row">
-                    <div class="item-slot" id="slotLeft" onclick="document.getElementById('gridMyContent').scrollIntoView({behavior: 'smooth'})">
-                        <canvas class="slot-confetti"></canvas>
-                        <img src="16201.png" class="slot-bg-pepe">
-                        <div class="slot-chevron-container">
-                            <svg class="chevron-anim down" viewBox="0 0 50 75" width="40" height="55">
-                                <path class="arrow-1" fill="var(--accent-main)" d="M5 10 L25 25 L45 10 L45 15 L25 30 L5 15 Z" />
-                                <path class="arrow-2" fill="var(--accent-main)" d="M5 25 L25 40 L45 25 L45 30 L25 45 L5 30 Z" />
-                                <path class="arrow-3" fill="var(--accent-main)" d="M5 40 L25 55 L45 40 L45 45 L25 60 L5 45 Z" />
-                            </svg>
+                    <div class="left-slot-wrapper">
+                        <div class="item-slot" id="slotLeft" onclick="document.getElementById('gridMyContent').scrollIntoView({behavior: 'smooth'})">
+                            <canvas class="slot-confetti"></canvas>
+                            <img src="16201.png" class="slot-bg-pepe">
+                            <div class="slot-chevron-container">
+                                <svg class="chevron-anim down" viewBox="0 0 50 75" width="40" height="55">
+                                    <path class="arrow-1" fill="var(--accent-main)" d="M5 10 L25 25 L45 10 L45 15 L25 30 L5 15 Z" />
+                                    <path class="arrow-2" fill="var(--accent-main)" d="M5 25 L25 40 L45 25 L45 30 L25 45 L5 30 Z" />
+                                    <path class="arrow-3" fill="var(--accent-main)" d="M5 40 L25 55 L45 40 L45 45 L25 60 L5 45 Z" />
+                                </svg>
+                            </div>
+                            <span class="slot-hint">Ваш предмет</span>
                         </div>
-                        <span class="slot-hint">Ваш предмет</span>
+                        
+                        <div class="balance-boost-container" id="boostContainer">
+                            <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); font-weight: bold; text-transform: uppercase;">
+                                <span>Буст шанса</span>
+                                <span id="boostValDisplay" style="color: var(--accent-secondary);">+ 0 ⭐</span>
+                            </div>
+                            <input type="range" id="balanceBoostSlider" min="0" max="0" value="0" step="1" class="boost-slider">
+                        </div>
                     </div>
                     
                     <div class="wheel-container">
@@ -539,7 +554,7 @@
                     </div>
 
                     <div class="right-slot-wrapper">
-                        <div class="item-slot" id="slotRight" onclick="document.getElementById('gridShopContent').scrollIntoView({behavior: 'smooth'})" style="max-width: 100%; width: 100%;">
+                        <div class="item-slot" id="slotRight" onclick="document.getElementById('gridShopContent').scrollIntoView({behavior: 'smooth'})">
                             <canvas class="slot-confetti"></canvas>
                             <img src="16201.png" class="slot-bg-pepe">
                             <div class="slot-chevron-container">
@@ -562,14 +577,6 @@
                 </div>
 
                 <div class="action-block">
-                    <div class="balance-boost-container" id="boostContainer" style="display: none; width: 100%; margin-top: 10px; margin-bottom: 5px; flex-direction: column; gap: 8px; background: var(--bg-card); padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); transition: var(--transition);">
-                        <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); font-weight: bold; text-transform: uppercase;">
-                            <span>Буст шанса (За Звезды)</span>
-                            <span id="boostValDisplay" style="color: var(--accent-secondary);">+ 0 ⭐</span>
-                        </div>
-                        <input type="range" id="balanceBoostSlider" min="0" max="0" value="0" step="1" class="boost-slider">
-                    </div>
-
                     <button class="btn-upgrade" id="btnUpgrade" onclick="executeUpgrade()" disabled>ВЫБЕРИТЕ ПРЕДМЕТЫ</button>
                 </div>
             </section>
