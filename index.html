@@ -174,13 +174,22 @@
             box-shadow: 0 8px 30px rgba(0,0,0,0.6);
         }
         
-        .fast-upgrade-wrapper { 
+        /* ОБНОВЛЕННЫЙ БЛОК УПРАВЛЕНИЯ СЛЕВА */
+        .top-left-controls { 
             position: absolute; top: 16px; left: 16px; z-index: 10; 
+            display: flex; gap: 12px; align-items: center;
+            background: rgba(0,0,0,0.4); padding: 6px 12px; border-radius: 20px;
+            border: 1px solid var(--border-color);
         }
-        .fast-upgrade-label { cursor: pointer; display: flex; align-items: center; }
+        .control-icon {
+            background: transparent; border: none; cursor: pointer; color: var(--text-muted); 
+            font-size: 18px; transition: 0.3s; display: flex; align-items: center; justify-content: center;
+        }
+        .control-icon:hover { color: #fff; transform: scale(1.1); }
+        .fast-upgrade-label { cursor: pointer; display: flex; align-items: center; margin-left: 4px; }
         .fast-upgrade-label input { display: none; }
         .lightning-icon { 
-            width: 26px; height: 26px; fill: var(--text-muted); 
+            width: 22px; height: 22px; fill: var(--text-muted); 
             transition: all 0.3s; filter: drop-shadow(0 0 0 transparent);
         }
         .fast-upgrade-label input:checked + .lightning-icon { 
@@ -212,7 +221,7 @@
             justify-content: space-between;
             width: 100%;
             z-index: 2;
-            margin-top: 10px;
+            margin-top: 20px;
         }
 
         .item-slot {
@@ -231,7 +240,6 @@
         .item-slot.active.rarity-mythic { border: 2px solid var(--rarity-mythic); background: rgba(252, 92, 101, 0.05); box-shadow: 0 0 20px rgba(252, 92, 101, 0.2) inset; transform: translateY(0); }
         .item-slot.active.rarity-immortal { border: 2px solid var(--rarity-immortal); background: rgba(43, 203, 186, 0.05); box-shadow: 0 0 20px rgba(43, 203, 186, 0.2) inset; transform: translateY(0); }
 
-        /* Темные Пепе */
         .slot-bg-pepe {
             position: absolute; width: 75%; height: 75%; object-fit: contain;
             opacity: 0.1; z-index: 1; pointer-events: none;
@@ -275,9 +283,10 @@
             will-change: transform;
         }
         
+        /* УЗКАЯ СТРЕЛКА */
         .wheel-arrow {
             position: absolute; top: 15px; left: 50%; transform: translateX(-50%) rotate(180deg);
-            width: 10px; height: 32px; filter: drop-shadow(0 0 6px var(--accent-glow));
+            width: 8px; height: 34px; filter: drop-shadow(0 0 6px var(--accent-glow));
             transform-origin: center;
         }
 
@@ -288,7 +297,6 @@
             padding: 0 10px;
         }
 
-        /* Анимация для стрелок по центру */
         @keyframes slowSpin { 100% { transform: rotate(360deg); } }
         .spin-anim { animation: slowSpin 4s linear infinite; }
 
@@ -364,6 +372,25 @@
         }
 
         .inv-header-title { font-size: 15px; font-weight: 800; color: #fff; margin: 10px 0 16px; padding-left: 5px; text-transform: uppercase; letter-spacing: 0.5px; border-left: 3px solid var(--accent-main); padding-left: 10px; }
+
+        /* ОБНОВЛЕННЫЙ ФИЛЬТР ЦЕНЫ */
+        .filter-row {
+            display: flex; gap: 8px; margin-bottom: 15px; align-items: center; 
+            background: var(--bg-card); padding: 8px 12px; border-radius: 12px; 
+            border: 1px solid var(--border-color);
+        }
+        .filter-row span { font-size: 11px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; }
+        .filter-input {
+            width: 100%; background: transparent; border: none; color: #fff; 
+            outline: none; font-size: 13px; text-align: center;
+        }
+        .filter-input::placeholder { color: #555; }
+        .filter-btn-search {
+            background: var(--accent-main); border: none; color: white; width: 32px; height: 32px; 
+            border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; transition: var(--transition);
+        }
+        .filter-btn-search:hover { transform: scale(1.05); box-shadow: 0 0 10px var(--accent-glow); }
 
         .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; align-items: stretch;}
         
@@ -531,7 +558,7 @@
             <div id="headerUserArea" style="display: none; align-items: center; gap: 14px;">
                 <div class="balance-block">
                     <span class="balance-label">Баланс</span>
-                    <div class="balance" id="userBalance">10 000 ⭐</div>
+                    <div class="balance" id="userBalance">0 ⭐</div>
                 </div>
                 <button class="btn-deposit" onclick="openModal('depositModal')">Пополнить</button>
                 <div class="profile-avatar" id="headerAvatar" onclick="openModal('profileModal')">👤</div>
@@ -544,7 +571,10 @@
 
         <div class="main-content">
             <section class="upgrade-arena" id="arenaBox">
-                <div class="fast-upgrade-wrapper">
+                <div class="top-left-controls">
+                    <div class="control-icon" onclick="openModal('settingsModal')" title="Настройки">⚙️</div>
+                    <div class="control-icon" onclick="toggleSound()" id="soundToggleBtn" title="Включить/Выключить звук">🔊</div>
+                    <span style="color:var(--border-color);">|</span>
                     <label class="fast-upgrade-label" title="Быстрый апгрейд">
                         <input type="checkbox" id="fastUpgradeCheck">
                         <svg class="lightning-icon" viewBox="0 0 24 24">
@@ -580,7 +610,7 @@
                                         <stop offset="100%" stop-color="#4a00e0" />
                                     </linearGradient>
                                 </defs>
-                                <path d="M12 0 L18 32 L14 28 L14 40 L10 40 L10 28 L6 32 Z" fill="url(#arrowGrad)"/>
+                                <path d="M12 0 L15 32 L13 28 L13 40 L11 40 L11 28 L9 32 Z" fill="url(#arrowGrad)"/>
                             </svg>
                         </div>
                         
@@ -653,7 +683,17 @@
                         </div>
                         <div class="inv-col">
                             <div class="inv-header-title">Магазин предметов</div>
-                            <input type="number" id="priceSearch" class="modal-input" placeholder="Поиск по цене (напр. 4500)..." style="margin-bottom: 15px; padding: 12px; font-size: 14px; width: 100%; border-radius: 12px;" oninput="renderGrid()">
+                            
+                            <div class="filter-row">
+                                <span>Цена</span>
+                                <input type="number" id="priceFrom" class="filter-input" placeholder="От" oninput="renderGrid()">
+                                <span style="color:var(--border-color);">|</span>
+                                <input type="number" id="priceTo" class="filter-input" placeholder="До" oninput="renderGrid()">
+                                <button class="filter-btn-search" onclick="renderGrid()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                </button>
+                            </div>
+
                             <div class="items-grid" id="gridShopContent"></div>
                         </div>
                     </div>
@@ -676,6 +716,15 @@
             @om1a2
         </a>
     </footer>
+
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeModal('settingsModal')">×</button>
+            <div class="modal-title">Настройки</div>
+            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Здесь вы можете управлять аккаунтом и получать бонусы.</p>
+            <button class="modal-btn" onclick="claimDailyBonus()" style="background: linear-gradient(135deg, #fd9644, #fc5c65); margin-bottom: 15px;">🎁 Ежедневный Бонус (2500 ⭐)</button>
+        </div>
+    </div>
 
     <div class="modal-overlay" id="depositModal">
         <div class="modal-card">
@@ -727,7 +776,7 @@
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <div style="display: flex; flex-direction: column;">
                             <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Баланс</span>
-                            <span style="font-size: 18px; font-weight: 900; color: #fff; margin-top: 4px;" id="profileBalanceVal">10 000 ⭐</span>
+                            <span style="font-size: 18px; font-weight: 900; color: #fff; margin-top: 4px;" id="profileBalanceVal">0 ⭐</span>
                         </div>
                         <button onclick="closeModal('profileModal'); openModal('depositModal');" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); color: #fff; border: none; padding: 10px 14px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; transition: transform 0.2s; box-shadow: 0 4px 15px var(--accent-glow);">Пополнить</button>
                     </div>
@@ -808,7 +857,10 @@
 
         giftPool.sort((a, b) => parseInt(a.price) - parseInt(b.price));
 
-        let balance = parseFloat(localStorage.getItem('ub_balance')) || 10000;
+        // СБРОС БАЛАНСА по указанию
+        let balance = 0;
+        localStorage.setItem('ub_balance', 0);
+        
         let myInventoryData = JSON.parse(localStorage.getItem('ub_inv')) || [giftPool[0], giftPool[1], giftPool[4], giftPool[8]];
         let stats = JSON.parse(localStorage.getItem('ub_stats')) || { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0, nickname: '' };
         
@@ -889,6 +941,33 @@
         const soundWin = document.getElementById('soundWin');
         const soundFail = document.getElementById('soundFail');
         const soundClick = document.getElementById('soundClick');
+        
+        let soundEnabled = true;
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundToggleBtn').innerText = soundEnabled ? '🔊' : '🔇';
+            soundSpin.muted = !soundEnabled;
+            soundWin.muted = !soundEnabled;
+            soundFail.muted = !soundEnabled;
+            soundClick.muted = !soundEnabled;
+        }
+
+        function claimDailyBonus() {
+            let lastClaim = localStorage.getItem('ub_last_bonus');
+            let now = Date.now();
+            if (!lastClaim || now - parseInt(lastClaim) > 24 * 60 * 60 * 1000) {
+                balance += 2500;
+                localStorage.setItem('ub_last_bonus', now);
+                saveData();
+                updateBalanceUI();
+                alert('Ежедневный бонус 2500 ⭐ получен!');
+            } else {
+                let remain = (24 * 60 * 60 * 1000 - (now - parseInt(lastClaim))) / 1000;
+                let h = Math.floor(remain / 3600);
+                let m = Math.floor((remain % 3600) / 60);
+                alert(`Следующий бонус через ${h}ч ${m}м`);
+            }
+        }
 
         function saveData() {
             localStorage.setItem('ub_balance', balance);
@@ -916,7 +995,7 @@
         window.getCurrentInv = () => myInventoryData;
         window.getCurrentStats = () => stats;
 
-        function playSound(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
+        function playSound(audio) { if(soundEnabled) { audio.currentTime = 0; audio.play().catch(() => {}); } }
         
         function updateBalanceUI() { 
             let formatted = Math.floor(balance).toLocaleString('ru-RU');
@@ -947,8 +1026,12 @@
         function renderGrid() {
             const combined = document.getElementById('combinedInventory');
             const promoBlock = document.getElementById('unauthPromoBlock');
-            const searchInput = document.getElementById('priceSearch');
-            const priceFilter = searchInput ? searchInput.value.trim() : '';
+            
+            // Фильтр цен от и до
+            const priceFromStr = document.getElementById('priceFrom')?.value;
+            const priceToStr = document.getElementById('priceTo')?.value;
+            const pFrom = priceFromStr ? parseInt(priceFromStr) : 0;
+            const pTo = priceToStr ? parseInt(priceToStr) : Infinity;
 
             if (!window.isUserLoggedIn) {
                 document.getElementById('headerLoginBtn').style.display = 'block';
@@ -971,7 +1054,7 @@
             gridMy.innerHTML = '';
             
             myInventoryData.forEach((item, idx) => {
-                if (priceFilter && !item.price.toString().includes(priceFilter)) return;
+                if (item.price < pFrom || item.price > pTo) return;
                 gridMy.innerHTML += `
                     <div class="item-card ${item.rarity}" onclick="selectItem(${idx}, 'my')">
                         <div class="item-price">${Math.round(item.price)} ⭐</div>
@@ -985,7 +1068,7 @@
             });
             
             const minCells = 9;
-            if (myInventoryData.length < minCells && !priceFilter) {
+            if (myInventoryData.length < minCells && pFrom === 0 && pTo === Infinity) {
                 const emptyCount = minCells - myInventoryData.length;
                 for(let i=0; i<emptyCount; i++) {
                     gridMy.innerHTML += `
@@ -1001,7 +1084,7 @@
 
             gridShop.innerHTML = '';
             giftPool.forEach((item, idx) => {
-                if (priceFilter && !item.price.toString().includes(priceFilter)) return;
+                if (item.price < pFrom || item.price > pTo) return;
                 gridShop.innerHTML += `
                     <div class="item-card ${item.rarity}" onclick="selectItem(${idx}, 'shop')">
                         <div class="item-price">${Math.round(item.price)} ⭐</div>
@@ -1019,15 +1102,17 @@
             if (isProcessing) return;
             playSound(soundClick);
             
-            const searchInput = document.getElementById('priceSearch');
-            const priceFilter = searchInput ? searchInput.value.trim() : '';
+            const priceFromStr = document.getElementById('priceFrom')?.value;
+            const priceToStr = document.getElementById('priceTo')?.value;
+            const pFrom = priceFromStr ? parseInt(priceFromStr) : 0;
+            const pTo = priceToStr ? parseInt(priceToStr) : Infinity;
 
             if (type === 'my') { 
-                let filteredMy = myInventoryData.filter(item => !priceFilter || item.price.toString().includes(priceFilter));
+                let filteredMy = myInventoryData.filter(item => item.price >= pFrom && item.price <= pTo);
                 const item = filteredMy[index] || myInventoryData[index];
                 selectedLeft = item; renderSlot('slotLeft', item); 
             } else { 
-                let filteredShop = giftPool.filter(item => !priceFilter || item.price.toString().includes(priceFilter));
+                let filteredShop = giftPool.filter(item => item.price >= pFrom && item.price <= pTo);
                 const item = filteredShop[index] || giftPool[index];
                 selectedRight = item; renderSlot('slotRight', item); 
             }
@@ -1137,7 +1222,7 @@
         let isAudioSetup = false;
 
         function setupAudioAnalysis() {
-            if (isAudioSetup) return;
+            if (isAudioSetup || !soundEnabled) return;
             try {
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 analyserNode = audioContext.createAnalyser();
@@ -1154,7 +1239,7 @@
         }
 
         function getAverageVolume() {
-            if (!isAudioSetup) return 0;
+            if (!isAudioSetup || !soundEnabled) return 0;
             analyserNode.getByteTimeDomainData(dataArray);
             let sum = 0;
             for (let i = 0; i < dataArray.length; i++) {
@@ -1195,7 +1280,7 @@
             if (isFastUpgrade) soundSpin.playbackRate = 2.0;
             else soundSpin.playbackRate = 1.0;
             
-            soundSpin.play().catch(() => {});
+            if (soundEnabled) soundSpin.play().catch(() => {});
 
             if (chance > 95) chance = 95;
             if (chance < 1) chance = 1;
