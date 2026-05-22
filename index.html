@@ -93,7 +93,7 @@
             border: 1px solid var(--border-color); padding: 6px 10px; border-radius: var(--radius-sm);
             font-size: 12px; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: var(--transition);
         }
-        .lang-switch:hover { border-color: var(--accent-main); }
+        .lang-switch-footer:hover { border-color: var(--accent-main); }
         .lang-switch span.active { color: var(--text-main); }
         .lang-switch .divider { color: #333; font-weight: 400; }
 
@@ -254,33 +254,31 @@
             animation: floatEffect 5s ease-in-out infinite; 
         }
         
-        /* === АНИМИРОВАННЫЕ ТРОЙНЫЕ СТРЕЛОЧКИ В СЛОТАХ === */
-        .slot-arrow-container {
+        /* === НОВЫЕ ТРИ СТРЕЛОЧКИ В СЛОТАХ === */
+        .slot-arrows-container {
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            gap: 4px;
             justify-content: center;
+            align-items: center;
+            margin-bottom: 8px;
             position: relative;
             z-index: 2;
-            margin-bottom: 8px;
-            gap: 2px;
         }
-        .slot-arrow-container.down { animation: floatArrowDown 1.5s ease-in-out infinite; }
-        .slot-arrow-container.up { animation: floatArrowUp 1.5s ease-in-out infinite; }
-        
-        .slot-arrow-sub {
-            width: 14px; height: 16px;
-            filter: drop-shadow(0 0 8px var(--accent-glow));
+        .slot-arrow {
+            width: 12px; height: 32px; 
+            filter: drop-shadow(0 0 6px var(--accent-glow));
         }
-        .slot-arrow-container.down .slot-arrow-sub { transform: rotate(180deg); }
+        .slot-arrows-container.down .slot-arrow { transform: rotate(180deg); }
+        .slot-arrows-container.down { animation: floatArrowDown 1.5s ease-in-out infinite; }
+        .slot-arrows-container.up { animation: floatArrowUp 1.5s ease-in-out infinite; }
         
         @keyframes floatArrowDown {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(6px); }
+            50% { transform: translateY(5px); }
         }
         @keyframes floatArrowUp {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
+            50% { transform: translateY(-5px); }
         }
 
         .slot-hint { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; position: relative; z-index: 2; }
@@ -488,7 +486,7 @@
         }
         .amount-btn:hover { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); transform: translateY(-2px); }
 
-        /* === НОВЫЙ ПРОФИЛЬ === */
+        /* === ПРОФИЛЬ === */
         .profile-page-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(10, 10, 15, 0.96); backdrop-filter: blur(20px);
@@ -541,7 +539,6 @@
         .bd-info { display: flex; flex-direction: column; min-width: 0; }
         .bd-name { font-size: 20px; font-weight: 800; color: #fff; text-shadow: 0 0 5px rgba(255,255,255,0.3); }
         .bd-rarity { font-size: 13px; font-weight: 700; margin-top: 6px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-        .bd-empty { font-size: 15px; color: var(--text-muted); font-weight: 600; text-align: center; padding: 20px 0; }
         
         .profile-tabs { display: flex; gap: 10px; margin-bottom: 24px; background: rgba(0,0,0,0.4); padding: 8px; border-radius: var(--radius-lg); border: 1px solid rgba(255,255,255,0.05); }
         .p-tab-btn { flex: 1; padding: 14px; border: none; background: transparent; color: var(--text-muted); font-size: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; border-radius: 12px; transition: var(--transition); letter-spacing: 0.5px; }
@@ -632,10 +629,10 @@
                 <div class="arena-row">
                     <div class="item-slot" id="slotLeft" onclick="playSound('sfxClick'); document.getElementById('gridMyContent').scrollIntoView({behavior: 'smooth'})">
                         <img src="16201.png" class="slot-bg-pepe">
-                        <div class="slot-arrow-container down">
-                            <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                            <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                            <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                        <div class="slot-arrows-container down">
+                            <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                            <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                            <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
                         </div>
                         <span class="slot-hint">Ваш предмет</span>
                     </div>
@@ -682,10 +679,10 @@
 
                     <div class="item-slot" id="slotRight" onclick="playSound('sfxClick'); document.getElementById('gridShopContent').scrollIntoView({behavior: 'smooth'})">
                         <img src="16201.png" class="slot-bg-pepe">
-                        <div class="slot-arrow-container up">
-                            <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                            <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                            <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                        <div class="slot-arrows-container up">
+                            <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                            <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                            <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
                         </div>
                         <span class="slot-hint">Желаемый предмет</span>
                     </div>
@@ -1127,7 +1124,7 @@
             updateChance();
         }
 
-        function renderSlot(slotId, item, arrowDir) {
+        function renderSlot(slotId, item, direction) {
             const slot = document.getElementById(slotId);
             slot.classList.remove('rarity-epic', 'rarity-legendary', 'rarity-mythic', 'rarity-immortal');
             slot.classList.add('active', item.rarity);
@@ -1136,6 +1133,11 @@
                 <div style="font-size:12px; font-weight:800; color:#fff; position: relative; z-index: 2; margin-bottom: auto;">${item.sub}</div>
                 <div style="margin: 8px 0; flex: 1; display:flex; align-items:center; justify-content:center; position: relative; z-index: 2;">
                     <img src="${item.img}" class="slot-item-img" style="max-height:80px; max-width:90%; object-fit:contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
+                </div>
+                <div class="slot-arrows-container ${direction}">
+                    <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                    <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                    <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
                 </div>
                 <div style="font-size:13px; font-weight:900; color:#fff; background: rgba(0,0,0,0.5); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 2; margin-top: auto;">${Math.round(item.price)} ⭐</div>
             `;
@@ -1337,10 +1339,9 @@
                 let rightItemImg = rightSlot.querySelector('.slot-item-img');
                 if(rightItemImg) rightItemImg.classList.add('win-item-anim');
                 
-                // ВЗРЫВ КОНФЕТТИ НА ВЕСЬ ЭКРАН (ИЗ ЦЕНТРА)
                 if(window.confetti) {
                     confetti({
-                        particleCount: 150, 
+                        particleCount: 120, 
                         spread: 100,
                         origin: { x: 0.5, y: 0.5 },
                         colors: ['#a55eea', '#00e5ff', '#ffffff']
@@ -1353,7 +1354,6 @@
                     stats.bestDrop = selectedRight;
                 }
 
-                // Закреп топового выигрыша в ленте, если подарок стоит больше 100 000
                 pinToLiveTicker(selectedRight, chanceText.innerText);
 
             } else {
@@ -1383,31 +1383,30 @@
                 
                 selectedLeft = null; selectedRight = null;
                 
-                // ИСПРАВЛЕНА АНИМАЦИЯ: Сброс углов вращения для корректного следующего цикла
                 arrowRotation = 0;
                 document.getElementById('arrowSpinner').style.transform = `rotate(0deg)`;
                 
                 document.getElementById('slotLeft').innerHTML = `
                     <img src="16201.png" class="slot-bg-pepe">
-                    <div class="slot-arrow-container down">
-                        <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                        <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                        <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                    <div class="slot-arrows-container down">
+                        <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                        <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                        <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
                     </div>
                     <span class="slot-hint">Ваш предмет</span>
                 `;
-                document.getElementById('slotLeft').className = 'item-slot';
+                document.getElementById('slotLeft').classList.remove('active', 'rarity-epic', 'rarity-legendary', 'rarity-mythic', 'rarity-immortal');
                 
                 document.getElementById('slotRight').innerHTML = `
                     <img src="16201.png" class="slot-bg-pepe">
-                    <div class="slot-arrow-container up">
-                        <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                        <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
-                        <svg class="slot-arrow-sub" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                    <div class="slot-arrows-container up">
+                        <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                        <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
+                        <svg class="slot-arrow" viewBox="0 0 24 40"><path d="M12 0 L22 10 L14 8 L14 40 L10 40 L10 8 L2 10 Z" fill="url(#arrowGrad)"/></svg>
                     </div>
                     <span class="slot-hint">Желаемый предмет</span>
                 `;
-                document.getElementById('slotRight').className = 'item-slot';
+                document.getElementById('slotRight').classList.remove('active', 'rarity-epic', 'rarity-legendary', 'rarity-mythic', 'rarity-immortal');
                 
                 updateChance(); 
                 renderGrid();
@@ -1415,7 +1414,6 @@
             }, 2500); 
         }
 
-        // РЕНДЕР ЛУЧШЕГО ДРОПА (БЕЗ ОТОБРАЖЕНИЯ ЦЕНЫ ПОДАРКА)
         function renderBestDrop() {
             const container = document.getElementById('bestDropContainer');
             if (!stats.bestDrop) {
@@ -1599,20 +1597,19 @@
             countNode.innerText = current.toLocaleString('ru-RU');
         }
 
-        // ФУНКЦИЯ ЗАКРЕПА ТОПОВОГО ВЫИГРЫША (> 100K ⭐) В ЛАЙВ-ЛЕНТЕ
         function pinToLiveTicker(item, chanceStr) {
-            if (parseFloat(item.price) < 100000) return; // Условие закрепа строго от 100к звезд
+            if (parseFloat(item.price) < 100000) return;
 
             const ticker = document.getElementById('liveTicker');
             const existingPin = document.getElementById('pinnedLiveDrop');
             if (existingPin) existingPin.remove();
 
             const html = `
-                <div id="pinnedLiveDrop" class="ticker-item success-stripe" style="border-left-color: #ffcc00; background: rgba(255, 204, 0, 0.15); border: 2px solid #ffcc00; position: sticky; left: 0; z-index: 10;">
-                    <span style="font-size:10px; background:#ffcc00; color:#000; padding:2px 4px; border-radius:4px; font-weight:900;">📌 ТОП ДРОП</span>
+                <div id="pinnedLiveDrop" class="ticker-item success-stripe" style="border-left-color: #ffcc00; background: rgba(255, 204, 0, 0.15); border: 2px solid #ffcc00; position: sticky; left: 0; z-index: 10; box-shadow: 0 0 15px rgba(255,204,0,0.3);">
+                    <span style="font-size:10px; background:#ffcc00; color:#000; padding:2px 6px; border-radius:4px; font-weight:900;">📌 ТОП ДРОП</span>
                     <img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'">
-                    <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 90px;">${item.sub}</span>
-                    <span class="ticker-chance" style="color: #ffcc00; background: rgba(255,204,0,0.2); border-color: rgba(255,204,0,0.4);">${chanceStr}</span>
+                    <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 90px; font-weight: bold;">${item.sub}</span>
+                    <span class="ticker-chance" style="color: #ffcc00; background: rgba(255,204,0,0.2); border-color: rgba(255,204,0,0.4); font-weight: 800;">${chanceStr}</span>
                 </div>
             `;
             
@@ -1621,7 +1618,7 @@
             setTimeout(() => {
                 const el = document.getElementById('pinnedLiveDrop');
                 if(el) el.remove();
-            }, 20000); // Закреп держится 20 секунд
+            }, 20000);
         }
 
         function updateTicker() {
@@ -1727,9 +1724,10 @@
             logoutBtn.addEventListener('click', () => {
                 playSound('sfxClick');
                 signOut(auth).then(() => {
-                    // ИСПРАВЛЕНО: Вместо localStorage.clear() сбрасываем только флаги сессии.
-                    // Данные профиля в БД больше не затрутся пустыми значениями.
                     localStorage.setItem('ub_logged_in', 'false');
+                    localStorage.removeItem('ub_balance');
+                    localStorage.removeItem('ub_inv');
+                    localStorage.removeItem('ub_stats');
                     location.reload(); 
                 });
             });
