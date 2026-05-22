@@ -70,10 +70,15 @@
         }
 
         .logo-area { display: flex; flex-direction: column; }
-        .logo { font-size: 20px; font-weight: 900; color: var(--accent-main); letter-spacing: 0.5px; transition: var(--transition); text-shadow: 0 0 10px var(--accent-glow); }
+        .logo { font-size: 20px; font-weight: 900; color: var(--accent-main); letter-spacing: 0.5px; transition: var(--transition); text-shadow: 0 0 10px var(--accent-glow); animation: neonPulse 3s infinite; }
         .logo span { color: var(--text-main); text-shadow: none; }
         .online-count { font-size: 11px; color: var(--text-muted); margin-top: 2px; font-weight: 600; }
-        .online-count span { color: var(--text-muted); font-weight: bold; } /* ИЗМЕНЕНО: Серый цвет онлайна */
+        .online-count span { color: var(--text-muted); font-weight: bold; }
+
+        @keyframes neonPulse {
+            0%, 100% { text-shadow: 0 0 10px var(--accent-glow); }
+            50% { text-shadow: 0 0 20px var(--accent-main), 0 0 5px var(--accent-glow); }
+        }
 
         .user-area { display: flex; align-items: center; gap: 12px; min-height: 38px;}
         
@@ -85,7 +90,7 @@
             background: var(--accent-main); color: #fff;
             padding: 8px 14px; border: none; border-radius: var(--radius-sm);
             font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition);
-            box-shadow: 0 0 10px rgba(138, 43, 226, 0.3); /* ИЗМЕНЕНО: Добавлено свечение */
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
         }
         .btn-deposit:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 0 15px rgba(138, 43, 226, 0.6); }
         
@@ -145,8 +150,8 @@
         }
         
         .top-left-controls { 
-            position: absolute; top: 12px; left: 12px; z-index: 10; 
-            display: flex; gap: 8px; align-items: center;
+            position: absolute; top: 8px; left: 8px; z-index: 10; 
+            display: flex; gap: 8px; align-items: center; transform: scale(0.85); transform-origin: top left;
         }
         .fast-upgrade-label { cursor: pointer; display: flex; align-items: center; background: var(--bg-card); padding: 6px; border-radius: 8px; border: 1px solid var(--border-color); }
         .fast-upgrade-label input { display: none; }
@@ -163,28 +168,26 @@
         }
 
         .right-slot-wrapper {
-            display: flex; flex-direction: column; flex: 1; max-width: 170px; width: 100%;
+            display: flex; flex-direction: column; flex: 1; max-width: 190px; width: 100%;
         }
 
         .item-slot {
             background: var(--bg-card); border: 1px dashed var(--border-color); border-radius: var(--radius-md);
-            height: 180px; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
-            padding: 12px; text-align: center; transition: var(--transition); cursor: pointer;
-            position: relative; overflow: hidden; flex: 1; max-width: 170px;
+            height: 200px; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+            padding: 12px; text-align: center; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s, box-shadow 0.3s; cursor: pointer;
+            position: relative; overflow: hidden; flex: 1; max-width: 190px;
         }
         .slot-confetti { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
         
-        .item-slot:hover { border-color: var(--text-muted); background: var(--bg-card-hover); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .item-slot:hover { border-color: var(--text-muted); background: var(--bg-card-hover); transform: translateY(-4px); box-shadow: 0 6px 16px rgba(0,0,0,0.4); }
         
-        /* ИЗМЕНЕНО: Добавлено свечение для активных слотов */
         .item-slot.active { border-style: solid; border-width: 2px; }
         .item-slot.active.rarity-epic { border-color: var(--rarity-epic); background: rgba(165, 94, 234, 0.05); box-shadow: 0 0 15px rgba(165, 94, 234, 0.25); }
         .item-slot.active.rarity-legendary { border-color: var(--rarity-legendary); background: rgba(253, 150, 68, 0.05); box-shadow: 0 0 15px rgba(253, 150, 68, 0.25); }
         .item-slot.active.rarity-mythic { border-color: var(--rarity-mythic); background: rgba(252, 92, 101, 0.05); box-shadow: 0 0 15px rgba(252, 92, 101, 0.25); }
         .item-slot.active.rarity-immortal { border-color: var(--rarity-immortal); background: rgba(43, 203, 186, 0.05); box-shadow: 0 0 15px rgba(43, 203, 186, 0.25); }
 
-        /* ИЗМЕНЕНО: Пепе теперь отлично видно */
-        .slot-bg-pepe { position: absolute; width: 65%; height: 65%; object-fit: contain; opacity: 0.25; z-index: 1; pointer-events: none; animation: floatEffect 5s ease-in-out infinite; }
+        .slot-bg-pepe { position: absolute; width: 65%; height: 65%; object-fit: contain; filter: brightness(0) opacity(0.3); z-index: 1; pointer-events: none; animation: floatEffect 5s ease-in-out infinite; }
         
         .slot-chevron-container { position: relative; z-index: 2; margin: auto 0; display: flex; align-items: center; justify-content: center; height: 50px; }
         .slot-hint { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; position: relative; z-index: 2; margin-top: auto; }
@@ -201,22 +204,19 @@
             50% { opacity: 1; transform: translateY(2px); filter: drop-shadow(0 0 5px var(--accent-main)); }
         }
 
-        /* ИЗМЕНЕНО: Ровная сетка для множителей иксов */
         .multiplier-bar {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 6px; 
-            width: 100%; margin-top: 12px;
-            background: var(--bg-card); padding: 8px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);
+            gap: 4px; 
+            width: 100%; margin-top: 10px;
+            background: var(--bg-card); padding: 6px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);
         }
         .multiplier-btn {
             background: var(--bg-panel); color: var(--text-muted); border: 1px solid var(--border-color);
-            padding: 6px 0; font-size: 11px; font-weight: 800; border-radius: 6px; cursor: pointer; text-align: center;
+            padding: 4px 0; font-size: 10px; font-weight: 800; border-radius: 6px; cursor: pointer; text-align: center;
             transition: var(--transition);
         }
         .multiplier-btn:hover { background: var(--accent-main); color: #fff; border-color: var(--accent-main); box-shadow: 0 0 8px var(--accent-glow); }
-        .multiplier-btn.pct-btn { grid-column: 1 / -1; color: var(--accent-secondary); padding: 8px 0; }
-        .multiplier-btn.pct-btn:hover { background: var(--accent-secondary); color: #000; box-shadow: 0 0 8px rgba(0, 229, 255, 0.4); }
 
         /* === КОЛЕСО И СТРЕЛКА === */
         .wheel-container { position: relative; width: 200px; height: 200px; margin: 0; display: flex; align-items: center; justify-content: center; z-index: 2; flex-shrink: 0; }
@@ -234,29 +234,34 @@
         
         .wheel-arrow { 
             position: absolute; 
-            top: 10px; 
+            top: 25px; 
             left: 50%; 
-            margin-left: -7px;
+            transform: translateX(-50%) rotate(180deg);
             width: 14px; 
             height: 22px; 
             fill: var(--accent-main); 
-            transform-origin: center 90px; 
-            transform: rotate(180deg); 
             filter: drop-shadow(0 0 6px var(--accent-glow));
         }
 
-        .wheel-center-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; z-index: 5; text-align: center; pointer-events: none; }
+        .wheel-center-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; justify-content: center; width: 130px; height: 130px; z-index: 5; text-align: center; pointer-events: none; overflow: hidden; }
 
         @keyframes slowBarsAnim { 0%, 100% { opacity: 1; transform: translateY(0); } 50% { opacity: 0.6; transform: translateY(-2px); } }
         .bars-anim { animation: slowBarsAnim 2s ease-in-out infinite; }
 
         #chanceDisplay { width: 100%; }
-        #chanceDisplay h1 { font-size: 28px; font-weight: 900; color: #ffffff; letter-spacing: -0.5px; transition: var(--transition); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; margin: 0 auto; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
-        #chanceDisplay p { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; margin-top: 0px; transition: var(--transition); }
+        #chanceDisplay h1 { font-size: 24px; font-weight: 900; color: #ffffff; letter-spacing: -0.5px; transition: var(--transition); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; margin: 0 auto; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        #chanceDisplay p { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; margin-top: 2px; transition: var(--transition); }
 
         .action-block { width: 100%; display: flex; flex-direction: column; gap: 10px; z-index: 2; margin-top: 5px; }
         
-        /* ИЗМЕНЕНО: Неоновое свечение кнопки апгрейда */
+        .boost-slider {
+            -webkit-appearance: none; width: 100%; height: 6px; background: var(--bg-main); border-radius: 4px; outline: none; opacity: 0.9; transition: var(--transition); border: 1px solid var(--border-color);
+        }
+        .boost-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--accent-main); cursor: pointer; box-shadow: 0 0 10px var(--accent-glow); transition: transform 0.2s;
+        }
+        .boost-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
         .btn-upgrade { background: var(--accent-main); color: #fff; border: none; padding: 16px; font-size: 14px; font-weight: 800; border-radius: var(--radius-md); cursor: pointer; text-transform: uppercase; transition: var(--transition); }
         .btn-upgrade:not(:disabled) { box-shadow: 0 0 15px var(--accent-glow); }
         .btn-upgrade:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 0 25px rgba(138, 43, 226, 0.6); }
@@ -302,12 +307,12 @@
 
         .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; align-items: stretch;}
         
-        .item-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; cursor: pointer; transition: var(--transition); height: 100%; position: relative; overflow: hidden; }
-        .item-card:hover:not(.empty-slot) { background: var(--bg-card-hover); transform: translateY(-2px); border-color: #3a3a4d; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .item-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; cursor: pointer; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s, box-shadow 0.3s, background 0.3s; height: 100%; position: relative; overflow: hidden; }
+        .item-card:hover:not(.empty-slot) { background: var(--bg-card-hover); transform: translateY(-4px); border-color: #3a3a4d; box-shadow: 0 6px 16px rgba(0,0,0,0.4); }
         .item-price { font-size: 10px; font-weight: 800; color: #fff; align-self: flex-end; background: var(--bg-panel); padding: 3px 6px; border-radius: 4px; border: 1px solid var(--border-color); }
         .item-img-container { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; margin: 8px 0; }
         .item-img-container img { max-width: 85%; max-height: 85%; object-fit: contain; transition: var(--transition); }
-        .item-card:hover:not(.empty-slot) .item-img-container img { transform: scale(1.05); }
+        .item-card:hover:not(.empty-slot) .item-img-container img { transform: scale(1.1); }
         .item-info { text-align: center; width: 100%; }
         
         .item-rarity-text { font-size: 9px; text-transform: uppercase; font-weight: 800; margin-bottom: 2px; padding: 2px 6px; border-radius: 4px; display: inline-block; }
@@ -414,7 +419,7 @@
     <div class="modal-overlay" id="authModal">
         <div class="modal-card" style="max-width: 380px; text-align: center;">
             <button class="modal-close" onclick="closeModal('authModal')">×</button>
-            <div class="logo" style="font-size: 26px; margin-bottom: 8px;">FLASH<span>UPGRADER</span></div>
+            <div class="logo" style="font-size: 26px; margin-bottom: 8px; animation: none;">FLASH<span>UPGRADER</span></div>
             <div class="auth-title" style="font-size: 16px; font-weight: bold; margin-bottom: 4px; text-transform: uppercase;">Авторизация</div>
             <div class="auth-subtitle" style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Войдите или создайте аккаунт, чтобы сохранять прогресс и делать апгрейды.</div>
             
@@ -528,12 +533,19 @@
                             <button class="multiplier-btn" onclick="selectByMultiplier(2)">2x</button>
                             <button class="multiplier-btn" onclick="selectByMultiplier(5)">5x</button>
                             <button class="multiplier-btn" onclick="selectByMultiplier(10)">10x</button>
-                            <button class="multiplier-btn pct-btn" onclick="selectByPercentage(80)">80% MAX</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="action-block">
+                    <div class="balance-boost-container" id="boostContainer" style="display: none; width: 100%; margin-top: 10px; margin-bottom: 5px; flex-direction: column; gap: 8px; background: var(--bg-card); padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); transition: var(--transition);">
+                        <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); font-weight: bold; text-transform: uppercase;">
+                            <span>Буст шанса (За Звезды)</span>
+                            <span id="boostValDisplay" style="color: var(--accent-secondary);">+ 0 ⭐</span>
+                        </div>
+                        <input type="range" id="balanceBoostSlider" min="0" max="0" value="0" step="1" class="boost-slider">
+                    </div>
+
                     <button class="btn-upgrade" id="btnUpgrade" onclick="executeUpgrade()" disabled>ВЫБЕРИТЕ ПРЕДМЕТЫ</button>
                 </div>
             </section>
@@ -875,20 +887,6 @@
             updateChance();
         }
 
-        function selectByPercentage(pct) {
-            if (!selectedLeft) {
-                alert("Сначала выберите свой предмет!");
-                return;
-            }
-            let targetPrice = selectedLeft.price / (pct / 100);
-            let closestItem = giftPool.reduce((prev, curr) => {
-                return (Math.abs(curr.price - targetPrice) < Math.abs(prev.price - targetPrice) ? curr : prev);
-            });
-            selectedRight = closestItem;
-            renderSlot('slotRight', closestItem);
-            updateChance();
-        }
-
         function renderGrid() {
             const combined = document.getElementById('combinedInventory');
             const promoBlock = document.getElementById('unauthPromoBlock');
@@ -996,18 +994,24 @@
             `;
         }
 
+        // ОБНОВЛЕНО: Логика буста балансом
         function updateChance() {
             const btn = document.getElementById('btnUpgrade');
             const bars = document.getElementById('centerBars');
             const chanceDisplay = document.getElementById('chanceDisplay');
             const chanceLabel = document.getElementById('chanceLabel');
             const chanceText = document.getElementById('chanceText');
+            
+            const boostSlider = document.getElementById('balanceBoostSlider');
+            const boostValDisplay = document.getElementById('boostValDisplay');
+            const boostContainer = document.getElementById('boostContainer');
 
             if (!selectedLeft || !selectedRight) {
                 btn.disabled = true;
                 btn.innerText = 'ВЫБЕРИТЕ ПРЕДМЕТЫ';
                 bars.style.display = 'block';
                 chanceDisplay.style.display = 'none';
+                boostContainer.style.display = 'none';
                 document.getElementById('wheelCircle').style.strokeDashoffset = circleCircumference;
                 return;
             }
@@ -1017,15 +1021,36 @@
                 btn.innerText = 'ВОЙТИ ДЛЯ АПГРЕЙДА';
                 bars.style.display = 'none';
                 chanceDisplay.style.display = 'block';
+                boostContainer.style.display = 'none';
                 return;
             }
             
+            boostContainer.style.display = 'flex';
+            
+            let maxBoostPossible = balance; 
+            let neededFor80 = (parseFloat(selectedRight.price) * 0.8) - parseFloat(selectedLeft.price);
+            if (neededFor80 < 0) neededFor80 = 0;
+            
+            let maxAllowed = Math.min(maxBoostPossible, neededFor80);
+            
+            if (boostSlider.dataset.leftId !== (selectedLeft.id || selectedLeft.title) || boostSlider.dataset.rightId !== (selectedRight.id || selectedRight.title)) {
+                boostSlider.max = Math.floor(maxAllowed);
+                boostSlider.value = 0;
+                boostSlider.dataset.leftId = selectedLeft.id || selectedLeft.title;
+                boostSlider.dataset.rightId = selectedRight.id || selectedRight.title;
+            } else {
+                 boostSlider.max = Math.floor(maxAllowed); 
+            }
+            
+            let currentBoost = parseFloat(boostSlider.value) || 0;
+            boostValDisplay.innerText = '+ ' + Math.floor(currentBoost) + ' ⭐';
+
             btn.disabled = false;
             btn.innerText = 'АПГРЕЙД';
             bars.style.display = 'none';
             chanceDisplay.style.display = 'block';
 
-            let chance = (parseFloat(selectedLeft.price) / parseFloat(selectedRight.price)) * 100;
+            let chance = ((parseFloat(selectedLeft.price) + currentBoost) / parseFloat(selectedRight.price)) * 100;
             if (chance > 95) chance = 95;
             if (chance < 1) chance = 1;
 
@@ -1048,6 +1073,8 @@
                 chanceLabel.style.color = "rgba(252, 92, 101, 0.8)";
             }
         }
+        
+        document.getElementById('balanceBoostSlider').addEventListener('input', updateChance);
 
         let startRotation = 0;
         let targetRotation = 0;
@@ -1072,6 +1099,7 @@
             if (ticker.children.length > maxItems) ticker.removeChild(ticker.lastChild);
         }
 
+        // ОБНОВЛЕНО: Списание буста
         function executeUpgrade() {
             if (!window.isUserLoggedIn) {
                 openModal('authModal');
@@ -1080,11 +1108,19 @@
 
             if (isProcessing || !selectedLeft || !selectedRight) return;
             
-            let chance = (parseFloat(selectedLeft.price) / parseFloat(selectedRight.price)) * 100;
+            let currentBoost = parseFloat(document.getElementById('balanceBoostSlider').value) || 0;
+            if (currentBoost > balance) {
+                alert('Недостаточно баланса для буста!');
+                return;
+            }
+
+            let chance = ((parseFloat(selectedLeft.price) + currentBoost) / parseFloat(selectedRight.price)) * 100;
             if (chance > 80) {
                 alert('Максимальный шанс для апгрейда составляет 80%!');
                 return;
             }
+            
+            balance -= currentBoost; 
 
             isProcessing = true;
             playSound('spin');
@@ -1092,8 +1128,11 @@
             const btn = document.getElementById('btnUpgrade');
             const arrowSpinner = document.getElementById('arrowSpinner');
             const isFastUpgrade = document.getElementById('fastUpgradeCheck').checked;
+            const boostContainer = document.getElementById('boostContainer');
             
             btn.innerText = 'Улучшение...';
+            boostContainer.style.pointerEvents = 'none';
+            boostContainer.style.opacity = '0.5';
             
             let animationDuration = isFastUpgrade ? 800 : 3800; 
             
@@ -1161,8 +1200,11 @@
             const arena = document.getElementById('arenaBox');
             const chanceText = document.getElementById('chanceText');
             const chanceLabel = document.getElementById('chanceLabel');
+            const boostContainer = document.getElementById('boostContainer');
             
             btn.innerText = isWin ? 'ВЫИГРЫШ!' : 'СГОРЕЛО!';
+            boostContainer.style.pointerEvents = 'auto';
+            boostContainer.style.opacity = '1';
             
             let currentName = stats.nickname || "Игрок";
             pushToTicker(selectedRight, isWin, chanceVal, currentName);
