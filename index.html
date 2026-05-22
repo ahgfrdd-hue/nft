@@ -28,7 +28,7 @@
             --radius-lg: 20px;
             --radius-md: 14px;
             --radius-sm: 8px;
-            --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); /* Улучшенная плавная анимация */
+            --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -193,7 +193,6 @@
             100% { transform: translateY(0px) scale(1); }
         }
 
-        /* Анимация победы на самом предмете */
         @keyframes winItemPop {
             0% { transform: scale(1) translateX(0); filter: drop-shadow(0 0 0 transparent); }
             20% { transform: scale(1.25) translateX(-8px) rotate(-5deg); filter: drop-shadow(0 0 30px var(--accent-main)); }
@@ -227,16 +226,16 @@
         
         .item-slot:hover { border-color: var(--text-muted); background: var(--bg-card-hover); transform: translateY(-3px); }
         
-        /* ЦВЕТА РЕДКОСТИ ДЛЯ СЛОТОВ */
         .item-slot.active.rarity-epic { border: 2px solid var(--rarity-epic); background: rgba(165, 94, 234, 0.05); box-shadow: 0 0 20px rgba(165, 94, 234, 0.2) inset; transform: translateY(0); }
         .item-slot.active.rarity-legendary { border: 2px solid var(--rarity-legendary); background: rgba(253, 150, 68, 0.05); box-shadow: 0 0 20px rgba(253, 150, 68, 0.2) inset; transform: translateY(0); }
         .item-slot.active.rarity-mythic { border: 2px solid var(--rarity-mythic); background: rgba(252, 92, 101, 0.05); box-shadow: 0 0 20px rgba(252, 92, 101, 0.2) inset; transform: translateY(0); }
         .item-slot.active.rarity-immortal { border: 2px solid var(--rarity-immortal); background: rgba(43, 203, 186, 0.05); box-shadow: 0 0 20px rgba(43, 203, 186, 0.2) inset; transform: translateY(0); }
 
-        /* Пепа вернулась в цвете, но полупрозрачная */
+        /* Полностью скрытый Пепе (силуэт) */
         .slot-bg-pepe {
             position: absolute; width: 75%; height: 75%; object-fit: contain;
-            opacity: 0.15; z-index: 1; pointer-events: none;
+            opacity: 0.1; z-index: 1; pointer-events: none;
+            filter: brightness(0) invert(1);
             animation: floatEffect 4s ease-in-out infinite; 
         }
         
@@ -346,16 +345,23 @@
         .promo-sub { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; white-space: nowrap; }
         .promo-price-tag { font-size: 11px; font-weight: 800; color: #fff; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 8px;}
 
-        /* === ИНВЕНТАРЬ === */
+        /* === ИНВЕНТАРЬ И МАГАЗИН (РАЗДЕЛЕНИЕ) === */
         .inventory-section { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; }
         
-        #combinedInventory { padding: 16px; max-height: 480px; overflow-y: auto; scroll-behavior: smooth; }
+        #combinedInventory { padding: 16px; max-height: 550px; overflow-y: auto; scroll-behavior: smooth; display: none; }
         #combinedInventory::-webkit-scrollbar { width: 6px; }
         #combinedInventory::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
         
+        .inventory-split { display: flex; gap: 20px; align-items: flex-start; }
+        .inv-col { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+        
+        @media (max-width: 768px) {
+            .inventory-split { flex-direction: column; }
+        }
+
         .inv-header-title { font-size: 15px; font-weight: 800; color: #fff; margin: 10px 0 16px; padding-left: 5px; text-transform: uppercase; letter-spacing: 0.5px; border-left: 3px solid var(--accent-main); padding-left: 10px; }
 
-        .items-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; align-items: stretch;}
+        .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; align-items: stretch;}
         
         .item-card { 
             background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); 
@@ -366,12 +372,11 @@
         }
         .item-card:hover:not(.empty-slot) { background: var(--bg-card-hover); transform: translateY(-5px) scale(1.03); box-shadow: 0 10px 25px rgba(0,0,0,0.5); border-color: #4a4a60; }
         .item-price { font-size: 11px; font-weight: 800; color: #fff; align-self: flex-end; background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); }
-        .item-img-container { width: 100%; height: 85px; display: flex; align-items: center; justify-content: center; margin: 8px 0; }
+        .item-img-container { width: 100%; height: 75px; display: flex; align-items: center; justify-content: center; margin: 8px 0; }
         .item-img-container img { max-width: 90%; max-height: 90%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); transition: var(--transition); }
         .item-card:hover:not(.empty-slot) .item-img-container img { transform: scale(1.1); }
         .item-info { text-align: center; width: 100%; }
         
-        /* Красивые плашки с редкостями */
         .item-rarity-text { 
             font-size: 9px; text-transform: uppercase; font-weight: 800; margin-bottom: 4px;
             padding: 3px 8px; border-radius: 6px; display: inline-block;
@@ -549,9 +554,9 @@
                         <img src="16201.png" class="slot-bg-pepe">
                         <div class="slot-chevron-container">
                             <svg class="chevron-down" viewBox="0 0 50 75" width="45" height="65">
-                                <path fill="#FFCC00" d="M5 10 L25 25 L45 10 L45 20 L25 35 L5 20 Z" />
-                                <path fill="#FFCC00" d="M5 30 L25 45 L45 30 L45 40 L25 55 L5 40 Z" />
-                                <path fill="#FFCC00" d="M5 50 L25 65 L45 50 L45 60 L25 75 L5 60 Z" />
+                                <path fill="var(--accent-main)" d="M5 10 L25 25 L45 10 L45 20 L25 35 L5 20 Z" />
+                                <path fill="var(--accent-main)" d="M5 30 L25 45 L45 30 L45 40 L25 55 L5 40 Z" />
+                                <path fill="var(--accent-main)" d="M5 50 L25 65 L45 50 L45 60 L25 75 L5 60 Z" />
                             </svg>
                         </div>
                         <span class="slot-hint">Ваш предмет</span>
@@ -590,9 +595,8 @@
                             </svg>
 
                             <div class="wheel-center-content">
-                                <svg id="centerChevrons" width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="display: block;">
-                                    <polygon points="15,70 50,40 85,70 85,85 50,55 15,85" fill="#3a1c61"/>
-                                    <polygon points="15,40 50,10 85,40 85,55 50,25 15,55" fill="#8a2be2"/>
+                                <svg id="centerChevrons" width="40" height="40" viewBox="0 0 24 24" fill="var(--accent-main)" xmlns="http://www.w3.org/2000/svg" style="display: block;">
+                                    <path d="M12 2L22 12H15V22H9V12H2L12 2Z"/>
                                 </svg>
 
                                 <div id="chanceDisplay" style="display: none;">
@@ -607,9 +611,9 @@
                         <img src="16201.png" class="slot-bg-pepe">
                         <div class="slot-chevron-container">
                             <svg class="chevron-up" viewBox="0 0 50 75" width="45" height="65">
-                                <path fill="#FFCC00" d="M5 25 L25 10 L45 25 L45 15 L25 0 L5 15 Z" />
-                                <path fill="#FFCC00" d="M5 45 L25 30 L45 45 L45 35 L25 20 L5 35 Z" />
-                                <path fill="#FFCC00" d="M5 65 L25 50 L45 65 L45 55 L25 40 L5 55 Z" />
+                                <path fill="var(--accent-main)" d="M5 25 L25 10 L45 25 L45 15 L25 0 L5 15 Z" />
+                                <path fill="var(--accent-main)" d="M5 45 L25 30 L45 45 L45 35 L25 20 L5 35 Z" />
+                                <path fill="var(--accent-main)" d="M5 65 L25 50 L45 65 L45 55 L25 40 L5 55 Z" />
                             </svg>
                         </div>
                         <span class="slot-hint">Желаемый предмет</span>
@@ -637,12 +641,18 @@
                     <button class="btn-upgrade" style="background: linear-gradient(135deg, var(--accent-main), var(--accent-secondary)); margin-top: 24px; padding: 14px 30px; font-size: 14px; max-width: 280px; width: 100%; border-radius: 50px;" onclick="openModal('authModal')">ВОЙТИ ПО EMAIL</button>
                 </div>
 
-                <div id="combinedInventory" style="display: none;">
-                    <div class="inv-header-title">Мой инвентарь</div>
-                    <div class="items-grid" id="gridMyContent" style="margin-bottom: 24px;"></div>
-                    
-                    <div class="inv-header-title">Магазин предметов</div>
-                    <div class="items-grid" id="gridShopContent"></div>
+                <div id="combinedInventory">
+                    <div class="inventory-split">
+                        <div class="inv-col">
+                            <div class="inv-header-title">Мой инвентарь</div>
+                            <div class="items-grid" id="gridMyContent" style="margin-bottom: 24px;"></div>
+                        </div>
+                        <div class="inv-col">
+                            <div class="inv-header-title">Магазин предметов</div>
+                            <input type="number" id="priceSearch" class="modal-input" placeholder="Поиск по цене (напр. 4500)..." style="margin-bottom: 15px; padding: 12px; font-size: 14px; width: 100%; border-radius: 12px;" oninput="renderGrid()">
+                            <div class="items-grid" id="gridShopContent"></div>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>
@@ -740,6 +750,7 @@
                 <div class="stat-line"><span>Всего апгрейдов:</span><span id="statTotal">0</span></div>
                 <div class="stat-line"><span>Успешных:</span><span id="statWins" style="color:var(--accent-secondary);">0</span></div>
                 <div class="stat-line"><span>Сгорело:</span><span id="statLosses" style="color:var(--rarity-mythic);">0</span></div>
+                <div class="stat-line"><span>Выведено:</span><span id="statWithdrawn" style="color:var(--rarity-legendary);">0 ⭐</span></div>
             </div>
             <div id="pContentSell" style="display:none;">
                 <div id="profileSellList" style="max-height: 350px; overflow-y:auto; padding-right: 5px;"></div>
@@ -932,6 +943,8 @@
         function renderGrid() {
             const combined = document.getElementById('combinedInventory');
             const promoBlock = document.getElementById('unauthPromoBlock');
+            const searchInput = document.getElementById('priceSearch');
+            const priceFilter = searchInput ? searchInput.value.trim() : '';
 
             if (!window.isUserLoggedIn) {
                 document.getElementById('headerLoginBtn').style.display = 'block';
@@ -954,6 +967,7 @@
             gridMy.innerHTML = '';
             
             myInventoryData.forEach((item, idx) => {
+                if (priceFilter && !item.price.toString().includes(priceFilter)) return;
                 gridMy.innerHTML += `
                     <div class="item-card ${item.rarity}" onclick="selectItem(${idx}, 'my')">
                         <div class="item-price">${Math.round(item.price)} ⭐</div>
@@ -967,7 +981,7 @@
             });
             
             const minCells = 9;
-            if (myInventoryData.length < minCells) {
+            if (myInventoryData.length < minCells && !priceFilter) {
                 const emptyCount = minCells - myInventoryData.length;
                 for(let i=0; i<emptyCount; i++) {
                     gridMy.innerHTML += `
@@ -983,6 +997,7 @@
 
             gridShop.innerHTML = '';
             giftPool.forEach((item, idx) => {
+                if (priceFilter && !item.price.toString().includes(priceFilter)) return;
                 gridShop.innerHTML += `
                     <div class="item-card ${item.rarity}" onclick="selectItem(${idx}, 'shop')">
                         <div class="item-price">${Math.round(item.price)} ⭐</div>
@@ -999,11 +1014,17 @@
         function selectItem(index, type) {
             if (isProcessing) return;
             playSound(soundClick);
+            
+            const searchInput = document.getElementById('priceSearch');
+            const priceFilter = searchInput ? searchInput.value.trim() : '';
+
             if (type === 'my') { 
-                const item = myInventoryData[index];
+                let filteredMy = myInventoryData.filter(item => !priceFilter || item.price.toString().includes(priceFilter));
+                const item = filteredMy[index] || myInventoryData[index];
                 selectedLeft = item; renderSlot('slotLeft', item); 
             } else { 
-                const item = giftPool[index];
+                let filteredShop = giftPool.filter(item => !priceFilter || item.price.toString().includes(priceFilter));
+                const item = filteredShop[index] || giftPool[index];
                 selectedRight = item; renderSlot('slotRight', item); 
             }
             updateChance();
@@ -1248,7 +1269,6 @@
                 btn.style.background = 'var(--accent-secondary)';
                 
                 let rightSlot = document.getElementById('slotRight');
-                // Анимация победы ТОЛЬКО на подарке
                 let rightItemImg = rightSlot.querySelector('.slot-item-img');
                 if(rightItemImg) rightItemImg.classList.add('win-item-anim');
                 
@@ -1305,9 +1325,9 @@
                     <img src="16201.png" class="slot-bg-pepe">
                     <div class="slot-chevron-container">
                         <svg class="chevron-down" viewBox="0 0 50 75" width="45" height="65">
-                            <path fill="#FFCC00" d="M5 10 L25 25 L45 10 L45 20 L25 35 L5 20 Z" />
-                            <path fill="#FFCC00" d="M5 30 L25 45 L45 30 L45 40 L25 55 L5 40 Z" />
-                            <path fill="#FFCC00" d="M5 50 L25 65 L45 50 L45 60 L25 75 L5 60 Z" />
+                            <path fill="var(--accent-main)" d="M5 10 L25 25 L45 10 L45 20 L25 35 L5 20 Z" />
+                            <path fill="var(--accent-main)" d="M5 30 L25 45 L45 30 L45 40 L25 55 L5 40 Z" />
+                            <path fill="var(--accent-main)" d="M5 50 L25 65 L45 50 L45 60 L25 75 L5 60 Z" />
                         </svg>
                     </div>
                     <span class="slot-hint">Ваш предмет</span>
@@ -1318,9 +1338,9 @@
                     <img src="16201.png" class="slot-bg-pepe">
                     <div class="slot-chevron-container">
                         <svg class="chevron-up" viewBox="0 0 50 75" width="45" height="65">
-                            <path fill="#FFCC00" d="M5 25 L25 10 L45 25 L45 15 L25 0 L5 15 Z" />
-                            <path fill="#FFCC00" d="M5 45 L25 30 L45 45 L45 35 L25 20 L5 35 Z" />
-                            <path fill="#FFCC00" d="M5 65 L25 50 L45 65 L45 55 L25 40 L5 55 Z" />
+                            <path fill="var(--accent-main)" d="M5 25 L25 10 L45 25 L45 15 L25 0 L5 15 Z" />
+                            <path fill="var(--accent-main)" d="M5 45 L25 30 L45 45 L45 35 L25 20 L5 35 Z" />
+                            <path fill="var(--accent-main)" d="M5 65 L25 50 L45 65 L45 55 L25 40 L5 55 Z" />
                         </svg>
                     </div>
                     <span class="slot-hint">Желаемый предмет</span>
@@ -1392,6 +1412,7 @@
                 document.getElementById('statTotal').innerText = stats.total;
                 document.getElementById('statWins').innerText = stats.wins;
                 document.getElementById('statLosses').innerText = stats.losses;
+                document.getElementById('statWithdrawn').innerText = stats.withdrawn + ' ⭐';
             } else if(pTab === 'sell') {
                 renderProfileSellList();
             } else if(pTab === 'buy') {
