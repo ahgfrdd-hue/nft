@@ -174,26 +174,85 @@
             box-shadow: 0 8px 30px rgba(0,0,0,0.6);
         }
         
-        /* ОБНОВЛЕННЫЙ БЛОК УПРАВЛЕНИЯ СЛЕВА */
+        /* ОБНОВЛЕННЫЙ БЛОК УПРАВЛЕНИЯ (ИЗ ВТОРОГО ФОТО В СТИЛЕ ПЕРВОГО) */
         .top-left-controls { 
             position: absolute; top: 16px; left: 16px; z-index: 10; 
-            display: flex; gap: 12px; align-items: center;
-            background: rgba(0,0,0,0.4); padding: 6px 12px; border-radius: 20px;
-            border: 1px solid var(--border-color);
+            display: flex; gap: 14px; align-items: center;
+            background: #16161f; padding: 6px 14px; border-radius: 30px;
+            border: 1px solid #22222e;
         }
         .control-icon {
-            background: transparent; border: none; cursor: pointer; color: var(--text-muted); 
-            font-size: 18px; transition: 0.3s; display: flex; align-items: center; justify-content: center;
+            background: transparent; border: none; cursor: pointer; color: #5a5a6e; 
+            font-size: 16px; transition: 0.3s; display: flex; align-items: center; justify-content: center;
         }
-        .control-icon:hover { color: #fff; transform: scale(1.1); }
-        .fast-upgrade-label { cursor: pointer; display: flex; align-items: center; margin-left: 4px; }
+        .control-icon:hover { transform: scale(1.1); }
+        .control-icon.gear-btn { color: #5a5a6e; }
+        .control-icon.sound-btn { color: #ffcc00; }
+        
+        .fast-upgrade-label { cursor: pointer; display: flex; align-items: center; }
         .fast-upgrade-label input { display: none; }
         .lightning-icon { 
-            width: 22px; height: 22px; fill: var(--text-muted); 
-            transition: all 0.3s; filter: drop-shadow(0 0 0 transparent);
+            width: 18px; height: 18px; fill: #5a5a6e; 
+            transition: all 0.3s;
         }
         .fast-upgrade-label input:checked + .lightning-icon { 
-            fill: #FFD700; filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6)); transform: scale(1.1);
+            fill: #ffcc00; transform: scale(1.1);
+        }
+        .controls-divider {
+            width: 1px; height: 14px; background-color: #2c2c3d; margin: 0 2px;
+        }
+
+        /* КОМПОНЕНТЫ НАСТРОЕК В СТИЛЕ ТРЕТЬЕГО СКРИНШОТА */
+        .settings-section-title {
+            font-size: 11px; font-weight: 800; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; margin-top: 14px;
+        }
+        .settings-section-title:first-of-type { margin-top: 0; }
+        .settings-grid-buttons {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 14px;
+        }
+        .settings-opt-btn {
+            background: #1a1a26; border: 1px solid #2b2b3d; color: var(--text-main);
+            padding: 10px 4px; border-radius: 8px; font-size: 13px; font-weight: 700;
+            cursor: pointer; transition: var(--transition); text-align: center;
+        }
+        .settings-opt-btn.active {
+            background: var(--accent-main); border-color: var(--accent-main); color: #fff;
+        }
+        .settings-toggle-row {
+            display: flex; justify-content: space-between; align-items: center;
+            background: #1a1a26; border: 1px solid #2b2b3d; padding: 12px 14px;
+            border-radius: 10px; margin-bottom: 12px;
+        }
+        .settings-toggle-label {
+            font-size: 13px; font-weight: 700; color: var(--text-main);
+        }
+        .settings-switch-box {
+            display: flex; background: #13131c; border-radius: 6px; padding: 2px; border: 1px solid #22222e;
+        }
+        .settings-switch-item {
+            padding: 6px 12px; font-size: 11px; font-weight: 800; text-transform: uppercase;
+            border-radius: 4px; color: var(--text-muted); cursor: pointer; transition: 0.2s;
+        }
+        .settings-switch-item.active {
+            background: #222230; color: #fff;
+        }
+        .settings-save-btn {
+            width: 100%; background: #ffcc00; color: #000; border: none; padding: 14px;
+            border-radius: 10px; font-size: 14px; font-weight: 800; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 0.5px; margin-top: 16px; transition: var(--transition);
+        }
+        .settings-save-btn:hover { background: #e6b800; }
+
+        @media (max-width: 650px) {
+            .arena-row {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+            #slotLeft { grid-column: 1; grid-row: 1; max-width: none; flex: auto; }
+            #slotRight { grid-column: 2; grid-row: 1; max-width: none; flex: auto; }
+            .wheel-container { grid-column: 1 / 3; grid-row: 2; margin: 20px auto 0; }
         }
 
         @keyframes floatEffect {
@@ -319,17 +378,6 @@
         }
         .btn-upgrade:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 12px 35px var(--accent-glow); }
         .btn-upgrade:disabled { background: var(--bg-card); color: #555566; cursor: not-allowed; box-shadow: none; border: 1px solid var(--border-color); transform: none; }
-
-        @media (max-width: 650px) {
-            .arena-row {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 20px;
-            }
-            #slotLeft { grid-column: 1; grid-row: 1; max-width: none; flex: auto; }
-            #slotRight { grid-column: 2; grid-row: 1; max-width: none; flex: auto; }
-            .wheel-container { grid-column: 1 / 3; grid-row: 2; margin: 20px auto 0; }
-        }
 
         /* === БЛОК ДЛЯ НЕАВТОРИЗОВАННЫХ === */
         #unauthPromoBlock {
@@ -555,12 +603,12 @@
         <div class="user-area">
             <button id="headerLoginBtn" class="btn-deposit" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); font-weight: 800; box-shadow: 0 4px 15px var(--accent-glow); display: none;" onclick="openModal('authModal')">Вход</button>
             
-            <div id="headerUserArea" style="display: none; align-items: center; gap: 14px;">
+            <div id="headerUserArea" style="none; align-items: center; gap: 14px;">
                 <div class="balance-block">
                     <span class="balance-label">Баланс</span>
                     <div class="balance" id="userBalance">0 ⭐</div>
                 </div>
-                <button class="btn-deposit" onclick="openModal('depositModal')">Пополнить</button>
+                <button class="btn-deposit" onclick="openModal('depositModal')">Пополниться</button>
                 <div class="profile-avatar" id="headerAvatar" onclick="openModal('profileModal')">👤</div>
             </div>
         </div>
@@ -572,11 +620,11 @@
         <div class="main-content">
             <section class="upgrade-arena" id="arenaBox">
                 <div class="top-left-controls">
-                    <div class="control-icon" onclick="openModal('settingsModal')" title="Настройки">⚙️</div>
-                    <div class="control-icon" onclick="toggleSound()" id="soundToggleBtn" title="Включить/Выключить звук">🔊</div>
-                    <span style="color:var(--border-color);">|</span>
+                    <button class="control-icon gear-btn" onclick="openModal('settingsModal')" title="Настройки">⚙️</button>
+                    <button class="control-icon sound-btn" onclick="toggleSound()" id="soundToggleBtn" title="Звук">🔊</button>
+                    <div class="controls-divider"></div>
                     <label class="fast-upgrade-label" title="Быстрый апгрейд">
-                        <input type="checkbox" id="fastUpgradeCheck">
+                        <input type="checkbox" id="fastUpgradeCheck" onchange="syncLightningCheckbox(this.checked)">
                         <svg class="lightning-icon" viewBox="0 0 24 24">
                             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                         </svg>
@@ -718,11 +766,43 @@
     </footer>
 
     <div class="modal-overlay" id="settingsModal">
-        <div class="modal-card">
+        <div class="modal-card" style="max-width: 420px;">
             <button class="modal-close" onclick="closeModal('settingsModal')">×</button>
-            <div class="modal-title">Настройки</div>
-            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Здесь вы можете управлять аккаунтом и получать бонусы.</p>
-            <button class="modal-btn" onclick="claimDailyBonus()" style="background: linear-gradient(135deg, #fd9644, #fc5c65); margin-bottom: 15px;">🎁 Ежедневный Бонус (2500 ⭐)</button>
+            <div class="modal-title" style="margin-bottom: 16px;">Настройки</div>
+            
+            <div class="settings-section-title">Quick Selection (Multiplier)</div>
+            <div class="settings-grid-buttons">
+                <button class="settings-opt-btn" onclick="selectSettingOpt(this, 'mult', '1.5')">x1.5</button>
+                <button class="settings-opt-btn" onclick="selectSettingOpt(this, 'mult', '2')">x2</button>
+                <button class="settings-opt-btn" onclick="selectSettingOpt(this, 'mult', '5')">x5</button>
+                <button class="settings-opt-btn" onclick="selectSettingOpt(this, 'mult', '10')">x10</button>
+            </div>
+
+            <div class="settings-section-title">Quick Selection (Chance)</div>
+            <div class="settings-grid-buttons">
+                <button class="settings-opt-btn" onclick="selectSettingOpt(this, 'chance', '10')">10%</button>
+                <button class="settings-opt-btn" onclick="selectSettingOpt(this, 'chance', '25')">25%</button>
+                <button class="settings-opt-btn" onclick="selectSettingOpt(this, 'chance', '50')">50%</button>
+                <button class="settings-opt-btn" onclick="selectSettingOpt(this, 'chance', '90')">90%</button>
+            </div>
+
+            <div class="settings-toggle-row">
+                <div class="settings-toggle-label">Sound in upgrade</div>
+                <div class="settings-switch-box">
+                    <div class="settings-switch-item id-sound-on active" onclick="setSettingToggle('sound', true)">Enabled</div>
+                    <div class="settings-switch-item id-sound-off" onclick="setSettingToggle('sound', false)">Disabled</div>
+                </div>
+            </div>
+
+            <div class="settings-toggle-row">
+                <div class="settings-toggle-label">Scroll type</div>
+                <div class="settings-switch-box">
+                    <div class="settings-switch-item id-scroll-normal active" onclick="setSettingToggle('scroll', 'normal')">Normal</div>
+                    <div class="settings-switch-item id-scroll-fast" onclick="setSettingToggle('scroll', 'fast')">Fast</div>
+                </div>
+            </div>
+
+            <button class="settings-save-btn" onclick="closeModal('settingsModal')">Save and close</button>
         </div>
     </div>
 
@@ -857,7 +937,6 @@
 
         giftPool.sort((a, b) => parseInt(a.price) - parseInt(b.price));
 
-        // СБРОС БАЛАНСА по указанию
         let balance = 0;
         localStorage.setItem('ub_balance', 0);
         
@@ -946,27 +1025,65 @@
         function toggleSound() {
             soundEnabled = !soundEnabled;
             document.getElementById('soundToggleBtn').innerText = soundEnabled ? '🔊' : '🔇';
+            
+            // Синхронизация табов в модалке настроек
+            document.querySelector('.id-sound-on').classList.toggle('active', soundEnabled);
+            document.querySelector('.id-sound-off').classList.toggle('active', !soundEnabled);
+
             soundSpin.muted = !soundEnabled;
             soundWin.muted = !soundEnabled;
             soundFail.muted = !soundEnabled;
             soundClick.muted = !soundEnabled;
         }
 
-        function claimDailyBonus() {
-            let lastClaim = localStorage.getItem('ub_last_bonus');
-            let now = Date.now();
-            if (!lastClaim || now - parseInt(lastClaim) > 24 * 60 * 60 * 1000) {
-                balance += 2500;
-                localStorage.setItem('ub_last_bonus', now);
-                saveData();
-                updateBalanceUI();
-                alert('Ежедневный бонус 2500 ⭐ получен!');
-            } else {
-                let remain = (24 * 60 * 60 * 1000 - (now - parseInt(lastClaim))) / 1000;
-                let h = Math.floor(remain / 3600);
-                let m = Math.floor((remain % 3600) / 60);
-                alert(`Следующий бонус через ${h}ч ${m}м`);
+        // Функции управления новыми опциями настроек
+        function selectSettingOpt(btn, type, value) {
+            playSound(soundClick);
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.settings-opt-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            if (type === 'chance') {
+                let targetPercent = parseFloat(value);
+                if (selectedLeft) {
+                    let requiredPrice = selectedLeft.price / (targetPercent / 100);
+                    let closestItem = giftPool.reduce((prev, curr) => {
+                        return (Math.abs(curr.price - requiredPrice) < Math.abs(prev.price - requiredPrice) ? curr : prev);
+                    });
+                    selectedRight = closestItem;
+                    renderSlot('slotRight', closestItem);
+                    updateChance();
+                }
+            } else if (type === 'mult') {
+                let multiplier = parseFloat(value);
+                if (selectedLeft) {
+                    let requiredPrice = selectedLeft.price * multiplier;
+                    let closestItem = giftPool.reduce((prev, curr) => {
+                        return (Math.abs(curr.price - requiredPrice) < Math.abs(prev.price - requiredPrice) ? curr : prev);
+                    });
+                    selectedRight = closestItem;
+                    renderSlot('slotRight', closestItem);
+                    updateChance();
+                }
             }
+        }
+
+        function setSettingToggle(type, value) {
+            playSound(soundClick);
+            if (type === 'sound') {
+                if (soundEnabled !== value) {
+                    toggleSound();
+                }
+            } else if (type === 'scroll') {
+                document.querySelector('.id-scroll-normal').classList.toggle('active', value === 'normal');
+                document.querySelector('.id-scroll-fast').classList.toggle('active', value === 'fast');
+                document.getElementById('fastUpgradeCheck').checked = (value === 'fast');
+            }
+        }
+
+        function syncLightningCheckbox(isChecked) {
+            document.querySelector('.id-scroll-normal').classList.toggle('active', !isChecked);
+            document.querySelector('.id-scroll-fast').classList.toggle('active', isChecked);
         }
 
         function saveData() {
@@ -1027,7 +1144,6 @@
             const combined = document.getElementById('combinedInventory');
             const promoBlock = document.getElementById('unauthPromoBlock');
             
-            // Фильтр цен от и до
             const priceFromStr = document.getElementById('priceFrom')?.value;
             const priceToStr = document.getElementById('priceTo')?.value;
             const pFrom = priceFromStr ? parseInt(priceFromStr) : 0;
@@ -1481,6 +1597,10 @@
                 
                 switchProfileTab('stats');
                 renderBestDrop();
+            }
+            if (id === 'settingsModal') {
+                // Очистка активных классов при открытии окон выбора множителей
+                document.getElementById('settingsModal').querySelectorAll('.settings-opt-btn').forEach(b => b.classList.remove('active'));
             }
         }
 
