@@ -138,16 +138,17 @@
             display: inline-flex; align-items: center; gap: 8px; background: var(--bg-card);
             padding: 6px 12px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; 
             min-width: fit-content;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
         }
         .ticker-item.success-stripe {
             background: repeating-linear-gradient( 45deg, var(--bg-card), var(--bg-card) 10px, #1c1c28 10px, #1c1c28 20px );
-            border-left: 3px solid var(--accent-secondary);
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
         .ticker-img { width: 22px; height: 22px; object-fit: contain; }
         .ticker-chance {
-            margin-left: auto; color: var(--accent-secondary); font-weight: 800; font-size: 11px;
-            background: rgba(0, 229, 255, 0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(0, 229, 255, 0.2);
+            margin-left: auto; font-weight: 800; font-size: 11px;
+            padding: 2px 6px; border-radius: 4px; border: 1px solid transparent;
         }
 
         /* АДАПТИВ ПК */
@@ -174,7 +175,7 @@
         }
         
         .fast-upgrade-wrapper { 
-            position: absolute; top: 16px; right: 16px; z-index: 10; 
+            position: absolute; top: 16px; left: 16px; z-index: 10; 
         }
         .fast-upgrade-label { cursor: pointer; display: flex; align-items: center; }
         .fast-upgrade-label input { display: none; }
@@ -270,11 +271,11 @@
             filter: drop-shadow(0 0 12px var(--accent-main)); 
         }
 
-        .wheel-marker { position: absolute; font-size: 11px; font-weight: 800; color: #4a4a60; z-index: 10; pointer-events: none;}
-        .marker-top { top: -20px; left: 50%; transform: translateX(-50%); }
-        .marker-bottom { bottom: -20px; left: 50%; transform: translateX(-50%); }
-        .marker-left { top: 50%; left: -25px; transform: translateY(-50%); }
-        .marker-right { top: 50%; right: -25px; transform: translateY(-50%); }
+        .wheel-marker { position: absolute; font-size: 13px; font-weight: 900; color: rgba(255,255,255,0.7); z-index: 10; pointer-events: none; text-shadow: 0 1px 5px rgba(0,0,0,0.8);}
+        .marker-top { top: 30px; left: 50%; transform: translateX(-50%); }
+        .marker-bottom { bottom: 30px; left: 50%; transform: translateX(-50%); }
+        .marker-left { top: 50%; left: 30px; transform: translateY(-50%); }
+        .marker-right { top: 50%; right: 30px; transform: translateY(-50%); }
         
         .arrow-spinner-wrapper {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -283,7 +284,7 @@
         }
         
         .wheel-arrow {
-            position: absolute; top: -5px; left: 50%; transform: translateX(-50%) rotate(180deg);
+            position: absolute; top: 25px; left: 50%; transform: translateX(-50%);
             width: 14px; height: 22px; filter: drop-shadow(0 0 6px var(--accent-glow));
         }
 
@@ -386,16 +387,16 @@
         .promo-sub { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; white-space: nowrap; }
         .promo-price-tag { font-size: 11px; font-weight: 800; color: #fff; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 8px;}
 
-        /* === ТАБЫ И ИНВЕНТАРЬ === */
+        /* === ИНВЕНТАРЬ (ОБЪЕДИНЕННЫЙ) === */
         .inventory-section { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; }
-        .tabs-header { display: flex; background: #0c0c12; border-bottom: 1px solid var(--border-color); padding: 8px; gap: 8px; }
-        .tab-btn { flex: 1; padding: 14px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 700; border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition); text-transform: uppercase; letter-spacing: 0.5px;}
-        .tab-btn:hover { color: #fff; background: rgba(255,255,255,0.02); }
-        .tab-btn.active { color: #fff; background: var(--bg-card); border: 1px solid var(--border-color); }
         
-        .items-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 20px; max-height: 420px; overflow-y: auto; scroll-behavior: smooth; align-items: stretch;}
-        .items-grid::-webkit-scrollbar { width: 6px; }
-        .items-grid::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        #combinedInventory { padding: 16px; max-height: 480px; overflow-y: auto; scroll-behavior: smooth; }
+        #combinedInventory::-webkit-scrollbar { width: 6px; }
+        #combinedInventory::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        
+        .inv-header-title { font-size: 15px; font-weight: 800; color: #fff; margin: 10px 0 16px; padding-left: 5px; text-transform: uppercase; letter-spacing: 0.5px; border-left: 3px solid var(--accent-main); padding-left: 10px; }
+
+        .items-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; align-items: stretch;}
         
         .item-card { 
             background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); 
@@ -583,7 +584,7 @@
                 </div>
 
                 <div class="arena-row">
-                    <div class="item-slot" id="slotLeft" onclick="switchTab('my')">
+                    <div class="item-slot" id="slotLeft" onclick="document.getElementById('gridMyContent').scrollIntoView({behavior: 'smooth'})">
                         <img src="16201.png" class="slot-bg-pepe">
                         <div class="slot-chevron-container">
                             <svg class="chevron-down" viewBox="0 0 50 75" width="45" height="65">
@@ -596,10 +597,10 @@
                     </div>
                     
                     <div class="wheel-container">
-                        <div class="wheel-marker marker-top">100</div>
-                        <div class="wheel-marker marker-bottom">0</div>
-                        <div class="wheel-marker marker-left">50</div>
-                        <div class="wheel-marker marker-right">50</div>
+                        <div class="wheel-marker marker-top">100%</div>
+                        <div class="wheel-marker marker-bottom">0%</div>
+                        <div class="wheel-marker marker-left">50%</div>
+                        <div class="wheel-marker marker-right">50%</div>
 
                         <div class="arrow-spinner-wrapper" id="arrowSpinner">
                             <svg class="wheel-arrow" viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg">
@@ -641,7 +642,7 @@
                         </div>
                     </div>
 
-                    <div class="item-slot" id="slotRight" onclick="switchTab('shop')">
+                    <div class="item-slot" id="slotRight" onclick="document.getElementById('gridShopContent').scrollIntoView({behavior: 'smooth'})">
                         <img src="16201.png" class="slot-bg-pepe">
                         <div class="slot-chevron-container">
                             <svg class="chevron-up" viewBox="0 0 50 75" width="45" height="65">
@@ -660,11 +661,6 @@
             </section>
 
             <section class="inventory-section" id="inventorySection">
-                <div class="tabs-header" id="inventoryTabs">
-                    <button class="tab-btn active" id="tabMy" onclick="switchTab('my')">Мой инвентарь</button>
-                    <button class="tab-btn" id="tabShop" onclick="switchTab('shop')">Магазин</button>
-                </div>
-                
                 <div id="unauthPromoBlock">
                     <div class="unauth-title">Вы не авторизированы</div>
                     <div class="unauth-subtitle">Войдите для доступа к инвентарю и апгрейдам</div>
@@ -680,7 +676,13 @@
                     <button class="btn-upgrade" style="background: linear-gradient(135deg, var(--accent-main), var(--accent-secondary)); margin-top: 24px; padding: 14px 30px; font-size: 14px; max-width: 280px; width: 100%; border-radius: 50px;" onclick="openModal('authModal')">ВОЙТИ ПО EMAIL</button>
                 </div>
 
-                <div class="items-grid" id="gridContent"></div>
+                <div id="combinedInventory" style="display: none;">
+                    <div class="inv-header-title">Мой инвентарь</div>
+                    <div class="items-grid" id="gridMyContent" style="margin-bottom: 24px;"></div>
+                    
+                    <div class="inv-header-title">Магазин предметов</div>
+                    <div class="items-grid" id="gridShopContent"></div>
+                </div>
             </section>
         </div>
     </main>
@@ -740,7 +742,7 @@
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;">
                         <div style="display: flex; flex-direction: column;">
                             <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Аккаунт</span>
-                            <span style="font-size: 14px; font-weight: 800; color: #fff;" id="profileEmailDisplay">user@email.com</span>
+                            <span style="font-size: 14px; font-weight: 800; color: #fff; cursor: pointer;" id="profileEmailDisplay" title="Нажми, чтобы изменить ник">user@email.com <span style="font-size:12px; opacity:0.7; margin-left:6px;">✎</span></span>
                         </div>
                         <button id="logout-btn" style="background: rgba(252, 92, 101, 0.1); color: var(--rarity-mythic); border: 1px solid rgba(252, 92, 101, 0.2); padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: transform 0.2s;">Выйти</button>
                     </div>
@@ -805,6 +807,13 @@
     <audio id="soundClick" src="click.mp3" preload="auto"></audio>
 
     <script>
+        const rarityColors = {
+            'rarity-epic': '#a55eea',
+            'rarity-legendary': '#fd9644',
+            'rarity-mythic': '#fc5c65',
+            'rarity-immortal': '#2bcbba'
+        };
+
         const giftPool = [
             { id: 'frog_purple', title: 'Премиум Подарок', sub: 'Аметистовый Харт', price: '4500', rarity: 'rarity-epic', img: '16201.png' },
             { id: 'frog_aqua', title: 'Премиум Подарок', sub: 'Бирюзовый Лав', price: '8900', rarity: 'rarity-legendary', img: '16202.png' },
@@ -830,13 +839,12 @@
 
         let balance = parseFloat(localStorage.getItem('ub_balance')) || 10000;
         let myInventoryData = JSON.parse(localStorage.getItem('ub_inv')) || [giftPool[0], giftPool[1], giftPool[4], giftPool[8]];
-        let stats = JSON.parse(localStorage.getItem('ub_stats')) || { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0 };
+        let stats = JSON.parse(localStorage.getItem('ub_stats')) || { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0, nickname: '' };
         
         window.isUserLoggedIn = false;
 
         if(stats.withdrawn === undefined) stats.withdrawn = 0;
         
-        let currentTab = 'my';
         let selectedLeft = null;
         let selectedRight = null;
         let isProcessing = false;
@@ -898,11 +906,12 @@
         window.loadFromDb = function(dbBalance, dbInv, dbStats) {
             balance = dbBalance;
             myInventoryData = dbInv || [];
-            stats = dbStats || { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0 };
+            stats = dbStats || { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0, nickname: '' };
             if(stats.withdrawn === undefined) stats.withdrawn = 0;
             
             saveData(); 
             updateBalanceUI();
+            updateProfileName();
             renderGrid();
         };
 
@@ -920,33 +929,64 @@
             if(pBalance) pBalance.innerText = formatted + ' ⭐';
         }
 
+        function updateProfileName() {
+            const el = document.getElementById('profileEmailDisplay');
+            if(el) {
+                let name = stats.nickname || (window.auth && auth.currentUser ? auth.currentUser.email : "Игрок");
+                el.innerHTML = name + ' <span style="font-size:12px; opacity:0.7; margin-left:6px;">✎</span>';
+            }
+        }
+
+        document.getElementById('profileEmailDisplay').addEventListener('click', () => {
+            let currentName = stats.nickname || (window.auth && auth.currentUser ? auth.currentUser.email : "Игрок");
+            let newNick = prompt("Введите новый никнейм:", currentName);
+            if (newNick && newNick.trim() !== "") {
+                stats.nickname = newNick.trim();
+                saveData();
+                updateProfileName();
+            }
+        });
+
         function renderGrid() {
-            const grid = document.getElementById('gridContent');
+            const combined = document.getElementById('combinedInventory');
             const promoBlock = document.getElementById('unauthPromoBlock');
 
-            // Исправлена проблема с инвентарем. Четко проверяем переменную авторизации.
-            if (!window.isUserLoggedIn && currentTab === 'my') {
-                grid.style.display = 'none';
+            if (!window.isUserLoggedIn) {
+                combined.style.display = 'none';
                 promoBlock.style.display = 'flex';
                 if (!promoInterval) startPromoSlider();
                 return;
             } else {
-                grid.style.display = 'grid';
+                combined.style.display = 'block';
                 promoBlock.style.display = 'none';
                 if (promoInterval) { clearInterval(promoInterval); promoInterval = null; }
             }
 
-            grid.innerHTML = '';
-            const activeData = currentTab === 'my' ? myInventoryData : giftPool;
+            const gridMy = document.getElementById('gridMyContent');
+            const gridShop = document.getElementById('gridShopContent');
 
-            if(activeData.length === 0) {
-                grid.innerHTML = `<div style="grid-column:span 3;text-align:center;padding:30px;color:var(--text-muted);">Инвентарь пуст. Зайдите в Профиль, чтобы купить предметы.</div>`;
-                return;
+            gridMy.innerHTML = '';
+            if(myInventoryData.length === 0) {
+                gridMy.innerHTML = `<div style="grid-column:span 3;text-align:center;padding:30px;color:var(--text-muted);">Инвентарь пуст. Купите предметы в магазине ниже.</div>`;
+            } else {
+                myInventoryData.forEach((item, idx) => {
+                    gridMy.innerHTML += `
+                        <div class="item-card ${item.rarity}" onclick="selectItem(${idx}, 'my')">
+                            <div class="item-price">${Math.round(item.price)} ⭐</div>
+                            <div class="item-img-container"><img src="${item.img}" onerror="this.src='16201.png'"></div>
+                            <div class="item-info">
+                                <div class="item-title">${item.title}</div>
+                                <div class="item-sub">${item.sub}</div>
+                            </div>
+                        </div>
+                    `;
+                });
             }
 
-            activeData.forEach((item, idx) => {
-                grid.innerHTML += `
-                    <div class="item-card ${item.rarity}" onclick="selectItem(${idx})">
+            gridShop.innerHTML = '';
+            giftPool.forEach((item, idx) => {
+                gridShop.innerHTML += `
+                    <div class="item-card ${item.rarity}" onclick="selectItem(${idx}, 'shop')">
                         <div class="item-price">${Math.round(item.price)} ⭐</div>
                         <div class="item-img-container"><img src="${item.img}" onerror="this.src='16201.png'"></div>
                         <div class="item-info">
@@ -958,20 +998,16 @@
             });
         }
 
-        function switchTab(tab) {
-            playSound(soundClick);
-            currentTab = tab;
-            document.getElementById('tabMy').classList.toggle('active', tab === 'my');
-            document.getElementById('tabShop').classList.toggle('active', tab === 'shop');
-            renderGrid();
-        }
-
-        function selectItem(index) {
+        function selectItem(index, type) {
             if (isProcessing) return;
             playSound(soundClick);
-            const item = currentTab === 'my' ? myInventoryData[index] : giftPool[index];
-            if (currentTab === 'my') { selectedLeft = item; renderSlot('slotLeft', item); } 
-            else { selectedRight = item; renderSlot('slotRight', item); }
+            if (type === 'my') { 
+                const item = myInventoryData[index];
+                selectedLeft = item; renderSlot('slotLeft', item); 
+            } else { 
+                const item = giftPool[index];
+                selectedRight = item; renderSlot('slotRight', item); 
+            }
             updateChance();
         }
 
@@ -1132,9 +1168,11 @@
 
             btn.innerText = 'Улучшение...';
             
-            if (!isFastUpgrade) {
-                soundSpin.play().catch(() => {});
-            }
+            let animationDuration = isFastUpgrade ? 600 : 3500;
+            if (isFastUpgrade) soundSpin.playbackRate = 2.0;
+            else soundSpin.playbackRate = 1.0;
+            
+            soundSpin.play().catch(() => {});
 
             if (chance > 95) chance = 95;
             if (chance < 1) chance = 1;
@@ -1168,14 +1206,6 @@
                 myInventoryData.splice(indexToRemove, 1);
             }
 
-            if (isFastUpgrade) {
-                arrowSpinner.style.transform = `rotate(${targetRotation}deg)`;
-                arrowRotation = targetRotation; 
-                afterSpin(isWin);
-                return;
-            }
-
-            let animationDuration = 3500; 
             let animationStartTime = performance.now();
 
             function animateRotation(timestamp) {
@@ -1323,6 +1353,7 @@
             if(id === 'profileModal') {
                 document.getElementById('profileTotalWithdrawn').innerText = (stats.withdrawn || 0).toLocaleString('ru-RU') + ' ⭐';
                 document.getElementById('profileTotalUpgradesBlock').innerText = stats.total;
+                updateProfileName();
                 
                 switchProfileTab('stats');
                 renderBestDrop();
@@ -1478,16 +1509,17 @@
         }
 
         function updateTicker() {
-            // Теперь выводятся только успешные залеты (апгрейды, которые "зашли") с красивыми полосками и шансами
             const ticker = document.getElementById('liveTicker');
             const item = giftPool[Math.floor(Math.random() * giftPool.length)];
-            const chance = (Math.random() * 80 + 1).toFixed(2); // Рандомный шанс для отображения в ленте
+            const chance = (Math.random() * 80 + 1).toFixed(2);
+            
+            const color = rarityColors[item.rarity] || '#00e5ff';
             
             const html = `
-                <div class="ticker-item success-stripe">
+                <div class="ticker-item success-stripe" style="border-left-color: ${color};">
                     <img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'">
                     <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 90px;">${item.sub}</span>
-                    <span class="ticker-chance">${chance}%</span>
+                    <span class="ticker-chance" style="color: ${color}; background: ${color}22; border-color: ${color}44;">${chance}%</span>
                 </div>
             `;
             ticker.insertAdjacentHTML('afterbegin', html);
@@ -1518,6 +1550,7 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        window.auth = auth;
         const db = getFirestore(app);
 
         const loginBtn = document.getElementById('login-btn');
@@ -1525,8 +1558,6 @@
         const logoutBtn = document.getElementById('logout-btn');
         const emailInput = document.getElementById('email-input');
         const passInput = document.getElementById('password-input');
-        
-        const profileEmailDisplay = document.getElementById('profileEmailDisplay');
 
         window.syncToDb = async (bal, inv, st) => {
             if (auth.currentUser) {
@@ -1582,10 +1613,6 @@
                 document.getElementById('headerLoginBtn').style.display = 'none';
                 document.getElementById('headerUserArea').style.display = 'flex';
                 
-                if (profileEmailDisplay) {
-                    profileEmailDisplay.innerText = user.email; 
-                }
-                
                 const userRef = doc(db, "users", user.uid);
                 const docSnap = await getDoc(userRef);
                 
@@ -1596,7 +1623,6 @@
                     window.syncToDb(window.getCurrentBalance(), window.getCurrentInv(), window.getCurrentStats());
                 }
                 
-                // Принудительно рендерим сетку для залогиненного состояния
                 renderGrid();
                 updateChance(); 
             } else {
@@ -1604,8 +1630,7 @@
                 document.getElementById('headerLoginBtn').style.display = 'block';
                 document.getElementById('headerUserArea').style.display = 'none';
                 
-                // Переключаем на 'my', чтобы показать витрину для неавторизованных внутри инвентаря
-                switchTab('my'); 
+                renderGrid();
                 updateChance(); 
             }
         });
