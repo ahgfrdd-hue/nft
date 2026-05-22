@@ -25,10 +25,10 @@
             --rarity-mythic: #fc5c65;
             --rarity-immortal: #2bcbba;
             
-            --radius-lg: 20px;
-            --radius-md: 14px;
+            --radius-lg: 16px;
+            --radius-md: 12px;
             --radius-sm: 8px;
-            --transition: all 0.5s cubic-bezier(0.3, 1, 0.3, 1);
+            --transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         * {
@@ -39,9 +39,8 @@
         }
 
         button:active, .item-slot:active, .item-card:active, .profile-avatar:active, .modal-close:active, .payment-method:active {
-            transform: scale(0.92) !important;
+            transform: scale(0.95) !important;
             transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1) !important;
-            filter: brightness(1.2);
         }
 
         .item-sub, .item-title, .p-item-name, .bd-name, #profileEmailDisplay, .ticker-item span {
@@ -57,137 +56,131 @@
 
         body {
             background: var(--bg-main);
-            background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, var(--bg-main) 70%);
             color: var(--text-main);
             min-height: 100vh;
             display: flex; flex-direction: column; overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
         /* === ХЕДЕР === */
         header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 24px; background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(12px);
+            padding: 16px 20px; background: rgba(19, 19, 28, 0.95); backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100;
         }
 
         .logo-area { display: flex; flex-direction: column; }
-        .logo { font-size: 22px; font-weight: 900; color: var(--accent-main); letter-spacing: 0.5px; text-shadow: 0 0 15px var(--accent-glow); }
-        .logo span { color: var(--text-main); text-shadow: none; }
-        .online-count { font-size: 12px; color: var(--text-muted); margin-top: 3px; font-weight: 500; }
-        .online-count span { color: var(--text-muted); font-weight: bold; } 
+        .logo { font-size: 20px; font-weight: 900; color: var(--accent-main); letter-spacing: 0.5px; transition: var(--transition); }
+        .logo span { color: var(--text-main); }
+        .online-count { font-size: 11px; color: var(--text-muted); margin-top: 2px; font-weight: 600; }
+        .online-count span { color: var(--accent-secondary); font-weight: bold; } 
 
-        .user-area { display: flex; align-items: center; gap: 14px; min-height: 38px;}
+        .user-area { display: flex; align-items: center; gap: 12px; min-height: 38px;}
         
-        .balance-block { display: flex; flex-direction: column; align-items: flex-end; }
-        .balance-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .balance { font-size: 16px; font-weight: 800; color: var(--text-main); }
+        .balance-block { display: flex; flex-direction: column; align-items: flex-end; justify-content: center; }
+        .balance-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
+        .balance { font-size: 15px; font-weight: 800; color: var(--text-main); }
         
         .btn-deposit {
-            background: linear-gradient(135deg, var(--accent-main), #b838ff); color: #fff;
-            padding: 8px 16px; border: none; border-radius: var(--radius-sm);
+            background: var(--accent-main); color: #fff;
+            padding: 8px 14px; border: none; border-radius: var(--radius-sm);
             font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition);
-            box-shadow: 0 4px 15px var(--accent-glow);
         }
-        .btn-deposit:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--accent-glow); }
+        .btn-deposit:hover { filter: brightness(1.1); transform: translateY(-1px); }
         
         .profile-avatar {
-            width: 38px; height: 38px; background: var(--bg-card); border: 2px solid var(--border-color);
+            width: 36px; height: 36px; background: var(--bg-card); border: 2px solid var(--border-color);
             border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            font-size: 16px; transition: var(--transition); overflow: hidden;
+            transition: var(--transition); overflow: hidden; flex-shrink: 0;
         }
-        .profile-avatar:hover { border-color: var(--accent-main); background: var(--bg-card-hover); transform: scale(1.03); }
+        .profile-avatar:hover { border-color: var(--accent-main); }
 
         /* === ОСНОВНОЙ КОНТЕНТ === */
         main { 
-            flex: 1; display: flex; flex-direction: column; padding: 24px 16px; gap: 24px; 
+            flex: 1; display: flex; flex-direction: column; padding: 20px 14px; gap: 20px; 
             max-width: 1200px; width: 100%; margin: 0 auto; 
         }
         .main-content {
-            display: flex; flex-direction: column; gap: 24px; flex: 1; max-width: 650px; margin: 0 auto; width: 100%;
+            display: flex; flex-direction: column; gap: 20px; flex: 1; max-width: 650px; margin: 0 auto; width: 100%;
         }
 
         .live-ticker {
             background: var(--bg-panel); border: 1px solid var(--border-color);
-            border-radius: var(--radius-md); padding: 10px; display: flex; gap: 10px;
-            overflow-x: auto; white-space: nowrap; scrollbar-width: none; min-height: 56px;
+            border-radius: var(--radius-md); padding: 8px; display: flex; gap: 8px;
+            overflow-x: auto; white-space: nowrap; scrollbar-width: none; min-height: 52px;
+            scroll-behavior: smooth;
         }
         .live-ticker::-webkit-scrollbar { display: none; }
         
         .ticker-item {
             display: inline-flex; align-items: center; gap: 8px; background: var(--bg-card);
-            padding: 6px 12px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; 
+            padding: 6px 10px; border-radius: var(--radius-sm); font-size: 11px; font-weight: 600; 
             min-width: fit-content; border-left: 3px solid transparent; transition: var(--transition);
+            animation: fadeIn 0.4s ease forwards;
         }
-        .ticker-item.success-stripe {
-            background: repeating-linear-gradient( 45deg, var(--bg-card), var(--bg-card) 10px, #1c1c28 10px, #1c1c28 20px );
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-        .ticker-img { width: 22px; height: 22px; object-fit: contain; }
-        .ticker-chance { margin-left: auto; font-weight: 800; font-size: 11px; padding: 2px 6px; border-radius: 4px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+        
+        .ticker-img { width: 20px; height: 20px; object-fit: contain; }
+        .ticker-chance { margin-left: auto; font-weight: 800; font-size: 10px; padding: 2px 5px; border-radius: 4px; }
+        .ticker-user { font-size: 10px; color: var(--text-muted); opacity: 0.8; margin-right: 4px; }
 
         @media (min-width: 900px) {
             main { flex-direction: row; align-items: flex-start; justify-content: center; }
             .live-ticker { 
-                flex-direction: column; width: 250px; height: auto; max-height: 80vh; 
-                overflow-y: auto; overflow-x: hidden; white-space: normal; padding: 14px; scrollbar-width: thin;
+                flex-direction: column; width: 220px; height: auto; max-height: 80vh; 
+                overflow-y: auto; overflow-x: hidden; white-space: normal; padding: 10px; 
             }
-            .live-ticker::-webkit-scrollbar { display: block; width: 4px; }
-            .live-ticker::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
             .ticker-item { width: 100%; justify-content: flex-start; }
             .main-content { margin: 0; }
         }
 
         /* === АРЕНА АПГРЕЙДА === */
         .upgrade-arena {
-            background: linear-gradient(180deg, var(--bg-panel) 0%, #0d0d14 100%);
+            background: var(--bg-panel);
             border: 1px solid var(--border-color); border-radius: var(--radius-lg);
-            padding: 32px 24px; display: flex; flex-direction: column; align-items: center; gap: 28px;
+            padding: 24px 16px; display: flex; flex-direction: column; align-items: center; gap: 24px;
             position: relative; transition: var(--transition); overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
         }
         
         .top-left-controls { 
-            position: absolute; top: 16px; left: 16px; z-index: 10; 
+            position: absolute; top: 12px; left: 12px; z-index: 10; 
             display: flex; gap: 8px; align-items: center;
-            background: rgba(10, 10, 15, 0.7); backdrop-filter: blur(5px); padding: 6px 12px; border-radius: 30px;
-            border: 1px solid var(--border-color); transition: var(--transition);
         }
-        .fast-upgrade-label { cursor: pointer; display: flex; align-items: center; }
+        .fast-upgrade-label { cursor: pointer; display: flex; align-items: center; background: var(--bg-card); padding: 6px; border-radius: 8px; border: 1px solid var(--border-color); }
         .fast-upgrade-label input { display: none; }
-        .lightning-icon { width: 18px; height: 18px; fill: #5a5a6e; transition: all 0.3s ease; }
-        .fast-upgrade-label input:checked + .lightning-icon { fill: #ffcc00; transform: scale(1.15); filter: drop-shadow(0 0 5px rgba(255, 204, 0, 0.5)); }
+        .lightning-icon { width: 16px; height: 16px; fill: #5a5a6e; transition: var(--transition); }
+        .fast-upgrade-label input:checked + .lightning-icon { fill: #ffcc00; transform: scale(1.1); filter: drop-shadow(0 0 4px rgba(255, 204, 0, 0.4)); }
 
+        .arena-row { display: flex; align-items: center; justify-content: space-between; width: 100%; z-index: 2; margin-top: 10px; gap: 15px;}
+        
         @media (max-width: 650px) {
-            .arena-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+            .arena-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
             #slotLeft { grid-column: 1; grid-row: 1; max-width: none; flex: auto; }
             #slotRight { grid-column: 2; grid-row: 1; max-width: none; flex: auto; }
-            .wheel-container { grid-column: 1 / 3; grid-row: 2; margin: 20px auto 0; }
+            .wheel-container { grid-column: 1 / 3; grid-row: 2; margin: 10px auto 0; }
         }
 
-        .arena-row { display: flex; align-items: center; justify-content: space-between; width: 100%; z-index: 2; margin-top: 20px; }
-
         .item-slot {
-            background: var(--bg-card); border: 1px dashed #3a3a4d; border-radius: var(--radius-md);
-            height: 190px; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
-            padding: 16px; text-align: center; transition: var(--transition); cursor: pointer;
-            position: relative; overflow: hidden; flex: 1; max-width: 180px;
+            background: var(--bg-card); border: 1px dashed var(--border-color); border-radius: var(--radius-md);
+            height: 180px; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+            padding: 12px; text-align: center; transition: var(--transition); cursor: pointer;
+            position: relative; overflow: hidden; flex: 1; max-width: 170px;
         }
         .slot-confetti { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
         
-        .item-slot:hover { border-color: var(--text-muted); background: var(--bg-card-hover); transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .item-slot:hover { border-color: var(--text-muted); background: var(--bg-card-hover); transform: translateY(-2px); }
         
-        /* СВЕЧЕНИЕ КАРТОЧЕК ПО ЦВЕТУ РЕДКОСТИ */
-        .item-slot.active.rarity-epic { border: 2px solid var(--rarity-epic); background: rgba(165, 94, 234, 0.05); box-shadow: 0 0 20px rgba(165, 94, 234, 0.4), 0 0 20px rgba(165, 94, 234, 0.2) inset; }
-        .item-slot.active.rarity-legendary { border: 2px solid var(--rarity-legendary); background: rgba(253, 150, 68, 0.05); box-shadow: 0 0 20px rgba(253, 150, 68, 0.4), 0 0 20px rgba(253, 150, 68, 0.2) inset; }
-        .item-slot.active.rarity-mythic { border: 2px solid var(--rarity-mythic); background: rgba(252, 92, 101, 0.05); box-shadow: 0 0 20px rgba(252, 92, 101, 0.4), 0 0 20px rgba(252, 92, 101, 0.2) inset; }
-        .item-slot.active.rarity-immortal { border: 2px solid var(--rarity-immortal); background: rgba(43, 203, 186, 0.05); box-shadow: 0 0 20px rgba(43, 203, 186, 0.4), 0 0 20px rgba(43, 203, 186, 0.2) inset; }
+        .item-slot.active { border-style: solid; border-width: 2px; }
+        .item-slot.active.rarity-epic { border-color: var(--rarity-epic); background: rgba(165, 94, 234, 0.05); }
+        .item-slot.active.rarity-legendary { border-color: var(--rarity-legendary); background: rgba(253, 150, 68, 0.05); }
+        .item-slot.active.rarity-mythic { border-color: var(--rarity-mythic); background: rgba(252, 92, 101, 0.05); }
+        .item-slot.active.rarity-immortal { border-color: var(--rarity-immortal); background: rgba(43, 203, 186, 0.05); }
 
-        .slot-bg-pepe { position: absolute; width: 75%; height: 75%; object-fit: contain; opacity: 0.1; z-index: 1; pointer-events: none; filter: brightness(0); animation: floatEffect 5s ease-in-out infinite; }
+        .slot-bg-pepe { position: absolute; width: 60%; height: 60%; object-fit: contain; opacity: 0.05; z-index: 1; pointer-events: none; filter: brightness(0); animation: floatEffect 5s ease-in-out infinite; }
         
-        .slot-chevron-container { position: relative; z-index: 2; margin: auto 0; display: flex; align-items: center; justify-content: center; height: 65px; }
-        .slot-hint { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; position: relative; z-index: 2; margin-top: auto; }
+        .slot-chevron-container { position: relative; z-index: 2; margin: auto 0; display: flex; align-items: center; justify-content: center; height: 50px; }
+        .slot-hint { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; position: relative; z-index: 2; margin-top: auto; }
 
-        /* АНИМАЦИЯ СТРЕЛОК */
         .arrow-1 { animation: arrowPulse 1.5s infinite; animation-delay: 0s; }
         .arrow-2 { animation: arrowPulse 1.5s infinite; animation-delay: 0.2s; }
         .arrow-3 { animation: arrowPulse 1.5s infinite; animation-delay: 0.4s; }
@@ -196,193 +189,205 @@
         .chevron-up .arrow-3 { animation-delay: 0s; }
         
         @keyframes arrowPulse {
-            0%, 100% { opacity: 0.1; transform: translateY(0); filter: drop-shadow(0 0 0 transparent); }
-            50% { opacity: 1; transform: translateY(2px); filter: drop-shadow(0 0 8px var(--accent-main)); }
+            0%, 100% { opacity: 0.2; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(2px); filter: drop-shadow(0 0 5px var(--accent-main)); }
         }
 
-        /* === КОЛЕСО И СТРЕЛКА === */
-        .wheel-container { position: relative; width: 220px; height: 220px; margin: 10px 0; display: flex; align-items: center; justify-content: center; z-index: 2; flex-shrink: 0; }
-        .wheel-box { width: 100%; height: 100%; position: relative; }
-        .wheel-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
-        .wheel-progress { stroke-dasharray: 534; stroke-dashoffset: 534; transition: stroke-dashoffset 0.8s cubic-bezier(0.3, 1, 0.3, 1); filter: drop-shadow(0 0 15px var(--accent-main)); }
+        /* === БАР МНОЖИТЕЛЕЙ === */
+        .multiplier-bar {
+            display: flex; gap: 4px; justify-content: center; width: 100%; margin-top: 12px; flex-wrap: wrap;
+            background: var(--bg-card); padding: 6px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);
+        }
+        .multiplier-btn {
+            background: var(--bg-panel); color: var(--text-muted); border: 1px solid var(--border-color);
+            padding: 6px 10px; font-size: 11px; font-weight: 800; border-radius: 6px; cursor: pointer; flex: 1; text-align: center;
+            transition: var(--transition);
+        }
+        .multiplier-btn:hover { background: var(--accent-main); color: #fff; border-color: var(--accent-main); }
+        .multiplier-btn.pct-btn { color: var(--accent-secondary); }
+        .multiplier-btn.pct-btn:hover { background: var(--accent-secondary); color: #000; }
 
-        .wheel-marker { position: absolute; font-size: 8px; font-weight: 900; color: rgba(255,255,255,0.1); z-index: 10; pointer-events: none; }
-        .marker-top { top: 30px; left: 50%; transform: translateX(-50%); }
-        .marker-bottom { bottom: 30px; left: 50%; transform: translateX(-50%); }
-        .marker-left { top: 50%; left: 30px; transform: translateY(-50%); }
-        .marker-right { top: 50%; right: 30px; transform: translateY(-50%); }
+        /* === КОЛЕСО И СТРЕЛКА === */
+        .wheel-container { position: relative; width: 200px; height: 200px; margin: 0; display: flex; align-items: center; justify-content: center; z-index: 2; flex-shrink: 0; }
+        .wheel-box { width: 100%; height: 100%; position: relative; }
+        .wheel-svg { width: 100%; height: 100%; }
+        .wheel-progress { stroke-dasharray: 534; stroke-dashoffset: 534; transition: stroke-dashoffset 0.8s cubic-bezier(0.3, 1, 0.3, 1); filter: drop-shadow(0 0 8px var(--accent-main)); }
+
+        .wheel-marker { position: absolute; font-size: 9px; font-weight: 800; color: var(--text-muted); z-index: 10; pointer-events: none; opacity: 0.6; }
+        .marker-top { top: 20px; left: 50%; transform: translateX(-50%); }
+        .marker-bottom { bottom: 20px; left: 50%; transform: translateX(-50%); }
+        .marker-left { top: 50%; left: 20px; transform: translateY(-50%); }
+        .marker-right { top: 50%; right: 20px; transform: translateY(-50%); }
         
         .arrow-spinner-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15; will-change: transform; }
         
-        /* ИЗМЕНЕННАЯ КРУТЯЩАЯСЯ СТРЕЛКА (меньше и указывает на центр) */
+        /* ОБНОВЛЕННАЯ СТРЕЛКА */
         .wheel-arrow { 
             position: absolute; 
-            top: 55px; /* Ближе к процентам */
+            top: 10px; /* Вернулась на внешнюю часть */
             left: 50%; 
-            transform: translateX(-50%); 
-            width: 16px; /* Меньше */
-            height: 26px; /* Меньше */
-            filter: drop-shadow(0 0 8px var(--accent-glow)); 
-            transform-origin: 50% 55px; /* Центр круга 110px. 55px top + 55px origin = 110px */
+            margin-left: -7px;
+            width: 14px; /* Меньше */
+            height: 22px; 
+            fill: var(--accent-main); /* Цвет по дизайну сайта */
+            transform-origin: center 90px; /* Центр вращения - колесо 200x200, радиус 100. Если стрелка на top: 10, origin = 90 */
+            transform: rotate(180deg); /* Развернута на 180 градусов */
+            filter: drop-shadow(0 0 4px var(--accent-glow));
         }
 
-        .wheel-center-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; z-index: 5; text-align: center; pointer-events: none; padding: 0 10px; }
+        .wheel-center-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; z-index: 5; text-align: center; pointer-events: none; }
 
-        @keyframes slowBarsAnim { 0%, 100% { opacity: 1; transform: translateY(0); } 50% { opacity: 0.6; transform: translateY(-3px); } }
+        @keyframes slowBarsAnim { 0%, 100% { opacity: 1; transform: translateY(0); } 50% { opacity: 0.6; transform: translateY(-2px); } }
         .bars-anim { animation: slowBarsAnim 2s ease-in-out infinite; }
 
         #chanceDisplay { width: 100%; }
-        #chanceDisplay h1 { font-size: 32px; font-weight: 900; color: #ffffff; letter-spacing: -1px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); transition: var(--transition); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; margin: 0 auto; }
-        #chanceDisplay p { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 800; margin-top: -2px; transition: var(--transition); }
+        #chanceDisplay h1 { font-size: 28px; font-weight: 900; color: #ffffff; letter-spacing: -0.5px; transition: var(--transition); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; margin: 0 auto; }
+        #chanceDisplay p { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; margin-top: 0px; transition: var(--transition); }
 
-        .action-block { width: 100%; display: flex; flex-direction: column; gap: 12px; z-index: 2; }
+        .action-block { width: 100%; display: flex; flex-direction: column; gap: 10px; z-index: 2; }
         
-        .btn-upgrade { background: linear-gradient(135deg, var(--accent-main), #6b1cb0); color: #fff; border: none; padding: 20px; font-size: 16px; font-weight: 800; border-radius: var(--radius-md); cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 8px 25px var(--accent-glow); transition: var(--transition); }
-        .btn-upgrade:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 30px var(--accent-glow); }
-        .btn-upgrade:disabled { background: var(--bg-card); color: #555566; cursor: not-allowed; box-shadow: none; border: 1px solid var(--border-color); transform: none; }
+        .btn-upgrade { background: var(--accent-main); color: #fff; border: none; padding: 16px; font-size: 14px; font-weight: 800; border-radius: var(--radius-md); cursor: pointer; text-transform: uppercase; transition: var(--transition); }
+        .btn-upgrade:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn-upgrade:disabled { background: var(--bg-card); color: var(--text-muted); cursor: not-allowed; border: 1px solid var(--border-color); transform: none; filter: none; }
 
-        @keyframes floatEffect { 0%, 100% { transform: translateY(0px) scale(1); } 50% { transform: translateY(-6px) scale(1.02); } }
-        @keyframes winItemPop { 0% { transform: scale(1) translateX(0); filter: drop-shadow(0 0 0 transparent); } 20% { transform: scale(1.1) translateX(-4px) rotate(-3deg); filter: drop-shadow(0 0 25px var(--accent-main)); } 40% { transform: scale(1.1) translateX(4px) rotate(3deg); } 60% { transform: scale(1.1) translateX(-2px) rotate(-1deg); } 80% { transform: scale(1.1) translateX(2px) rotate(1deg); } 100% { transform: scale(1) translateX(0); filter: drop-shadow(0 0 15px var(--accent-main)); } }
-        .win-item-anim { animation: winItemPop 1.5s cubic-bezier(0.3, 1, 0.3, 1) forwards !important; z-index: 20; }
+        @keyframes floatEffect { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-4px); } }
+        @keyframes winItemPop { 0% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); } 50% { transform: scale(1.15); filter: drop-shadow(0 0 15px var(--accent-main)); } 100% { transform: scale(1); filter: drop-shadow(0 0 10px var(--accent-main)); } }
+        .win-item-anim { animation: winItemPop 1.2s cubic-bezier(0.3, 1, 0.3, 1) forwards !important; z-index: 20; }
 
         /* === БЛОК ДЛЯ НЕАВТОРИЗОВАННЫХ === */
-        #unauthPromoBlock { display: none; flex-direction: column; align-items: center; text-align: center; padding: 40px 10px; position: relative; }
-        .unauth-title { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 6px; }
-        .unauth-subtitle { font-size: 13px; color: #6e6e84; font-weight: 600; margin-bottom: 20px; }
+        #unauthPromoBlock { display: none; flex-direction: column; align-items: center; text-align: center; padding: 30px 10px; }
+        .unauth-title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+        .unauth-subtitle { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 16px; }
         
-        #promoDisplay { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 180px; width: 100%; position: relative; transition: opacity 0.5s ease; }
-        .promo-item { display: flex; flex-direction: column; align-items: center; justify-content: center; transition: var(--transition); width: 75px; }
-        .promo-item.side.near { filter: brightness(0); transform: scale(0.75); opacity: 0.8; z-index: 3; }
-        .promo-item.side.far { filter: brightness(0); transform: scale(0.55); opacity: 0.4; z-index: 1; }
-        .promo-item.center { transform: scale(1.15); z-index: 5; filter: drop-shadow(0 0 15px var(--accent-glow)); width: 100px; }
-        .promo-item img { max-width: 100%; max-height: 70px; object-fit: contain; }
-        .promo-item.center img { animation: floatEffect 5s ease-in-out infinite; max-height: 85px; }
-        .promo-info { text-align: center; margin-top: 10px; }
-        .promo-sub { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; white-space: nowrap; }
-        .promo-price-tag { font-size: 11px; font-weight: 800; color: #fff; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 8px;}
+        #promoDisplay { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 140px; width: 100%; transition: opacity 0.4s ease; }
+        .promo-item { display: flex; flex-direction: column; align-items: center; justify-content: center; transition: var(--transition); width: 60px; }
+        .promo-item.side.near { filter: brightness(0.5); transform: scale(0.8); opacity: 0.8; }
+        .promo-item.side.far { filter: brightness(0.2); transform: scale(0.6); opacity: 0.4; }
+        .promo-item.center { transform: scale(1.1); z-index: 5; width: 90px; }
+        .promo-item img { max-width: 100%; max-height: 60px; object-fit: contain; }
+        .promo-item.center img { animation: floatEffect 4s ease-in-out infinite; max-height: 75px; }
+        .promo-info { text-align: center; margin-top: 8px; }
+        .promo-sub { font-size: 9px; color: var(--text-muted); font-weight: 700; white-space: nowrap; }
+        .promo-price-tag { font-size: 10px; font-weight: 800; color: #fff; background: rgba(0,0,0,0.6); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border-color); margin-bottom: 6px;}
 
         /* === ИНВЕНТАРЬ И МАГАЗИН === */
         .inventory-section { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; }
-        #combinedInventory { padding: 16px; max-height: 550px; overflow-y: auto; scroll-behavior: smooth; display: none; }
-        #combinedInventory::-webkit-scrollbar { width: 6px; }
-        #combinedInventory::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        #combinedInventory { padding: 16px; max-height: 600px; overflow-y: auto; scroll-behavior: smooth; display: none; }
+        #combinedInventory::-webkit-scrollbar { width: 4px; }
+        #combinedInventory::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
         
-        .inventory-split { display: flex; gap: 20px; align-items: flex-start; }
+        .inventory-split { display: flex; gap: 16px; align-items: flex-start; }
         .inv-col { flex: 1; min-width: 0; display: flex; flex-direction: column; }
         
         @media (max-width: 768px) { .inventory-split { flex-direction: column; } }
 
-        .inv-header-title { font-size: 15px; font-weight: 800; color: #fff; margin: 10px 0 16px; padding-left: 5px; text-transform: uppercase; letter-spacing: 0.5px; border-left: 3px solid var(--accent-main); padding-left: 10px; }
-        .filter-row { display: flex; gap: 8px; margin-bottom: 15px; align-items: center; background: var(--bg-card); padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border-color); }
-        .filter-row span { font-size: 11px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; }
-        .filter-input { width: 100%; background: transparent; border: none; color: #fff; outline: none; font-size: 13px; text-align: center; }
-        .filter-input::placeholder { color: #555; }
-        .filter-btn-search { background: var(--accent-main); border: none; color: white; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: var(--transition); }
-        .filter-btn-search:hover { transform: scale(1.05); box-shadow: 0 0 10px var(--accent-glow); }
+        .inv-header-title { font-size: 14px; font-weight: 800; color: #fff; margin: 8px 0 12px; text-transform: uppercase; border-left: 3px solid var(--accent-main); padding-left: 8px; }
+        .filter-row { display: flex; gap: 6px; margin-bottom: 12px; align-items: center; background: var(--bg-card); padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border-color); }
+        .filter-row span { font-size: 10px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; }
+        .filter-input { width: 100%; background: transparent; border: none; color: #fff; outline: none; font-size: 12px; text-align: center; }
+        .filter-btn-search { background: var(--accent-main); border: none; color: white; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: var(--transition); }
+        .filter-btn-search:hover { filter: brightness(1.1); }
 
-        .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; align-items: stretch;}
+        .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; align-items: stretch;}
         
-        .item-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; position: relative; cursor: pointer; transition: var(--transition); height: 100%; }
-        .item-card:hover:not(.empty-slot) { background: var(--bg-card-hover); transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 30px rgba(138, 43, 226, 0.4); border-color: #4a4a60; }
-        .item-price { font-size: 11px; font-weight: 800; color: #fff; align-self: flex-end; background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); }
-        .item-img-container { width: 100%; height: 75px; display: flex; align-items: center; justify-content: center; margin: 8px 0; }
-        .item-img-container img { max-width: 90%; max-height: 90%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); transition: var(--transition); }
-        .item-card:hover:not(.empty-slot) .item-img-container img { transform: scale(1.1); }
+        .item-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; cursor: pointer; transition: var(--transition); height: 100%; position: relative; overflow: hidden; }
+        .item-card:hover:not(.empty-slot) { background: var(--bg-card-hover); transform: translateY(-2px); border-color: #3a3a4d; }
+        .item-price { font-size: 10px; font-weight: 800; color: #fff; align-self: flex-end; background: var(--bg-panel); padding: 3px 6px; border-radius: 4px; border: 1px solid var(--border-color); }
+        .item-img-container { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; margin: 8px 0; }
+        .item-img-container img { max-width: 85%; max-height: 85%; object-fit: contain; transition: var(--transition); }
+        .item-card:hover:not(.empty-slot) .item-img-container img { transform: scale(1.05); }
         .item-info { text-align: center; width: 100%; }
         
-        .item-rarity-text { font-size: 9px; text-transform: uppercase; font-weight: 800; margin-bottom: 4px; padding: 3px 8px; border-radius: 6px; display: inline-block; }
-        .rarity-epic .item-rarity-text { color: var(--rarity-epic); background: rgba(165, 94, 234, 0.15); }
-        .rarity-legendary .item-rarity-text { color: var(--rarity-legendary); background: rgba(253, 150, 68, 0.15); }
-        .rarity-mythic .item-rarity-text { color: var(--rarity-mythic); background: rgba(252, 92, 101, 0.15); }
-        .rarity-immortal .item-rarity-text { color: var(--rarity-immortal); background: rgba(43, 203, 186, 0.15); }
+        .item-rarity-text { font-size: 9px; text-transform: uppercase; font-weight: 800; margin-bottom: 2px; padding: 2px 6px; border-radius: 4px; display: inline-block; }
+        .rarity-epic .item-rarity-text { color: var(--rarity-epic); background: rgba(165, 94, 234, 0.1); }
+        .rarity-legendary .item-rarity-text { color: var(--rarity-legendary); background: rgba(253, 150, 68, 0.1); }
+        .rarity-mythic .item-rarity-text { color: var(--rarity-mythic); background: rgba(252, 92, 101, 0.1); }
+        .rarity-immortal .item-rarity-text { color: var(--rarity-immortal); background: rgba(43, 203, 186, 0.1); }
 
-        .item-title { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 2px;}
+        .item-title { font-size: 9px; color: var(--text-muted); font-weight: 700;}
 
-        .rarity-epic { border-bottom: 3px solid var(--rarity-epic); }
-        .rarity-legendary { border-bottom: 3px solid var(--rarity-legendary); }
-        .rarity-mythic { border-bottom: 3px solid var(--rarity-mythic); }
-        .rarity-immortal { border-bottom: 3px solid var(--rarity-immortal); }
+        .rarity-epic { border-bottom: 2px solid var(--rarity-epic); }
+        .rarity-legendary { border-bottom: 2px solid var(--rarity-legendary); }
+        .rarity-mythic { border-bottom: 2px solid var(--rarity-mythic); }
+        .rarity-immortal { border-bottom: 2px solid var(--rarity-immortal); }
 
         /* === ФУТЕР === */
-        footer { margin-top: auto; padding: 24px 16px; background: var(--bg-panel); border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-        .lang-switch-footer { display: flex; align-items: center; gap: 6px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 30px; font-size: 13px; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: var(--transition); }
-        .lang-switch-footer:hover { border-color: var(--accent-main); }
+        footer { margin-top: auto; padding: 20px 16px; background: var(--bg-panel); border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .lang-switch-footer { display: flex; align-items: center; gap: 6px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 6px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: var(--transition); }
         .lang-switch-footer span.active { color: var(--text-main); }
         
-        .footer-contacts { display: flex; align-items: center; gap: 10px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 12px 24px; border-radius: 30px; color: var(--text-main); font-size: 14px; font-weight: 700; text-decoration: none; transition: var(--transition); }
-        .footer-contacts:hover { border-color: #2AABEE; background: var(--bg-card-hover); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(42, 171, 238, 0.2); }
-        .tg-icon { width: 22px; height: 22px; fill: #2AABEE; }
+        .footer-contacts { display: flex; align-items: center; gap: 8px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 20px; color: var(--text-main); font-size: 12px; font-weight: 700; text-decoration: none; transition: var(--transition); }
+        .footer-contacts:hover { background: var(--bg-card-hover); border-color: #2AABEE; }
+        .tg-icon { width: 18px; height: 18px; fill: #2AABEE; }
 
-        /* === МОДАЛКИ === */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; opacity: 0; transition: opacity 0.6s cubic-bezier(0.3, 1, 0.3, 1); }
+        /* === МОДАЛКИ И ПРОФИЛЬ (РОВНЫЙ ДИЗАЙН БЕЗ ЛИШНЕГО СВЕЧЕНИЯ) === */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; opacity: 0; transition: opacity 0.4s ease; }
         .modal-overlay.active { display: flex; opacity: 1; }
-        .modal-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 460px; padding: 28px; position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.8); transform: translateY(30px); transition: transform 0.6s cubic-bezier(0.3, 1, 0.3, 1); }
+        .modal-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 420px; padding: 24px; position: relative; max-height: 90vh; overflow-y: auto; transform: translateY(20px); transition: transform 0.4s ease; }
         .modal-overlay.active .modal-card { transform: translateY(0); }
-        .modal-close { position: absolute; top: 20px; right: 20px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 50%; width: 32px; height: 32px; display:flex; align-items:center; justify-content:center; color: var(--text-muted); font-size: 18px; cursor: pointer; transition: var(--transition); }
-        .modal-close:hover { background: var(--rarity-mythic); color: #fff; border-color: var(--rarity-mythic); transform: rotate(90deg); }
-        .modal-title { font-size: 20px; font-weight: 800; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; color: #fff; text-transform: uppercase; letter-spacing: 0.5px; }
-        .modal-input { width: 100%; background: var(--bg-card); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-sm); color: #fff; font-size: 16px; margin-bottom: 16px; outline: none; transition: var(--transition); }
-        .modal-input:focus { border-color: var(--accent-main); box-shadow: 0 0 15px rgba(138, 43, 226, 0.2); }
-        .modal-btn { width: 100%; background: linear-gradient(135deg, var(--accent-main), #b838ff); color: #fff; border: none; padding: 16px; border-radius: var(--radius-sm); font-size: 15px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: var(--transition); box-shadow: 0 4px 15px var(--accent-glow); }
-        .modal-btn:hover { box-shadow: 0 6px 20px var(--accent-glow); transform: translateY(-2px); }
+        .modal-close { position: absolute; top: 16px; right: 16px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; width: 30px; height: 30px; display:flex; align-items:center; justify-content:center; color: var(--text-muted); font-size: 18px; cursor: pointer; transition: var(--transition); }
+        .modal-close:hover { background: var(--bg-card-hover); color: #fff; }
+        .modal-title { font-size: 18px; font-weight: 800; margin-bottom: 16px; color: #fff; text-transform: uppercase; }
+        .modal-input { width: 100%; background: var(--bg-card); border: 1px solid var(--border-color); padding: 12px; border-radius: var(--radius-sm); color: #fff; font-size: 14px; margin-bottom: 12px; outline: none; transition: var(--transition); }
+        .modal-input:focus { border-color: var(--accent-main); }
+        .modal-btn { width: 100%; background: var(--accent-main); color: #fff; border: none; padding: 14px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: var(--transition); }
+        .modal-btn:hover { filter: brightness(1.1); }
         
-        .payment-methods { display: flex; gap: 10px; margin-bottom: 16px; }
-        .payment-method { flex: 1; background: var(--bg-card); border: 2px solid var(--border-color); padding: 12px; border-radius: var(--radius-sm); text-align: center; cursor: pointer; transition: var(--transition); }
-        .payment-method.active { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); transform: scale(1.02); }
-        .amount-presets { display: flex; gap: 8px; margin-bottom: 16px; }
-        .amount-btn { flex: 1; background: var(--bg-card); border: 1px solid var(--border-color); padding: 10px 4px; border-radius: 6px; color: var(--text-main); font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition); }
-        .amount-btn:hover { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); transform: translateY(-2px); }
+        .payment-methods { display: flex; gap: 8px; margin-bottom: 12px; }
+        .payment-method { flex: 1; background: var(--bg-card); border: 1px solid var(--border-color); padding: 10px; border-radius: var(--radius-sm); text-align: center; cursor: pointer; transition: var(--transition); }
+        .payment-method.active { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); }
+        .amount-presets { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+        .amount-btn { flex: 1; min-width: 70px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 8px; border-radius: 6px; color: var(--text-main); font-size: 12px; font-weight: 700; cursor: pointer; transition: var(--transition); text-align: center; }
+        .amount-btn:hover { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); }
 
-        /* === ПЕРЕДЕЛАННЫЙ ПРОФИЛЬ (В ИГРОВОМ СТИЛЕ) === */
-        .profile-page-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(10, 10, 15, 0.96); backdrop-filter: blur(20px); z-index: 300; display: none; flex-direction: column; opacity: 0; transform: translateX(100%); transition: transform 0.6s cubic-bezier(0.3, 1, 0.3, 1), opacity 0.6s cubic-bezier(0.3, 1, 0.3, 1); background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, var(--bg-main) 70%); }
+        /* === ПЕРЕДЕЛАННЫЙ ПРОФИЛЬ (СТРОГИЙ И РОВНЫЙ) === */
+        .profile-page-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-main); z-index: 300; display: none; flex-direction: column; opacity: 0; transform: translateX(100%); transition: transform 0.4s ease, opacity 0.4s ease; }
         .profile-page-overlay.active { display: flex; opacity: 1; transform: translateX(0); }
-        .profile-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; background: rgba(20, 20, 30, 0.7); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .profile-back { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
-        .profile-back:hover { transform: translateX(-3px); background: rgba(255,255,255,0.1); }
-        .profile-title-text { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: 1px; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+        .profile-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: var(--bg-panel); border-bottom: 1px solid var(--border-color); }
+        .profile-back { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; padding: 6px; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
+        .profile-back:hover { background: var(--bg-card-hover); }
+        .profile-title-text { font-size: 18px; font-weight: 800; color: #fff; text-transform: uppercase; }
         
-        .profile-body { flex: 1; overflow-y: auto; padding: 24px 16px; width: 100%; margin: 0 auto; scrollbar-width: none; max-width: 1000px; }
-        .profile-body::-webkit-scrollbar { display: none; }
+        .profile-body { flex: 1; overflow-y: auto; padding: 20px 14px; width: 100%; margin: 0 auto; max-width: 1000px; }
         
-        .layout-pubg { display: grid; grid-template-columns: 1fr; gap: 24px; }
-        @media (min-width: 768px) { .layout-pubg { grid-template-columns: 300px 1fr; align-items: flex-start; } }
+        .layout-pubg { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 768px) { .layout-pubg { grid-template-columns: 280px 1fr; align-items: flex-start; } }
         
         .profile-left-panel { display: flex; flex-direction: column; gap: 16px; }
         .profile-right-panel { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
 
-        .profile-side-card { background: linear-gradient(145deg, rgba(30, 30, 45, 0.8), rgba(20, 20, 30, 0.9)); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-lg); padding: 20px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 10px 40px rgba(138, 43, 226, 0.2); transition: var(--transition); }
-        .profile-side-card:hover { box-shadow: 0 15px 50px rgba(138, 43, 226, 0.3); transform: translateY(-2px); }
+        .profile-side-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; gap: 12px; }
 
-        .best-drop-card { background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(0, 229, 255, 0.1)); border: 1px solid rgba(138, 43, 226, 0.6); border-radius: var(--radius-lg); padding: 30px 24px; position: relative; overflow: hidden; box-shadow: 0 10px 40px rgba(138, 43, 226, 0.3); transition: var(--transition); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 250px; text-align: center; }
-        .best-drop-card:hover { box-shadow: 0 15px 50px rgba(138, 43, 226, 0.4); }
-        .bd-header { font-size: 14px; color: var(--accent-secondary); text-transform: uppercase; font-weight: 800; margin-bottom: auto; letter-spacing: 1.5px; display: flex; align-items: center; gap: 8px; text-shadow: 0 0 8px rgba(0, 229, 255, 0.5); align-self: flex-start; }
-        .bd-content-large { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 10px; }
-        .bd-img-container-large { width: 140px; height: 140px; background: rgba(0,0,0,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 0 30px rgba(138, 43, 226, 0.4); }
-        .bd-img-container-large img { max-width: 75%; max-height: 75%; object-fit: contain; filter: drop-shadow(0 0 20px rgba(255,255,255,0.5)); animation: floatEffect 4s ease-in-out infinite; }
-        .bd-name-large { font-size: 26px; font-weight: 900; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
-        .bd-rarity { font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-        .bd-price-large { font-size: 20px; font-weight: 900; color: #fff; background: rgba(0,0,0,0.6); padding: 10px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); text-shadow: 0 0 8px var(--accent-secondary); margin-top: 10px; }
-        .bd-empty { font-size: 16px; color: var(--text-muted); font-weight: 600; text-align: center; padding: 40px 0; margin: auto; }
+        .best-drop-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px; text-align: center; }
+        .bd-header { font-size: 13px; color: var(--accent-secondary); text-transform: uppercase; font-weight: 800; margin-bottom: auto; display: flex; align-items: center; gap: 6px; align-self: flex-start; }
+        .bd-content-large { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 10px; }
+        .bd-img-container-large { width: 100px; height: 100px; background: var(--bg-card); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color); }
+        .bd-img-container-large img { max-width: 70%; max-height: 70%; object-fit: contain; }
+        .bd-name-large { font-size: 20px; font-weight: 800; color: #fff; }
+        .bd-rarity { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+        .bd-price-large { font-size: 16px; font-weight: 800; color: #fff; background: var(--bg-card); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border-color); margin-top: 5px; }
+        .bd-empty { font-size: 14px; color: var(--text-muted); font-weight: 600; text-align: center; padding: 30px 0; margin: auto; }
         
-        .profile-tabs { display: flex; gap: 10px; background: rgba(0,0,0,0.4); padding: 8px; border-radius: var(--radius-lg); border: 1px solid rgba(255,255,255,0.05); }
-        .p-tab-btn { flex: 1; padding: 14px; border: none; background: transparent; color: var(--text-muted); font-size: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; border-radius: 12px; transition: var(--transition); letter-spacing: 0.5px; }
-        .p-tab-btn.active { background: rgba(255,255,255,0.1); color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border-color: rgba(138, 43, 226, 0.4); }
+        .profile-tabs { display: flex; gap: 8px; background: var(--bg-card); padding: 6px; border-radius: var(--radius-md); border: 1px solid var(--border-color); overflow-x: auto; scrollbar-width: none; }
+        .profile-tabs::-webkit-scrollbar { display: none; }
+        .p-tab-btn { flex: 1; padding: 10px 14px; border: none; background: transparent; color: var(--text-muted); font-size: 11px; font-weight: 800; text-transform: uppercase; cursor: pointer; border-radius: 8px; transition: var(--transition); white-space: nowrap; }
+        .p-tab-btn.active { background: var(--bg-panel); color: #fff; border: 1px solid var(--border-color); }
         
-        .profile-list-item { display: flex; justify-content: space-between; align-items: center; background: rgba(30,30,45,0.6); padding: 18px; border-radius: var(--radius-lg); margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05); border-left: 4px solid transparent; transition: var(--transition); }
-        .profile-list-item:hover { border-color: rgba(138, 43, 226, 0.4); background: rgba(40,40,55,0.8); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(138, 43, 226, 0.2); }
-        .p-item-name { font-size: 15px; font-weight: 800; color: #fff; text-shadow: 0 0 5px rgba(255,255,255,0.3); }
-        .p-item-price { font-size: 12px; color: var(--text-muted); font-weight: bold; margin-top: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .btn-profile-action { padding: 12px 20px; border: none; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: var(--transition); }
-        .btn-sell { background: rgba(252, 92, 101, 0.15); color: var(--rarity-mythic); border: 1px solid rgba(252, 92, 101, 0.3); }
-        .btn-sell:hover { background: var(--rarity-mythic); color: #fff; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(252, 92, 101, 0.4); }
-        .btn-buy { background: rgba(43, 203, 186, 0.15); color: var(--rarity-immortal); border: 1px solid rgba(43, 203, 186, 0.3); }
-        .btn-buy:hover { background: var(--rarity-immortal); color: #fff; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(43, 203, 186, 0.4); }
+        .profile-list-item { display: flex; justify-content: space-between; align-items: center; background: var(--bg-card); padding: 14px; border-radius: var(--radius-sm); margin-bottom: 10px; border: 1px solid var(--border-color); border-left: 3px solid transparent; transition: var(--transition); }
+        .profile-list-item:hover { border-color: var(--accent-main); }
+        .p-item-name { font-size: 13px; font-weight: 800; color: #fff; }
+        .p-item-price { font-size: 11px; color: var(--text-muted); font-weight: bold; margin-top: 4px; text-transform: uppercase; }
+        .btn-profile-action { padding: 10px 16px; border: none; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: var(--transition); }
+        .btn-sell { background: rgba(252, 92, 101, 0.1); color: var(--rarity-mythic); border: 1px solid rgba(252, 92, 101, 0.2); }
+        .btn-sell:hover { background: var(--rarity-mythic); color: #fff; }
+        .btn-buy { background: rgba(43, 203, 186, 0.1); color: var(--rarity-immortal); border: 1px solid rgba(43, 203, 186, 0.2); }
+        .btn-buy:hover { background: var(--rarity-immortal); color: #fff; }
         
-        .stat-card { background: rgba(30,30,45,0.6); padding: 20px; border-radius: var(--radius-lg); border: 1px solid rgba(255,255,255,0.05); }
-        .stat-line { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; color: var(--text-muted); font-weight: 600; }
+        .stat-card { background: var(--bg-panel); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); }
+        .stat-line { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-color); font-size: 13px; color: var(--text-muted); font-weight: 600; }
         .stat-line:last-child { border-bottom: none; padding-bottom: 0; }
         .stat-line:first-child { padding-top: 0; }
-        .stat-line span:last-child { font-weight: 900; color: #fff; font-size: 18px; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        .stat-line span:last-child { font-weight: 800; color: #fff; font-size: 15px; }
     </style>
 </head>
 <body>
@@ -395,18 +400,18 @@
     <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
 
     <div class="modal-overlay" id="authModal">
-        <div class="modal-card" style="max-width: 400px; text-align: center;">
+        <div class="modal-card" style="max-width: 380px; text-align: center;">
             <button class="modal-close" onclick="closeModal('authModal')">×</button>
-            <div class="logo" style="font-size: 32px; margin-bottom: 10px;">FLASH<span>UPGRADER</span></div>
-            <div class="auth-title" style="font-size: 20px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase;">Авторизация</div>
-            <div class="auth-subtitle" style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Войдите или создайте аккаунт, чтобы сохранять прогресс и делать апгрейды.</div>
+            <div class="logo" style="font-size: 26px; margin-bottom: 8px;">FLASH<span>UPGRADER</span></div>
+            <div class="auth-title" style="font-size: 16px; font-weight: bold; margin-bottom: 4px; text-transform: uppercase;">Авторизация</div>
+            <div class="auth-subtitle" style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Войдите или создайте аккаунт, чтобы сохранять прогресс и делать апгрейды.</div>
             
-            <input type="email" id="email-input" class="modal-input" placeholder="Email" style="margin-bottom: 12px; padding: 12px;">
-            <input type="password" id="password-input" class="modal-input" placeholder="Пароль" style="padding: 12px;">
+            <input type="email" id="email-input" class="modal-input" placeholder="Email">
+            <input type="password" id="password-input" class="modal-input" placeholder="Пароль">
             
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button id="login-btn" class="modal-btn" style="background: var(--accent-main); color: #fff; flex: 1;">Войти</button>
-                <button id="register-btn" class="modal-btn" style="background: transparent; color: #fff; border: 1px solid var(--border-color); flex: 1; box-shadow: none;">Создать</button>
+            <div style="display: flex; gap: 8px; margin-top: 10px;">
+                <button id="login-btn" class="modal-btn" style="flex: 1;">Войти</button>
+                <button id="register-btn" class="modal-btn" style="background: var(--bg-card); color: #fff; border: 1px solid var(--border-color); flex: 1;">Создать</button>
             </div>
         </div>
     </div>
@@ -417,9 +422,9 @@
             <div class="online-count">Онлайн: <span id="onlineCount">482</span></div>
         </div>
         <div class="user-area">
-            <button id="headerLoginBtn" class="btn-deposit" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); font-weight: 800; box-shadow: 0 4px 15px var(--accent-glow); display: none;" onclick="openModal('authModal')">Вход</button>
+            <button id="headerLoginBtn" class="btn-deposit" style="display: none;" onclick="openModal('authModal')">Вход</button>
             
-            <div id="headerUserArea" style="none; align-items: center; gap: 14px;">
+            <div id="headerUserArea" style="none; align-items: center; gap: 12px;">
                 <div class="balance-block">
                     <span class="balance-label">Баланс</span>
                     <div class="balance" id="userBalance">0 ⭐</div>
@@ -449,7 +454,7 @@
                         <canvas class="slot-confetti"></canvas>
                         <img src="16201.png" class="slot-bg-pepe">
                         <div class="slot-chevron-container">
-                            <svg class="chevron-anim down" viewBox="0 0 50 75" width="45" height="65">
+                            <svg class="chevron-anim down" viewBox="0 0 50 75" width="40" height="55">
                                 <path class="arrow-1" fill="var(--accent-main)" d="M5 10 L25 25 L45 10 L45 15 L25 30 L5 15 Z" />
                                 <path class="arrow-2" fill="var(--accent-main)" d="M5 25 L25 40 L45 25 L45 30 L25 45 L5 30 Z" />
                                 <path class="arrow-3" fill="var(--accent-main)" d="M5 40 L25 55 L45 40 L45 45 L25 60 L5 45 Z" />
@@ -466,32 +471,20 @@
 
                         <div class="arrow-spinner-wrapper" id="arrowSpinner">
                             <svg class="wheel-arrow" viewBox="0 0 24 50" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                        <stop offset="0%" stop-color="#00e5ff" />
-                                        <stop offset="100%" stop-color="#8a2be2" />
-                                    </linearGradient>
-                                </defs>
-                                <path d="M12 0 L24 20 L16 18 L16 50 L8 50 L8 18 L0 20 Z" fill="url(#arrowGrad)"/>
+                                <path d="M12 0 L24 20 L16 18 L16 50 L8 50 L8 18 L0 20 Z" />
                             </svg>
                         </div>
                         
                         <div class="wheel-box">
-                            <svg class="wheel-svg" viewBox="0 0 260 260">
-                                <defs>
-                                    <linearGradient id="progressGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" stop-color="#b838ff" />
-                                        <stop offset="100%" stop-color="#8a2be2" />
-                                    </linearGradient>
-                                </defs>
-                                <circle cx="130" cy="130" r="120" fill="none" stroke="#272736" stroke-width="4" stroke-dasharray="2 12" />
-                                <circle cx="130" cy="130" r="100" fill="#13131c" />
-                                <circle cx="130" cy="130" r="85" fill="none" stroke="#1a1a24" stroke-width="26" />
-                                <circle class="wheel-progress" id="wheelCircle" cx="130" cy="130" r="85" fill="none" stroke="url(#progressGrad)" stroke-width="26" transform="rotate(-90 130 130)" />
+                            <svg class="wheel-svg" viewBox="0 0 200 200">
+                                <circle cx="100" cy="100" r="90" fill="none" stroke="#272736" stroke-width="3" stroke-dasharray="2 8" />
+                                <circle cx="100" cy="100" r="75" fill="#13131c" />
+                                <circle cx="100" cy="100" r="65" fill="none" stroke="#1a1a24" stroke-width="20" />
+                                <circle class="wheel-progress" id="wheelCircle" cx="100" cy="100" r="65" fill="none" stroke="var(--accent-main)" stroke-width="20" transform="rotate(-90 100 100)" style="stroke-dasharray: 408.4; stroke-dashoffset: 408.4;" />
                             </svg>
 
                             <div class="wheel-center-content">
-                                <svg id="centerBars" viewBox="0 0 50 50" width="40" height="40" style="display: block;">
+                                <svg id="centerBars" viewBox="0 0 50 50" width="30" height="30" style="display: block;">
                                     <path class="arrow-1" fill="var(--accent-main)" d="M5 25 L25 10 L45 25 L45 20 L25 5 L5 20 Z" />
                                     <path class="arrow-2" fill="var(--accent-main)" d="M5 40 L25 25 L45 40 L45 35 L25 20 L5 35 Z" />
                                 </svg>
@@ -504,17 +497,27 @@
                         </div>
                     </div>
 
-                    <div class="item-slot" id="slotRight" onclick="document.getElementById('gridShopContent').scrollIntoView({behavior: 'smooth'})">
-                        <canvas class="slot-confetti"></canvas>
-                        <img src="16201.png" class="slot-bg-pepe">
-                        <div class="slot-chevron-container">
-                            <svg class="chevron-anim up" viewBox="0 0 50 75" width="45" height="65">
-                                <path class="arrow-1" fill="var(--accent-main)" d="M5 25 L25 10 L45 25 L45 20 L25 5 L5 20 Z" />
-                                <path class="arrow-2" fill="var(--accent-main)" d="M5 40 L25 25 L45 40 L45 35 L25 20 L5 35 Z" />
-                                <path class="arrow-3" fill="var(--accent-main)" d="M5 55 L25 40 L45 55 L45 50 L25 35 L5 50 Z" />
-                            </svg>
+                    <div style="display: flex; flex-direction: column; flex: 1; max-width: 170px;">
+                        <div class="item-slot" id="slotRight" onclick="document.getElementById('gridShopContent').scrollIntoView({behavior: 'smooth'})" style="max-width: 100%; width: 100%;">
+                            <canvas class="slot-confetti"></canvas>
+                            <img src="16201.png" class="slot-bg-pepe">
+                            <div class="slot-chevron-container">
+                                <svg class="chevron-anim up" viewBox="0 0 50 75" width="40" height="55">
+                                    <path class="arrow-1" fill="var(--accent-main)" d="M5 25 L25 10 L45 25 L45 20 L25 5 L5 20 Z" />
+                                    <path class="arrow-2" fill="var(--accent-main)" d="M5 40 L25 25 L45 40 L45 35 L25 20 L5 35 Z" />
+                                    <path class="arrow-3" fill="var(--accent-main)" d="M5 55 L25 40 L45 55 L45 50 L25 35 L5 50 Z" />
+                                </svg>
+                            </div>
+                            <span class="slot-hint">Желаемый предмет</span>
                         </div>
-                        <span class="slot-hint">Желаемый предмет</span>
+                        
+                        <div class="multiplier-bar">
+                            <button class="multiplier-btn" onclick="selectByMultiplier(1.5)">1.5x</button>
+                            <button class="multiplier-btn" onclick="selectByMultiplier(2)">2x</button>
+                            <button class="multiplier-btn" onclick="selectByMultiplier(5)">5x</button>
+                            <button class="multiplier-btn" onclick="selectByMultiplier(10)">10x</button>
+                            <button class="multiplier-btn pct-btn" onclick="selectByPercentage(80)">80% MAX</button>
+                        </div>
                     </div>
                 </div>
 
@@ -536,14 +539,14 @@
                         <div id="promoRight2" class="promo-item side far"></div>
                     </div>
 
-                    <button class="modal-btn" style="margin-top: 24px; padding: 14px 30px; font-size: 14px; max-width: 280px; width: 100%; border-radius: 50px;" onclick="openModal('authModal')">ВОЙТИ ПО EMAIL</button>
+                    <button class="modal-btn" style="margin-top: 20px; max-width: 240px; border-radius: 20px;" onclick="openModal('authModal')">ВОЙТИ ПО EMAIL</button>
                 </div>
 
                 <div id="combinedInventory">
                     <div class="inventory-split">
                         <div class="inv-col">
                             <div class="inv-header-title">Мой инвентарь</div>
-                            <div class="items-grid" id="gridMyContent" style="margin-bottom: 24px;"></div>
+                            <div class="items-grid" id="gridMyContent" style="margin-bottom: 20px;"></div>
                         </div>
                         <div class="inv-col">
                             <div class="inv-header-title">Магазин предметов</div>
@@ -554,7 +557,7 @@
                                 <span style="color:var(--border-color);">|</span>
                                 <input type="number" id="priceTo" class="filter-input" placeholder="До" oninput="renderGrid()">
                                 <button class="filter-btn-search" onclick="renderGrid()">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                                 </button>
                             </div>
 
@@ -585,63 +588,63 @@
         <div class="modal-card">
             <button class="modal-close" onclick="closeModal('depositModal')">×</button>
             <div class="modal-title">Пополнение баланса</div>
-            <div style="margin-bottom: 16px;">
-                <label style="font-size: 12px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 8px; display: block; letter-spacing: 0.5px;">Выберите способ оплаты</label>
+            <div style="margin-bottom: 12px;">
+                <label style="font-size: 11px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 6px; display: block;">Выберите способ оплаты</label>
                 <div class="payment-methods">
                     <div class="payment-method active">
-                        <div style="font-size: 24px; margin-bottom: 4px;">⭐</div>
-                        <div style="font-size: 12px; font-weight: 700; color: #fff; text-transform: uppercase;">Telegram Stars</div>
+                        <div style="font-size: 20px; margin-bottom: 2px;">⭐</div>
+                        <div style="font-size: 11px; font-weight: 700; color: #fff; text-transform: uppercase;">Telegram Stars</div>
                     </div>
                 </div>
             </div>
-            <label style="font-size: 12px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 8px; display: block; letter-spacing: 0.5px;">Сумма (Минимум 10 ⭐)</label>
-            <input type="number" class="modal-input" id="depositAmount" placeholder="Введите сумму..." min="10" value="100" style="margin-bottom: 10px;">
+            <label style="font-size: 11px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 6px; display: block;">Сумма (Минимум 5000 ⭐)</label>
+            <input type="number" class="modal-input" id="depositAmount" placeholder="Введите сумму..." min="5000" value="5000" style="margin-bottom: 8px;">
             <div class="amount-presets">
-                <button class="amount-btn" onclick="setDepositAmount(50)">50 ⭐</button>
-                <button class="amount-btn" onclick="setDepositAmount(100)">100 ⭐</button>
-                <button class="amount-btn" onclick="setDepositAmount(500)">500 ⭐</button>
-                <button class="amount-btn" onclick="setDepositAmount(1000)">1000 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(5000)">5000 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(10000)">10000 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(15000)">15000 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(30000)">30000 ⭐</button>
             </div>
-            <button class="modal-btn" id="depositBtn" onclick="processDeposit()">Оплатить <span id="payAmountText">100</span> ⭐</button>
+            <button class="modal-btn" id="depositBtn" onclick="processDeposit()">Оплатить <span id="payAmountText">5000</span> ⭐</button>
         </div>
     </div>
 
     <div class="profile-page-overlay" id="profileModal">
         <div class="profile-header">
             <button class="profile-back" onclick="closeModal('profileModal')">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
             </button>
             <div class="profile-title-text">ПРОФИЛЬ ИГРОКА</div>
-            <div style="width: 42px;"></div>
+            <div style="width: 34px;"></div>
         </div>
         
         <div class="profile-body">
             <div class="layout-pubg">
                 <div class="profile-left-panel">
                     <div class="profile-side-card">
-                        <div style="display: flex; align-items: center; gap: 14px;">
-                            <div class="profile-avatar" id="modalAvatar" style="width: 65px; height: 65px; border-width: 3px;" onclick="document.getElementById('avatarUpload').click()" title="Нажми, чтобы изменить аватар">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div class="profile-avatar" id="modalAvatar" style="width: 55px; height: 55px; border-width: 2px;" onclick="document.getElementById('avatarUpload').click()" title="Нажми, чтобы изменить аватар">
                                 <img src="frog_ninja.png" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
                             </div>
                             <div style="display: flex; flex-direction: column;">
-                                <span style="font-size: 11px; color: var(--accent-secondary); text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">ID Аккаунта</span>
-                                <span style="font-size: 16px; font-weight: 800; color: #fff; cursor: pointer; margin-top: 4px;" id="profileEmailDisplay" title="Нажми, чтобы изменить ник">user@email.com <span style="font-size:12px; opacity:0.7; margin-left:6px;">✎</span></span>
+                                <span style="font-size: 10px; color: var(--accent-secondary); text-transform: uppercase; font-weight: 800;">ID Аккаунта</span>
+                                <span style="font-size: 14px; font-weight: 800; color: #fff; cursor: pointer; margin-top: 2px;" id="profileEmailDisplay" title="Нажми, чтобы изменить ник">user@email.com <span style="font-size:10px; opacity:0.7; margin-left:4px;">✎</span></span>
                             </div>
                         </div>
-                        <button id="logout-btn" style="background: rgba(252, 92, 101, 0.1); color: var(--rarity-mythic); border: 1px solid rgba(252, 92, 101, 0.2); padding: 10px; border-radius: 12px; font-size: 12px; font-weight: 800; cursor: pointer; transition: var(--transition); text-transform: uppercase; margin-top: 10px;">Сменить аккаунт</button>
+                        <button id="logout-btn" style="background: var(--bg-card); color: var(--rarity-mythic); border: 1px solid var(--border-color); padding: 8px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; transition: var(--transition); text-transform: uppercase; margin-top: 8px;">Сменить аккаунт</button>
                     </div>
 
                     <div class="profile-side-card">
                         <div style="display: flex; flex-direction: column;">
-                            <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Текущий Баланс</span>
-                            <span style="font-size: 24px; font-weight: 900; color: #fff; margin-top: 6px; text-shadow: 0 0 10px rgba(255,255,255,0.3);" id="profileBalanceVal">0 ⭐</span>
+                            <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 800;">Текущий Баланс</span>
+                            <span style="font-size: 20px; font-weight: 900; color: #fff; margin-top: 4px;" id="profileBalanceVal">0 ⭐</span>
                         </div>
-                        <button onclick="closeModal('profileModal'); openModal('depositModal');" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); color: #fff; border: none; padding: 12px 14px; border-radius: 12px; font-size: 13px; font-weight: 800; cursor: pointer; transition: var(--transition); box-shadow: 0 4px 15px var(--accent-glow); text-transform: uppercase; margin-top: 5px;">+ Пополнить</button>
+                        <button onclick="closeModal('profileModal'); openModal('depositModal');" style="background: var(--accent-main); color: #fff; border: none; padding: 10px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; transition: var(--transition); text-transform: uppercase; margin-top: 4px;">+ Пополнить</button>
                     </div>
 
                     <div class="profile-side-card">
-                        <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Уровень (Апгрейды)</span>
-                        <span style="font-size: 32px; font-weight: 900; color: var(--accent-secondary); margin-top: 2px; text-shadow: 0 0 15px var(--accent-secondary);" id="profileTotalUpgradesBlock">0</span>
+                        <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 800;">Уровень (Апгрейды)</span>
+                        <span style="font-size: 26px; font-weight: 900; color: var(--accent-secondary); margin-top: 2px;" id="profileTotalUpgradesBlock">0</span>
                     </div>
                 </div>
 
@@ -662,16 +665,16 @@
                         <div class="stat-line"><span>Выведено:</span><span id="statWithdrawn" style="color:var(--rarity-legendary);">0 ⭐</span></div>
                     </div>
                     <div id="pContentSell" style="display:none;">
-                        <div id="profileSellList" style="max-height: 350px; overflow-y:auto; padding-right: 5px;"></div>
+                        <div id="profileSellList" style="max-height: 350px; overflow-y:auto; padding-right: 4px;"></div>
                     </div>
                     <div id="pContentBuy" style="display:none;">
-                        <div id="profileBuyList" style="max-height: 350px; overflow-y:auto; padding-right: 5px;"></div>
+                        <div id="profileBuyList" style="max-height: 350px; overflow-y:auto; padding-right: 4px;"></div>
                     </div>
                     <div id="pContentPayout" style="display:none;">
                         <div class="stat-card">
-                            <input type="text" class="modal-input" id="withdrawDetails" placeholder="Ваш Telegram Username (@username)" style="margin-bottom:16px;">
-                            <input type="number" class="modal-input" id="withdrawAmount" placeholder="Сумма для вывода (⭐)" style="margin-bottom:20px;">
-                            <button class="modal-btn" style="background: linear-gradient(135deg, var(--accent-main), #b838ff); padding: 18px;" onclick="processWithdraw()">Создать заявку на вывод</button>
+                            <input type="text" class="modal-input" id="withdrawDetails" placeholder="Ваш Telegram Username (@username)">
+                            <input type="number" class="modal-input" id="withdrawAmount" placeholder="Сумма для вывода (⭐)">
+                            <button class="modal-btn" onclick="processWithdraw()">Создать заявку на вывод</button>
                         </div>
                     </div>
                 </div>
@@ -720,7 +723,7 @@
         let selectedRight = null;
         let isProcessing = false;
         let arrowRotation = 0; 
-        const circleCircumference = 534; 
+        const circleCircumference = 408.4; 
 
         let promoInterval = null;
 
@@ -796,7 +799,7 @@
                 document.getElementById('promoRight2').innerHTML = `<img src="${right2.img}" onerror="this.src='16201.png'">`;
                 
                 promoDisplay.style.opacity = '1';
-            }, 500);
+            }, 400);
         }
 
         function saveData() {
@@ -832,7 +835,7 @@
             const el = document.getElementById('profileEmailDisplay');
             if(el) {
                 let name = stats.nickname || (window.auth && auth.currentUser ? auth.currentUser.email : "Игрок");
-                el.innerHTML = name + ' <span style="font-size:12px; opacity:0.7; margin-left:6px;">✎</span>';
+                el.innerHTML = name + ' <span style="font-size:10px; opacity:0.7; margin-left:4px;">✎</span>';
             }
         }
 
@@ -845,6 +848,34 @@
                 updateProfileName();
             }
         });
+
+        function selectByMultiplier(multiplier) {
+            if (!selectedLeft) {
+                alert("Сначала выберите свой предмет!");
+                return;
+            }
+            let targetPrice = selectedLeft.price * multiplier;
+            let closestItem = giftPool.reduce((prev, curr) => {
+                return (Math.abs(curr.price - targetPrice) < Math.abs(prev.price - targetPrice) ? curr : prev);
+            });
+            selectedRight = closestItem;
+            renderSlot('slotRight', closestItem);
+            updateChance();
+        }
+
+        function selectByPercentage(pct) {
+            if (!selectedLeft) {
+                alert("Сначала выберите свой предмет!");
+                return;
+            }
+            let targetPrice = selectedLeft.price / (pct / 100);
+            let closestItem = giftPool.reduce((prev, curr) => {
+                return (Math.abs(curr.price - targetPrice) < Math.abs(prev.price - targetPrice) ? curr : prev);
+            });
+            selectedRight = closestItem;
+            renderSlot('slotRight', closestItem);
+            updateChance();
+        }
 
         function renderGrid() {
             const combined = document.getElementById('combinedInventory');
@@ -889,16 +920,13 @@
                 `;
             });
             
-            const minCells = 9;
+            const minCells = 8;
             if (myInventoryData.length < minCells && pFrom === 0 && pTo === Infinity) {
                 const emptyCount = minCells - myInventoryData.length;
                 for(let i=0; i<emptyCount; i++) {
                     gridMy.innerHTML += `
-                        <div class="item-card empty-slot" style="opacity: 0.5; pointer-events: none; border-color: var(--border-color); cursor: default;">
-                            <div class="item-img-container"><img src="16201.png" style="filter: brightness(0); opacity: 0.8;"></div>
-                            <div class="item-info">
-                                <div class="item-sub" style="color: #555;"></div>
-                            </div>
+                        <div class="item-card empty-slot" style="opacity: 0.5; pointer-events: none; cursor: default;">
+                            <div class="item-img-container"><img src="16201.png" style="filter: brightness(0); opacity: 0.5;"></div>
                         </div>
                     `;
                 }
@@ -948,11 +976,11 @@
             
             slot.innerHTML = `
                 <canvas class="slot-confetti"></canvas>
-                <div style="font-size:12px; font-weight:800; color:#fff; position: relative; z-index: 2;">${item.sub}</div>
-                <div style="margin: 10px 0; flex: 1; display:flex; align-items:center; justify-content:center; position: relative; z-index: 2;">
-                    <img src="${item.img}" class="slot-item-img" style="max-height:85px; max-width:90%; object-fit:contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
+                <div style="font-size:11px; font-weight:800; color:#fff; position: relative; z-index: 2;">${item.sub}</div>
+                <div style="margin: 8px 0; flex: 1; display:flex; align-items:center; justify-content:center; position: relative; z-index: 2;">
+                    <img src="${item.img}" class="slot-item-img" style="max-height:75px; max-width:90%; object-fit:contain; transition: var(--transition);">
                 </div>
-                <div style="font-size:13px; font-weight:900; color:#fff; background: rgba(0,0,0,0.5); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 2;">${Math.round(item.price)} ⭐</div>
+                <div style="font-size:11px; font-weight:900; color:#fff; background: var(--bg-panel); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border-color); position: relative; z-index: 2;">${Math.round(item.price)} ⭐</div>
             `;
         }
 
@@ -966,8 +994,6 @@
             if (!selectedLeft || !selectedRight) {
                 btn.disabled = true;
                 btn.innerText = 'ВЫБЕРИТЕ ПРЕДМЕТЫ';
-                btn.style.background = '';
-                btn.style.boxShadow = '';
                 bars.style.display = 'block';
                 chanceDisplay.style.display = 'none';
                 document.getElementById('wheelCircle').style.strokeDashoffset = circleCircumference;
@@ -977,8 +1003,6 @@
             if (!window.isUserLoggedIn) {
                 btn.disabled = false;
                 btn.innerText = 'ВОЙТИ ДЛЯ АПГРЕЙДА';
-                btn.style.background = 'linear-gradient(135deg, var(--accent-main), #b838ff)';
-                btn.style.boxShadow = '0 8px 25px var(--accent-glow)';
                 bars.style.display = 'none';
                 chanceDisplay.style.display = 'block';
                 return;
@@ -996,46 +1020,45 @@
             chanceText.innerText = chance.toFixed(2) + '%';
             document.getElementById('wheelCircle').style.strokeDashoffset = circleCircumference - (circleCircumference * (chance / 100));
 
-            if (chance >= 75) {
-                chanceLabel.innerText = "ВЫСОКИЙ ШАНС";
-                chanceLabel.style.color = "rgba(43, 203, 186, 0.5)"; 
-                chanceLabel.style.fontSize = "13px";
-                chanceText.style.opacity = "0.9";
-                chanceText.style.fontSize = "32px";
-                
+            if (chance > 80) {
+                chanceLabel.innerText = "ШАНС > 80%";
+                chanceLabel.style.color = "rgba(43, 203, 186, 0.8)"; 
                 btn.disabled = true;
                 btn.innerText = 'ШАНС СЛИШКОМ ВЫСОКИЙ';
-                btn.style.background = 'var(--bg-card)';
             } else if (chance >= 50) {
                 chanceLabel.innerText = "СРЕДНИЙ ШАНС";
-                chanceLabel.style.color = "rgba(253, 150, 68, 0.6)";
-                chanceLabel.style.fontSize = "12px";
-                chanceText.style.opacity = "0.8";
-                chanceText.style.fontSize = "32px";
-                btn.style.background = '';
-                btn.style.boxShadow = '';
+                chanceLabel.style.color = "rgba(253, 150, 68, 0.8)";
             } else if (chance >= 25) {
                 chanceLabel.innerText = "МАЛЕНЬКИЙ ШАНС";
-                chanceLabel.style.color = "rgba(165, 94, 234, 0.7)";
-                chanceLabel.style.fontSize = "11px";
-                chanceText.style.opacity = "0.7";
-                chanceText.style.fontSize = "32px";
-                btn.style.background = '';
-                btn.style.boxShadow = '';
+                chanceLabel.style.color = "rgba(165, 94, 234, 0.8)";
             } else {
                 chanceLabel.innerText = "ОЧЕНЬ МАЛЕНЬКИЙ ШАНС";
                 chanceLabel.style.color = "rgba(252, 92, 101, 0.8)";
-                chanceLabel.style.fontSize = "10px";
-                chanceText.style.opacity = "0.6";
-                chanceText.style.fontSize = "28px";
-                btn.style.background = '';
-                btn.style.boxShadow = '';
             }
         }
 
         let startRotation = 0;
         let targetRotation = 0;
         let rotationAnimationRequest; 
+
+        function pushToTicker(item, isWin, chanceVal, userNick) {
+            const ticker = document.getElementById('liveTicker');
+            const color = isWin ? '#00e5ff' : '#fc5c65';
+            const bgStr = isWin ? 'success-stripe' : '';
+            
+            const html = `
+                <div class="ticker-item ${bgStr}" style="border-left-color: ${color};">
+                    <span class="ticker-user">${userNick}</span>
+                    <img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'">
+                    <span style="max-width: 80px;">${item.sub}</span>
+                    <span class="ticker-chance" style="color: ${color}; background: ${color}22;">${chanceVal.toFixed(2)}%</span>
+                </div>
+            `;
+            ticker.insertAdjacentHTML('afterbegin', html);
+            
+            const maxItems = window.innerWidth > 900 ? 15 : 6;
+            if (ticker.children.length > maxItems) ticker.removeChild(ticker.lastChild);
+        }
 
         function executeUpgrade() {
             if (!window.isUserLoggedIn) {
@@ -1045,6 +1068,12 @@
 
             if (isProcessing || !selectedLeft || !selectedRight) return;
             
+            let chance = (parseFloat(selectedLeft.price) / parseFloat(selectedRight.price)) * 100;
+            if (chance > 80) {
+                alert('Максимальный шанс для апгрейда составляет 80%!');
+                return;
+            }
+
             isProcessing = true;
             playSound('spin');
 
@@ -1052,21 +1081,10 @@
             const arrowSpinner = document.getElementById('arrowSpinner');
             const isFastUpgrade = document.getElementById('fastUpgradeCheck').checked;
             
-            let chance = (parseFloat(selectedLeft.price) / parseFloat(selectedRight.price)) * 100;
-            
-            if (chance >= 80) {
-                alert('Максимальный шанс для апгрейда составляет 79.99%!');
-                isProcessing = false;
-                btn.innerText = 'ШАНС СЛИШКОМ ВЫСОКИЙ';
-                btn.style.background = 'var(--bg-card)';
-                return;
-            }
-
             btn.innerText = 'Улучшение...';
             
             let animationDuration = isFastUpgrade ? 800 : 3800; 
             
-            if (chance > 95) chance = 95;
             if (chance < 1) chance = 1;
             
             let roll = Math.random() * 100;
@@ -1083,7 +1101,7 @@
                 targetSectorDeg = fullRotationDeg + pad + Math.random() * (360 - fullRotationDeg - pad * 2); 
             }
             
-            let extraSpins = 360 * (Math.floor(Math.random() * 5) + 6);
+            let extraSpins = 360 * (Math.floor(Math.random() * 4) + 5);
             let baseRotation = Math.floor(arrowRotation / 360) * 360; 
             
             targetRotation = baseRotation + extraSpins + targetSectorDeg;
@@ -1106,15 +1124,18 @@
                 if (elapsed > animationDuration) {
                     arrowSpinner.style.transform = `rotate(${targetRotation}deg)`;
                     arrowRotation = targetRotation; 
-                    afterSpin(isWin); 
+                    afterSpin(isWin, chance); 
                     return;
                 }
 
-                let progress = elapsed / animationDuration;
-                let totalDiff = targetRotation - startRotation;
+                let t = elapsed / animationDuration;
                 
-                let t = 1 - progress;
-                let currentVisualRotation = startRotation + totalDiff * (1 - t * t * t);
+                // Эффект перекатывания/недокатывания
+                let p = t - 1; 
+                let progress = 1 + p * p * ((1.70158 + 1) * p + 1.70158); // easeOutBack
+                
+                let totalDiff = targetRotation - startRotation;
+                let currentVisualRotation = startRotation + totalDiff * progress;
                 
                 arrowSpinner.style.transform = `rotate(${currentVisualRotation}deg)`;
                 
@@ -1124,19 +1145,20 @@
             requestAnimationFrame(animateRotation); 
         }
 
-        function afterSpin(isWin) {
+        function afterSpin(isWin, chanceVal) {
             const btn = document.getElementById('btnUpgrade');
             const arena = document.getElementById('arenaBox');
             const chanceText = document.getElementById('chanceText');
             const chanceLabel = document.getElementById('chanceLabel');
             
             btn.innerText = isWin ? 'ВЫИГРЫШ!' : 'СГОРЕЛО!';
+            
+            let currentName = stats.nickname || "Игрок";
+            pushToTicker(selectedRight, isWin, chanceVal, currentName);
 
             if (isWin) {
                 playSound('win');
                 stats.wins++;
-                btn.style.background = 'var(--accent-secondary)';
-                btn.style.boxShadow = '0 8px 25px rgba(0, 229, 255, 0.5)';
                 
                 let rightSlot = document.getElementById('slotRight');
                 let rightItemImg = rightSlot.querySelector('.slot-item-img');
@@ -1145,44 +1167,32 @@
                 let cardCanvas = rightSlot.querySelector('.slot-confetti');
                 if(cardCanvas && window.confetti) {
                     let cardConfetti = confetti.create(cardCanvas, { resize: true });
-                    cardConfetti({
-                        particleCount: 80,
-                        spread: 100,
-                        origin: { y: 0.6 },
-                        colors: ['#a55eea', '#00e5ff', '#ffffff']
-                    });
+                    cardConfetti({ particleCount: 60, spread: 80, origin: { y: 0.6 }, colors: ['#a55eea', '#00e5ff', '#ffffff'] });
                 }
                 
                 myInventoryData.push(selectedRight);
                 
                 if (!stats.bestDrop || parseFloat(selectedRight.price) > parseFloat(stats.bestDrop.price)) {
                     stats.bestDrop = selectedRight;
+                    renderBestDrop(); // Update profile instantly
                 }
             } else {
                 playSound('lose');
                 stats.losses++;
-                btn.style.background = 'var(--rarity-mythic)';
-                btn.style.boxShadow = '0 8px 25px rgba(252, 92, 101, 0.5)';
                 
                 chanceText.innerText = '0.00%';
-                chanceText.style.opacity = "1";
-                chanceText.style.fontSize = "32px";
                 chanceLabel.innerText = 'шанс';
                 chanceLabel.style.color = "var(--text-muted)";
-                chanceLabel.style.fontSize = "11px";
                 
-                document.getElementById('wheelCircle').style.strokeDashoffset = 534;
+                document.getElementById('wheelCircle').style.strokeDashoffset = circleCircumference;
             }
 
             saveData();
             updateBalanceUI();
 
             setTimeout(() => {
-                btn.style.background = '';
-                btn.style.boxShadow = '';
                 btn.innerText = 'ВЫБЕРИТЕ ПРЕДМЕТЫ';
                 btn.disabled = true;
-                arena.className = 'upgrade-arena'; 
                 
                 selectedLeft = null; selectedRight = null;
                 
@@ -1193,7 +1203,7 @@
                     <canvas class="slot-confetti"></canvas>
                     <img src="16201.png" class="slot-bg-pepe">
                     <div class="slot-chevron-container">
-                        <svg class="chevron-anim down" viewBox="0 0 50 75" width="45" height="65">
+                        <svg class="chevron-anim down" viewBox="0 0 50 75" width="40" height="55">
                             <path class="arrow-1" fill="var(--accent-main)" d="M5 10 L25 25 L45 10 L45 15 L25 30 L5 15 Z" />
                             <path class="arrow-2" fill="var(--accent-main)" d="M5 25 L25 40 L45 25 L45 30 L25 45 L5 30 Z" />
                             <path class="arrow-3" fill="var(--accent-main)" d="M5 40 L25 55 L45 40 L45 45 L25 60 L5 45 Z" />
@@ -1207,7 +1217,7 @@
                     <canvas class="slot-confetti"></canvas>
                     <img src="16201.png" class="slot-bg-pepe">
                     <div class="slot-chevron-container">
-                        <svg class="chevron-anim up" viewBox="0 0 50 75" width="45" height="65">
+                        <svg class="chevron-anim up" viewBox="0 0 50 75" width="40" height="55">
                             <path class="arrow-1" fill="var(--accent-main)" d="M5 25 L25 10 L45 25 L45 20 L25 5 L5 20 Z" />
                             <path class="arrow-2" fill="var(--accent-main)" d="M5 40 L25 25 L45 40 L45 35 L25 20 L5 35 Z" />
                             <path class="arrow-3" fill="var(--accent-main)" d="M5 55 L25 40 L45 55 L45 50 L25 35 L5 50 Z" />
@@ -1366,8 +1376,8 @@
 
         function processDeposit() {
             const amount = parseInt(document.getElementById('depositAmount').value);
-            if (!amount || amount < 10) { 
-                alert('Минимальная сумма — 10 ⭐'); 
+            if (!amount || amount < 5000) { 
+                alert('Минимальная сумма — 5000 ⭐'); 
                 return; 
             }
             
@@ -1412,15 +1422,18 @@
         function updateTicker() {
             const ticker = document.getElementById('liveTicker');
             const item = giftPool[Math.floor(Math.random() * giftPool.length)];
-            const chance = (Math.random() * 80 + 1).toFixed(2);
             
+            // Очень редко выводим предметы дороже 100к
+            if (parseInt(item.price) > 100000 && Math.random() > 0.05) return;
+
+            const chance = (Math.random() * 79 + 1).toFixed(2);
             const color = rarityColors[item.rarity] || '#00e5ff';
             
             const html = `
                 <div class="ticker-item success-stripe" style="border-left-color: ${color};">
                     <img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'">
                     <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 90px;">${item.sub}</span>
-                    <span class="ticker-chance" style="color: ${color}; background: ${color}22; border-color: ${color}44;">${chance}%</span>
+                    <span class="ticker-chance" style="color: ${color}; background: ${color}22;">${chance}%</span>
                 </div>
             `;
             ticker.insertAdjacentHTML('afterbegin', html);
