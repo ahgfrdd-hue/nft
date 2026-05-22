@@ -52,6 +52,9 @@
         .p-item-info, .item-info {
             min-width: 0;
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         body {
@@ -112,7 +115,7 @@
 
         .live-ticker {
             background: var(--bg-panel); border: 1px solid var(--border-color);
-            border-radius: var(--radius-md); padding: 8px; display: flex; gap: 8px;
+            border-radius: var(--radius-md); padding: 8px; display: flex; align-items: center; gap: 8px;
             overflow-x: auto; white-space: nowrap; scrollbar-width: none; min-height: 52px;
             scroll-behavior: smooth; position: relative;
         }
@@ -121,22 +124,23 @@
         .ticker-item {
             display: inline-flex; align-items: center; gap: 8px; background: var(--bg-card);
             padding: 6px 10px; border-radius: var(--radius-sm); font-size: 11px; font-weight: 600; 
-            min-width: fit-content; border-left: 3px solid transparent; transition: var(--transition);
+            min-width: 150px; max-width: 200px; border-left: 3px solid transparent; transition: var(--transition);
             animation: fadeIn 0.5s ease forwards;
         }
         @keyframes fadeIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
         
-        .ticker-img { width: 20px; height: 20px; object-fit: contain; }
-        .ticker-chance { margin-left: auto; font-weight: 800; font-size: 10px; padding: 2px 5px; border-radius: 4px; }
-        .ticker-user { font-size: 10px; color: var(--text-muted); opacity: 0.8; margin-right: 4px; }
+        .ticker-img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
+        .ticker-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .ticker-chance { margin-left: auto; font-weight: 800; font-size: 10px; padding: 2px 5px; border-radius: 4px; flex-shrink: 0; }
+        .ticker-user { font-size: 10px; color: var(--text-muted); opacity: 0.8; margin-right: 4px; flex-shrink: 0; }
 
         @media (min-width: 900px) {
             main { flex-direction: row; align-items: flex-start; justify-content: center; }
             .live-ticker { 
-                flex-direction: column; width: 220px; height: auto; max-height: 80vh; 
+                flex-direction: column; align-items: stretch; width: 220px; height: auto; max-height: 80vh; 
                 overflow-y: auto; overflow-x: hidden; white-space: normal; padding: 10px; 
             }
-            .ticker-item { width: 100%; justify-content: flex-start; }
+            .ticker-item { width: 100%; justify-content: flex-start; max-width: 100%; }
             .main-content { margin: 0; }
         }
 
@@ -204,32 +208,32 @@
             50% { opacity: 1; transform: translateY(2px); filter: drop-shadow(0 0 5px var(--accent-main)); }
         }
 
+        /* Обновленный дизайн Множителей */
         .multiplier-bar {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px; 
+            display: flex;
+            background: var(--bg-card); padding: 4px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);
             width: 100%;
-            background: var(--bg-card); padding: 8px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);
         }
         .multiplier-btn {
-            background: var(--bg-panel); color: var(--text-muted); border: 1px solid var(--border-color);
-            padding: 8px 0; font-size: 11px; font-weight: 800; border-radius: 6px; cursor: pointer; text-align: center;
+            flex: 1; background: transparent; color: var(--text-muted); border: none;
+            padding: 10px 0; font-size: 12px; font-weight: 800; border-radius: 6px; cursor: pointer; text-align: center;
             transition: var(--transition);
         }
-        .multiplier-btn:hover { background: var(--accent-main); color: #fff; border-color: var(--accent-main); box-shadow: 0 0 8px var(--accent-glow); }
+        .multiplier-btn:hover { background: var(--bg-card-hover); color: #fff; }
 
+        /* Обновленный дизайн Бара буста */
         .balance-boost-container {
-            display: flex; flex-direction: column; gap: 8px; background: var(--bg-card); 
-            padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); 
+            display: flex; flex-direction: column; gap: 10px; background: var(--bg-card); 
+            padding: 14px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); 
             transition: var(--transition); width: 100%; margin-top: auto;
         }
         .boost-slider {
-            -webkit-appearance: none; width: 100%; height: 6px; background: var(--bg-main); border-radius: 4px; outline: none; opacity: 0.9; transition: var(--transition); border: 1px solid var(--border-color);
+            -webkit-appearance: none; width: 100%; height: 8px; background: var(--bg-main); border-radius: 4px; outline: none; opacity: 0.9; transition: var(--transition); border: 1px solid var(--border-color);
         }
         .boost-slider::-webkit-slider-thumb {
-            -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--accent-main); cursor: pointer; box-shadow: 0 0 10px var(--accent-glow); transition: transform 0.2s;
+            -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #fff; border: 4px solid var(--accent-main); cursor: pointer; box-shadow: 0 0 10px var(--accent-glow); transition: transform 0.2s;
         }
-        .boost-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+        .boost-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
 
         /* === КОЛЕСО И СТРЕЛКА === */
         .wheel-container { position: relative; width: 220px; height: 220px; margin: 0; display: flex; align-items: center; justify-content: center; z-index: 2; flex-shrink: 0; transition: var(--transition); }
@@ -295,8 +299,8 @@
             #chanceDisplay h1 { font-size: 18px; }
             #chanceDisplay p { font-size: 10px; }
             .slot-item-img { max-height: 55px; }
-            .multiplier-bar { gap: 6px; }
-            .multiplier-btn { font-size: 11px; padding: 6px 0; }
+            .multiplier-bar { padding: 4px; }
+            .multiplier-btn { font-size: 11px; padding: 8px 0; }
             .wheel-arrow { top: 15px; width: 12px; height: 18px; }
             .marker-top { top: 25px; } .marker-bottom { bottom: 25px; }
             .marker-left { left: 25px; } .marker-right { right: 25px; }
@@ -337,13 +341,18 @@
         .items-grid::-webkit-scrollbar { width: 4px; }
         .items-grid::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
         
-        .item-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; cursor: pointer; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.4s, box-shadow 0.4s, background 0.4s; height: 100%; position: relative; overflow: hidden; }
+        /* Исправление размеров карточек */
+        .item-card { 
+            background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); 
+            padding: 12px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; 
+            cursor: pointer; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.4s, box-shadow 0.4s, background 0.4s; 
+            height: 165px; position: relative; overflow: hidden; width: 100%; 
+        }
         .item-card:hover:not(.empty-slot) { background: var(--bg-card-hover); transform: translateY(-4px); border-color: #3a3a4d; box-shadow: 0 6px 16px rgba(0,0,0,0.4); }
         .item-price { font-size: 11px; font-weight: 800; color: #fff; align-self: flex-end; background: var(--bg-panel); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border-color); }
-        .item-img-container { width: 100%; height: 65px; display: flex; align-items: center; justify-content: center; margin: 10px 0; }
-        .item-img-container img { max-width: 85%; max-height: 85%; object-fit: contain; transition: var(--transition); }
+        .item-img-container { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; margin: auto 0; }
+        .item-img-container img { max-width: 85%; max-height: 100%; object-fit: contain; transition: var(--transition); }
         .item-card:hover:not(.empty-slot) .item-img-container img { transform: scale(1.1); }
-        .item-info { text-align: center; width: 100%; }
         
         .item-rarity-text { font-size: 10px; text-transform: uppercase; font-weight: 800; margin-bottom: 4px; padding: 3px 8px; border-radius: 4px; display: inline-block; letter-spacing: 0.5px; }
         .rarity-epic .item-rarity-text { color: var(--rarity-epic); background: rgba(165, 94, 234, 0.1); }
@@ -777,7 +786,6 @@
         
         window.isUserLoggedIn = localStorage.getItem('ub_logged_in') === 'true';
 
-        // Инициализация из LocalStorage на случай очистки куки
         let storedBal = localStorage.getItem('local_balance');
         if (storedBal) balance = parseFloat(storedBal);
         let storedInv = localStorage.getItem('local_inv');
@@ -797,7 +805,7 @@
             const audio = document.getElementById('sfx-' + type);
             if(audio) {
                 audio.currentTime = 0;
-                audio.volume = 0.5;
+                audio.volume = 1.0;
                 audio.play().catch(e => console.log('Sound not played: ' + e));
             }
         }
@@ -957,7 +965,6 @@
                 if (promoInterval) { clearInterval(promoInterval); promoInterval = null; }
             }
 
-            // Рендер инвентаря
             gridMy.innerHTML = '';
             myInventoryData.forEach((item, idx) => {
                 if (item.price < pFrom || item.price > pTo) return;
@@ -985,7 +992,6 @@
                 }
             }
 
-            // Рендер магазина (теперь виден всегда)
             const gridShop = document.getElementById('gridShopContent');
             gridShop.innerHTML = '';
             giftPool.forEach((item, idx) => {
@@ -1141,6 +1147,7 @@
             if (isPinned) {
                 html.style.position = 'sticky';
                 html.style.left = '0';
+                html.style.top = '0';
                 html.style.zIndex = '50';
                 html.style.boxShadow = '0 0 10px #ffcc00';
                 html.style.border = '1px solid #ffcc00';
@@ -1150,7 +1157,7 @@
             html.innerHTML = `
                 <span class="ticker-user">${userNick}</span>
                 <img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'">
-                <span style="max-width: 80px;">${item.sub}</span>
+                <span class="ticker-name">${item.sub}</span>
                 <span class="ticker-chance" style="color: ${color}; background: ${color}22;">${chanceVal.toFixed(2)}%</span>
             `;
             
@@ -1256,8 +1263,8 @@
                 }
 
                 let t = elapsed / animationDuration;
-                let p = t - 1; 
-                let progress = 1 + p * p * ((1.70158 + 1) * p + 1.70158); 
+                // Плавное торможение без кручения назад (easeOutQuart)
+                let progress = 1 - Math.pow(1 - t, 4); 
                 
                 let totalDiff = targetRotation - startRotation;
                 let currentVisualRotation = startRotation + totalDiff * progress;
@@ -1546,7 +1553,7 @@
             const ticker = document.getElementById('liveTicker');
             const item = giftPool[Math.floor(Math.random() * giftPool.length)];
             
-            if (parseInt(item.price) > 100000 && Math.random() > 0.05) return;
+            if (parseInt(item.price) > 50000 && Math.random() > 0.02) return;
 
             const chance = (Math.random() * 79 + 1).toFixed(2);
             const color = rarityColors[item.rarity] || '#00e5ff';
@@ -1564,6 +1571,7 @@
             if (isPinned) {
                 html.style.position = 'sticky';
                 html.style.left = '0';
+                html.style.top = '0';
                 html.style.zIndex = '50';
                 html.style.boxShadow = '0 0 10px #ffcc00';
                 html.style.border = '1px solid #ffcc00';
@@ -1573,7 +1581,7 @@
             html.innerHTML = `
                 <span class="ticker-user">${botName}</span>
                 <img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'">
-                <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 90px;">${item.sub}</span>
+                <span class="ticker-name">${item.sub}</span>
                 <span class="ticker-chance" style="color: ${color}; background: ${color}22;">${chance}%</span>
             `;
             
