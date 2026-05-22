@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <title>Project Evolution — Premium Edition</title>
+    <title>FLASHUPGRADER — Premium Edition</title>
     <style>
         /* === НОВЫЙ ДИЗАЙН === */
         :root {
@@ -28,7 +28,7 @@
             --radius-lg: 16px;
             --radius-md: 12px;
             --radius-sm: 8px;
-            --transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            --transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         * {
@@ -40,7 +40,7 @@
 
         button:active, .item-slot:active, .item-card:active, .profile-avatar:active, .modal-close:active, .payment-method:active {
             transform: scale(0.95) !important;
-            transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1) !important;
         }
 
         .item-sub, .item-title, .p-item-name, .bd-name, #profileEmailDisplay, .ticker-item span {
@@ -114,7 +114,7 @@
             background: var(--bg-panel); border: 1px solid var(--border-color);
             border-radius: var(--radius-md); padding: 8px; display: flex; gap: 8px;
             overflow-x: auto; white-space: nowrap; scrollbar-width: none; min-height: 52px;
-            scroll-behavior: smooth;
+            scroll-behavior: smooth; position: relative;
         }
         .live-ticker::-webkit-scrollbar { display: none; }
         
@@ -122,7 +122,7 @@
             display: inline-flex; align-items: center; gap: 8px; background: var(--bg-card);
             padding: 6px 10px; border-radius: var(--radius-sm); font-size: 11px; font-weight: 600; 
             min-width: fit-content; border-left: 3px solid transparent; transition: var(--transition);
-            animation: fadeIn 0.4s ease forwards;
+            animation: fadeIn 0.5s ease forwards;
         }
         @keyframes fadeIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
         
@@ -162,16 +162,20 @@
             display: flex; align-items: center; justify-content: center; 
             width: 100%; z-index: 2; margin-top: 10px; gap: 30px; flex-wrap: nowrap;
         }
+
+        .left-slot-wrapper {
+            display: flex; flex-direction: column; flex: 1; max-width: 260px; width: 100%; min-width: 110px; gap: 10px;
+        }
         
         .right-slot-wrapper {
-            display: flex; flex-direction: column; flex: 1; max-width: 260px; width: 100%; min-width: 110px; gap: 10px;
+            display: flex; flex-direction: column; flex: 1; max-width: 260px; width: 100%; min-width: 110px; gap: 10px; justify-content: flex-start;
         }
 
         .item-slot {
             background: var(--bg-card); border: 1px dashed var(--border-color); border-radius: var(--radius-md);
             height: 220px; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
-            padding: 16px; text-align: center; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s, box-shadow 0.3s; cursor: pointer;
-            position: relative; overflow: hidden; flex: 1; max-width: 260px; min-width: 110px;
+            padding: 16px; text-align: center; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.4s, box-shadow 0.4s; cursor: pointer;
+            position: relative; overflow: hidden; width: 100%;
         }
         .slot-confetti { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
         
@@ -214,11 +218,10 @@
         }
         .multiplier-btn:hover { background: var(--accent-main); color: #fff; border-color: var(--accent-main); box-shadow: 0 0 8px var(--accent-glow); }
 
-        /* === СЛАЙДЕР БУСТА ТЕПЕРЬ ВСЕГДА ВИДЕН СПРАВА === */
         .balance-boost-container {
             display: flex; flex-direction: column; gap: 8px; background: var(--bg-card); 
             padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); 
-            transition: var(--transition); width: 100%;
+            transition: var(--transition); width: 100%; margin-top: auto;
         }
         .boost-slider {
             -webkit-appearance: none; width: 100%; height: 6px; background: var(--bg-main); border-radius: 4px; outline: none; opacity: 0.9; transition: var(--transition); border: 1px solid var(--border-color);
@@ -235,7 +238,6 @@
         .wheel-progress { stroke-dasharray: 534; stroke-dashoffset: 534; transition: stroke-dashoffset 0.8s cubic-bezier(0.3, 1, 0.3, 1); filter: drop-shadow(0 0 10px var(--accent-main)); }
 
         .wheel-marker { position: absolute; font-size: 9px; font-weight: 800; color: var(--text-muted); z-index: 10; pointer-events: none; opacity: 0.6; }
-        /* Проценты сдвинуты внутрь кольца */
         .marker-top { top: 38px; left: 50%; transform: translateX(-50%); }
         .marker-bottom { bottom: 38px; left: 50%; transform: translateX(-50%); }
         .marker-left { top: 50%; left: 38px; transform: translateY(-50%); }
@@ -266,9 +268,9 @@
 
         #chanceDisplay { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
         #chanceDisplay h1 { 
-            font-size: 34px; font-weight: 900; color: #ffffff; letter-spacing: -0.5px; 
+            font-size: 24px; font-weight: 900; color: #ffffff; letter-spacing: -0.5px; 
             transition: var(--transition); line-height: 1; margin: 0; 
-            text-shadow: 0 0 15px rgba(255,255,255,0.4); 
+            text-shadow: 0 0 15px rgba(255,255,255,0.4); white-space: nowrap;
         }
         #chanceDisplay p { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; margin-top: 4px; transition: var(--transition); }
 
@@ -285,12 +287,12 @@
 
         @media (max-width: 650px) {
             .arena-row { flex-direction: row; flex-wrap: wrap; gap: 12px; }
-            #slotLeft, .right-slot-wrapper { max-width: 100%; flex: 1; }
+            .left-slot-wrapper, .right-slot-wrapper { max-width: 100%; flex: 1; }
             .item-slot { height: 160px; padding: 8px; }
             .wheel-container { width: 150px; height: 150px; margin: 0 auto; }
             .wheel-svg { width: 150px; height: 150px; }
             .wheel-center-content { width: 90%; height: 90%; }
-            #chanceDisplay h1 { font-size: 24px; }
+            #chanceDisplay h1 { font-size: 18px; }
             #chanceDisplay p { font-size: 10px; }
             .slot-item-img { max-height: 55px; }
             .multiplier-bar { gap: 6px; }
@@ -305,7 +307,7 @@
         .unauth-title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 4px; }
         .unauth-subtitle { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 16px; }
         
-        #promoDisplay { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 140px; width: 100%; transition: opacity 0.4s ease; }
+        #promoDisplay { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 140px; width: 100%; transition: opacity 0.5s ease; }
         .promo-item { display: flex; flex-direction: column; align-items: center; justify-content: center; transition: var(--transition); width: 60px; }
         /* Черные подарки по бокам */
         .promo-item.side.near { filter: brightness(0); transform: scale(0.8); opacity: 0.6; }
@@ -335,7 +337,7 @@
         .items-grid::-webkit-scrollbar { width: 4px; }
         .items-grid::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
         
-        .item-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; cursor: pointer; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s, box-shadow 0.3s, background 0.3s; height: 100%; position: relative; overflow: hidden; }
+        .item-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; cursor: pointer; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.4s, box-shadow 0.4s, background 0.4s; height: 100%; position: relative; overflow: hidden; }
         .item-card:hover:not(.empty-slot) { background: var(--bg-card-hover); transform: translateY(-4px); border-color: #3a3a4d; box-shadow: 0 6px 16px rgba(0,0,0,0.4); }
         .item-price { font-size: 11px; font-weight: 800; color: #fff; align-self: flex-end; background: var(--bg-panel); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border-color); }
         .item-img-container { width: 100%; height: 65px; display: flex; align-items: center; justify-content: center; margin: 10px 0; }
@@ -343,7 +345,6 @@
         .item-card:hover:not(.empty-slot) .item-img-container img { transform: scale(1.1); }
         .item-info { text-align: center; width: 100%; }
         
-        /* Улучшенный шрифт в магазине */
         .item-rarity-text { font-size: 10px; text-transform: uppercase; font-weight: 800; margin-bottom: 4px; padding: 3px 8px; border-radius: 4px; display: inline-block; letter-spacing: 0.5px; }
         .rarity-epic .item-rarity-text { color: var(--rarity-epic); background: rgba(165, 94, 234, 0.1); }
         .rarity-legendary .item-rarity-text { color: var(--rarity-legendary); background: rgba(253, 150, 68, 0.1); }
@@ -367,9 +368,9 @@
         .tg-icon { width: 18px; height: 18px; fill: #2AABEE; }
 
         /* === МОДАЛКИ И ПРОФИЛЬ === */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; opacity: 0; transition: opacity 0.4s ease; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; opacity: 0; transition: opacity 0.5s ease; }
         .modal-overlay.active { display: flex; opacity: 1; }
-        .modal-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 420px; padding: 24px; position: relative; max-height: 90vh; overflow-y: auto; transform: translateY(20px); transition: transform 0.4s ease; }
+        .modal-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 420px; padding: 24px; position: relative; max-height: 90vh; overflow-y: auto; transform: translateY(20px); transition: transform 0.5s ease; }
         .modal-overlay.active .modal-card { transform: translateY(0); }
         .modal-close { position: absolute; top: 16px; right: 16px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; width: 30px; height: 30px; display:flex; align-items:center; justify-content:center; color: var(--text-muted); font-size: 18px; cursor: pointer; transition: var(--transition); }
         .modal-close:hover { background: var(--bg-card-hover); color: #fff; }
@@ -387,7 +388,7 @@
         .amount-btn:hover { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); }
 
         /* === ПЕРЕДЕЛАННЫЙ ПРОФИЛЬ === */
-        .profile-page-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-main); z-index: 300; display: none; flex-direction: column; opacity: 0; transform: translateX(100%); transition: transform 0.4s ease, opacity 0.4s ease; }
+        .profile-page-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-main); z-index: 300; display: none; flex-direction: column; opacity: 0; transform: translateX(100%); transition: transform 0.5s ease, opacity 0.5s ease; }
         .profile-page-overlay.active { display: flex; opacity: 1; transform: translateX(0); }
         .profile-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: var(--bg-panel); border-bottom: 1px solid var(--border-color); }
         .profile-back { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; padding: 6px; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
@@ -448,9 +449,9 @@
     <div class="modal-overlay" id="authModal">
         <div class="modal-card" style="max-width: 380px; text-align: center;">
             <button class="modal-close" onclick="closeModal('authModal')">×</button>
-            <div class="logo" style="font-size: 26px; margin-bottom: 8px; animation: none;">PROJECT<span>EVOLUTION</span></div>
+            <div class="logo" style="font-size: 26px; margin-bottom: 8px; animation: none;">FLASH<span>UPGRADER</span></div>
             <div class="auth-title" style="font-size: 16px; font-weight: bold; margin-bottom: 4px; text-transform: uppercase;">Авторизация</div>
-            <div class="auth-subtitle" style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Войдите или создайте аккаунт, чтобы сохранять прогресс и делать апгрейды.</div>
+            <div class="auth-subtitle" style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Войдите или создайте аккаунт, чтобы сохранять прогресс в облаке и делать апгрейды.</div>
             
             <input type="email" id="email-input" class="modal-input" placeholder="Email">
             <input type="password" id="password-input" class="modal-input" placeholder="Пароль">
@@ -464,7 +465,7 @@
 
     <header>
         <div class="logo-area">
-            <div class="logo">PROJECT<span>EVOLUTION</span></div>
+            <div class="logo">FLASH<span>UPGRADER</span></div>
             <div class="online-count">Онлайн: <span id="onlineCount">482</span></div>
         </div>
         <div class="user-area">
@@ -496,17 +497,27 @@
                 </div>
 
                 <div class="arena-row">
-                    <div class="item-slot" id="slotLeft" onclick="document.getElementById('gridMyContent').scrollIntoView({behavior: 'smooth'})">
-                        <canvas class="slot-confetti"></canvas>
-                        <img src="16201.png" class="slot-bg-pepe">
-                        <div class="slot-chevron-container">
-                            <svg class="chevron-anim down" viewBox="0 0 50 75" width="40" height="55">
-                                <path class="arrow-1" fill="var(--accent-main)" d="M5 10 L25 25 L45 10 L45 15 L25 30 L5 15 Z" />
-                                <path class="arrow-2" fill="var(--accent-main)" d="M5 25 L25 40 L45 25 L45 30 L25 45 L5 30 Z" />
-                                <path class="arrow-3" fill="var(--accent-main)" d="M5 40 L25 55 L45 40 L45 45 L25 60 L5 45 Z" />
-                            </svg>
+                    <div class="left-slot-wrapper">
+                        <div class="item-slot" id="slotLeft" onclick="document.getElementById('gridMyContent').scrollIntoView({behavior: 'smooth'})">
+                            <canvas class="slot-confetti"></canvas>
+                            <img src="16201.png" class="slot-bg-pepe">
+                            <div class="slot-chevron-container">
+                                <svg class="chevron-anim down" viewBox="0 0 50 75" width="40" height="55">
+                                    <path class="arrow-1" fill="var(--accent-main)" d="M5 10 L25 25 L45 10 L45 15 L25 30 L5 15 Z" />
+                                    <path class="arrow-2" fill="var(--accent-main)" d="M5 25 L25 40 L45 25 L45 30 L25 45 L5 30 Z" />
+                                    <path class="arrow-3" fill="var(--accent-main)" d="M5 40 L25 55 L45 40 L45 45 L25 60 L5 45 Z" />
+                                </svg>
+                            </div>
+                            <span class="slot-hint">Ваш предмет</span>
                         </div>
-                        <span class="slot-hint">Ваш предмет</span>
+
+                        <div class="balance-boost-container" id="boostContainer">
+                            <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); font-weight: bold; text-transform: uppercase;">
+                                <span>Буст шанса (За Звезды)</span>
+                                <span id="boostValDisplay" style="color: #ffcc00;">+ 0 ⭐</span>
+                            </div>
+                            <input type="range" id="balanceBoostSlider" min="0" max="0" value="0" step="1" class="boost-slider">
+                        </div>
                     </div>
                     
                     <div class="wheel-container">
@@ -563,14 +574,6 @@
                             <button class="multiplier-btn" onclick="selectByMultiplier(5)">5x</button>
                             <button class="multiplier-btn" onclick="selectByMultiplier(10)">10x</button>
                         </div>
-
-                        <div class="balance-boost-container" id="boostContainer">
-                            <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); font-weight: bold; text-transform: uppercase;">
-                                <span>Буст шанса (За Звезды)</span>
-                                <span id="boostValDisplay" style="color: var(--accent-secondary);">+ 0 ⭐</span>
-                            </div>
-                            <input type="range" id="balanceBoostSlider" min="0" max="0" value="0" step="1" class="boost-slider">
-                        </div>
                     </div>
                 </div>
 
@@ -586,7 +589,7 @@
 
                         <div id="unauthPromoBlock" style="display: none;">
                             <div class="unauth-title">Вы не авторизированы</div>
-                            <div class="unauth-subtitle">Войдите для доступа к инвентарю и апгрейдам</div>
+                            <div class="unauth-subtitle">Войдите для доступа к инвентарю и облачным сохранениям</div>
 
                             <div id="promoDisplay">
                                 <div id="promoLeft2" class="promo-item side far"></div>
@@ -766,11 +769,21 @@
 
         giftPool.sort((a, b) => parseInt(a.price) - parseInt(b.price));
 
-        let balance = 1000000; // Всем миллион!
+        const botNames = ['Alex', 'DropKing', 'Shadow', 'LuckyFrog', 'ProGamer', 'NinjaStrike', 'RichBoy', 'TopG', 'Sigma', 'PepeFan'];
+
+        let balance = 1000000; 
         let myInventoryData = []; 
         let stats = { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0, nickname: '' };
         
         window.isUserLoggedIn = localStorage.getItem('ub_logged_in') === 'true';
+
+        // Инициализация из LocalStorage на случай очистки куки
+        let storedBal = localStorage.getItem('local_balance');
+        if (storedBal) balance = parseFloat(storedBal);
+        let storedInv = localStorage.getItem('local_inv');
+        if (storedInv) myInventoryData = JSON.parse(storedInv);
+        let storedStats = localStorage.getItem('local_stats');
+        if (storedStats) stats = JSON.parse(storedStats);
 
         let selectedLeft = null;
         let selectedRight = null;
@@ -852,10 +865,14 @@
                 document.getElementById('promoRight2').innerHTML = `<img src="${right2.img}" onerror="this.src='16201.png'">`;
                 
                 promoDisplay.style.opacity = '1';
-            }, 400);
+            }, 500);
         }
 
         function saveData() {
+            localStorage.setItem('local_balance', balance);
+            localStorage.setItem('local_inv', JSON.stringify(myInventoryData));
+            localStorage.setItem('local_stats', JSON.stringify(stats));
+
             if (window.syncToDb) {
                 window.syncToDb(balance, myInventoryData, stats);
             }
@@ -867,6 +884,7 @@
             stats = dbStats || { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0, nickname: '' };
             if(stats.withdrawn === undefined) stats.withdrawn = 0;
             
+            saveData();
             updateBalanceUI();
             updateProfileName();
             renderGrid();
@@ -1111,18 +1129,52 @@
             const color = isWin ? '#00e5ff' : '#fc5c65';
             const bgStr = isWin ? 'success-stripe' : '';
             
-            const html = `
-                <div class="ticker-item ${bgStr}" style="border-left-color: ${color};">
-                    <span class="ticker-user">${userNick}</span>
-                    <img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'">
-                    <span style="max-width: 80px;">${item.sub}</span>
-                    <span class="ticker-chance" style="color: ${color}; background: ${color}22;">${chanceVal.toFixed(2)}%</span>
-                </div>
+            let isPinned = false;
+            if (isWin && parseInt(item.price) >= 500000) {
+                isPinned = true;
+            }
+            
+            const html = document.createElement('div');
+            html.className = `ticker-item ${bgStr}`;
+            html.style.borderLeftColor = color;
+            
+            if (isPinned) {
+                html.style.position = 'sticky';
+                html.style.left = '0';
+                html.style.zIndex = '50';
+                html.style.boxShadow = '0 0 10px #ffcc00';
+                html.style.border = '1px solid #ffcc00';
+                html.style.backgroundColor = 'var(--bg-card-hover)';
+            }
+            
+            html.innerHTML = `
+                <span class="ticker-user">${userNick}</span>
+                <img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'">
+                <span style="max-width: 80px;">${item.sub}</span>
+                <span class="ticker-chance" style="color: ${color}; background: ${color}22;">${chanceVal.toFixed(2)}%</span>
             `;
-            ticker.insertAdjacentHTML('afterbegin', html);
+            
+            ticker.insertBefore(html, ticker.firstChild);
+            
+            if (isPinned) {
+                setTimeout(() => {
+                    html.style.position = 'static';
+                    html.style.boxShadow = 'none';
+                    html.style.border = 'none';
+                    html.style.borderLeft = `3px solid ${color}`;
+                }, 20000);
+            }
             
             const maxItems = window.innerWidth > 900 ? 15 : 6;
-            if (ticker.children.length > maxItems) ticker.removeChild(ticker.lastChild);
+            let currentItems = Array.from(ticker.children);
+            if (currentItems.length > maxItems) {
+                for (let i = currentItems.length - 1; i >= 0; i--) {
+                    if (currentItems[i].style.position !== 'sticky') {
+                        ticker.removeChild(currentItems[i]);
+                        break;
+                    }
+                }
+            }
         }
 
         function executeUpgrade() {
@@ -1176,13 +1228,12 @@
                 targetSectorDeg = fullRotationDeg + pad + Math.random() * (360 - fullRotationDeg - pad * 2); 
             }
             
-            // Фикс анимации - теперь всегда крутимся вперед на доп. круги
             let startRotation = arrowRotation;
             let extraSpins = 360 * (Math.floor(Math.random() * 3) + 5); 
             
             let currentMod = startRotation % 360;
             let distance = targetSectorDeg - currentMod;
-            if (distance < 0) distance += 360; // Никогда не идем назад
+            if (distance < 0) distance += 360;
             
             targetRotation = startRotation + extraSpins + distance;
             stats.total++;
@@ -1206,7 +1257,6 @@
 
                 let t = elapsed / animationDuration;
                 let p = t - 1; 
-                // Easing function: плавно замедляется в конце
                 let progress = 1 + p * p * ((1.70158 + 1) * p + 1.70158); 
                 
                 let totalDiff = targetRotation - startRotation;
@@ -1500,22 +1550,58 @@
 
             const chance = (Math.random() * 79 + 1).toFixed(2);
             const color = rarityColors[item.rarity] || '#00e5ff';
+            const botName = botNames[Math.floor(Math.random() * botNames.length)];
             
-            const html = `
-                <div class="ticker-item success-stripe" style="border-left-color: ${color};">
-                    <img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'">
-                    <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 90px;">${item.sub}</span>
-                    <span class="ticker-chance" style="color: ${color}; background: ${color}22;">${chance}%</span>
-                </div>
+            let isPinned = false;
+            if (parseInt(item.price) >= 500000) {
+                isPinned = true;
+            }
+            
+            const html = document.createElement('div');
+            html.className = `ticker-item success-stripe`;
+            html.style.borderLeftColor = color;
+            
+            if (isPinned) {
+                html.style.position = 'sticky';
+                html.style.left = '0';
+                html.style.zIndex = '50';
+                html.style.boxShadow = '0 0 10px #ffcc00';
+                html.style.border = '1px solid #ffcc00';
+                html.style.backgroundColor = 'var(--bg-card-hover)';
+            }
+            
+            html.innerHTML = `
+                <span class="ticker-user">${botName}</span>
+                <img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'">
+                <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 90px;">${item.sub}</span>
+                <span class="ticker-chance" style="color: ${color}; background: ${color}22;">${chance}%</span>
             `;
-            ticker.insertAdjacentHTML('afterbegin', html);
+            
+            ticker.insertBefore(html, ticker.firstChild);
+            
+            if (isPinned) {
+                setTimeout(() => {
+                    html.style.position = 'static';
+                    html.style.boxShadow = 'none';
+                    html.style.border = 'none';
+                    html.style.borderLeft = `3px solid ${color}`;
+                }, 20000);
+            }
             
             const maxItems = window.innerWidth > 900 ? 15 : 6;
-            if (ticker.children.length > maxItems) ticker.removeChild(ticker.lastChild);
+            let currentItems = Array.from(ticker.children);
+            if (currentItems.length > maxItems) {
+                for (let i = currentItems.length - 1; i >= 0; i--) {
+                    if (currentItems[i].style.position !== 'sticky') {
+                        ticker.removeChild(currentItems[i]);
+                        break;
+                    }
+                }
+            }
         }
 
         setInterval(updateOnline, 3000);
-        setInterval(updateTicker, 2200);
+        setInterval(updateTicker, 2500);
         
         updateBalanceUI();
         renderGrid();
