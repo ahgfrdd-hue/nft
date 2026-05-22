@@ -5,206 +5,222 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <title>PROJECT EVOLUTION — Premium Edition</title>
+    <title>FLASHUPGRADER — Premium Edition</title>
     <style>
-        /* === ПРЕМИАЛЬНЫЙ НОВЫЙ ДИЗАЙН === */
+        /* === НОВЫЙ ДИЗАЙН (ПРЕМИУМ UI) === */
         :root {
-            --bg-main: #070709;
-            --bg-panel: rgba(19, 19, 28, 0.7);
-            --bg-card: rgba(26, 26, 36, 0.85);
-            --bg-card-hover: rgba(34, 34, 46, 0.95);
+            --bg-main: #0a0a0f;
+            --bg-panel: #13131c;
+            --bg-card: #1a1a24;
+            --bg-card-hover: #22222e;
             --accent-main: #8a2be2; 
-            --accent-glow: rgba(138, 43, 226, 0.6);
+            --accent-glow: rgba(138, 43, 226, 0.4);
             --accent-secondary: #00e5ff;
             --text-main: #ffffff;
             --text-muted: #8b8b9e;
-            --border-color: rgba(255, 255, 255, 0.08);
+            --border-color: #272736;
             
             --rarity-epic: #a55eea;
             --rarity-legendary: #fd9644;
             --rarity-mythic: #fc5c65;
             --rarity-immortal: #2bcbba;
             
-            --radius-lg: 20px;
-            --radius-md: 14px;
-            --radius-sm: 10px;
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         * {
             margin: 0; padding: 0; box-sizing: border-box;
-            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             -webkit-tap-highlight-color: transparent;
             min-width: 0; 
         }
 
-        body {
-            background: var(--bg-main);
-            background-image: 
-                radial-gradient(circle at 15% 50%, rgba(138, 43, 226, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 85% 30%, rgba(0, 229, 255, 0.05) 0%, transparent 50%);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex; flex-direction: column; overflow-x: hidden;
-            scroll-behavior: smooth;
+        /* === ОБНОВЛЕННЫЕ КНОПКИ === */
+        button {
+            cursor: pointer;
+            outline: none;
+            font-family: inherit;
         }
 
-        /* Анимации нажатий (Сделано более плавным) */
-        button:active, .item-slot:active, .item-card:active, .profile-avatar:active, .modal-close:active, .payment-method:active {
-            transform: scale(0.96) !important;
-            transition: transform 0.1s ease !important;
+        .btn-deposit, .modal-btn, .btn-upgrade {
+            background: linear-gradient(180deg, #9d4edd 0%, #7b2cbf 100%);
+            color: #fff;
+            border: 1px solid #c77dff;
+            box-shadow: 0 4px 15px rgba(123, 44, 191, 0.4), inset 0 2px 0 rgba(255,255,255,0.2);
+            border-radius: var(--radius-sm);
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
         }
+        
+        .btn-deposit:hover, .modal-btn:hover, .btn-upgrade:hover:not(:disabled) {
+            background: linear-gradient(180deg, #c77dff 0%, #9d4edd 100%);
+            box-shadow: 0 6px 20px rgba(123, 44, 191, 0.6), inset 0 2px 0 rgba(255,255,255,0.3);
+            border-color: #e0aaff;
+            transform: translateY(-2px);
+        }
+
+        button:active, .item-slot:active, .item-card:active, .profile-avatar:active, .modal-close:active, .payment-method:active {
+            transform: translateY(1px) scale(0.96) !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+            transition: all 0.1s ease !important;
+        }
+
+        .btn-upgrade:disabled {
+            background: linear-gradient(180deg, #2a2a35 0%, #1a1a24 100%);
+            color: #5a5a6e;
+            border: 1px solid #3a3a4d;
+            box-shadow: inset 0 2px 0 rgba(255,255,255,0.05);
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .amount-btn, .multiplier-btn, .p-tab-btn {
+            background: linear-gradient(180deg, #2b2b36 0%, #1f1f2a 100%);
+            border: 1px solid #3a3a4d;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
+            color: var(--text-main);
+            font-weight: 700;
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+
+        .amount-btn:hover, .multiplier-btn:hover, .p-tab-btn:hover {
+            background: linear-gradient(180deg, #3a3a4d 0%, #2b2b36 100%);
+            border-color: var(--accent-main);
+            box-shadow: 0 4px 10px rgba(138, 43, 226, 0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+        
+        .p-tab-btn.active {
+            background: linear-gradient(180deg, #5a189a 0%, #3c096c 100%);
+            border-color: #9d4edd;
+            color: #fff;
+            box-shadow: inset 0 2px 0 rgba(255,255,255,0.1);
+        }
+
+        .btn-profile-action { 
+            padding: 10px 16px; border: none; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: var(--transition); 
+        }
+        .btn-sell { background: linear-gradient(180deg, #fc5c65 0%, #eb3b5a 100%); color: #fff; box-shadow: 0 4px 10px rgba(235, 59, 90, 0.4), inset 0 2px 0 rgba(255,255,255,0.2); }
+        .btn-sell:hover { filter: brightness(1.1); transform: translateY(-2px); }
+        .btn-buy { background: linear-gradient(180deg, #2bcbba 0%, #0fb9b1 100%); color: #fff; box-shadow: 0 4px 10px rgba(15, 185, 177, 0.4), inset 0 2px 0 rgba(255,255,255,0.2); }
+        .btn-buy:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
         .item-sub, .item-title, .p-item-name, .bd-name, #profileEmailDisplay, .ticker-item span {
             overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%;
         }
-        
         .p-item-info, .item-info {
             min-width: 0; width: 100%; display: flex; flex-direction: column; align-items: center;
+        }
+
+        body {
+            background: var(--bg-main); color: var(--text-main);
+            min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; scroll-behavior: smooth;
         }
 
         /* === ХЕДЕР === */
         header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 24px; 
-            background: rgba(10, 10, 15, 0.8); 
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color); 
-            position: sticky; top: 0; z-index: 100;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            padding: 16px 20px; background: rgba(19, 19, 28, 0.95); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100;
         }
 
         .logo-area { display: flex; flex-direction: column; }
-        .logo { 
-            font-size: 22px; font-weight: 900; color: var(--accent-main); 
-            letter-spacing: 1px; text-transform: uppercase;
-            text-shadow: 0 0 15px var(--accent-glow); 
-        }
-        .logo span { color: var(--text-main); text-shadow: none; font-weight: 300;}
-        .online-count { font-size: 11px; color: var(--text-muted); margin-top: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;}
-        .online-count span { color: #00e5ff; font-weight: 800; text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);}
+        .logo { font-size: 20px; font-weight: 900; color: var(--accent-main); letter-spacing: 0.5px; transition: var(--transition); text-shadow: 0 0 10px var(--accent-glow); animation: neonPulse 3s infinite; }
+        .logo span { color: var(--text-main); text-shadow: none; }
+        .online-count { font-size: 11px; color: var(--text-muted); margin-top: 2px; font-weight: 600; }
+        .online-count span { color: var(--text-muted); font-weight: bold; }
 
-        .user-area { display: flex; align-items: center; gap: 16px; min-height: 38px;}
-        
+        @keyframes neonPulse {
+            0%, 100% { text-shadow: 0 0 10px var(--accent-glow); }
+            50% { text-shadow: 0 0 20px var(--accent-main), 0 0 5px var(--accent-glow); }
+        }
+
+        .user-area { display: flex; align-items: center; gap: 12px; min-height: 38px;}
         .balance-block { display: flex; flex-direction: column; align-items: flex-end; justify-content: center; }
-        .balance-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;}
-        .balance { font-size: 16px; font-weight: 900; color: var(--text-main); letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);}
+        .balance-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
+        .balance { font-size: 15px; font-weight: 800; color: var(--text-main); }
         
-        /* Стилизация главных кнопок */
-        .btn-deposit, .modal-btn, .btn-upgrade {
-            background: linear-gradient(135deg, #8a2be2 0%, #6a1b9a 100%);
-            color: #fff;
-            padding: 10px 18px; 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            border-radius: var(--radius-sm);
-            font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-            cursor: pointer; transition: var(--transition);
-            box-shadow: 0 4px 15px var(--accent-glow), inset 0 2px 4px rgba(255,255,255,0.2);
-        }
-        .btn-deposit:hover, .modal-btn:hover, .btn-upgrade:hover:not(:disabled) { 
-            transform: translateY(-2px); 
-            box-shadow: 0 6px 20px rgba(138, 43, 226, 0.8), inset 0 2px 4px rgba(255,255,255,0.3);
-            filter: brightness(1.15); 
-        }
+        .btn-deposit { padding: 8px 14px; font-size: 13px; }
         
         .profile-avatar {
-            width: 42px; height: 42px; background: var(--bg-card); 
-            border: 2px solid rgba(255,255,255,0.1);
+            width: 36px; height: 36px; background: var(--bg-card); border: 2px solid var(--border-color);
             border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
             transition: var(--transition); overflow: hidden; flex-shrink: 0;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
-        .profile-avatar:hover { border-color: var(--accent-main); box-shadow: 0 0 15px var(--accent-glow); transform: rotate(5deg) scale(1.05);}
+        .profile-avatar:hover { border-color: var(--accent-main); box-shadow: 0 0 10px var(--accent-glow); }
 
         /* === ОСНОВНОЙ КОНТЕНТ === */
-        main { 
-            flex: 1; display: flex; flex-direction: column; padding: 24px 16px; gap: 24px; 
-            max-width: 1400px; width: 100%; margin: 0 auto; 
-        }
-        .main-content {
-            display: flex; flex-direction: column; gap: 24px; flex: 1; max-width: 1000px; margin: 0 auto; width: 100%;
-        }
+        main { flex: 1; display: flex; flex-direction: column; padding: 20px 14px; gap: 20px; max-width: 1300px; width: 100%; margin: 0 auto; }
+        .main-content { display: flex; flex-direction: column; gap: 24px; flex: 1; max-width: 950px; margin: 0 auto; width: 100%; }
 
         .live-ticker {
             background: var(--bg-panel); border: 1px solid var(--border-color);
-            border-radius: var(--radius-md); padding: 10px; display: flex; align-items: center; gap: 10px;
-            overflow-x: auto; white-space: nowrap; scrollbar-width: none; min-height: 60px;
-            backdrop-filter: blur(10px); box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            border-radius: var(--radius-md); padding: 8px; display: flex; align-items: center; gap: 8px;
+            overflow-x: auto; white-space: nowrap; scrollbar-width: none; min-height: 52px;
+            scroll-behavior: smooth; position: relative;
         }
         .live-ticker::-webkit-scrollbar { display: none; }
         
         .ticker-item {
-            display: inline-flex; align-items: center; gap: 8px; 
-            background: linear-gradient(90deg, rgba(26,26,36,0.9) 0%, rgba(34,34,46,0.9) 100%);
-            padding: 8px 12px; border-radius: var(--radius-sm); font-size: 11px; font-weight: 700; 
-            min-width: 160px; max-width: 210px; border-left: 3px solid transparent; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2); border-top: 1px solid rgba(255,255,255,0.05);
-            animation: fadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            display: inline-flex; align-items: center; gap: 8px; background: var(--bg-card);
+            padding: 6px 10px; border-radius: var(--radius-sm); font-size: 11px; font-weight: 600; 
+            min-width: 150px; max-width: 200px; border-left: 3px solid transparent; transition: var(--transition);
+            animation: fadeIn 0.5s ease forwards;
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateX(-15px) scale(0.95); } to { opacity: 1; transform: translateX(0) scale(1); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
         
-        .ticker-img { width: 24px; height: 24px; object-fit: contain; flex-shrink: 0; drop-shadow: 0 2px 4px rgba(0,0,0,0.5);}
-        .ticker-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #e2e2e2;}
-        .ticker-chance { margin-left: auto; font-weight: 900; font-size: 10px; padding: 3px 6px; border-radius: 6px; flex-shrink: 0; box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);}
-        .ticker-user { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-right: 4px; flex-shrink: 0; }
+        .ticker-img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
+        .ticker-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .ticker-chance { margin-left: auto; font-weight: 800; font-size: 10px; padding: 2px 5px; border-radius: 4px; flex-shrink: 0; }
+        .ticker-user { font-size: 10px; color: var(--text-muted); opacity: 0.8; margin-right: 4px; flex-shrink: 0; }
 
-        @media (min-width: 1024px) {
+        @media (min-width: 900px) {
             main { flex-direction: row; align-items: flex-start; justify-content: center; }
-            .live-ticker { 
-                flex-direction: column; align-items: stretch; width: 250px; height: auto; max-height: 85vh; 
-                overflow-y: auto; overflow-x: hidden; white-space: normal; padding: 12px; 
-            }
-            .ticker-item { width: 100%; justify-content: flex-start; max-width: 100%; margin-bottom: 4px;}
+            .live-ticker { flex-direction: column; align-items: stretch; width: 220px; height: auto; max-height: 80vh; overflow-y: auto; overflow-x: hidden; white-space: normal; padding: 10px; }
+            .ticker-item { width: 100%; justify-content: flex-start; max-width: 100%; }
             .main-content { margin: 0; }
         }
 
         /* === АРЕНА АПГРЕЙДА === */
         .upgrade-arena {
-            background: linear-gradient(180deg, var(--bg-panel) 0%, rgba(15,15,22,0.8) 100%);
+            background: var(--bg-panel);
             border: 1px solid var(--border-color); border-radius: var(--radius-lg);
-            padding: 35px 25px; display: flex; flex-direction: column; align-items: center; gap: 28px;
-            position: relative; overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
-            backdrop-filter: blur(15px);
+            padding: 30px 20px; display: flex; flex-direction: column; align-items: center; gap: 24px;
+            position: relative; transition: var(--transition); overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
         }
         
-        .top-left-controls { 
-            position: absolute; top: 16px; left: 16px; z-index: 10; 
-        }
-        .fast-upgrade-label { 
-            cursor: pointer; display: flex; align-items: center; 
-            background: rgba(0,0,0,0.3); padding: 8px; border-radius: 10px; 
-            border: 1px solid var(--border-color); backdrop-filter: blur(5px);
-            transition: var(--transition);
-        }
-        .fast-upgrade-label:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); }
+        .top-left-controls { position: absolute; top: 12px; left: 12px; z-index: 10; display: flex; gap: 8px; align-items: center; }
+        .fast-upgrade-label { cursor: pointer; display: flex; align-items: center; background: var(--bg-card); padding: 6px; border-radius: 8px; border: 1px solid var(--border-color); }
         .fast-upgrade-label input { display: none; }
-        .lightning-icon { width: 14px; height: 14px; fill: #5a5a6e; transition: var(--transition); }
-        .fast-upgrade-label input:checked + .lightning-icon { fill: #ffcc00; filter: drop-shadow(0 0 8px rgba(255, 204, 0, 0.8)); }
+        .lightning-icon { width: 12px; height: 12px; fill: #5a5a6e; transition: var(--transition); }
+        .fast-upgrade-label input:checked + .lightning-icon { fill: #ffcc00; filter: drop-shadow(0 0 6px rgba(255, 204, 0, 0.6)); }
 
-        .arena-row { 
-            display: flex; align-items: center; justify-content: center; 
-            width: 100%; z-index: 2; margin-top: 10px; gap: 40px; flex-wrap: nowrap;
-        }
+        .arena-row { display: flex; align-items: center; justify-content: center; width: 100%; z-index: 2; margin-top: 10px; gap: 30px; flex-wrap: nowrap; }
+        .left-slot-wrapper { display: flex; flex-direction: column; flex: 1; max-width: 260px; width: 100%; min-width: 110px; gap: 10px; }
+        .right-slot-wrapper { display: flex; flex-direction: column; flex: 1; max-width: 260px; width: 100%; min-width: 110px; gap: 10px; justify-content: flex-start; }
 
-        .left-slot-wrapper, .right-slot-wrapper {
-            display: flex; flex-direction: column; flex: 1; max-width: 280px; width: 100%; min-width: 120px; gap: 12px;
+        .item-slot, .item-card {
+            background: linear-gradient(180deg, #1f1f2a 0%, #13131c 100%);
+            border: 1px dashed #2a2a35;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
         }
 
         .item-slot {
-            background: linear-gradient(145deg, var(--bg-card) 0%, rgba(20,20,28,0.9) 100%);
-            border: 1px dashed rgba(255,255,255,0.15); border-radius: var(--radius-md);
-            height: 240px; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
-            padding: 20px; text-align: center; cursor: pointer; position: relative; overflow: hidden; width: 100%;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: var(--radius-md); height: 220px; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+            padding: 16px; text-align: center; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer;
+            position: relative; overflow: hidden; width: 100%;
         }
+        .slot-confetti { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
         
-        .item-slot:hover { 
-            border-color: rgba(255,255,255,0.3); 
-            background: var(--bg-card-hover); 
-            transform: translateY(-5px); 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.6), inset 0 0 20px rgba(255,255,255,0.02); 
+        .item-slot:hover, .item-card:hover:not(.empty-slot) { 
+            background: linear-gradient(180deg, #2b2b36 0%, #1a1a24 100%); 
+            border-style: solid; border-color: #5a5a6e; transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.5); 
         }
         
         .item-slot.active { border-style: solid; border-width: 2px; }
@@ -213,213 +229,201 @@
         .item-slot.active.rarity-mythic { border-color: var(--rarity-mythic); background: radial-gradient(circle at top, rgba(252, 92, 101, 0.15), var(--bg-card)); box-shadow: 0 0 20px rgba(252, 92, 101, 0.2); }
         .item-slot.active.rarity-immortal { border-color: var(--rarity-immortal); background: radial-gradient(circle at top, rgba(43, 203, 186, 0.15), var(--bg-card)); box-shadow: 0 0 20px rgba(43, 203, 186, 0.2); }
 
-        .slot-bg-pepe { position: absolute; width: 70%; height: 70%; object-fit: contain; filter: brightness(0) opacity(0.2); z-index: 1; pointer-events: none; animation: floatEffect 6s ease-in-out infinite; }
-        .slot-confetti { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+        .slot-bg-pepe { position: absolute; width: 65%; height: 65%; object-fit: contain; filter: brightness(0) opacity(0.3); z-index: 1; pointer-events: none; animation: floatEffect 5s ease-in-out infinite; }
         
         .slot-chevron-container { position: relative; z-index: 2; margin: auto 0; display: flex; align-items: center; justify-content: center; height: 50px; }
-        .slot-hint { font-size: 12px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; position: relative; z-index: 2; margin-top: auto; }
+        .slot-hint { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; position: relative; z-index: 2; margin-top: auto; }
 
-        /* Обновленный дизайн Бара буста */
-        .balance-boost-container {
-            display: flex; flex-direction: column; gap: 12px; background: rgba(0,0,0,0.3); 
-            padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); 
-            backdrop-filter: blur(5px); width: 100%; margin-top: auto;
-        }
-        .boost-slider {
-            -webkit-appearance: none; width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; outline: none; transition: var(--transition);
-        }
-        .boost-slider::-webkit-slider-thumb {
-            -webkit-appearance: none; appearance: none; width: 22px; height: 22px; border-radius: 50%; background: #fff; border: 5px solid var(--accent-main); cursor: pointer; box-shadow: 0 0 12px var(--accent-glow); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .boost-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
-
-        /* Множители */
-        .multiplier-bar {
-            display: flex; background: rgba(0,0,0,0.3); padding: 5px; border-radius: var(--radius-md); border: 1px solid var(--border-color); width: 100%; backdrop-filter: blur(5px);
-        }
-        .multiplier-btn {
-            flex: 1; background: transparent; color: var(--text-muted); border: none;
-            padding: 12px 0; font-size: 13px; font-weight: 900; border-radius: 8px; cursor: pointer; text-align: center;
-            transition: var(--transition);
-        }
-        .multiplier-btn:hover { background: rgba(255,255,255,0.1); color: #fff; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,0.3);}
-
-        /* КОЛЕСО */
-        .wheel-container { position: relative; width: 240px; height: 240px; margin: 0; display: flex; align-items: center; justify-content: center; z-index: 2; flex-shrink: 0; }
-        .wheel-box { width: 100%; height: 100%; position: relative; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.6)); }
-        .wheel-svg { width: 100%; height: 100%; }
-        .wheel-progress { stroke-dasharray: 534; stroke-dashoffset: 534; transition: stroke-dashoffset 0.8s cubic-bezier(0.25, 1, 0.5, 1); filter: drop-shadow(0 0 12px var(--accent-main)); }
-
-        .wheel-marker { position: absolute; font-size: 10px; font-weight: 900; color: rgba(255,255,255,0.4); z-index: 10; pointer-events: none; letter-spacing: 1px;}
-        .marker-top { top: 40px; left: 50%; transform: translateX(-50%); }
-        .marker-bottom { bottom: 40px; left: 50%; transform: translateX(-50%); }
-        .marker-left { top: 50%; left: 40px; transform: translateY(-50%); }
-        .marker-right { top: 50%; right: 40px; transform: translateY(-50%); }
-        
-        .arrow-spinner-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15; will-change: transform; }
-        
-        .wheel-arrow { 
-            position: absolute; top: 20px; left: 50%; transform: translateX(-50%) rotate(180deg);
-            width: 18px; height: 26px; fill: #fff; 
-            filter: drop-shadow(0 0 8px var(--accent-glow));
-        }
-
-        .wheel-center-content { 
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            width: 85%; height: 85%; z-index: 5; text-align: center; pointer-events: none; 
-        }
-
-        #chanceDisplay h1 { 
-            font-size: 28px; font-weight: 900; color: #ffffff; letter-spacing: 0px; 
-            line-height: 1; margin: 0; text-shadow: 0 0 20px rgba(255,255,255,0.5); 
-        }
-        #chanceDisplay p { font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 900; margin-top: 6px; letter-spacing: 1px;}
-
-        .action-block { width: 100%; display: flex; flex-direction: column; gap: 12px; z-index: 2; margin-top: 15px; }
-
-        .btn-upgrade { padding: 18px; font-size: 16px; border-radius: var(--radius-md); letter-spacing: 2px;}
-        .btn-upgrade:disabled { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.3); border: 1px dashed rgba(255,255,255,0.1); cursor: not-allowed; box-shadow: none; text-shadow: none;}
-
-        @media (max-width: 768px) {
-            .arena-row { flex-direction: row; flex-wrap: wrap; gap: 16px; }
-            .left-slot-wrapper, .right-slot-wrapper { max-width: 100%; flex: 1; min-width: 140px;}
-            .item-slot { height: 190px; padding: 12px; }
-            .wheel-container { width: 180px; height: 180px; margin: 10px auto; }
-            #chanceDisplay h1 { font-size: 22px; }
-            .slot-item-img { max-height: 60px; }
-            .marker-top { top: 30px; } .marker-bottom { bottom: 30px; }
-            .marker-left { left: 30px; } .marker-right { right: 30px; }
-            .wheel-arrow { top: 16px; width: 14px; height: 20px; }
-        }
-
-        /* === ИНВЕНТАРЬ И МАГАЗИН === */
-        .inventory-section { 
-            background: linear-gradient(180deg, rgba(19,19,28,0.6) 0%, rgba(10,10,15,0.8) 100%);
-            border: 1px solid var(--border-color); border-radius: var(--radius-lg); 
-            display: flex; flex-direction: column; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            backdrop-filter: blur(10px);
-        }
-        .inventory-split { display: flex; gap: 30px; align-items: flex-start; }
-        .inv-col { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-        
-        @media (max-width: 768px) { .inventory-split { flex-direction: column; gap: 20px;} }
-
-        .inv-header-title { 
-            font-size: 18px; font-weight: 900; color: #fff; margin: 0 0 20px; 
-            text-transform: uppercase; border-left: 5px solid var(--accent-main); 
-            padding-left: 12px; letter-spacing: 1px; text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-        }
-        
-        .filter-row { 
-            display: flex; gap: 8px; margin-bottom: 20px; align-items: center; 
-            background: rgba(0,0,0,0.3); padding: 10px 14px; border-radius: var(--radius-md); 
-            border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(5px);
-        }
-        .filter-row span { font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;}
-        .filter-input { width: 100%; background: transparent; border: none; color: #fff; outline: none; font-size: 13px; text-align: center; font-weight: 700;}
-        .filter-btn-search { 
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); color: white; 
-            width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; 
-            align-items: center; justify-content: center; transition: var(--transition); 
-        }
-        .filter-btn-search:hover { background: var(--accent-main); border-color: var(--accent-main); box-shadow: 0 0 12px var(--accent-glow); }
-
-        .items-grid { 
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(115px, 1fr)); 
-            gap: 14px; align-items: stretch; max-height: 650px; overflow-y: auto; 
-            padding-right: 8px; padding-bottom: 15px; 
-        }
-        .items-grid::-webkit-scrollbar { width: 6px; }
-        .items-grid::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 6px; }
-        .items-grid::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
-        
-        .item-card { 
-            background: linear-gradient(180deg, rgba(30,33,45,0.6) 0%, rgba(20,22,30,0.8) 100%); 
-            border: 1px solid rgba(255,255,255,0.05); border-radius: var(--radius-md); 
-            padding: 14px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; 
-            cursor: pointer; height: 180px; position: relative; overflow: hidden; width: 100%; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        .item-card:hover:not(.empty-slot) { 
-            background: linear-gradient(180deg, rgba(40,43,60,0.8) 0%, rgba(25,27,38,0.95) 100%); 
-            transform: translateY(-6px); 
-            border-color: rgba(255,255,255,0.2); 
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1); 
-        }
-        .item-price { 
-            font-size: 11px; font-weight: 900; color: #fff; align-self: flex-end; 
-            background: rgba(0,0,0,0.4); padding: 5px 10px; border-radius: 6px; 
-            border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(4px);
-        }
-        .item-img-container { width: 100%; height: 70px; display: flex; align-items: center; justify-content: center; margin: auto 0; }
-        .item-img-container img { max-width: 90%; max-height: 100%; object-fit: contain; transition: var(--transition); filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));}
-        .item-card:hover:not(.empty-slot) .item-img-container img { transform: scale(1.15) rotate(3deg); filter: drop-shadow(0 8px 15px rgba(0,0,0,0.5));}
-        
-        .item-rarity-text { 
-            font-size: 10px; text-transform: uppercase; font-weight: 900; margin-bottom: 6px; 
-            padding: 4px 10px; border-radius: 6px; display: inline-block; letter-spacing: 1px; 
-        }
-        .rarity-epic .item-rarity-text { color: var(--rarity-epic); background: rgba(165, 94, 234, 0.15); box-shadow: inset 0 0 5px rgba(165, 94, 234, 0.3);}
-        .rarity-legendary .item-rarity-text { color: var(--rarity-legendary); background: rgba(253, 150, 68, 0.15); box-shadow: inset 0 0 5px rgba(253, 150, 68, 0.3);}
-        .rarity-mythic .item-rarity-text { color: var(--rarity-mythic); background: rgba(252, 92, 101, 0.15); box-shadow: inset 0 0 5px rgba(252, 92, 101, 0.3);}
-        .rarity-immortal .item-rarity-text { color: var(--rarity-immortal); background: rgba(43, 203, 186, 0.15); box-shadow: inset 0 0 5px rgba(43, 203, 186, 0.3);}
-
-        .item-title { font-size: 12px; color: #ffffff; font-weight: 800; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.5);}
-
-        .rarity-epic { border-bottom: 3px solid var(--rarity-epic); }
-        .rarity-legendary { border-bottom: 3px solid var(--rarity-legendary); }
-        .rarity-mythic { border-bottom: 3px solid var(--rarity-mythic); }
-        .rarity-immortal { border-bottom: 3px solid var(--rarity-immortal); }
-
-        /* === ФУТЕР === */
-        footer { margin-top: auto; padding: 24px; background: rgba(10,10,15,0.9); border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
-        .lang-switch-footer { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: 800; color: var(--text-muted); cursor: pointer; transition: var(--transition); }
-        .lang-switch-footer span.active { color: var(--text-main); }
-        
-        .footer-contacts { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 20px; color: var(--text-main); font-size: 13px; font-weight: 800; text-decoration: none; transition: var(--transition); }
-        .footer-contacts:hover { background: rgba(42, 171, 238, 0.1); border-color: #2AABEE; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(42, 171, 238, 0.3);}
-
-        /* === МОДАЛКИ И ПРОФИЛЬ === */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; opacity: 0; transition: opacity 0.4s ease; }
-        .modal-overlay.active { display: flex; opacity: 1; }
-        .modal-card { background: linear-gradient(180deg, rgba(26,26,36,0.95) 0%, rgba(15,15,22,0.95) 100%); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-lg); width: 100%; max-width: 440px; padding: 30px; position: relative; max-height: 90vh; overflow-y: auto; transform: scale(0.95) translateY(20px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1); }
-        .modal-overlay.active .modal-card { transform: scale(1) translateY(0); }
-        .modal-close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; width: 36px; height: 36px; display:flex; align-items:center; justify-content:center; color: var(--text-muted); font-size: 20px; cursor: pointer; transition: var(--transition); }
-        .modal-close:hover { background: rgba(255,255,255,0.1); color: #fff; transform: rotate(90deg);}
-        .modal-title { font-size: 20px; font-weight: 900; margin-bottom: 20px; color: #fff; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);}
-        .modal-input { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 14px 16px; border-radius: var(--radius-sm); color: #fff; font-size: 14px; font-weight: 600; margin-bottom: 16px; outline: none; transition: var(--transition); box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);}
-        .modal-input:focus { border-color: var(--accent-main); box-shadow: 0 0 12px var(--accent-glow), inset 0 2px 4px rgba(0,0,0,0.2); background: rgba(0,0,0,0.5);}
-        
-        .amount-presets { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-        .amount-btn { flex: 1; min-width: 75px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; color: var(--text-main); font-size: 13px; font-weight: 800; cursor: pointer; transition: var(--transition); text-align: center; }
-        .amount-btn:hover { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.15); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.3);}
-
-        /* Специфичные анимации и эффекты */
-        @keyframes floatEffect { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-6px); } }
-        @keyframes arrowPulse { 0%, 100% { opacity: 0.2; transform: translateY(0); } 50% { opacity: 1; transform: translateY(3px); filter: drop-shadow(0 0 8px var(--accent-main)); } }
-        @keyframes winItemPop { 0% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); } 50% { transform: scale(1.25); filter: drop-shadow(0 0 30px var(--accent-main)); } 100% { transform: scale(1); filter: drop-shadow(0 0 20px var(--accent-main)); } }
-        .win-item-anim { animation: winItemPop 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards !important; z-index: 20; }
-        
-        /* Блок неавторизованных */
-        #unauthPromoBlock { flex-direction: column; align-items: center; text-align: center; padding: 40px 20px; background: rgba(26,26,36,0.5); border-radius: var(--radius-lg); border: 1px dashed rgba(255,255,255,0.2); backdrop-filter: blur(5px);}
-        .unauth-title { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;}
-        
-        /* Профиль */
-        .profile-page-overlay { background: var(--bg-main); background-image: radial-gradient(circle at 50% 0%, rgba(138, 43, 226, 0.1) 0%, transparent 70%); z-index: 300;}
-        .profile-header { background: rgba(10,10,15,0.9); border-bottom: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px);}
-        .profile-side-card, .best-drop-card, .stat-card { background: rgba(26,26,36,0.6); border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 8px 25px rgba(0,0,0,0.2); backdrop-filter: blur(10px);}
-        .p-tab-btn.active { background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 10px rgba(0,0,0,0.2);}
-        .profile-list-item { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);}
-        .profile-list-item:hover { transform: translateX(5px); background: rgba(255,255,255,0.05);}
-        
         .arrow-1 { animation: arrowPulse 1.5s infinite; animation-delay: 0s; }
         .arrow-2 { animation: arrowPulse 1.5s infinite; animation-delay: 0.2s; }
         .arrow-3 { animation: arrowPulse 1.5s infinite; animation-delay: 0.4s; }
         .chevron-up .arrow-1 { animation-delay: 0.4s; }
         .chevron-up .arrow-2 { animation-delay: 0.2s; }
         .chevron-up .arrow-3 { animation-delay: 0s; }
+        
+        @keyframes arrowPulse { 0%, 100% { opacity: 0.2; transform: translateY(0); } 50% { opacity: 1; transform: translateY(2px); filter: drop-shadow(0 0 5px var(--accent-main)); } }
+
+        .multiplier-bar { display: flex; background: var(--bg-card); padding: 4px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); width: 100%; gap: 4px; }
+        .multiplier-btn { flex: 1; padding: 10px 0; font-size: 12px; text-align: center; }
+
+        .balance-boost-container { display: flex; flex-direction: column; gap: 10px; background: var(--bg-card); padding: 14px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); transition: var(--transition); width: 100%; margin-top: auto; }
+        .boost-slider { -webkit-appearance: none; width: 100%; height: 8px; background: var(--bg-main); border-radius: 4px; outline: none; opacity: 0.9; transition: var(--transition); border: 1px solid var(--border-color); }
+        .boost-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #fff; border: 4px solid var(--accent-main); cursor: pointer; box-shadow: 0 0 10px var(--accent-glow); transition: transform 0.2s; }
+        .boost-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+
+        /* === КОЛЕСО И СТРЕЛКА === */
+        .wheel-container { position: relative; width: 220px; height: 220px; margin: 0; display: flex; align-items: center; justify-content: center; z-index: 2; flex-shrink: 0; transition: var(--transition); }
+        .wheel-box { width: 100%; height: 100%; position: relative; filter: drop-shadow(0 0 15px rgba(0,0,0,0.6)); }
+        .wheel-svg { width: 100%; height: 100%; }
+        .wheel-progress { stroke-dasharray: 534; stroke-dashoffset: 534; transition: stroke-dashoffset 0.8s cubic-bezier(0.3, 1, 0.3, 1); filter: drop-shadow(0 0 10px var(--accent-main)); }
+
+        .wheel-marker { position: absolute; font-size: 9px; font-weight: 800; color: var(--text-muted); z-index: 10; pointer-events: none; opacity: 0.6; }
+        .marker-top { top: 38px; left: 50%; transform: translateX(-50%); }
+        .marker-bottom { bottom: 38px; left: 50%; transform: translateX(-50%); }
+        .marker-left { top: 50%; left: 38px; transform: translateY(-50%); }
+        .marker-right { top: 50%; right: 38px; transform: translateY(-50%); }
+        
+        .arrow-spinner-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15; will-change: transform; }
+        .wheel-arrow { position: absolute; top: 25px; left: 50%; transform: translateX(-50%) rotate(180deg); width: 14px; height: 22px; fill: var(--accent-main); filter: drop-shadow(0 0 6px var(--accent-glow)); }
+        .wheel-center-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; justify-content: center; width: 85%; height: 85%; z-index: 5; text-align: center; pointer-events: none; }
+
+        @keyframes slowBarsAnim { 0%, 100% { opacity: 1; transform: translateY(0); } 50% { opacity: 0.6; transform: translateY(-2px); } }
+        .bars-anim { animation: slowBarsAnim 2s ease-in-out infinite; }
+
+        #chanceDisplay { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
+        #chanceDisplay h1 { font-size: 24px; font-weight: 900; color: #ffffff; letter-spacing: -0.5px; transition: var(--transition); line-height: 1; margin: 0; text-shadow: 0 0 15px rgba(255,255,255,0.4); white-space: nowrap; }
+        #chanceDisplay p { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; margin-top: 4px; transition: var(--transition); }
+
+        .action-block { width: 100%; display: flex; flex-direction: column; gap: 10px; z-index: 2; margin-top: 10px; }
+        .btn-upgrade { padding: 16px; font-size: 14px; }
+
+        @keyframes floatEffect { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-4px); } }
+        @keyframes winItemPop { 0% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); } 50% { transform: scale(1.15); filter: drop-shadow(0 0 20px var(--accent-main)); } 100% { transform: scale(1); filter: drop-shadow(0 0 15px var(--accent-main)); } }
+        .win-item-anim { animation: winItemPop 1.2s cubic-bezier(0.3, 1, 0.3, 1) forwards !important; z-index: 20; }
+
+        @media (max-width: 650px) {
+            .arena-row { flex-direction: row; flex-wrap: wrap; gap: 12px; }
+            .left-slot-wrapper, .right-slot-wrapper { max-width: 100%; flex: 1; }
+            .item-slot { height: 160px; padding: 8px; }
+            .wheel-container { width: 150px; height: 150px; margin: 0 auto; }
+            .wheel-svg { width: 150px; height: 150px; }
+            .wheel-center-content { width: 90%; height: 90%; }
+            #chanceDisplay h1 { font-size: 18px; }
+            #chanceDisplay p { font-size: 10px; }
+            .slot-item-img { max-height: 55px; }
+            .multiplier-bar { padding: 4px; }
+            .multiplier-btn { font-size: 11px; padding: 8px 0; }
+            .wheel-arrow { top: 15px; width: 12px; height: 18px; }
+            .marker-top { top: 25px; } .marker-bottom { bottom: 25px; }
+            .marker-left { left: 25px; } .marker-right { right: 25px; }
+        }
+
+        /* === БЛОК ДЛЯ НЕАВТОРИЗОВАННЫХ === */
+        #unauthPromoBlock { flex-direction: column; align-items: center; text-align: center; padding: 30px 10px; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px dashed var(--border-color); }
+        .unauth-title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+        .unauth-subtitle { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 16px; }
+        
+        #promoDisplay { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 140px; width: 100%; transition: opacity 0.5s ease; }
+        .promo-item { display: flex; flex-direction: column; align-items: center; justify-content: center; transition: var(--transition); width: 60px; }
+        .promo-item.side.near { filter: brightness(0); transform: scale(0.8); opacity: 0.6; }
+        .promo-item.side.far { filter: brightness(0); transform: scale(0.6); opacity: 0.2; }
+        .promo-item.center { transform: scale(1.1); z-index: 5; width: 90px; }
+        .promo-item img { max-width: 100%; max-height: 60px; object-fit: contain; }
+        .promo-item.center img { animation: floatEffect 4s ease-in-out infinite; max-height: 75px; }
+        .promo-info { text-align: center; margin-top: 8px; }
+        .promo-sub { font-size: 9px; color: var(--text-muted); font-weight: 700; white-space: nowrap; }
+        .promo-price-tag { font-size: 10px; font-weight: 800; color: #fff; background: rgba(0,0,0,0.6); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border-color); margin-bottom: 6px;}
+
+        /* === ИНВЕНТАРЬ И МАГАЗИН === */
+        .inventory-section { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; padding: 20px; }
+        .inventory-split { display: flex; gap: 24px; align-items: flex-start; }
+        .inv-col { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+        
+        @media (max-width: 768px) { .inventory-split { flex-direction: column; } }
+
+        .inv-header-title { font-size: 16px; font-weight: 900; color: #fff; margin: 0 0 16px; text-transform: uppercase; border-left: 4px solid var(--accent-main); padding-left: 10px; letter-spacing: 0.5px; }
+        .filter-row { display: flex; gap: 6px; margin-bottom: 16px; align-items: center; background: var(--bg-card); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); }
+        .filter-row span { font-size: 10px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; }
+        .filter-input { width: 100%; background: transparent; border: none; color: #fff; outline: none; font-size: 12px; text-align: center; }
+        .filter-btn-search { background: var(--accent-main); border: none; color: white; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: var(--transition); }
+        .filter-btn-search:hover { filter: brightness(1.1); box-shadow: 0 0 8px var(--accent-glow); }
+
+        .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 12px; align-items: stretch; max-height: 600px; overflow-y: auto; padding-right: 6px; padding-bottom: 10px; }
+        .items-grid::-webkit-scrollbar { width: 4px; }
+        .items-grid::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        
+        .item-card { 
+            border: 1px solid var(--border-color); border-radius: var(--radius-sm); 
+            padding: 12px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; 
+            height: 165px; position: relative; overflow: hidden; width: 100%; 
+        }
+        .item-price { font-size: 11px; font-weight: 800; color: #fff; align-self: flex-end; background: var(--bg-panel); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border-color); box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .item-img-container { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; margin: auto 0; }
+        .item-img-container img { max-width: 85%; max-height: 100%; object-fit: contain; transition: var(--transition); }
+        .item-card:hover:not(.empty-slot) .item-img-container img { transform: scale(1.1); }
+        
+        .item-rarity-text { font-size: 10px; text-transform: uppercase; font-weight: 800; margin-bottom: 4px; padding: 3px 8px; border-radius: 4px; display: inline-block; letter-spacing: 0.5px; }
+        .rarity-epic .item-rarity-text { color: var(--rarity-epic); background: rgba(165, 94, 234, 0.1); }
+        .rarity-legendary .item-rarity-text { color: var(--rarity-legendary); background: rgba(253, 150, 68, 0.1); }
+        .rarity-mythic .item-rarity-text { color: var(--rarity-mythic); background: rgba(252, 92, 101, 0.1); }
+        .rarity-immortal .item-rarity-text { color: var(--rarity-immortal); background: rgba(43, 203, 186, 0.1); }
+
+        .item-title { font-size: 11px; color: #e2e2e2; font-weight: 800; letter-spacing: 0.3px;}
+
+        .rarity-epic { border-bottom: 2px solid var(--rarity-epic); }
+        .rarity-legendary { border-bottom: 2px solid var(--rarity-legendary); }
+        .rarity-mythic { border-bottom: 2px solid var(--rarity-mythic); }
+        .rarity-immortal { border-bottom: 2px solid var(--rarity-immortal); }
+
+        /* === ФУТЕР === */
+        footer { margin-top: auto; padding: 20px 16px; background: var(--bg-panel); border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .lang-switch-footer { display: flex; align-items: center; gap: 6px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 6px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: var(--transition); }
+        .lang-switch-footer span.active { color: var(--text-main); }
+        
+        .footer-contacts { display: flex; align-items: center; gap: 8px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 20px; color: var(--text-main); font-size: 12px; font-weight: 700; text-decoration: none; transition: var(--transition); }
+        .footer-contacts:hover { background: var(--bg-card-hover); border-color: #2AABEE; }
+        .tg-icon { width: 18px; height: 18px; fill: #2AABEE; }
+
+        /* === МОДАЛКИ И ПРОФИЛЬ === */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; opacity: 0; transition: opacity 0.5s ease; }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 420px; padding: 24px; position: relative; max-height: 90vh; overflow-y: auto; transform: translateY(20px); transition: transform 0.5s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.7); }
+        .modal-overlay.active .modal-card { transform: translateY(0); }
+        .modal-close { position: absolute; top: 16px; right: 16px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; width: 30px; height: 30px; display:flex; align-items:center; justify-content:center; color: var(--text-muted); font-size: 18px; cursor: pointer; transition: var(--transition); }
+        .modal-close:hover { background: var(--bg-card-hover); color: #fff; }
+        .modal-title { font-size: 18px; font-weight: 800; margin-bottom: 16px; color: #fff; text-transform: uppercase; }
+        
+        .modal-input { width: 100%; background: #13131c; border: 1px solid #3a3a4d; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); padding: 12px; border-radius: var(--radius-sm); color: #fff; font-size: 14px; margin-bottom: 12px; outline: none; transition: var(--transition); }
+        .modal-input:focus { border-color: var(--accent-main); box-shadow: inset 0 2px 4px rgba(0,0,0,0.3), 0 0 8px var(--accent-glow); }
+        .modal-btn { width: 100%; padding: 14px; }
+        
+        .payment-methods { display: flex; gap: 8px; margin-bottom: 12px; }
+        .payment-method { flex: 1; background: var(--bg-card); border: 1px solid var(--border-color); padding: 10px; border-radius: var(--radius-sm); text-align: center; cursor: pointer; transition: var(--transition); }
+        .payment-method.active { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); }
+        .amount-presets { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+        .amount-btn { flex: 1; min-width: 70px; padding: 10px; }
+
+        /* === ПЕРЕДЕЛАННЫЙ ПРОФИЛЬ === */
+        .profile-page-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-main); z-index: 300; display: none; flex-direction: column; opacity: 0; transform: translateX(100%); transition: transform 0.5s ease, opacity 0.5s ease; }
+        .profile-page-overlay.active { display: flex; opacity: 1; transform: translateX(0); }
+        .profile-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: var(--bg-panel); border-bottom: 1px solid var(--border-color); }
+        .profile-back { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; padding: 6px; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
+        .profile-back:hover { background: var(--bg-card-hover); }
+        .profile-title-text { font-size: 18px; font-weight: 800; color: #fff; text-transform: uppercase; }
+        
+        .profile-body { flex: 1; overflow-y: auto; padding: 20px 14px; width: 100%; margin: 0 auto; max-width: 1000px; }
+        
+        .layout-pubg { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 768px) { .layout-pubg { grid-template-columns: 280px 1fr; align-items: flex-start; } }
+        
+        .profile-left-panel { display: flex; flex-direction: column; gap: 16px; }
+        .profile-right-panel { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+
+        .profile-side-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+
+        .best-drop-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .bd-header { font-size: 13px; color: var(--accent-secondary); text-transform: uppercase; font-weight: 800; margin-bottom: auto; display: flex; align-items: center; gap: 6px; align-self: flex-start; }
+        .bd-content-large { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 10px; }
+        .bd-img-container-large { width: 100px; height: 100px; background: var(--bg-card); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
+        .bd-img-container-large img { max-width: 70%; max-height: 70%; object-fit: contain; }
+        .bd-name-large { font-size: 20px; font-weight: 800; color: #fff; }
+        .bd-rarity { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+        .bd-price-large { font-size: 16px; font-weight: 800; color: #fff; background: var(--bg-card); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border-color); margin-top: 5px; }
+        .bd-empty { font-size: 14px; color: var(--text-muted); font-weight: 600; text-align: center; padding: 30px 0; margin: auto; }
+        
+        .profile-tabs { display: flex; gap: 8px; background: var(--bg-card); padding: 6px; border-radius: var(--radius-md); border: 1px solid var(--border-color); overflow-x: auto; scrollbar-width: none; }
+        .profile-tabs::-webkit-scrollbar { display: none; }
+        
+        .profile-list-item { display: flex; justify-content: space-between; align-items: center; background: var(--bg-card); padding: 14px; border-radius: var(--radius-sm); margin-bottom: 10px; border: 1px solid var(--border-color); border-left: 3px solid transparent; transition: var(--transition); box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+        .profile-list-item:hover { border-color: var(--accent-main); transform: translateX(2px); }
+        .p-item-name { font-size: 13px; font-weight: 800; color: #fff; }
+        .p-item-price { font-size: 11px; color: var(--text-muted); font-weight: bold; margin-top: 4px; text-transform: uppercase; }
+        
+        .stat-card { background: var(--bg-panel); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .stat-line { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-color); font-size: 13px; color: var(--text-muted); font-weight: 600; }
+        .stat-line:last-child { border-bottom: none; padding-bottom: 0; }
+        .stat-line:first-child { padding-top: 0; }
+        .stat-line span:last-child { font-weight: 800; color: #fff; font-size: 15px; }
     </style>
 </head>
 <body>
@@ -432,31 +436,31 @@
     <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
 
     <div class="modal-overlay" id="authModal">
-        <div class="modal-card" style="max-width: 400px; text-align: center;">
+        <div class="modal-card" style="max-width: 380px; text-align: center;">
             <button class="modal-close" onclick="closeModal('authModal')">×</button>
-            <div class="logo" style="font-size: 28px; margin-bottom: 12px; animation: none;">PROJECT<span>EVOLUTION</span></div>
-            <div class="auth-title" style="font-size: 18px; font-weight: 900; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Авторизация</div>
-            <div class="auth-subtitle" style="font-size: 13px; color: var(--text-muted); margin-bottom: 24px; font-weight: 600;">Войдите или создайте аккаунт, чтобы сохранять прогресс в облаке и делать апгрейды.</div>
+            <div class="logo" style="font-size: 26px; margin-bottom: 8px; animation: none;">FLASH<span>UPGRADER</span></div>
+            <div class="auth-title" style="font-size: 16px; font-weight: bold; margin-bottom: 4px; text-transform: uppercase;">Авторизация</div>
+            <div class="auth-subtitle" style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Войдите или создайте аккаунт, чтобы сохранять прогресс в облаке и делать апгрейды.</div>
             
-            <input type="email" id="email-input" class="modal-input" placeholder="Ваш Email">
-            <input type="password" id="password-input" class="modal-input" placeholder="Ваш Пароль">
+            <input type="email" id="email-input" class="modal-input" placeholder="Email">
+            <input type="password" id="password-input" class="modal-input" placeholder="Пароль">
             
-            <div style="display: flex; gap: 12px; margin-top: 15px;">
+            <div style="display: flex; gap: 8px; margin-top: 10px;">
                 <button id="login-btn" class="modal-btn" style="flex: 1;">Войти</button>
-                <button id="register-btn" class="modal-btn" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); box-shadow: none; flex: 1;">Создать</button>
+                <button id="register-btn" class="modal-btn" style="background: var(--bg-card); color: #fff; border: 1px solid var(--border-color); box-shadow: none; flex: 1;">Создать</button>
             </div>
         </div>
     </div>
 
     <header>
         <div class="logo-area">
-            <div class="logo">PROJECT<span>EVOLUTION</span></div>
+            <div class="logo">FLASH<span>UPGRADER</span></div>
             <div class="online-count">Онлайн: <span id="onlineCount">482</span></div>
         </div>
         <div class="user-area">
             <button id="headerLoginBtn" class="btn-deposit" style="display: none;" onclick="openModal('authModal')">Вход</button>
             
-            <div id="headerUserArea" style="none; align-items: center; gap: 16px;">
+            <div id="headerUserArea" style="none; align-items: center; gap: 12px;">
                 <div class="balance-block">
                     <span class="balance-label">Баланс</span>
                     <div class="balance" id="userBalance">1 000 000 ⭐</div>
@@ -497,9 +501,9 @@
                         </div>
 
                         <div class="balance-boost-container" id="boostContainer">
-                            <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">
-                                <span>Буст шанса (⭐)</span>
-                                <span id="boostValDisplay" style="color: #ffcc00; text-shadow: 0 0 8px rgba(255,204,0,0.4);">+ 0 ⭐</span>
+                            <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); font-weight: bold; text-transform: uppercase;">
+                                <span>Буст шанса (За Звезды)</span>
+                                <span id="boostValDisplay" style="color: #ffcc00;">+ 0 ⭐</span>
                             </div>
                             <input type="range" id="balanceBoostSlider" min="0" max="0" value="0" step="1" class="boost-slider">
                         </div>
@@ -519,14 +523,14 @@
                         
                         <div class="wheel-box">
                             <svg class="wheel-svg" viewBox="0 0 200 200">
-                                <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3" stroke-dasharray="2 8" />
-                                <circle cx="100" cy="100" r="75" fill="rgba(15,15,22,0.8)" />
-                                <circle cx="100" cy="100" r="65" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="20" />
+                                <circle cx="100" cy="100" r="90" fill="none" stroke="#272736" stroke-width="3" stroke-dasharray="2 8" />
+                                <circle cx="100" cy="100" r="75" fill="#13131c" />
+                                <circle cx="100" cy="100" r="65" fill="none" stroke="#1a1a24" stroke-width="20" />
                                 <circle class="wheel-progress" id="wheelCircle" cx="100" cy="100" r="65" fill="none" stroke="var(--accent-main)" stroke-width="20" transform="rotate(-90 100 100)" style="stroke-dasharray: 408.4; stroke-dashoffset: 408.4;" />
                             </svg>
 
                             <div class="wheel-center-content">
-                                <svg id="centerBars" viewBox="0 0 50 50" width="30" height="30" style="display: block; filter: drop-shadow(0 0 5px var(--accent-glow));">
+                                <svg id="centerBars" viewBox="0 0 50 50" width="30" height="30" style="display: block;">
                                     <path class="arrow-1" fill="var(--accent-main)" d="M5 25 L25 10 L45 25 L45 20 L25 5 L5 20 Z" />
                                     <path class="arrow-2" fill="var(--accent-main)" d="M5 40 L25 25 L45 40 L45 35 L25 20 L5 35 Z" />
                                 </svg>
@@ -574,17 +578,17 @@
 
                         <div id="unauthPromoBlock" style="display: none;">
                             <div class="unauth-title">Вы не авторизированы</div>
-                            <div class="unauth-subtitle" style="font-size: 13px; color: var(--text-muted); font-weight: 600; margin-bottom: 24px;">Войдите для доступа к инвентарю и облачным сохранениям</div>
+                            <div class="unauth-subtitle">Войдите для доступа к инвентарю и облачным сохранениям</div>
 
-                            <div id="promoDisplay" style="display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 150px; width: 100%; transition: opacity 0.5s ease;">
-                                <div id="promoLeft2" class="promo-item side far" style="filter: brightness(0); transform: scale(0.7); opacity: 0.3;"></div>
-                                <div id="promoLeft1" class="promo-item side near" style="filter: brightness(0); transform: scale(0.85); opacity: 0.6;"></div>
-                                <div id="promoCenter" class="promo-item center" style="transform: scale(1.15); z-index: 5; width: 100px;"></div>
-                                <div id="promoRight1" class="promo-item side near" style="filter: brightness(0); transform: scale(0.85); opacity: 0.6;"></div>
-                                <div id="promoRight2" class="promo-item side far" style="filter: brightness(0); transform: scale(0.7); opacity: 0.3;"></div>
+                            <div id="promoDisplay">
+                                <div id="promoLeft2" class="promo-item side far"></div>
+                                <div id="promoLeft1" class="promo-item side near"></div>
+                                <div id="promoCenter" class="promo-item center"></div>
+                                <div id="promoRight1" class="promo-item side near"></div>
+                                <div id="promoRight2" class="promo-item side far"></div>
                             </div>
 
-                            <button class="modal-btn" style="margin-top: 25px; max-width: 260px; border-radius: 20px;" onclick="openModal('authModal')">ВОЙТИ ПО EMAIL</button>
+                            <button class="modal-btn" style="margin-top: 20px; max-width: 240px; border-radius: 20px;" onclick="openModal('authModal')">ВОЙТИ ПО EMAIL</button>
                         </div>
 
                         <div class="items-grid" id="gridMyContent"></div>
@@ -599,7 +603,7 @@
                             <span style="color:var(--border-color);">|</span>
                             <input type="number" id="priceTo" class="filter-input" placeholder="До" oninput="renderGrid()">
                             <button class="filter-btn-search" onclick="renderGrid()">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                             </button>
                         </div>
 
@@ -613,12 +617,12 @@
     <footer>
         <div class="lang-switch-footer">
             <span class="active">RU</span>
-            <span class="divider" style="opacity: 0.3;">/</span>
+            <span class="divider">/</span>
             <span>EN</span>
         </div>
         
         <a href="https://t.me/om1a2" target="_blank" class="footer-contacts">
-            <svg class="tg-icon" style="width: 20px; height: 20px; fill: #2AABEE;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <svg class="tg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.12.03-1.97 1.25-5.56 3.67-.53.36-1.01.54-1.44.53-.47-.01-1.38-.27-2.05-.49-.83-.27-1.49-.41-1.43-.87.03-.23.36-.47 1-.72 3.91-1.7 6.52-2.82 7.84-3.37 3.73-1.56 4.5-1.83 5.01-1.84.11 0 .36.03.49.14.11.1.15.23.16.35-.01.07-.01.16-.03.26z"/>
             </svg>
             @om1a2
@@ -629,94 +633,93 @@
         <div class="modal-card">
             <button class="modal-close" onclick="closeModal('depositModal')">×</button>
             <div class="modal-title">Пополнение баланса</div>
-            <div style="margin-bottom: 16px;">
-                <label style="font-size: 11px; color: var(--text-muted); font-weight: 900; text-transform: uppercase; margin-bottom: 8px; display: block; letter-spacing: 0.5px;">Выберите способ оплаты</label>
-                <div class="payment-methods" style="display: flex; gap: 10px;">
-                    <div class="payment-method active" style="flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--accent-main); padding: 12px; border-radius: var(--radius-sm); text-align: center; cursor: pointer; box-shadow: inset 0 0 10px rgba(138,43,226,0.2);">
-                        <div style="font-size: 24px; margin-bottom: 4px; filter: drop-shadow(0 0 5px rgba(255,204,0,0.5));">⭐</div>
-                        <div style="font-size: 11px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 0.5px;">Telegram Stars</div>
+            <div style="margin-bottom: 12px;">
+                <label style="font-size: 11px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 6px; display: block;">Выберите способ оплаты</label>
+                <div class="payment-methods">
+                    <div class="payment-method active">
+                        <div style="font-size: 20px; margin-bottom: 2px;">⭐</div>
+                        <div style="font-size: 11px; font-weight: 700; color: #fff; text-transform: uppercase;">Telegram Stars</div>
                     </div>
                 </div>
             </div>
-            <label style="font-size: 11px; color: var(--text-muted); font-weight: 900; text-transform: uppercase; margin-bottom: 8px; display: block; letter-spacing: 0.5px;">Сумма (Минимум 5000 ⭐)</label>
-            <input type="number" class="modal-input" id="depositAmount" placeholder="Введите сумму..." min="5000" value="5000" style="margin-bottom: 12px; font-size: 16px;">
+            <label style="font-size: 11px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 6px; display: block;">Сумма (Минимум 15 ⭐)</label>
+            <input type="number" class="modal-input" id="depositAmount" placeholder="Введите сумму..." min="15" value="15" style="margin-bottom: 8px;">
             <div class="amount-presets">
-                <button class="amount-btn" onclick="setDepositAmount(5000)">5000 ⭐</button>
-                <button class="amount-btn" onclick="setDepositAmount(10000)">10000 ⭐</button>
-                <button class="amount-btn" onclick="setDepositAmount(15000)">15000 ⭐</button>
-                <button class="amount-btn" onclick="setDepositAmount(30000)">30000 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(15)">15 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(50)">50 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(100)">100 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(500)">500 ⭐</button>
             </div>
-            <button class="modal-btn" id="depositBtn" onclick="processDeposit()" style="font-size: 15px;">Оплатить <span id="payAmountText">5000</span> ⭐</button>
+            <button class="modal-btn" id="depositBtn" onclick="processDeposit()">Оплатить <span id="payAmountText">15</span> ⭐</button>
         </div>
     </div>
 
     <div class="profile-page-overlay" id="profileModal">
-        <div class="profile-header" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px;">
-            <button class="profile-back" onclick="closeModal('profileModal')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center; transition: var(--transition);">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        <div class="profile-header">
+            <button class="profile-back" onclick="closeModal('profileModal')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
             </button>
-            <div class="profile-title-text" style="font-size: 20px; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: 1px;">ПРОФИЛЬ ИГРОКА</div>
-            <div style="width: 40px;"></div>
+            <div class="profile-title-text">ПРОФИЛЬ ИГРОКА</div>
+            <div style="width: 34px;"></div>
         </div>
         
-        <div class="profile-body" style="flex: 1; overflow-y: auto; padding: 24px 16px; width: 100%; margin: 0 auto; max-width: 1100px;">
-            <div class="layout-pubg" style="display: grid; grid-template-columns: 1fr; gap: 24px;">
-                <style>@media (min-width: 768px) { .layout-pubg { grid-template-columns: 320px 1fr; align-items: flex-start; } }</style>
-                <div class="profile-left-panel" style="display: flex; flex-direction: column; gap: 20px;">
-                    <div class="profile-side-card" style="padding: 20px; border-radius: var(--radius-lg);">
-                        <div style="display: flex; align-items: center; gap: 16px;">
-                            <div class="profile-avatar" id="modalAvatar" style="width: 65px; height: 65px; border-width: 2px;" onclick="document.getElementById('avatarUpload').click()" title="Нажми, чтобы изменить аватар">
+        <div class="profile-body">
+            <div class="layout-pubg">
+                <div class="profile-left-panel">
+                    <div class="profile-side-card">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div class="profile-avatar" id="modalAvatar" style="width: 55px; height: 55px; border-width: 2px;" onclick="document.getElementById('avatarUpload').click()" title="Нажми, чтобы изменить аватар">
                                 <img src="frog_ninja.png" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
                             </div>
                             <div style="display: flex; flex-direction: column;">
-                                <span style="font-size: 11px; color: var(--accent-secondary); text-transform: uppercase; font-weight: 900; letter-spacing: 0.5px;">ID Аккаунта</span>
-                                <span style="font-size: 15px; font-weight: 800; color: #fff; cursor: pointer; margin-top: 4px;" id="profileEmailDisplay" title="Нажми, чтобы изменить ник">user@email.com <span style="font-size:12px; opacity:0.7; margin-left:6px;">✎</span></span>
+                                <span style="font-size: 10px; color: var(--accent-secondary); text-transform: uppercase; font-weight: 800;">ID Аккаунта</span>
+                                <span style="font-size: 14px; font-weight: 800; color: #fff; cursor: pointer; margin-top: 2px;" id="profileEmailDisplay" title="Нажми, чтобы изменить ник">user@email.com <span style="font-size:10px; opacity:0.7; margin-left:4px;">✎</span></span>
                             </div>
                         </div>
-                        <button id="logout-btn" style="background: rgba(252, 92, 101, 0.1); color: var(--rarity-mythic); border: 1px solid rgba(252, 92, 101, 0.2); padding: 10px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 800; cursor: pointer; transition: var(--transition); text-transform: uppercase; margin-top: 16px; letter-spacing: 1px;">Сменить аккаунт</button>
+                        <button id="logout-btn" style="background: linear-gradient(180deg, #2b2b36 0%, #1f1f2a 100%); color: var(--rarity-mythic); border: 1px solid #3a3a4d; box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; transition: var(--transition); text-transform: uppercase; margin-top: 8px;">Сменить аккаунт</button>
                     </div>
 
-                    <div class="profile-side-card" style="padding: 20px; border-radius: var(--radius-lg);">
+                    <div class="profile-side-card">
                         <div style="display: flex; flex-direction: column;">
-                            <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 900; letter-spacing: 0.5px;">Текущий Баланс</span>
-                            <span style="font-size: 24px; font-weight: 900; color: #fff; margin-top: 6px; text-shadow: 0 2px 5px rgba(0,0,0,0.5);" id="profileBalanceVal">1 000 000 ⭐</span>
+                            <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 800;">Текущий Баланс</span>
+                            <span style="font-size: 20px; font-weight: 900; color: #fff; margin-top: 4px;" id="profileBalanceVal">1 000 000 ⭐</span>
                         </div>
-                        <button onclick="closeModal('profileModal'); openModal('depositModal');" class="btn-deposit" style="margin-top: 12px; width: 100%; padding: 12px;">+ Пополнить</button>
+                        <button class="modal-btn" onclick="closeModal('profileModal'); openModal('depositModal');" style="margin-top: 4px; padding: 10px; font-size: 12px;">+ Пополнить</button>
                     </div>
 
-                    <div class="profile-side-card" style="padding: 20px; border-radius: var(--radius-lg);">
-                        <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 900; letter-spacing: 0.5px;">Уровень (Апгрейды)</span>
-                        <span style="font-size: 32px; font-weight: 900; color: var(--accent-secondary); margin-top: 6px; text-shadow: 0 0 15px rgba(0,229,255,0.4);" id="profileTotalUpgradesBlock">0</span>
+                    <div class="profile-side-card">
+                        <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 800;">Уровень (Апгрейды)</span>
+                        <span style="font-size: 26px; font-weight: 900; color: var(--accent-secondary); margin-top: 2px;" id="profileTotalUpgradesBlock">0</span>
                     </div>
                 </div>
 
-                <div class="profile-right-panel" style="display: flex; flex-direction: column; gap: 20px; min-width: 0;">
-                    <div class="best-drop-card" id="bestDropContainer" style="padding: 30px; border-radius: var(--radius-lg); min-height: 220px; text-align: center;"></div>
+                <div class="profile-right-panel">
+                    <div class="best-drop-card" id="bestDropContainer"></div>
 
-                    <div class="profile-tabs" style="display: flex; gap: 10px; background: rgba(0,0,0,0.3); padding: 8px; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.05); overflow-x: auto;">
-                        <button class="p-tab-btn active" id="pTabStats" onclick="switchProfileTab('stats')" style="flex: 1; padding: 12px 16px; border: none; color: var(--text-muted); font-size: 12px; font-weight: 900; text-transform: uppercase; cursor: pointer; border-radius: 10px; transition: var(--transition); white-space: nowrap; letter-spacing: 0.5px;">Статистика</button>
-                        <button class="p-tab-btn" id="pTabSell" onclick="switchProfileTab('sell')" style="flex: 1; padding: 12px 16px; border: none; background: transparent; color: var(--text-muted); font-size: 12px; font-weight: 900; text-transform: uppercase; cursor: pointer; border-radius: 10px; transition: var(--transition); white-space: nowrap; letter-spacing: 0.5px;">Продать</button>
-                        <button class="p-tab-btn" id="pTabBuy" onclick="switchProfileTab('buy')" style="flex: 1; padding: 12px 16px; border: none; background: transparent; color: var(--text-muted); font-size: 12px; font-weight: 900; text-transform: uppercase; cursor: pointer; border-radius: 10px; transition: var(--transition); white-space: nowrap; letter-spacing: 0.5px;">Купить</button>
-                        <button class="p-tab-btn" id="pTabPayout" onclick="switchProfileTab('payout')" style="flex: 1; padding: 12px 16px; border: none; background: transparent; color: var(--text-muted); font-size: 12px; font-weight: 900; text-transform: uppercase; cursor: pointer; border-radius: 10px; transition: var(--transition); white-space: nowrap; letter-spacing: 0.5px;">Вывод</button>
+                    <div class="profile-tabs">
+                        <button class="p-tab-btn active" id="pTabStats" onclick="switchProfileTab('stats')">Статистика</button>
+                        <button class="p-tab-btn" id="pTabSell" onclick="switchProfileTab('sell')">Продать</button>
+                        <button class="p-tab-btn" id="pTabBuy" onclick="switchProfileTab('buy')">Купить</button>
+                        <button class="p-tab-btn" id="pTabPayout" onclick="switchProfileTab('payout')">Вывод</button>
                     </div>
                     
-                    <div id="pContentStats" class="stat-card" style="padding: 24px; border-radius: var(--radius-md);">
-                        <div class="stat-line" style="display: flex; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;"><span style="padding-top: 0;">Всего апгрейдов:</span><span id="statTotal" style="font-weight: 900; color: #fff; font-size: 18px;">0</span></div>
-                        <div class="stat-line" style="display: flex; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;"><span>Успешных:</span><span id="statWins" style="font-weight: 900; color:var(--accent-secondary); font-size: 18px;">0</span></div>
-                        <div class="stat-line" style="display: flex; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;"><span>Сгорело:</span><span id="statLosses" style="font-weight: 900; color:var(--rarity-mythic); font-size: 18px;">0</span></div>
-                        <div class="stat-line" style="display: flex; justify-content: space-between; padding: 16px 0; border-bottom: none; padding-bottom: 0; font-size: 14px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;"><span>Выведено:</span><span id="statWithdrawn" style="font-weight: 900; color:var(--rarity-legendary); font-size: 18px;">0 ⭐</span></div>
+                    <div id="pContentStats" class="stat-card">
+                        <div class="stat-line"><span>Всего апгрейдов:</span><span id="statTotal">0</span></div>
+                        <div class="stat-line"><span>Успешных:</span><span id="statWins" style="color:var(--accent-secondary);">0</span></div>
+                        <div class="stat-line"><span>Сгорело:</span><span id="statLosses" style="color:var(--rarity-mythic);">0</span></div>
+                        <div class="stat-line"><span>Выведено:</span><span id="statWithdrawn" style="color:var(--rarity-legendary);">0 ⭐</span></div>
                     </div>
                     <div id="pContentSell" style="display:none;">
-                        <div id="profileSellList" style="max-height: 400px; overflow-y:auto; padding-right: 8px;"></div>
+                        <div id="profileSellList" style="max-height: 350px; overflow-y:auto; padding-right: 4px;"></div>
                     </div>
                     <div id="pContentBuy" style="display:none;">
-                        <div id="profileBuyList" style="max-height: 400px; overflow-y:auto; padding-right: 8px;"></div>
+                        <div id="profileBuyList" style="max-height: 350px; overflow-y:auto; padding-right: 4px;"></div>
                     </div>
                     <div id="pContentPayout" style="display:none;">
-                        <div class="stat-card" style="padding: 24px; border-radius: var(--radius-md);">
-                            <input type="text" class="modal-input" id="withdrawDetails" placeholder="Ваш Telegram Username (@username)" style="font-size: 15px;">
-                            <input type="number" class="modal-input" id="withdrawAmount" placeholder="Сумма для вывода (⭐)" style="font-size: 15px; margin-bottom: 24px;">
-                            <button class="modal-btn" onclick="processWithdraw()" style="font-size: 15px; padding: 16px;">Создать заявку на вывод</button>
+                        <div class="stat-card">
+                            <input type="text" class="modal-input" id="withdrawDetails" placeholder="Ваш Telegram Username (@username)">
+                            <input type="number" class="modal-input" id="withdrawAmount" placeholder="Сумма для вывода (⭐)">
+                            <button class="modal-btn" onclick="processWithdraw()">Создать заявку на вывод</button>
                         </div>
                     </div>
                 </div>
@@ -725,7 +728,6 @@
     </div>
 
     <script>
-        // JS Логика оставлена без изменений согласно требованиям "не удаляй код снизу"
         const rarityColors = {
             'rarity-epic': '#a55eea',
             'rarity-legendary': '#fd9644',
@@ -841,10 +843,10 @@
                 document.getElementById('promoLeft2').innerHTML = `<img src="${left2.img}" onerror="this.src='16201.png'">`;
                 document.getElementById('promoLeft1').innerHTML = `<img src="${left1.img}" onerror="this.src='16201.png'">`;
                 document.getElementById('promoCenter').innerHTML = `
-                    <div class="promo-price-tag" style="font-size: 11px; font-weight: 900; color: #fff; background: rgba(0,0,0,0.8); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 8px;">${Math.round(centerItem.price)} ⭐</div>
-                    <img src="${centerItem.img}" style="max-height: 85px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));" onerror="this.src='16201.png'">
-                    <div class="promo-info" style="margin-top: 10px;">
-                        <div class="promo-sub" style="font-size: 11px; color: #fff; font-weight: 800; white-space: nowrap; text-shadow: 0 1px 3px rgba(0,0,0,0.8);">${centerItem.sub}</div>
+                    <div class="promo-price-tag">${Math.round(centerItem.price)} ⭐</div>
+                    <img src="${centerItem.img}" onerror="this.src='16201.png'">
+                    <div class="promo-info">
+                        <div class="promo-sub">${centerItem.sub}</div>
                     </div>
                 `;
                 document.getElementById('promoRight1').innerHTML = `<img src="${right1.img}" onerror="this.src='16201.png'">`;
@@ -892,7 +894,7 @@
             const el = document.getElementById('profileEmailDisplay');
             if(el) {
                 let name = stats.nickname || (window.auth && auth.currentUser ? auth.currentUser.email : "Игрок");
-                el.innerHTML = name + ' <span style="font-size:12px; opacity:0.7; margin-left:6px;">✎</span>';
+                el.innerHTML = name + ' <span style="font-size:10px; opacity:0.7; margin-left:4px;">✎</span>';
             }
         }
 
@@ -963,7 +965,7 @@
                 const emptyCount = minCells - myInventoryData.length;
                 for(let i=0; i<emptyCount; i++) {
                     gridMy.innerHTML += `
-                        <div class="item-card empty-slot" style="opacity: 0.3; pointer-events: none; cursor: default; border-style: dashed;">
+                        <div class="item-card empty-slot" style="opacity: 0.5; pointer-events: none; cursor: default;">
                             <div class="item-img-container"><img src="16201.png" style="filter: brightness(0); opacity: 0.5;"></div>
                         </div>
                     `;
@@ -1015,11 +1017,11 @@
             
             slot.innerHTML = `
                 <canvas class="slot-confetti"></canvas>
-                <div style="font-size:13px; font-weight:900; color:#fff; position: relative; z-index: 2; letter-spacing: 0.5px; text-shadow: 0 1px 3px rgba(0,0,0,0.8);">${item.sub}</div>
-                <div style="margin: 12px 0; flex: 1; display:flex; align-items:center; justify-content:center; position: relative; z-index: 2;">
-                    <img src="${item.img}" class="slot-item-img" style="max-height:85px; max-width:90%; object-fit:contain; transition: var(--transition); filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));">
+                <div style="font-size:11px; font-weight:800; color:#fff; position: relative; z-index: 2;">${item.sub}</div>
+                <div style="margin: 8px 0; flex: 1; display:flex; align-items:center; justify-content:center; position: relative; z-index: 2;">
+                    <img src="${item.img}" class="slot-item-img" style="max-height:75px; max-width:90%; object-fit:contain; transition: var(--transition);">
                 </div>
-                <div style="font-size:12px; font-weight:900; color:#fff; background: rgba(0,0,0,0.5); padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(5px); position: relative; z-index: 2;">${Math.round(item.price)} ⭐</div>
+                <div style="font-size:11px; font-weight:900; color:#fff; background: var(--bg-panel); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border-color); position: relative; z-index: 2;">${Math.round(item.price)} ⭐</div>
             `;
         }
 
@@ -1088,18 +1090,18 @@
 
             if (chance > 80) {
                 chanceLabel.innerText = "ШАНС > 80%";
-                chanceLabel.style.color = "rgba(43, 203, 186, 0.9)"; 
+                chanceLabel.style.color = "rgba(43, 203, 186, 0.8)"; 
                 btn.disabled = true;
                 btn.innerText = 'ШАНС СЛИШКОМ ВЫСОКИЙ';
             } else if (chance >= 50) {
                 chanceLabel.innerText = "СРЕДНИЙ ШАНС";
-                chanceLabel.style.color = "rgba(253, 150, 68, 0.9)";
+                chanceLabel.style.color = "rgba(253, 150, 68, 0.8)";
             } else if (chance >= 25) {
                 chanceLabel.innerText = "МАЛЕНЬКИЙ ШАНС";
-                chanceLabel.style.color = "rgba(165, 94, 234, 0.9)";
+                chanceLabel.style.color = "rgba(165, 94, 234, 0.8)";
             } else {
                 chanceLabel.innerText = "ОЧЕНЬ МАЛЕНЬКИЙ ШАНС";
-                chanceLabel.style.color = "rgba(252, 92, 101, 0.9)";
+                chanceLabel.style.color = "rgba(252, 92, 101, 0.8)";
             }
         }
         
@@ -1111,6 +1113,7 @@
         function pushToTicker(item, isWin, chanceVal, userNick) {
             const ticker = document.getElementById('liveTicker');
             const color = isWin ? '#00e5ff' : '#fc5c65';
+            const bgStr = isWin ? 'success-stripe' : '';
             
             let isPinned = false;
             if (isWin && parseInt(item.price) >= 500000) {
@@ -1118,7 +1121,7 @@
             }
             
             const html = document.createElement('div');
-            html.className = `ticker-item`;
+            html.className = `ticker-item ${bgStr}`;
             html.style.borderLeftColor = color;
             
             if (isPinned) {
@@ -1126,16 +1129,16 @@
                 html.style.left = '0';
                 html.style.top = '0';
                 html.style.zIndex = '50';
-                html.style.boxShadow = '0 0 15px rgba(255, 204, 0, 0.5)';
+                html.style.boxShadow = '0 0 10px #ffcc00';
                 html.style.border = '1px solid #ffcc00';
-                html.style.background = 'linear-gradient(90deg, rgba(40,40,20,0.95) 0%, rgba(30,30,10,0.95) 100%)';
+                html.style.backgroundColor = 'var(--bg-card-hover)';
             }
             
             html.innerHTML = `
                 <span class="ticker-user">${userNick}</span>
                 <img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'">
                 <span class="ticker-name">${item.sub}</span>
-                <span class="ticker-chance" style="color: ${color}; background: ${color}22; border: 1px solid ${color}44;">${chanceVal.toFixed(2)}%</span>
+                <span class="ticker-chance" style="color: ${color}; background: ${color}22;">${chanceVal.toFixed(2)}%</span>
             `;
             
             ticker.insertBefore(html, ticker.firstChild);
@@ -1143,14 +1146,13 @@
             if (isPinned) {
                 setTimeout(() => {
                     html.style.position = 'static';
-                    html.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
-                    html.style.border = '1px solid rgba(255,255,255,0.05)';
+                    html.style.boxShadow = 'none';
+                    html.style.border = 'none';
                     html.style.borderLeft = `3px solid ${color}`;
-                    html.style.background = 'linear-gradient(90deg, rgba(26,26,36,0.9) 0%, rgba(34,34,46,0.9) 100%)';
                 }, 20000);
             }
             
-            const maxItems = window.innerWidth > 1024 ? 15 : 6;
+            const maxItems = window.innerWidth > 900 ? 15 : 6;
             let currentItems = Array.from(ticker.children);
             if (currentItems.length > maxItems) {
                 for (let i = currentItems.length - 1; i >= 0; i--) {
@@ -1277,7 +1279,7 @@
                 let cardCanvas = rightSlot.querySelector('.slot-confetti');
                 if(cardCanvas && window.confetti) {
                     let cardConfetti = confetti.create(cardCanvas, { resize: true });
-                    cardConfetti({ particleCount: 80, spread: 100, origin: { y: 0.6 }, colors: ['#a55eea', '#00e5ff', '#ffffff', '#ffcc00'] });
+                    cardConfetti({ particleCount: 60, spread: 80, origin: { y: 0.6 }, colors: ['#a55eea', '#00e5ff', '#ffffff'] });
                 }
                 
                 myInventoryData.push(selectedRight);
@@ -1344,24 +1346,24 @@
             const container = document.getElementById('bestDropContainer');
             if (!stats.bestDrop) {
                 container.innerHTML = `
-                    <div class="bd-header" style="font-size: 13px; color: var(--accent-secondary); text-transform: uppercase; font-weight: 900; margin-bottom: auto; display: flex; align-items: center; gap: 8px; align-self: flex-start; letter-spacing: 0.5px;">👑 Главная экипировка</div>
-                    <div class="bd-empty" style="font-size: 14px; color: var(--text-muted); font-weight: 700; text-align: center; padding: 40px 0; margin: auto;">У вас пока нет лучшего дропа</div>
+                    <div class="bd-header">👑 Главная экипировка</div>
+                    <div class="bd-empty">У вас пока нет лучшего дропа</div>
                 `;
                 return;
             }
             
             let item = stats.bestDrop;
             container.innerHTML = `
-                <div class="bd-header" style="font-size: 13px; color: var(--accent-secondary); text-transform: uppercase; font-weight: 900; margin-bottom: auto; display: flex; align-items: center; gap: 8px; align-self: flex-start; letter-spacing: 0.5px;">👑 Главная экипировка</div>
-                <div class="bd-content-large" style="display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 15px;">
-                    <div class="bd-img-container-large" style="width: 110px; height: 110px; background: rgba(0,0,0,0.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border-color); box-shadow: inset 0 0 15px rgba(255,255,255,0.05);">
-                        <img src="${item.img}" style="max-width: 75%; max-height: 75%; object-fit: contain; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));" onerror="this.src='16201.png'">
+                <div class="bd-header">👑 Главная экипировка</div>
+                <div class="bd-content-large">
+                    <div class="bd-img-container-large">
+                        <img src="${item.img}" onerror="this.src='16201.png'">
                     </div>
-                    <div style="display: flex; flex-direction: column; gap: 6px; align-items: center;">
-                        <div class="bd-name-large" style="font-size: 22px; font-weight: 900; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">${item.sub}</div>
-                        <div class="bd-rarity" style="font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">${item.title}</div>
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <div class="bd-name-large">${item.sub}</div>
+                        <div class="bd-rarity">${item.title}</div>
                     </div>
-                    <div class="bd-price-large" style="font-size: 16px; font-weight: 900; color: #fff; background: rgba(255,255,255,0.05); padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); margin-top: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">${Math.round(item.price)} ⭐</div>
+                    <div class="bd-price-large">${Math.round(item.price)} ⭐</div>
                 </div>
             `;
         }
@@ -1408,18 +1410,18 @@
             const container = document.getElementById('profileSellList');
             container.innerHTML = '';
             if(myInventoryData.length === 0) {
-                container.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:20px;font-weight:700;">У вас нет предметов для продажи</div>';
+                container.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:15px;">У вас нет предметов для продажи</div>';
                 return;
             }
             myInventoryData.forEach((item, idx) => {
                 let sellPrice = Math.round(item.price * 0.15);
                 container.innerHTML += `
-                    <div class="profile-list-item" style="display: flex; justify-content: space-between; align-items: center; padding: 16px; border-radius: var(--radius-sm); margin-bottom: 12px; border-left: 4px solid var(--accent-main); transition: var(--transition);">
-                        <div class="p-item-info" style="align-items: flex-start;">
-                            <span class="p-item-name" style="font-size: 14px; font-weight: 900; color: #fff;">${item.sub}</span>
-                            <span class="p-item-price" style="font-size: 12px; color: var(--text-muted); font-weight: 800; margin-top: 6px; text-transform: uppercase;">Цена: ${sellPrice} ⭐ (15%)</span>
+                    <div class="profile-list-item" style="border-left-color: var(--accent-main);">
+                        <div class="p-item-info">
+                            <span class="p-item-name">${item.sub}</span>
+                            <span class="p-item-price">Цена: ${sellPrice} ⭐ (15%)</span>
                         </div>
-                        <button class="btn-profile-action btn-sell" onclick="sellFromProfile(${idx})" style="background: rgba(252, 92, 101, 0.15); color: var(--rarity-mythic); border: 1px solid rgba(252, 92, 101, 0.3); padding: 10px 16px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: var(--transition); letter-spacing: 0.5px;">Продать</button>
+                        <button class="btn-profile-action btn-sell" onclick="sellFromProfile(${idx})">Продать</button>
                     </div>
                 `;
             });
@@ -1441,12 +1443,12 @@
             container.innerHTML = '';
             giftPool.forEach((item) => {
                 container.innerHTML += `
-                    <div class="profile-list-item" style="display: flex; justify-content: space-between; align-items: center; padding: 16px; border-radius: var(--radius-sm); margin-bottom: 12px; border-left: 4px solid var(--rarity-immortal); transition: var(--transition);">
-                        <div class="p-item-info" style="align-items: flex-start;">
-                            <span class="p-item-name" style="font-size: 14px; font-weight: 900; color: #fff;">${item.sub}</span>
-                            <span class="p-item-price" style="font-size: 12px; color: var(--text-muted); font-weight: 800; margin-top: 6px; text-transform: uppercase;">Стоимость: ${Math.round(item.price)} ⭐</span>
+                    <div class="profile-list-item" style="border-left-color: var(--rarity-immortal);">
+                        <div class="p-item-info">
+                            <span class="p-item-name">${item.sub}</span>
+                            <span class="p-item-price">Стоимость: ${Math.round(item.price)} ⭐</span>
                         </div>
-                        <button class="btn-profile-action btn-buy" onclick="buyFromProfile('${item.id}')" style="background: rgba(43, 203, 186, 0.15); color: var(--rarity-immortal); border: 1px solid rgba(43, 203, 186, 0.3); padding: 10px 16px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: var(--transition); letter-spacing: 0.5px;">Купить</button>
+                        <button class="btn-profile-action btn-buy" onclick="buyFromProfile('${item.id}')">Купить</button>
                     </div>
                 `;
             });
@@ -1483,8 +1485,8 @@
 
         function processDeposit() {
             const amount = parseInt(document.getElementById('depositAmount').value);
-            if (!amount || amount < 5000) { 
-                alert('Минимальная сумма — 5000 ⭐'); 
+            if (!amount || amount < 15) { 
+                alert('Минимальная сумма — 15 ⭐'); 
                 return; 
             }
             
@@ -1542,7 +1544,7 @@
             }
             
             const html = document.createElement('div');
-            html.className = `ticker-item`;
+            html.className = `ticker-item success-stripe`;
             html.style.borderLeftColor = color;
             
             if (isPinned) {
@@ -1550,16 +1552,16 @@
                 html.style.left = '0';
                 html.style.top = '0';
                 html.style.zIndex = '50';
-                html.style.boxShadow = '0 0 15px rgba(255, 204, 0, 0.5)';
+                html.style.boxShadow = '0 0 10px #ffcc00';
                 html.style.border = '1px solid #ffcc00';
-                html.style.background = 'linear-gradient(90deg, rgba(40,40,20,0.95) 0%, rgba(30,30,10,0.95) 100%)';
+                html.style.backgroundColor = 'var(--bg-card-hover)';
             }
             
             html.innerHTML = `
                 <span class="ticker-user">${botName}</span>
                 <img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'">
                 <span class="ticker-name">${item.sub}</span>
-                <span class="ticker-chance" style="color: ${color}; background: ${color}22; border: 1px solid ${color}44;">${chance}%</span>
+                <span class="ticker-chance" style="color: ${color}; background: ${color}22;">${chance}%</span>
             `;
             
             ticker.insertBefore(html, ticker.firstChild);
@@ -1567,14 +1569,13 @@
             if (isPinned) {
                 setTimeout(() => {
                     html.style.position = 'static';
-                    html.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
-                    html.style.border = '1px solid rgba(255,255,255,0.05)';
+                    html.style.boxShadow = 'none';
+                    html.style.border = 'none';
                     html.style.borderLeft = `3px solid ${color}`;
-                    html.style.background = 'linear-gradient(90deg, rgba(26,26,36,0.9) 0%, rgba(34,34,46,0.9) 100%)';
                 }, 20000);
             }
             
-            const maxItems = window.innerWidth > 1024 ? 15 : 6;
+            const maxItems = window.innerWidth > 900 ? 15 : 6;
             let currentItems = Array.from(ticker.children);
             if (currentItems.length > maxItems) {
                 for (let i = currentItems.length - 1; i >= 0; i--) {
@@ -1680,4 +1681,26 @@
                 const userRef = doc(db, "users", user.uid);
                 const docSnap = await getDoc(userRef);
                 
-                if (doc
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    window.loadFromDb(data.balance, data.inventory, data.stats);
+                } else {
+                    window.syncToDb(window.getCurrentBalance(), window.getCurrentInv(), window.getCurrentStats());
+                }
+                
+                renderGrid();
+                updateChance(); 
+            } else {
+                window.isUserLoggedIn = false;
+                localStorage.setItem('ub_logged_in', 'false');
+                
+                document.getElementById('headerLoginBtn').style.display = 'block';
+                document.getElementById('headerUserArea').style.display = 'none';
+                
+                renderGrid();
+                updateChance(); 
+            }
+        });
+    </script>
+</body>
+</html>
