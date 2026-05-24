@@ -5,20 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <title>FLASHUPGRADER — Premium Edition</title>
+    <title>FlashUpgrader — Premium Edition</title>
     <style>
-        /* === НОВЫЙ ДИЗАЙН (Более светлый, симметричный, без лишнего глоу) === */
+        /* === НОВЫЙ ДИЗАЙН === */
         :root {
-            --bg-main: #14141d; /* Сделали менее черным */
-            --bg-panel: #1b1b26;
-            --bg-card: #22222f;
-            --bg-card-hover: #2a2a3a;
+            --bg-main: #0a0a0f;
+            --bg-panel: #13131c;
+            --bg-card: #1a1a24;
+            --bg-card-hover: #22222e;
             --accent-main: #8a2be2; 
-            --accent-glow: rgba(138, 43, 226, 0.3); /* Уменьшили глоу */
+            --accent-glow: rgba(138, 43, 226, 0.4);
             --accent-secondary: #00e5ff;
             --text-main: #ffffff;
-            --text-muted: #9ba1b0;
-            --border-color: #323242;
+            --text-muted: #8b8b9e;
+            --border-color: #272736;
             
             --rarity-epic: #a55eea;
             --rarity-legendary: #fd9644;
@@ -28,7 +28,7 @@
             --radius-lg: 16px;
             --radius-md: 12px;
             --radius-sm: 8px;
-            --transition: all 0.3s cubic-bezier(0.25, 1, 0.2, 1); /* Плавные анимации */
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         * {
@@ -39,7 +39,7 @@
         }
 
         button:active, .item-slot:active, .item-card:active, .profile-avatar:active, .modal-close:active, .payment-method:active {
-            transform: scale(0.96) !important;
+            transform: scale(0.95) !important;
             transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1) !important;
         }
 
@@ -50,84 +50,93 @@
             max-width: 100%;
         }
         .p-item-info, .item-info {
-            min-width: 0; width: 100%; display: flex; flex-direction: column; align-items: center;
+            min-width: 0;
+            width: 100%;
         }
 
         body {
-            background: var(--bg-main); color: var(--text-main);
-            min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden;
+            background: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex; flex-direction: column; overflow-x: hidden;
             scroll-behavior: smooth;
         }
 
         /* === ХЕДЕР === */
         header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 20px; background: rgba(27, 27, 38, 0.95); backdrop-filter: blur(12px);
+            padding: 16px 20px; background: rgba(19, 19, 28, 0.95); backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100;
         }
 
         .logo-area { display: flex; flex-direction: column; }
-        .logo { font-size: 20px; font-weight: 900; color: var(--accent-main); letter-spacing: 0.5px; transition: var(--transition); }
-        .logo span { color: var(--text-main); }
+        .logo { font-size: 20px; font-weight: 900; color: var(--accent-main); letter-spacing: 0.5px; transition: var(--transition); text-shadow: 0 0 10px var(--accent-glow); animation: neonPulse 3s infinite; }
+        .logo span { color: var(--text-main); text-shadow: none; }
         .online-count { font-size: 11px; color: var(--text-muted); margin-top: 2px; font-weight: 600; }
         .online-count span { color: var(--text-muted); font-weight: bold; }
 
+        @keyframes neonPulse {
+            0%, 100% { text-shadow: 0 0 10px var(--accent-glow); }
+            50% { text-shadow: 0 0 20px var(--accent-main), 0 0 5px var(--accent-glow); }
+        }
+
         .user-area { display: flex; align-items: center; gap: 12px; min-height: 38px;}
+        
         .balance-block { display: flex; flex-direction: column; align-items: flex-end; justify-content: center; }
         .balance-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
         .balance { font-size: 15px; font-weight: 800; color: var(--text-main); }
         
         .btn-deposit {
-            background: linear-gradient(135deg, #8a2be2, #6a1b9a); color: #fff;
+            background: var(--accent-main); color: #fff;
             padding: 8px 14px; border: none; border-radius: var(--radius-sm);
-            font-size: 13px; font-weight: 800; cursor: pointer; transition: var(--transition);
-            text-transform: uppercase;
+            font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition);
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
         }
-        .btn-deposit:hover { filter: brightness(1.1); transform: translateY(-2px); }
+        .btn-deposit:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 0 15px rgba(138, 43, 226, 0.6); }
         
         .profile-avatar {
             width: 36px; height: 36px; background: var(--bg-card); border: 2px solid var(--border-color);
             border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
             transition: var(--transition); overflow: hidden; flex-shrink: 0;
         }
-        .profile-avatar:hover { border-color: var(--accent-main); transform: scale(1.05); }
+        .profile-avatar:hover { border-color: var(--accent-main); box-shadow: 0 0 10px var(--accent-glow); }
 
         /* === ОСНОВНОЙ КОНТЕНТ === */
         main { 
             flex: 1; display: flex; flex-direction: column; padding: 20px 14px; gap: 20px; 
             max-width: 1300px; width: 100%; margin: 0 auto; 
         }
-        .main-content { display: flex; flex-direction: column; gap: 24px; flex: 1; max-width: 950px; margin: 0 auto; width: 100%; }
+        .main-content {
+            display: flex; flex-direction: column; gap: 20px; flex: 1; max-width: 950px; margin: 0 auto; width: 100%;
+        }
 
         .live-ticker {
             background: var(--bg-panel); border: 1px solid var(--border-color);
-            border-radius: var(--radius-md); padding: 8px; display: flex; align-items: center; gap: 8px;
+            border-radius: var(--radius-md); padding: 8px; display: flex; gap: 8px;
             overflow-x: auto; white-space: nowrap; scrollbar-width: none; min-height: 52px;
-            scroll-behavior: smooth; position: relative;
+            scroll-behavior: smooth;
         }
         .live-ticker::-webkit-scrollbar { display: none; }
         
         .ticker-item {
             display: inline-flex; align-items: center; gap: 8px; background: var(--bg-card);
-            padding: 0 10px; border-radius: var(--radius-sm); font-size: 11px; font-weight: 600; 
-            min-width: 150px; max-width: 200px; border-left: 3px solid transparent; transition: var(--transition);
-            animation: slideInTicker 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; opacity: 0; transform: translateX(-15px);
-            height: 40px; box-sizing: border-box; /* Выровняли лайв сетку */
+            padding: 6px 10px; border-radius: var(--radius-sm); font-size: 11px; font-weight: 600; 
+            min-width: fit-content; border-left: 3px solid transparent; transition: var(--transition);
+            animation: fadeIn 0.4s ease forwards;
         }
-        @keyframes slideInTicker { to { opacity: 1; transform: translateX(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
         
-        .ticker-img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
-        .ticker-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .ticker-chance { margin-left: auto; font-weight: 800; font-size: 10px; padding: 2px 5px; border-radius: 4px; flex-shrink: 0; }
-        .ticker-user { font-size: 10px; color: var(--text-muted); opacity: 0.8; margin-right: 4px; flex-shrink: 0; }
+        .ticker-img { width: 20px; height: 20px; object-fit: contain; }
+        .ticker-chance { margin-left: auto; font-weight: 800; font-size: 10px; padding: 2px 5px; border-radius: 4px; }
+        .ticker-user { font-size: 10px; color: var(--text-muted); opacity: 0.8; margin-right: 4px; }
 
         @media (min-width: 900px) {
             main { flex-direction: row; align-items: flex-start; justify-content: center; }
             .live-ticker { 
-                flex-direction: column; align-items: stretch; width: 220px; height: auto; max-height: 80vh; 
+                flex-direction: column; width: 220px; height: auto; max-height: 80vh; 
                 overflow-y: auto; overflow-x: hidden; white-space: normal; padding: 10px; 
             }
-            .ticker-item { width: 100%; justify-content: flex-start; max-width: 100%; }
+            .ticker-item { width: 100%; justify-content: flex-start; }
             .main-content { margin: 0; }
         }
 
@@ -135,321 +144,306 @@
         .upgrade-arena {
             background: var(--bg-panel);
             border: 1px solid var(--border-color); border-radius: var(--radius-lg);
-            padding: 40px 20px 30px; display: flex; flex-direction: column; align-items: center; gap: 24px;
-            position: relative; transition: var(--transition); overflow: visible; /* Убрали лишние тени */
+            padding: 24px 16px; display: flex; flex-direction: column; align-items: center; gap: 24px;
+            position: relative; transition: var(--transition); overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
         }
+        
+        /* Измененная молния */
+        .top-left-controls { 
+            position: absolute; top: 12px; left: 16px; z-index: 10; 
+            display: flex; gap: 8px; align-items: center;
+        }
+        .fast-upgrade-label { cursor: pointer; display: flex; align-items: center; background: transparent; padding: 0; border: none; }
+        .fast-upgrade-label input { display: none; }
+        .lightning-icon { width: 14px; height: 14px; fill: #5a5a6e; transition: var(--transition); }
+        .fast-upgrade-label input:checked + .lightning-icon { fill: #ffcc00; filter: drop-shadow(0 0 4px rgba(255, 204, 0, 0.4)); }
 
         .arena-row { 
             display: flex; align-items: stretch; justify-content: center; 
-            width: 100%; z-index: 2; gap: 30px; flex-wrap: nowrap;
+            width: 100%; z-index: 2; margin-top: 10px; gap: 24px; flex-wrap: nowrap;
         }
-
-        .left-slot-wrapper, .right-slot-wrapper {
-            display: flex; flex-direction: column; flex: 1; max-width: 280px; width: 100%; min-width: 140px; gap: 12px; justify-content: space-between; position: relative;
+        
+        /* Карточки одинакового размера */
+        #slotLeft, .right-slot-wrapper {
+            flex: 1; max-width: 180px; width: 100%; min-width: 110px;
+            display: flex; flex-direction: column;
         }
-
-        /* Молния далеко от карточки и не липнет */
-        .top-left-controls { position: absolute; top: -35px; left: 0; z-index: 10; display: flex; gap: 8px; align-items: center; }
-        .fast-upgrade-label { cursor: pointer; display: flex; align-items: center; background: var(--bg-card); padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); transition: var(--transition); }
-        .fast-upgrade-label:hover { border-color: #ffcc00; }
-        .fast-upgrade-label input { display: none; }
-        .lightning-icon { width: 14px; height: 14px; fill: #5a5a6e; transition: var(--transition); }
-        .fast-upgrade-label input:checked + .lightning-icon { fill: #ffcc00; }
 
         .item-slot {
-            background: var(--bg-card); 
-            border: 1px solid var(--border-color); border-radius: var(--radius-md);
-            height: 250px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; /* Одинаковая высота */
-            padding: 16px; text-align: center; cursor: pointer; position: relative; overflow: hidden; width: 100%;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1);
+            background: var(--bg-card); border: 1px dashed var(--border-color); border-radius: var(--radius-md);
+            height: 220px; width: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+            padding: 16px; text-align: center; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s, box-shadow 0.3s; cursor: pointer;
+            position: relative; overflow: hidden;
         }
         .slot-confetti { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
         
-        .item-slot:hover { border-color: #5a5a6e; background: var(--bg-card-hover); transform: translateY(-4px); }
+        .item-slot:hover { border-color: var(--text-muted); background: var(--bg-card-hover); transform: translateY(-4px); box-shadow: 0 6px 16px rgba(0,0,0,0.4); }
         
-        .item-slot.active { border-width: 2px; }
-        .item-slot.active.rarity-epic { border-color: var(--rarity-epic); background: rgba(165, 94, 234, 0.05); }
-        .item-slot.active.rarity-legendary { border-color: var(--rarity-legendary); background: rgba(253, 150, 68, 0.05); }
-        .item-slot.active.rarity-mythic { border-color: var(--rarity-mythic); background: rgba(252, 92, 101, 0.05); }
-        .item-slot.active.rarity-immortal { border-color: var(--rarity-immortal); background: rgba(43, 203, 186, 0.05); }
+        .item-slot.active { border-style: solid; border-width: 2px; }
+        .item-slot.active.rarity-epic { border-color: var(--rarity-epic); background: rgba(165, 94, 234, 0.05); box-shadow: 0 0 15px rgba(165, 94, 234, 0.25); }
+        .item-slot.active.rarity-legendary { border-color: var(--rarity-legendary); background: rgba(253, 150, 68, 0.05); box-shadow: 0 0 15px rgba(253, 150, 68, 0.25); }
+        .item-slot.active.rarity-mythic { border-color: var(--rarity-mythic); background: rgba(252, 92, 101, 0.05); box-shadow: 0 0 15px rgba(252, 92, 101, 0.25); }
+        .item-slot.active.rarity-immortal { border-color: var(--rarity-immortal); background: rgba(43, 203, 186, 0.05); box-shadow: 0 0 15px rgba(43, 203, 186, 0.25); }
 
-        .slot-bg-pepe { position: absolute; width: 75%; height: 75%; object-fit: contain; filter: brightness(0) opacity(0.4); z-index: 1; pointer-events: none; animation: floatEffect 6s ease-in-out infinite; } /* Пепе посветлее */
+        .slot-bg-pepe { position: absolute; width: 65%; height: 65%; object-fit: contain; filter: brightness(0) opacity(0.3); z-index: 1; pointer-events: none; animation: floatEffect 5s ease-in-out infinite; }
         
-        .slot-chevron-container { position: relative; z-index: 2; margin: auto 0; display: flex; align-items: center; justify-content: center; height: 60px; }
-        .slot-hint { font-size: 11px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; position: relative; z-index: 2; margin-top: auto; letter-spacing: 0.5px;}
+        .slot-chevron-container { position: relative; z-index: 2; margin: auto 0; display: flex; align-items: center; justify-content: center; height: 50px; }
+        .slot-hint { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; position: relative; z-index: 2; margin-top: auto; }
 
-        /* Лучи при победе */
-        .sunburst-bg {
-            position: absolute; top: 50%; left: 50%; width: 250%; height: 250%;
-            background: repeating-conic-gradient(from 0deg, rgba(252, 92, 101, 0.3) 0deg 15deg, transparent 15deg 30deg);
-            transform: translate(-50%, -50%); animation: spinBurst 8s linear infinite;
-            opacity: 0; pointer-events: none; z-index: 1; mix-blend-mode: screen; filter: blur(3px);
-            transition: opacity 0.5s ease;
-        }
-        .item-slot.win-state .sunburst-bg { opacity: 1; }
-        @keyframes spinBurst { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
-        
-        .item-slot.win-state .slot-item-img {
-            animation: winItemPopEpic 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
-            filter: drop-shadow(0 0 15px #fc5c65); z-index: 20;
-        }
-        @keyframes winItemPopEpic {
-            0% { transform: scale(1); }
-            40% { transform: scale(1.3); }
-            100% { transform: scale(1.15); }
-        }
-
-        .arrow-1 { animation: arrowPulse 1.2s infinite; animation-delay: 0s; }
-        .arrow-2 { animation: arrowPulse 1.2s infinite; animation-delay: 0.2s; }
-        .arrow-3 { animation: arrowPulse 1.2s infinite; animation-delay: 0.4s; }
+        .arrow-1 { animation: arrowPulse 1.5s infinite; animation-delay: 0s; }
+        .arrow-2 { animation: arrowPulse 1.5s infinite; animation-delay: 0.2s; }
+        .arrow-3 { animation: arrowPulse 1.5s infinite; animation-delay: 0.4s; }
         .chevron-up .arrow-1 { animation-delay: 0.4s; }
         .chevron-up .arrow-2 { animation-delay: 0.2s; }
         .chevron-up .arrow-3 { animation-delay: 0s; }
         
         @keyframes arrowPulse {
             0%, 100% { opacity: 0.2; transform: translateY(0); }
-            50% { opacity: 1; transform: translateY(3px); }
+            50% { opacity: 1; transform: translateY(2px); filter: drop-shadow(0 0 5px var(--accent-main)); }
         }
 
-        /* === БУСТ ШАНСА НОВЫЙ ДИЗАЙН === */
-        .balance-boost-container {
-            background: var(--bg-card); border-radius: var(--radius-md); padding: 14px 16px; 
-            width: 100%; border: 1px solid var(--border-color); 
-            height: 75px; display: flex; flex-direction: column; justify-content: center; gap: 10px; /* Одинаковая высота */
+        /* Кнопки множителей - маленькие овалы */
+        .multiplier-bar {
+            display: flex; justify-content: center; gap: 8px; width: 100%; margin-top: 15px; 
+            background: transparent; padding: 0; border: none;
         }
-        .boost-header-custom { display: flex; justify-content: space-between; align-items: center; }
-        .boost-title-custom { color: var(--text-muted); font-size: 11px; font-weight: 700; text-transform: uppercase; }
-        .boost-val-custom { font-size: 14px; font-weight: 900; color: #ffcc00; display: flex; align-items: center; gap: 4px; }
-        .boost-max-custom { color: var(--text-muted); font-size: 10px; font-weight: 600; margin-left: 4px; }
-        
-        .boost-slider-custom {
-            -webkit-appearance: none; width: 100%; height: 6px; border-radius: 3px; 
-            background: var(--border-color); outline: none; transition: 0.1s; border: none;
+        .multiplier-btn {
+            background: var(--bg-panel); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1);
+            padding: 4px 10px; font-size: 11px; font-weight: 800; border-radius: 20px; cursor: pointer; text-align: center;
+            transition: var(--transition); flex: 1; max-width: 45px;
         }
-        .boost-slider-custom::-webkit-slider-thumb {
-            -webkit-appearance: none; appearance: none; width: 22px; height: 22px; border-radius: 50%; 
-            background: var(--accent-main); cursor: pointer; /* Цвет сайта для точки */
-            border: 2px solid #fff; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        .boost-slider-custom::-webkit-slider-thumb:hover { transform: scale(1.1); }
-
-        /* === МНОЖИТЕЛИ НОВЫЙ ДИЗАЙН (Без кривизны) === */
-        .multiplier-bar-custom {
-            display: flex; gap: 8px; width: 100%; height: 75px; align-items: center; justify-content: space-between; /* Одинаковая высота с бустом */
-        }
-        .mult-btn {
-            flex: 1; height: 100%; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; /* Убрали skew */
-            color: var(--text-muted); font-size: 13px; font-weight: 900; cursor: pointer; 
-            transition: var(--transition); display: flex; align-items: center; justify-content: center; 
-        }
-        .mult-btn:hover { background: var(--bg-card-hover); color: #fff; transform: scale(1.02); }
-        
-        .border-red { border-color: rgba(252, 92, 101, 0.4); }
-        .border-red:hover { border-color: #fc5c65; color: #fc5c65; }
-        .border-yellow { border-color: rgba(253, 150, 68, 0.4); }
-        .border-yellow:hover { border-color: #fd9644; color: #fd9644; }
-        .border-green { border-color: rgba(43, 203, 186, 0.4); }
-        .border-green:hover { border-color: #2bcbba; color: #2bcbba; }
-        .settings-btn { flex: 0.4; min-width: 35px; }
-        .settings-btn span { font-size: 16px; }
+        .multiplier-btn:hover { background: var(--accent-main); color: #fff; border-color: var(--accent-main); box-shadow: 0 0 8px var(--accent-glow); }
 
         /* === КОЛЕСО И СТРЕЛКА === */
-        .wheel-container { position: relative; width: 240px; height: 240px; margin: 0; display: flex; align-items: center; justify-content: center; z-index: 2; flex-shrink: 0; transition: var(--transition); }
-        .wheel-box { width: 100%; height: 100%; position: relative; }
+        .wheel-container { position: relative; width: 220px; height: 220px; margin: 0; display: flex; align-items: center; justify-content: center; z-index: 2; flex-shrink: 0; transition: var(--transition); }
+        .wheel-box { width: 100%; height: 100%; position: relative; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
         .wheel-svg { width: 100%; height: 100%; }
-        .wheel-progress { stroke-dasharray: 408.4; stroke-dashoffset: 408.4; transition: stroke-dashoffset 1s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        /* Плавная анимация колеса */
+        .wheel-progress { stroke-dasharray: 408.4; stroke-dashoffset: 408.4; transition: stroke-dashoffset 0.8s cubic-bezier(0.25, 0.8, 0.25, 1); filter: drop-shadow(0 0 10px var(--accent-main)); stroke-linecap: round; }
 
-        .wheel-marker { position: absolute; font-size: 10px; font-weight: 900; color: var(--text-muted); z-index: 10; pointer-events: none; opacity: 0.8; }
-        .marker-top { top: 40px; left: 50%; transform: translateX(-50%); }
-        .marker-bottom { bottom: 40px; left: 50%; transform: translateX(-50%); }
-        .marker-left { top: 50%; left: 40px; transform: translateY(-50%); }
-        .marker-right { top: 50%; right: 40px; transform: translateY(-50%); }
+        /* Проценты в прозрачных кружках */
+        .wheel-marker { 
+            position: absolute; 
+            width: 35px; height: 35px; 
+            border-radius: 50%; 
+            border: 2px solid rgba(255, 255, 255, 0.1); 
+            background: rgba(0, 0, 0, 0.5); 
+            backdrop-filter: blur(4px); 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 10px; font-weight: 800; color: rgba(255, 255, 255, 0.8); 
+            z-index: 10; pointer-events: none; 
+        }
+        .marker-top { top: -5px; left: 50%; transform: translateX(-50%); }
+        .marker-bottom { bottom: -5px; left: 50%; transform: translateX(-50%); }
+        .marker-left { top: 50%; left: -5px; transform: translateY(-50%); }
+        .marker-right { top: 50%; right: -5px; transform: translateY(-50%); }
         
-        .arrow-spinner-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15; will-change: transform; transition: transform 3s cubic-bezier(0.25, 1, 0.2, 1); }
+        .arrow-spinner-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15; will-change: transform; }
         
         .wheel-arrow { 
-            position: absolute; top: 22px; left: 50%; transform: translateX(-50%) rotate(180deg);
-            width: 16px; height: 24px; fill: var(--accent-main);
+            position: absolute; 
+            top: 25px; 
+            left: 50%; 
+            transform: translateX(-50%) rotate(180deg);
+            width: 14px; 
+            height: 22px; 
+            fill: var(--accent-main); 
+            filter: drop-shadow(0 0 6px var(--accent-glow));
         }
 
+        /* === ЦЕНТРИРОВАНИЕ ТЕКСТА ШАНСА === */
         .wheel-center-content { 
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            position: absolute; 
+            top: 50%; left: 50%; transform: translate(-50%, -50%); 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
             width: 85%; height: 85%; z-index: 5; text-align: center; pointer-events: none; 
-            background: var(--bg-panel); border-radius: 50%; border: 2px solid var(--border-color);
         }
 
-        @keyframes slowBarsAnim { 0%, 100% { opacity: 1; transform: translateY(0); } 50% { opacity: 0.5; transform: translateY(-3px); } }
+        @keyframes slowBarsAnim { 0%, 100% { opacity: 1; transform: translateY(0); } 50% { opacity: 0.6; transform: translateY(-2px); } }
         .bars-anim { animation: slowBarsAnim 2s ease-in-out infinite; }
 
         #chanceDisplay { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
         #chanceDisplay h1 { 
-            font-size: 26px; font-weight: 900; color: #ffffff; letter-spacing: -0.5px; 
-            transition: var(--transition); line-height: 1; margin: 0; white-space: nowrap;
+            font-size: 34px; font-weight: 900; color: #ffffff; letter-spacing: -0.5px; 
+            transition: var(--transition); line-height: 1; margin: 0; 
+            text-shadow: 0 0 15px rgba(255,255,255,0.4); 
         }
-        #chanceDisplay p { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 900; margin-top: 6px; transition: var(--transition); letter-spacing: 0.5px;}
+        #chanceDisplay p { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; margin-top: 4px; transition: var(--transition); }
 
-        .action-block { width: 100%; display: flex; flex-direction: column; gap: 10px; z-index: 2; margin-top: 15px; }
+        .action-block { width: 100%; display: flex; flex-direction: column; gap: 10px; z-index: 2; margin-top: 5px; }
+        
+        .boost-slider {
+            -webkit-appearance: none; width: 100%; height: 6px; background: var(--bg-main); border-radius: 4px; outline: none; opacity: 0.9; transition: var(--transition); border: 1px solid var(--border-color);
+        }
+        .boost-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--accent-main); cursor: pointer; box-shadow: 0 0 10px var(--accent-glow); transition: transform 0.2s;
+        }
+        .boost-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
 
-        .btn-upgrade { background: linear-gradient(135deg, var(--accent-main), #6a1b9a); color: #fff; border: none; padding: 18px; font-size: 16px; font-weight: 900; border-radius: var(--radius-md); cursor: pointer; text-transform: uppercase; transition: var(--transition); letter-spacing: 1px;}
-        .btn-upgrade:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.1); }
-        .btn-upgrade:disabled { background: var(--bg-card); color: var(--text-muted); cursor: not-allowed; border: 1px solid var(--border-color); transform: none; filter: none; }
+        .btn-upgrade { background: var(--accent-main); color: #fff; border: none; padding: 16px; font-size: 14px; font-weight: 800; border-radius: var(--radius-md); cursor: pointer; text-transform: uppercase; transition: var(--transition); }
+        .btn-upgrade:not(:disabled) { box-shadow: 0 0 15px var(--accent-glow); }
+        .btn-upgrade:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 0 25px rgba(138, 43, 226, 0.6); }
+        .btn-upgrade:disabled { background: var(--bg-card); color: var(--text-muted); cursor: not-allowed; border: 1px solid var(--border-color); transform: none; filter: none; box-shadow: none; }
 
-        @keyframes floatEffect { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-5px); } }
+        @keyframes floatEffect { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-4px); } }
+        @keyframes winItemPop { 0% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); } 50% { transform: scale(1.15); filter: drop-shadow(0 0 20px var(--accent-main)); } 100% { transform: scale(1); filter: drop-shadow(0 0 15px var(--accent-main)); } }
+        .win-item-anim { animation: winItemPop 1.2s cubic-bezier(0.3, 1, 0.3, 1) forwards !important; z-index: 20; }
 
+        /* === АДАПТИВ ПОД МОБИЛКИ === */
         @media (max-width: 650px) {
-            .arena-row { flex-direction: row; flex-wrap: wrap; gap: 12px; }
-            .left-slot-wrapper, .right-slot-wrapper { max-width: 100%; flex: 1; min-width: 140px; }
-            .item-slot { height: 210px; padding: 10px; }
-            .wheel-container { width: 180px; height: 180px; margin: 0 auto; order: -1; }
-            .wheel-svg { width: 180px; height: 180px; }
-            #chanceDisplay h1 { font-size: 22px; }
-            .slot-item-img { max-height: 60px; }
-            .mult-btn { font-size: 11px; height: 100%; }
-            .boost-slider-custom::-webkit-slider-thumb { width: 18px; height: 18px; }
-            .balance-boost-container { height: 60px; padding: 10px; }
-            .multiplier-bar-custom { height: 60px; }
+            .arena-row { flex-direction: row; flex-wrap: nowrap; gap: 8px; }
+            #slotLeft, .right-slot-wrapper { max-width: 50%; flex: 1; }
+            .item-slot { height: 150px; padding: 8px; }
+            .wheel-container { width: 130px; height: 130px; }
+            .wheel-svg { width: 130px; height: 130px; }
+            .wheel-center-content { width: 90%; height: 90%; }
+            #chanceDisplay h1 { font-size: 20px; }
+            #chanceDisplay p { font-size: 9px; }
+            .slot-item-img { max-height: 50px; }
+            .multiplier-bar { gap: 4px; }
+            .multiplier-btn { font-size: 10px; padding: 4px 0; }
+            .wheel-arrow { top: 15px; width: 12px; height: 18px; }
+            .marker-top { top: -2px; width: 25px; height: 25px; font-size: 8px;} 
+            .marker-bottom { bottom: -2px; width: 25px; height: 25px; font-size: 8px;}
+            .marker-left { left: -2px; width: 25px; height: 25px; font-size: 8px;} 
+            .marker-right { right: -2px; width: 25px; height: 25px; font-size: 8px;}
         }
+
+        /* === БЛОК ДЛЯ НЕАВТОРИЗОВАННЫХ === */
+        #unauthPromoBlock { display: none; flex-direction: column; align-items: center; text-align: center; padding: 30px 10px; }
+        .unauth-title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+        .unauth-subtitle { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 16px; }
+        
+        #promoDisplay { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 140px; width: 100%; transition: opacity 0.4s ease; }
+        .promo-item { display: flex; flex-direction: column; align-items: center; justify-content: center; transition: var(--transition); width: 60px; }
+        .promo-item.side.near { filter: brightness(0.5); transform: scale(0.8); opacity: 0.8; }
+        .promo-item.side.far { filter: brightness(0.2); transform: scale(0.6); opacity: 0.4; }
+        .promo-item.center { transform: scale(1.1); z-index: 5; width: 90px; }
+        .promo-item img { max-width: 100%; max-height: 60px; object-fit: contain; }
+        .promo-item.center img { animation: floatEffect 4s ease-in-out infinite; max-height: 75px; }
+        .promo-info { text-align: center; margin-top: 8px; }
+        .promo-sub { font-size: 9px; color: var(--text-muted); font-weight: 700; white-space: nowrap; }
+        .promo-price-tag { font-size: 10px; font-weight: 800; color: #fff; background: rgba(0,0,0,0.6); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border-color); margin-bottom: 6px;}
 
         /* === ИНВЕНТАРЬ И МАГАЗИН === */
-        .inventory-section { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; padding: 24px; }
-        .inventory-split { display: flex; gap: 30px; align-items: flex-start; }
+        .inventory-section { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; }
+        #combinedInventory { padding: 16px; max-height: 600px; overflow-y: auto; scroll-behavior: smooth; display: none; }
+        #combinedInventory::-webkit-scrollbar { width: 4px; }
+        #combinedInventory::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        
+        .inventory-split { display: flex; gap: 16px; align-items: flex-start; }
         .inv-col { flex: 1; min-width: 0; display: flex; flex-direction: column; }
         
         @media (max-width: 768px) { .inventory-split { flex-direction: column; } }
 
-        .inv-header-title { font-size: 18px; font-weight: 900; color: #fff; margin: 0 0 20px; text-transform: uppercase; border-left: 5px solid var(--accent-main); padding-left: 12px; letter-spacing: 1px; }
-        .filter-row { display: flex; gap: 8px; margin-bottom: 20px; align-items: center; background: var(--bg-card); padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-color); }
-        .filter-row span { font-size: 11px; font-weight: 900; color: var(--text-muted); text-transform: uppercase; }
-        .filter-input { width: 100%; background: transparent; border: none; color: #fff; outline: none; font-size: 13px; text-align: center; font-weight: bold; }
-        .filter-btn-search { background: var(--accent-main); border: none; color: white; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: var(--transition); }
-        .filter-btn-search:hover { filter: brightness(1.1); }
+        .inv-header-title { font-size: 14px; font-weight: 800; color: #fff; margin: 8px 0 12px; text-transform: uppercase; border-left: 3px solid var(--accent-main); padding-left: 8px; }
+        .filter-row { display: flex; gap: 6px; margin-bottom: 12px; align-items: center; background: var(--bg-card); padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border-color); }
+        .filter-row span { font-size: 10px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; }
+        .filter-input { width: 100%; background: transparent; border: none; color: #fff; outline: none; font-size: 12px; text-align: center; }
+        .filter-btn-search { background: var(--accent-main); border: none; color: white; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: var(--transition); }
+        .filter-btn-search:hover { filter: brightness(1.1); box-shadow: 0 0 8px var(--accent-glow); }
 
-        .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(115px, 1fr)); gap: 14px; align-items: stretch; max-height: 600px; overflow-y: auto; padding-right: 8px; padding-bottom: 12px; }
-        .items-grid::-webkit-scrollbar { width: 6px; }
-        .items-grid::-webkit-scrollbar-thumb { background: #3a3a4d; border-radius: 6px; }
+        .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; align-items: stretch;}
         
-        .item-card { 
-            background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); 
-            padding: 14px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; 
-            cursor: pointer; transition: all 0.3s ease; 
-            height: 175px; position: relative; overflow: hidden; width: 100%;
-        }
-        .item-card:hover:not(.empty-slot) { background: var(--bg-card-hover); transform: translateY(-4px); border-color: #5a5a6e; z-index: 5; }
-        .item-price { font-size: 12px; font-weight: 900; color: #fff; align-self: flex-end; background: rgba(0,0,0,0.4); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border-color); }
-        .item-img-container { width: 100%; height: 70px; display: flex; align-items: center; justify-content: center; margin: auto 0; position: relative;}
+        .item-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; cursor: pointer; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s, box-shadow 0.3s, background 0.3s; height: 100%; position: relative; overflow: hidden; }
+        .item-card:hover:not(.empty-slot) { background: var(--bg-card-hover); transform: translateY(-4px); border-color: #3a3a4d; box-shadow: 0 6px 16px rgba(0,0,0,0.4); }
+        .item-price { font-size: 10px; font-weight: 800; color: #fff; align-self: flex-end; background: var(--bg-panel); padding: 3px 6px; border-radius: 4px; border: 1px solid var(--border-color); }
+        .item-img-container { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; margin: 8px 0; }
+        .item-img-container img { max-width: 85%; max-height: 85%; object-fit: contain; transition: var(--transition); }
+        .item-card:hover:not(.empty-slot) .item-img-container img { transform: scale(1.1); }
+        .item-info { text-align: center; width: 100%; }
         
-        /* В инвентаре Пепе потемнее */
-        .item-img-container img { max-width: 85%; max-height: 100%; object-fit: contain; transition: var(--transition); filter: brightness(0.85) drop-shadow(0 5px 8px rgba(0,0,0,0.3)); }
-        .item-card:hover:not(.empty-slot) .item-img-container img { transform: scale(1.1); filter: brightness(1) drop-shadow(0 8px 12px rgba(0,0,0,0.5)); }
-        
-        .item-rarity-text { font-size: 10px; text-transform: uppercase; font-weight: 900; margin-bottom: 6px; padding: 4px 10px; border-radius: 6px; display: inline-block; letter-spacing: 0.5px; }
-        .rarity-epic .item-rarity-text { color: var(--rarity-epic); background: rgba(165, 94, 234, 0.1); border: 1px solid rgba(165, 94, 234, 0.2); }
-        .rarity-legendary .item-rarity-text { color: var(--rarity-legendary); background: rgba(253, 150, 68, 0.1); border: 1px solid rgba(253, 150, 68, 0.2); }
-        .rarity-mythic .item-rarity-text { color: var(--rarity-mythic); background: rgba(252, 92, 101, 0.1); border: 1px solid rgba(252, 92, 101, 0.2); }
-        .rarity-immortal .item-rarity-text { color: var(--rarity-immortal); background: rgba(43, 203, 186, 0.1); border: 1px solid rgba(43, 203, 186, 0.2); }
+        .item-rarity-text { font-size: 9px; text-transform: uppercase; font-weight: 800; margin-bottom: 2px; padding: 2px 6px; border-radius: 4px; display: inline-block; }
+        .rarity-epic .item-rarity-text { color: var(--rarity-epic); background: rgba(165, 94, 234, 0.1); }
+        .rarity-legendary .item-rarity-text { color: var(--rarity-legendary); background: rgba(253, 150, 68, 0.1); }
+        .rarity-mythic .item-rarity-text { color: var(--rarity-mythic); background: rgba(252, 92, 101, 0.1); }
+        .rarity-immortal .item-rarity-text { color: var(--rarity-immortal); background: rgba(43, 203, 186, 0.1); }
 
-        .item-title { font-size: 12px; color: #fff; font-weight: 800; letter-spacing: 0.5px; }
+        .item-title { font-size: 9px; color: var(--text-muted); font-weight: 700;}
 
-        .rarity-epic { border-bottom: 3px solid var(--rarity-epic); }
-        .rarity-legendary { border-bottom: 3px solid var(--rarity-legendary); }
-        .rarity-mythic { border-bottom: 3px solid var(--rarity-mythic); }
-        .rarity-immortal { border-bottom: 3px solid var(--rarity-immortal); }
-
-        /* === БЛОК ДЛЯ НЕАВТОРИЗОВАННЫХ === */
-        #unauthPromoBlock { flex-direction: column; align-items: center; text-align: center; padding: 40px 10px; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px dashed var(--border-color); }
-        .unauth-title { font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 6px; text-transform: uppercase; }
-        .unauth-subtitle { font-size: 13px; color: var(--text-muted); font-weight: 600; margin-bottom: 20px; }
-        
-        #promoDisplay { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 140px; width: 100%; transition: opacity 0.5s ease; }
-        .promo-item { display: flex; flex-direction: column; align-items: center; justify-content: center; transition: var(--transition); width: 60px; }
-        .promo-item.side.near { filter: brightness(0.2); transform: scale(0.8); opacity: 0.6; }
-        .promo-item.side.far { filter: brightness(0.1); transform: scale(0.6); opacity: 0.2; }
-        .promo-item.center { transform: scale(1.2); z-index: 5; width: 90px; }
-        .promo-item img { max-width: 100%; max-height: 60px; object-fit: contain; }
-        .promo-item.center img { animation: floatEffect 4s ease-in-out infinite; max-height: 80px; }
-        .promo-info { text-align: center; margin-top: 10px; }
-        .promo-sub { font-size: 10px; color: var(--text-muted); font-weight: 800; white-space: nowrap; text-transform: uppercase;}
-        .promo-price-tag { font-size: 11px; font-weight: 900; color: #fff; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--accent-main); margin-bottom: 8px; }
+        .rarity-epic { border-bottom: 2px solid var(--rarity-epic); }
+        .rarity-legendary { border-bottom: 2px solid var(--rarity-legendary); }
+        .rarity-mythic { border-bottom: 2px solid var(--rarity-mythic); }
+        .rarity-immortal { border-bottom: 2px solid var(--rarity-immortal); }
 
         /* === ФУТЕР === */
-        footer { margin-top: auto; padding: 24px 20px; background: var(--bg-panel); border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-        .lang-switch-footer { display: flex; align-items: center; gap: 8px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: 800; color: var(--text-muted); cursor: pointer; transition: var(--transition); }
+        footer { margin-top: auto; padding: 20px 16px; background: var(--bg-panel); border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .lang-switch-footer { display: flex; align-items: center; gap: 6px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 6px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: var(--transition); }
         .lang-switch-footer span.active { color: var(--text-main); }
         
-        .footer-contacts { display: flex; align-items: center; gap: 10px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 10px 18px; border-radius: 20px; color: var(--text-main); font-size: 13px; font-weight: 800; text-decoration: none; transition: var(--transition); }
-        .footer-contacts:hover { background: var(--bg-card-hover); border-color: #2AABEE; transform: translateY(-2px); }
-        .tg-icon { width: 20px; height: 20px; fill: #2AABEE; }
+        .footer-contacts { display: flex; align-items: center; gap: 8px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 20px; color: var(--text-main); font-size: 12px; font-weight: 700; text-decoration: none; transition: var(--transition); }
+        .footer-contacts:hover { background: var(--bg-card-hover); border-color: #2AABEE; }
+        .tg-icon { width: 18px; height: 18px; fill: #2AABEE; }
 
         /* === МОДАЛКИ И ПРОФИЛЬ === */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(20, 20, 29, 0.9); backdrop-filter: blur(10px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; opacity: 0; transition: opacity 0.3s ease; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; opacity: 0; transition: opacity 0.4s ease; }
         .modal-overlay.active { display: flex; opacity: 1; }
-        .modal-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 440px; padding: 30px; position: relative; max-height: 90vh; overflow-y: auto; transform: translateY(20px) scale(0.98); transition: all 0.3s ease; }
-        .modal-overlay.active .modal-card { transform: translateY(0) scale(1); }
-        .modal-close { position: absolute; top: 20px; right: 20px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; width: 34px; height: 34px; display:flex; align-items:center; justify-content:center; color: var(--text-muted); font-size: 20px; font-weight: bold; cursor: pointer; transition: var(--transition); }
-        .modal-close:hover { background: var(--border-color); color: #fff; }
-        .modal-title { font-size: 20px; font-weight: 900; margin-bottom: 20px; color: #fff; text-transform: uppercase; }
-        .modal-input { width: 100%; background: var(--bg-main); border: 1px solid var(--border-color); padding: 14px 16px; border-radius: var(--radius-sm); color: #fff; font-size: 15px; margin-bottom: 16px; outline: none; transition: var(--transition); font-weight: bold; }
-        .modal-input:focus { border-color: var(--accent-main); }
-        .modal-btn { width: 100%; background: linear-gradient(135deg, var(--accent-main), #6a1b9a); color: #fff; border: none; padding: 16px; border-radius: var(--radius-sm); font-size: 15px; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: var(--transition); letter-spacing: 1px; }
-        .modal-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
+        .modal-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 420px; padding: 24px; position: relative; max-height: 90vh; overflow-y: auto; transform: translateY(20px); transition: transform 0.4s ease; }
+        .modal-overlay.active .modal-card { transform: translateY(0); }
+        .modal-close { position: absolute; top: 16px; right: 16px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; width: 30px; height: 30px; display:flex; align-items:center; justify-content:center; color: var(--text-muted); font-size: 18px; cursor: pointer; transition: var(--transition); }
+        .modal-close:hover { background: var(--bg-card-hover); color: #fff; }
+        .modal-title { font-size: 18px; font-weight: 800; margin-bottom: 16px; color: #fff; text-transform: uppercase; }
+        .modal-input { width: 100%; background: var(--bg-card); border: 1px solid var(--border-color); padding: 12px; border-radius: var(--radius-sm); color: #fff; font-size: 14px; margin-bottom: 12px; outline: none; transition: var(--transition); }
+        .modal-input:focus { border-color: var(--accent-main); box-shadow: 0 0 8px var(--accent-glow); }
+        .modal-btn { width: 100%; background: var(--accent-main); color: #fff; border: none; padding: 14px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: var(--transition); box-shadow: 0 0 10px rgba(138, 43, 226, 0.3); }
+        .modal-btn:hover { filter: brightness(1.1); box-shadow: 0 0 15px rgba(138, 43, 226, 0.6); }
         
-        .payment-methods { display: flex; gap: 10px; margin-bottom: 16px; }
-        .payment-method { flex: 1; background: var(--bg-main); border: 1px solid var(--border-color); padding: 12px; border-radius: var(--radius-sm); text-align: center; cursor: pointer; transition: var(--transition); }
+        .payment-methods { display: flex; gap: 8px; margin-bottom: 12px; }
+        .payment-method { flex: 1; background: var(--bg-card); border: 1px solid var(--border-color); padding: 10px; border-radius: var(--radius-sm); text-align: center; cursor: pointer; transition: var(--transition); }
         .payment-method.active { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); }
-        .amount-presets { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-        .amount-btn { flex: 1; min-width: 75px; background: var(--bg-main); border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; color: var(--text-main); font-size: 13px; font-weight: 900; cursor: pointer; transition: var(--transition); text-align: center; }
+        .amount-presets { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+        .amount-btn { flex: 1; min-width: 70px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 8px; border-radius: 6px; color: var(--text-main); font-size: 12px; font-weight: 700; cursor: pointer; transition: var(--transition); text-align: center; }
         .amount-btn:hover { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); }
 
-        /* === ПРОФИЛЬ === */
-        .profile-page-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-main); z-index: 300; display: none; flex-direction: column; opacity: 0; transform: translateX(100%); transition: all 0.4s cubic-bezier(0.25, 1, 0.2, 1); }
+        /* === ПЕРЕДЕЛАННЫЙ ПРОФИЛЬ === */
+        .profile-page-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-main); z-index: 300; display: none; flex-direction: column; opacity: 0; transform: translateX(100%); transition: transform 0.4s ease, opacity 0.4s ease; }
         .profile-page-overlay.active { display: flex; opacity: 1; transform: translateX(0); }
-        .profile-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; background: rgba(27, 27, 38, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); }
-        .profile-back { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
-        .profile-back:hover { background: var(--border-color); transform: translateX(-3px); }
-        .profile-title-text { font-size: 20px; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
+        .profile-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: var(--bg-panel); border-bottom: 1px solid var(--border-color); }
+        .profile-back { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; padding: 6px; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
+        .profile-back:hover { background: var(--bg-card-hover); }
+        .profile-title-text { font-size: 18px; font-weight: 800; color: #fff; text-transform: uppercase; }
         
-        .profile-body { flex: 1; overflow-y: auto; padding: 24px 16px; width: 100%; margin: 0 auto; max-width: 1100px; }
+        .profile-body { flex: 1; overflow-y: auto; padding: 20px 14px; width: 100%; margin: 0 auto; max-width: 1000px; }
         
-        .layout-pubg { display: grid; grid-template-columns: 1fr; gap: 24px; }
-        @media (min-width: 768px) { .layout-pubg { grid-template-columns: 320px 1fr; align-items: flex-start; } }
+        .layout-pubg { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 768px) { .layout-pubg { grid-template-columns: 280px 1fr; align-items: flex-start; } }
         
-        .profile-left-panel { display: flex; flex-direction: column; gap: 20px; }
-        .profile-right-panel { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+        .profile-left-panel { display: flex; flex-direction: column; gap: 16px; }
+        .profile-right-panel { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
 
-        .profile-side-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+        .profile-side-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; gap: 12px; }
 
-        .best-drop-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 220px; text-align: center; }
-        .bd-header { font-size: 14px; color: var(--accent-secondary); text-transform: uppercase; font-weight: 900; margin-bottom: auto; display: flex; align-items: center; gap: 8px; align-self: flex-start; }
-        .bd-content-large { display: flex; flex-direction: column; align-items: center; gap: 14px; margin-top: 15px; }
-        .bd-img-container-large { width: 110px; height: 110px; background: var(--bg-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--accent-secondary); position: relative; }
-        .bd-img-container-large img { max-width: 75%; max-height: 75%; object-fit: contain; animation: floatEffect 4s infinite; }
-        .bd-name-large { font-size: 22px; font-weight: 900; color: #fff; }
-        .bd-rarity { font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;}
-        .bd-price-large { font-size: 18px; font-weight: 900; color: #fff; background: rgba(0,0,0,0.4); padding: 8px 16px; border-radius: 10px; border: 1px solid var(--accent-secondary); margin-top: 5px; }
-        .bd-empty { font-size: 15px; color: var(--text-muted); font-weight: 800; text-align: center; padding: 40px 0; margin: auto; text-transform: uppercase;}
+        .best-drop-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px; text-align: center; }
+        .bd-header { font-size: 13px; color: var(--accent-secondary); text-transform: uppercase; font-weight: 800; margin-bottom: auto; display: flex; align-items: center; gap: 6px; align-self: flex-start; }
+        .bd-content-large { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 10px; }
+        .bd-img-container-large { width: 100px; height: 100px; background: var(--bg-card); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color); }
+        .bd-img-container-large img { max-width: 70%; max-height: 70%; object-fit: contain; }
+        .bd-name-large { font-size: 20px; font-weight: 800; color: #fff; }
+        .bd-rarity { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+        .bd-price-large { font-size: 16px; font-weight: 800; color: #fff; background: var(--bg-card); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border-color); margin-top: 5px; }
+        .bd-empty { font-size: 14px; color: var(--text-muted); font-weight: 600; text-align: center; padding: 30px 0; margin: auto; }
         
-        .profile-tabs { display: flex; gap: 10px; background: var(--bg-main); padding: 8px; border-radius: var(--radius-md); border: 1px solid var(--border-color); overflow-x: auto; scrollbar-width: none; }
+        .profile-tabs { display: flex; gap: 8px; background: var(--bg-card); padding: 6px; border-radius: var(--radius-md); border: 1px solid var(--border-color); overflow-x: auto; scrollbar-width: none; }
         .profile-tabs::-webkit-scrollbar { display: none; }
-        .p-tab-btn { flex: 1; padding: 12px 16px; border: none; background: transparent; color: var(--text-muted); font-size: 12px; font-weight: 900; text-transform: uppercase; cursor: pointer; border-radius: 8px; transition: var(--transition); white-space: nowrap; letter-spacing: 0.5px; }
-        .p-tab-btn:hover { color: #fff; background: rgba(255,255,255,0.05); }
+        .p-tab-btn { flex: 1; padding: 10px 14px; border: none; background: transparent; color: var(--text-muted); font-size: 11px; font-weight: 800; text-transform: uppercase; cursor: pointer; border-radius: 8px; transition: var(--transition); white-space: nowrap; }
         .p-tab-btn.active { background: var(--bg-panel); color: #fff; border: 1px solid var(--border-color); }
         
-        .profile-list-item { display: flex; justify-content: space-between; align-items: center; background: var(--bg-card); padding: 16px; border-radius: var(--radius-sm); margin-bottom: 12px; border: 1px solid var(--border-color); border-left: 4px solid transparent; transition: var(--transition); }
-        .profile-list-item:hover { transform: translateX(5px); border-color: #5a5a6e; }
-        .p-item-name { font-size: 14px; font-weight: 900; color: #fff; }
-        .p-item-price { font-size: 12px; color: var(--text-muted); font-weight: 800; margin-top: 6px; text-transform: uppercase; }
-        .btn-profile-action { padding: 12px 20px; border: none; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: var(--transition); letter-spacing: 0.5px; }
+        .profile-list-item { display: flex; justify-content: space-between; align-items: center; background: var(--bg-card); padding: 14px; border-radius: var(--radius-sm); margin-bottom: 10px; border: 1px solid var(--border-color); border-left: 3px solid transparent; transition: var(--transition); }
+        .profile-list-item:hover { border-color: var(--accent-main); }
+        .p-item-name { font-size: 13px; font-weight: 800; color: #fff; }
+        .p-item-price { font-size: 11px; color: var(--text-muted); font-weight: bold; margin-top: 4px; text-transform: uppercase; }
+        .btn-profile-action { padding: 10px 16px; border: none; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: var(--transition); }
         .btn-sell { background: rgba(252, 92, 101, 0.1); color: var(--rarity-mythic); border: 1px solid rgba(252, 92, 101, 0.2); }
         .btn-sell:hover { background: var(--rarity-mythic); color: #fff; }
         .btn-buy { background: rgba(43, 203, 186, 0.1); color: var(--rarity-immortal); border: 1px solid rgba(43, 203, 186, 0.2); }
         .btn-buy:hover { background: var(--rarity-immortal); color: #fff; }
         
-        .stat-card { background: var(--bg-panel); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border-color); }
-        .stat-line { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border-color); font-size: 14px; color: var(--text-muted); font-weight: 700; }
+        .stat-card { background: var(--bg-panel); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); }
+        .stat-line { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-color); font-size: 13px; color: var(--text-muted); font-weight: 600; }
         .stat-line:last-child { border-bottom: none; padding-bottom: 0; }
         .stat-line:first-child { padding-top: 0; }
-        .stat-line span:last-child { font-weight: 900; color: #fff; font-size: 16px; }
+        .stat-line span:last-child { font-weight: 800; color: #fff; font-size: 15px; }
     </style>
 </head>
 <body>
@@ -462,18 +456,18 @@
     <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
 
     <div class="modal-overlay" id="authModal">
-        <div class="modal-card" style="max-width: 400px; text-align: center;">
+        <div class="modal-card" style="max-width: 380px; text-align: center;">
             <button class="modal-close" onclick="closeModal('authModal')">×</button>
-            <div class="logo" style="font-size: 28px; margin-bottom: 12px; animation: none;">FLASH<span>UPGRADER</span></div>
-            <div class="auth-title" style="font-size: 18px; font-weight: 900; margin-bottom: 6px; text-transform: uppercase;">Авторизация</div>
-            <div class="auth-subtitle" style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Войдите или создайте аккаунт, чтобы сохранять прогресс.</div>
+            <div class="logo" style="font-size: 26px; margin-bottom: 8px; animation: none;">FLASH<span>UPGRADER</span></div>
+            <div class="auth-title" style="font-size: 16px; font-weight: bold; margin-bottom: 4px; text-transform: uppercase;">Авторизация</div>
+            <div class="auth-subtitle" style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Войдите или создайте аккаунт, чтобы сохранять прогресс и делать апгрейды.</div>
             
             <input type="email" id="email-input" class="modal-input" placeholder="Email">
             <input type="password" id="password-input" class="modal-input" placeholder="Пароль">
             
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button id="login-btn" class="modal-btn" style="flex: 1;" onclick="login()">Войти</button>
-                <button id="register-btn" class="modal-btn" style="background: var(--bg-card); color: #fff; border: 1px solid var(--border-color); flex: 1;" onclick="login()">Создать</button>
+            <div style="display: flex; gap: 8px; margin-top: 10px;">
+                <button id="login-btn" class="modal-btn" style="flex: 1;">Войти</button>
+                <button id="register-btn" class="modal-btn" style="background: var(--bg-card); color: #fff; border: 1px solid var(--border-color); flex: 1;">Создать</button>
             </div>
         </div>
     </div>
@@ -486,10 +480,10 @@
         <div class="user-area">
             <button id="headerLoginBtn" class="btn-deposit" style="display: none;" onclick="openModal('authModal')">Вход</button>
             
-            <div id="headerUserArea" style="display: flex; align-items: center; gap: 14px;">
+            <div id="headerUserArea" style="none; align-items: center; gap: 12px;">
                 <div class="balance-block">
                     <span class="balance-label">Баланс</span>
-                    <div class="balance" id="userBalance">1 000 000 ⭐</div>
+                    <div class="balance" id="userBalance">0 ⭐</div>
                 </div>
                 <button class="btn-deposit" onclick="openModal('depositModal')">Пополнить</button>
                 <div class="profile-avatar" id="headerAvatar" onclick="openModal('profileModal')"><img src="frog_ninja.png" style="width:100%; height:100%; border-radius:50%; object-fit:cover;"></div>
@@ -502,42 +496,27 @@
 
         <div class="main-content">
             <section class="upgrade-arena" id="arenaBox">
+                <div class="top-left-controls">
+                    <label class="fast-upgrade-label" title="Быстрый апгрейд">
+                        <input type="checkbox" id="fastUpgradeCheck">
+                        <svg class="lightning-icon" viewBox="0 0 24 24">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                        </svg>
+                    </label>
+                </div>
 
                 <div class="arena-row">
-                    <div class="left-slot-wrapper">
-                        <!-- Вынесли молнию повыше, чтобы не прилипала -->
-                        <div class="top-left-controls">
-                            <label class="fast-upgrade-label" title="Быстрый апгрейд">
-                                <input type="checkbox" id="fastUpgradeCheck">
-                                <svg class="lightning-icon" viewBox="0 0 24 24">
-                                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                                </svg>
-                            </label>
+                    <div class="item-slot" id="slotLeft" onclick="document.getElementById('gridMyContent').scrollIntoView({behavior: 'smooth'})">
+                        <canvas class="slot-confetti"></canvas>
+                        <img src="16201.png" class="slot-bg-pepe">
+                        <div class="slot-chevron-container">
+                            <svg class="chevron-anim down" viewBox="0 0 50 75" width="40" height="55">
+                                <path class="arrow-1" fill="var(--accent-main)" d="M5 10 L25 25 L45 10 L45 15 L25 30 L5 15 Z" />
+                                <path class="arrow-2" fill="var(--accent-main)" d="M5 25 L25 40 L45 25 L45 30 L25 45 L5 30 Z" />
+                                <path class="arrow-3" fill="var(--accent-main)" d="M5 40 L25 55 L45 40 L45 45 L25 60 L5 45 Z" />
+                            </svg>
                         </div>
-
-                        <div class="item-slot" id="slotLeft" onclick="document.getElementById('gridMyContent').scrollIntoView({behavior: 'smooth'})">
-                            <canvas class="slot-confetti"></canvas>
-                            <img src="16201.png" class="slot-bg-pepe">
-                            <div class="slot-chevron-container">
-                                <svg class="chevron-anim down" viewBox="0 0 50 75" width="40" height="55">
-                                    <path class="arrow-1" fill="var(--accent-main)" d="M5 10 L25 25 L45 10 L45 15 L25 30 L5 15 Z" />
-                                    <path class="arrow-2" fill="var(--accent-main)" d="M5 25 L25 40 L45 25 L45 30 L25 45 L5 30 Z" />
-                                    <path class="arrow-3" fill="var(--accent-main)" d="M5 40 L25 55 L45 40 L45 45 L25 60 L5 45 Z" />
-                                </svg>
-                            </div>
-                            <span class="slot-hint">Ваш предмет</span>
-                        </div>
-
-                        <div class="balance-boost-container" id="boostContainer">
-                            <div class="boost-header-custom">
-                                <span class="boost-title-custom">Сумма баланса:</span>
-                                <span class="boost-val-custom">
-                                    <span id="boostValDisplay">0</span> ⭐ 
-                                    <span class="boost-max-custom">(max <span id="boostMaxDisplay">0</span>)</span>
-                                </span>
-                            </div>
-                            <input type="range" id="balanceBoostSlider" min="0" max="0" value="0" step="1" class="boost-slider-custom">
-                        </div>
+                        <span class="slot-hint">Ваш предмет</span>
                     </div>
                     
                     <div class="wheel-container">
@@ -554,10 +533,10 @@
                         
                         <div class="wheel-box">
                             <svg class="wheel-svg" viewBox="0 0 200 200">
-                                <circle cx="100" cy="100" r="90" fill="none" stroke="var(--border-color)" stroke-width="3" stroke-dasharray="2 8" />
-                                <circle cx="100" cy="100" r="75" fill="var(--bg-main)" />
-                                <circle cx="100" cy="100" r="65" fill="none" stroke="var(--bg-card)" stroke-width="20" />
-                                <circle class="wheel-progress" id="wheelCircle" cx="100" cy="100" r="65" fill="none" stroke="var(--accent-main)" stroke-width="20" transform="rotate(-90 100 100)" style="stroke-dasharray: 408.4; stroke-dashoffset: 408.4;" />
+                                <circle cx="100" cy="100" r="90" fill="none" stroke="#272736" stroke-width="3" stroke-dasharray="2 8" />
+                                <circle cx="100" cy="100" r="75" fill="#13131c" />
+                                <circle cx="100" cy="100" r="65" fill="none" stroke="#1a1a24" stroke-width="20" />
+                                <circle class="wheel-progress" id="wheelCircle" cx="100" cy="100" r="65" fill="none" stroke="var(--accent-main)" stroke-width="20" transform="rotate(90 100 100)" style="stroke-dasharray: 408.4; stroke-dashoffset: 408.4;" />
                             </svg>
 
                             <div class="wheel-center-content">
@@ -578,7 +557,6 @@
                         <div class="item-slot" id="slotRight" onclick="document.getElementById('gridShopContent').scrollIntoView({behavior: 'smooth'})">
                             <canvas class="slot-confetti"></canvas>
                             <img src="16201.png" class="slot-bg-pepe">
-                            <div class="sunburst-bg"></div>
                             <div class="slot-chevron-container">
                                 <svg class="chevron-anim up" viewBox="0 0 50 75" width="40" height="55">
                                     <path class="arrow-1" fill="var(--accent-main)" d="M5 25 L25 10 L45 25 L45 20 L25 5 L5 20 Z" />
@@ -589,61 +567,65 @@
                             <span class="slot-hint">Желаемый предмет</span>
                         </div>
                         
-                        <!-- Кнопки иксов и процентов теперь ровные, нормальной ширины -->
-                        <div class="multiplier-bar-custom">
-                            <button class="mult-btn" onclick="selectByMultiplier(2)"><span>x2</span></button>
-                            <button class="mult-btn" onclick="selectByMultiplier(4)"><span>x4</span></button>
-                            <button class="mult-btn" onclick="selectByMultiplier(8)"><span>x8</span></button>
-                            <button class="mult-btn border-red" onclick="selectByChance(35)"><span>35%</span></button>
-                            <button class="mult-btn border-yellow" onclick="selectByChance(55)"><span>55%</span></button>
-                            <button class="mult-btn border-green" onclick="selectByChance(75)"><span>75%</span></button>
-                            <button class="mult-btn settings-btn"><span>⚙</span></button>
+                        <div class="multiplier-bar">
+                            <button class="multiplier-btn" onclick="selectByMultiplier(1.5)">1.5x</button>
+                            <button class="multiplier-btn" onclick="selectByMultiplier(2)">2x</button>
+                            <button class="multiplier-btn" onclick="selectByMultiplier(5)">5x</button>
+                            <button class="multiplier-btn" onclick="selectByMultiplier(10)">10x</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="action-block">
+                    <div class="balance-boost-container" id="boostContainer" style="display: none; width: 100%; margin-top: 10px; margin-bottom: 5px; flex-direction: column; gap: 8px; background: var(--bg-card); padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); transition: var(--transition);">
+                        <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); font-weight: bold; text-transform: uppercase;">
+                            <span>Буст шанса (За Звезды)</span>
+                            <span id="boostValDisplay" style="color: var(--accent-secondary);">+ 0 ⭐</span>
+                        </div>
+                        <input type="range" id="balanceBoostSlider" min="0" max="0" value="0" step="1" class="boost-slider">
+                    </div>
+
                     <button class="btn-upgrade" id="btnUpgrade" onclick="executeUpgrade()" disabled>ВЫБЕРИТЕ ПРЕДМЕТЫ</button>
                 </div>
             </section>
 
             <section class="inventory-section" id="inventorySection">
-                <div class="inventory-split">
-                    <div class="inv-col" id="myInvWrapper">
-                        <div class="inv-header-title">Мой инвентарь</div>
+                <div id="unauthPromoBlock">
+                    <div class="unauth-title">Вы не авторизированы</div>
+                    <div class="unauth-subtitle">Войдите для доступа к инвентарю и апгрейдам</div>
 
-                        <div id="unauthPromoBlock" style="display: none;">
-                            <div class="unauth-title">Вы не авторизированы</div>
-                            <div class="unauth-subtitle">Войдите для доступа к инвентарю и облачным сохранениям</div>
+                    <div id="promoDisplay">
+                        <div id="promoLeft2" class="promo-item side far"></div>
+                        <div id="promoLeft1" class="promo-item side near"></div>
+                        <div id="promoCenter" class="promo-item center"></div>
+                        <div id="promoRight1" class="promo-item side near"></div>
+                        <div id="promoRight2" class="promo-item side far"></div>
+                    </div>
 
-                            <div id="promoDisplay">
-                                <div id="promoLeft2" class="promo-item side far"></div>
-                                <div id="promoLeft1" class="promo-item side near"></div>
-                                <div id="promoCenter" class="promo-item center"></div>
-                                <div id="promoRight1" class="promo-item side near"></div>
-                                <div id="promoRight2" class="promo-item side far"></div>
+                    <button class="modal-btn" style="margin-top: 20px; max-width: 240px; border-radius: 20px;" onclick="openModal('authModal')">ВОЙТИ ПО EMAIL</button>
+                </div>
+
+                <div id="combinedInventory">
+                    <div class="inventory-split">
+                        <div class="inv-col">
+                            <div class="inv-header-title">Мой инвентарь</div>
+                            <div class="items-grid" id="gridMyContent" style="margin-bottom: 20px;"></div>
+                        </div>
+                        <div class="inv-col">
+                            <div class="inv-header-title">Магазин предметов</div>
+                            
+                            <div class="filter-row">
+                                <span>Цена</span>
+                                <input type="number" id="priceFrom" class="filter-input" placeholder="От" oninput="renderGrid()">
+                                <span style="color:var(--border-color);">|</span>
+                                <input type="number" id="priceTo" class="filter-input" placeholder="До" oninput="renderGrid()">
+                                <button class="filter-btn-search" onclick="renderGrid()">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                </button>
                             </div>
 
-                            <button class="modal-btn" style="margin-top: 24px; max-width: 260px; border-radius: 20px;" onclick="openModal('authModal')">ВОЙТИ ПО EMAIL</button>
+                            <div class="items-grid" id="gridShopContent"></div>
                         </div>
-
-                        <div class="items-grid" id="gridMyContent"></div>
-                    </div>
-                    
-                    <div class="inv-col">
-                        <div class="inv-header-title">Магазин предметов</div>
-                        
-                        <div class="filter-row">
-                            <span>Цена</span>
-                            <input type="number" id="priceFrom" class="filter-input" placeholder="От" oninput="renderGrid()">
-                            <span style="color:var(--border-color);">|</span>
-                            <input type="number" id="priceTo" class="filter-input" placeholder="До" oninput="renderGrid()">
-                            <button class="filter-btn-search" onclick="renderGrid()">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                            </button>
-                        </div>
-
-                        <div class="items-grid" id="gridShopContent"></div>
                     </div>
                 </div>
             </section>
@@ -653,7 +635,7 @@
     <footer>
         <div class="lang-switch-footer">
             <span class="active">RU</span>
-            <span class="divider" style="color: var(--border-color);">/</span>
+            <span class="divider">/</span>
             <span>EN</span>
         </div>
         
@@ -665,80 +647,77 @@
         </a>
     </footer>
 
-    <!-- Модалки (Депозит, Профиль) -->
     <div class="modal-overlay" id="depositModal">
         <div class="modal-card">
             <button class="modal-close" onclick="closeModal('depositModal')">×</button>
             <div class="modal-title">Пополнение баланса</div>
-            <div style="margin-bottom: 16px;">
-                <label style="font-size: 12px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block;">Выберите способ оплаты</label>
+            <div style="margin-bottom: 12px;">
+                <label style="font-size: 11px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 6px; display: block;">Выберите способ оплаты</label>
                 <div class="payment-methods">
                     <div class="payment-method active">
-                        <div style="font-size: 24px; margin-bottom: 4px;">⭐</div>
-                        <div style="font-size: 12px; font-weight: 900; color: #fff; text-transform: uppercase;">Telegram Stars</div>
+                        <div style="font-size: 20px; margin-bottom: 2px;">⭐</div>
+                        <div style="font-size: 11px; font-weight: 700; color: #fff; text-transform: uppercase;">Telegram Stars</div>
                     </div>
                 </div>
             </div>
-            <label style="font-size: 12px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block;">Сумма (Минимум 15 ⭐)</label>
-            <input type="number" class="modal-input" id="depositAmount" placeholder="Введите сумму..." min="15" value="15" style="margin-bottom: 12px;" oninput="document.getElementById('payAmountText').innerText = this.value">
+            <label style="font-size: 11px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 6px; display: block;">Сумма (Минимум 5000 ⭐)</label>
+            <input type="number" class="modal-input" id="depositAmount" placeholder="Введите сумму..." min="5000" value="5000" style="margin-bottom: 8px;">
             <div class="amount-presets">
-                <button class="amount-btn" onclick="setDepositAmount(15)">15 ⭐</button>
-                <button class="amount-btn" onclick="setDepositAmount(50)">50 ⭐</button>
-                <button class="amount-btn" onclick="setDepositAmount(100)">100 ⭐</button>
-                <button class="amount-btn" onclick="setDepositAmount(500)">500 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(5000)">5000 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(10000)">10000 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(15000)">15000 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(30000)">30000 ⭐</button>
             </div>
-            <button class="modal-btn" id="depositBtn" onclick="processDeposit()">Оплатить <span id="payAmountText">15</span> ⭐</button>
+            <button class="modal-btn" id="depositBtn" onclick="processDeposit()">Оплатить <span id="payAmountText">5000</span> ⭐</button>
         </div>
     </div>
 
     <div class="profile-page-overlay" id="profileModal">
         <div class="profile-header">
             <button class="profile-back" onclick="closeModal('profileModal')">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
             </button>
             <div class="profile-title-text">ПРОФИЛЬ ИГРОКА</div>
-            <div style="width: 40px;"></div>
+            <div style="width: 34px;"></div>
         </div>
         
         <div class="profile-body">
             <div class="layout-pubg">
                 <div class="profile-left-panel">
                     <div class="profile-side-card">
-                        <div style="display: flex; align-items: center; gap: 14px;">
-                            <div class="profile-avatar" id="modalAvatar" style="width: 60px; height: 60px; border-width: 2px;" onclick="document.getElementById('avatarUpload').click()" title="Нажми, чтобы изменить аватар">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div class="profile-avatar" id="modalAvatar" style="width: 55px; height: 55px; border-width: 2px;" onclick="document.getElementById('avatarUpload').click()" title="Нажми, чтобы изменить аватар">
                                 <img src="frog_ninja.png" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
                             </div>
                             <div style="display: flex; flex-direction: column;">
-                                <span style="font-size: 11px; color: var(--accent-secondary); text-transform: uppercase; font-weight: 900; letter-spacing: 0.5px;">ID Аккаунта</span>
-                                <span style="font-size: 15px; font-weight: 900; color: #fff; cursor: pointer; margin-top: 4px;" id="profileEmailDisplay" title="Нажми, чтобы изменить ник">user@email.com <span style="font-size:11px; opacity:0.8; margin-left:6px; color: var(--accent-secondary);">✎</span></span>
+                                <span style="font-size: 10px; color: var(--accent-secondary); text-transform: uppercase; font-weight: 800;">ID Аккаунта</span>
+                                <span style="font-size: 14px; font-weight: 800; color: #fff; cursor: pointer; margin-top: 2px;" id="profileEmailDisplay" title="Нажми, чтобы изменить ник">user@email.com <span style="font-size:10px; opacity:0.7; margin-left:4px;">✎</span></span>
                             </div>
                         </div>
-                        <button id="logout-btn" style="background: var(--bg-card); color: var(--rarity-mythic); border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: 12px; font-weight: 900; cursor: pointer; transition: var(--transition); text-transform: uppercase; margin-top: 12px;" onclick="logout()">Сменить аккаунт</button>
+                        <button id="logout-btn" style="background: var(--bg-card); color: var(--rarity-mythic); border: 1px solid var(--border-color); padding: 8px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; transition: var(--transition); text-transform: uppercase; margin-top: 8px;">Сменить аккаунт</button>
                     </div>
 
                     <div class="profile-side-card">
                         <div style="display: flex; flex-direction: column;">
-                            <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 900;">Текущий Баланс</span>
-                            <span style="font-size: 24px; font-weight: 900; color: #fff; margin-top: 6px;" id="profileBalanceVal">1 000 000 ⭐</span>
+                            <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 800;">Текущий Баланс</span>
+                            <span style="font-size: 20px; font-weight: 900; color: #fff; margin-top: 4px;" id="profileBalanceVal">0 ⭐</span>
                         </div>
-                        <button onclick="closeModal('profileModal'); openModal('depositModal');" style="background: linear-gradient(135deg, var(--accent-main), #6a1b9a); color: #fff; border: none; padding: 12px; border-radius: 8px; font-size: 13px; font-weight: 900; cursor: pointer; transition: var(--transition); text-transform: uppercase; margin-top: 8px;">+ Пополнить</button>
+                        <button onclick="closeModal('profileModal'); openModal('depositModal');" style="background: var(--accent-main); color: #fff; border: none; padding: 10px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; transition: var(--transition); text-transform: uppercase; margin-top: 4px;">+ Пополнить</button>
                     </div>
 
                     <div class="profile-side-card">
-                        <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 900;">Уровень (Апгрейды)</span>
-                        <span style="font-size: 28px; font-weight: 900; color: var(--accent-secondary); margin-top: 4px;" id="profileTotalUpgradesBlock">0</span>
+                        <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 800;">Уровень (Апгрейды)</span>
+                        <span style="font-size: 26px; font-weight: 900; color: var(--accent-secondary); margin-top: 2px;" id="profileTotalUpgradesBlock">0</span>
                     </div>
                 </div>
 
                 <div class="profile-right-panel">
-                    <div class="best-drop-card" id="bestDropContainer">
-                        <div class="bd-empty">Лучший дроп не найден<br><span style="font-size:10px; opacity:0.5;">Сделайте апгрейд</span></div>
-                    </div>
+                    <div class="best-drop-card" id="bestDropContainer"></div>
 
                     <div class="profile-tabs">
                         <button class="p-tab-btn active" id="pTabStats" onclick="switchProfileTab('stats')">Статистика</button>
                         <button class="p-tab-btn" id="pTabSell" onclick="switchProfileTab('sell')">Продать</button>
-                        <button class="p-tab-btn" id="pTabBuy" onclick="switchProfileTab('buy')">Магазин</button>
+                        <button class="p-tab-btn" id="pTabBuy" onclick="switchProfileTab('buy')">Купить</button>
                         <button class="p-tab-btn" id="pTabPayout" onclick="switchProfileTab('payout')">Вывод</button>
                     </div>
                     
@@ -749,10 +728,10 @@
                         <div class="stat-line"><span>Выведено:</span><span id="statWithdrawn" style="color:var(--rarity-legendary);">0 ⭐</span></div>
                     </div>
                     <div id="pContentSell" style="display:none;">
-                        <div id="profileSellList" style="max-height: 400px; overflow-y:auto; padding-right: 6px;"></div>
+                        <div id="profileSellList" style="max-height: 350px; overflow-y:auto; padding-right: 4px;"></div>
                     </div>
                     <div id="pContentBuy" style="display:none;">
-                        <div id="profileBuyList" style="max-height: 400px; overflow-y:auto; padding-right: 6px;"></div>
+                        <div id="profileBuyList" style="max-height: 350px; overflow-y:auto; padding-right: 4px;"></div>
                     </div>
                     <div id="pContentPayout" style="display:none;">
                         <div class="stat-card">
@@ -766,7 +745,6 @@
         </div>
     </div>
 
-    <!-- === ПОВЕДЕНИЕ И СКРИПТЫ === -->
     <script>
         const rarityColors = {
             'rarity-epic': '#a55eea',
@@ -798,20 +776,11 @@
 
         giftPool.sort((a, b) => parseInt(a.price) - parseInt(b.price));
 
-        const botNames = ['Alex', 'DropKing', 'Shadow', 'LuckyFrog', 'ProGamer', 'NinjaStrike', 'RichBoy', 'TopG', 'Sigma', 'PepeFan'];
-
-        let balance = 1000000; 
-        let myInventoryData = [{...giftPool[0]}, {...giftPool[1]}]; // Выдали пару для старта
+        let balance = 0;
+        let myInventoryData = []; 
         let stats = { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0, nickname: '' };
         
         window.isUserLoggedIn = localStorage.getItem('ub_logged_in') === 'true';
-
-        let storedBal = localStorage.getItem('local_balance');
-        if (storedBal) balance = parseFloat(storedBal);
-        let storedInv = localStorage.getItem('local_inv');
-        if (storedInv) myInventoryData = JSON.parse(storedInv);
-        let storedStats = localStorage.getItem('local_stats');
-        if (storedStats) stats = JSON.parse(storedStats);
 
         let selectedLeft = null;
         let selectedRight = null;
@@ -825,8 +794,8 @@
             const audio = document.getElementById('sfx-' + type);
             if(audio) {
                 audio.currentTime = 0;
-                audio.volume = 1.0;
-                audio.play().catch(e => console.log('Sound error: ' + e));
+                audio.volume = 0.5;
+                audio.play().catch(e => console.log('Sound not played: ' + e));
             }
         }
 
@@ -874,59 +843,68 @@
             
             setTimeout(() => {
                 let shuffled = [...giftPool].sort(() => 0.5 - Math.random());
-                document.getElementById('promoLeft2').innerHTML = `<img src="${shuffled[2].img}" onerror="this.src='16201.png'">`;
-                document.getElementById('promoLeft1').innerHTML = `<img src="${shuffled[1].img}" onerror="this.src='16201.png'">`;
+                let centerItem = shuffled[0];
+                let left1 = shuffled[1];
+                let left2 = shuffled[2];
+                let right1 = shuffled[3];
+                let right2 = shuffled[4];
+
+                document.getElementById('promoLeft2').innerHTML = `<img src="${left2.img}" onerror="this.src='16201.png'">`;
+                document.getElementById('promoLeft1').innerHTML = `<img src="${left1.img}" onerror="this.src='16201.png'">`;
                 document.getElementById('promoCenter').innerHTML = `
-                    <div class="promo-price-tag">${Math.round(shuffled[0].price)} ⭐</div>
-                    <img src="${shuffled[0].img}" onerror="this.src='16201.png'">
-                    <div class="promo-info"><div class="promo-sub">${shuffled[0].sub}</div></div>
+                    <div class="promo-price-tag">${Math.round(centerItem.price)} ⭐</div>
+                    <img src="${centerItem.img}" onerror="this.src='16201.png'">
+                    <div class="promo-info">
+                        <div class="promo-sub">${centerItem.sub}</div>
+                    </div>
                 `;
-                document.getElementById('promoRight1').innerHTML = `<img src="${shuffled[3].img}" onerror="this.src='16201.png'">`;
-                document.getElementById('promoRight2').innerHTML = `<img src="${shuffled[4].img}" onerror="this.src='16201.png'">`;
+                document.getElementById('promoRight1').innerHTML = `<img src="${right1.img}" onerror="this.src='16201.png'">`;
+                document.getElementById('promoRight2').innerHTML = `<img src="${right2.img}" onerror="this.src='16201.png'">`;
+                
                 promoDisplay.style.opacity = '1';
-            }, 500);
+            }, 400);
         }
 
         function saveData() {
-            localStorage.setItem('local_balance', balance);
-            localStorage.setItem('local_inv', JSON.stringify(myInventoryData));
-            localStorage.setItem('local_stats', JSON.stringify(stats));
+            if (window.syncToDb) {
+                window.syncToDb(balance, myInventoryData, stats);
+            }
         }
 
-        function openModal(id) { document.getElementById(id).classList.add('active'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-
-        function login() {
-            window.isUserLoggedIn = true;
-            localStorage.setItem('ub_logged_in', 'true');
-            stats.nickname = document.getElementById('email-input').value.split('@')[0] || 'User';
-            saveData();
-            closeModal('authModal');
+        window.loadFromDb = function(dbBalance, dbInv, dbStats) {
+            balance = dbBalance !== undefined ? dbBalance : 0;
+            myInventoryData = dbInv || [];
+            stats = dbStats || { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0, nickname: '' };
+            if(stats.withdrawn === undefined) stats.withdrawn = 0;
+            
+            updateBalanceUI();
             updateProfileName();
             renderGrid();
-        }
+        };
 
-        function logout() {
-            window.isUserLoggedIn = false;
-            localStorage.setItem('ub_logged_in', 'false');
-            closeModal('profileModal');
-            renderGrid();
-        }
+        window.getCurrentBalance = () => balance;
+        window.getCurrentInv = () => myInventoryData;
+        window.getCurrentStats = () => stats;
 
         function updateBalanceUI() { 
             let formatted = Math.floor(balance).toLocaleString('ru-RU');
             document.getElementById('userBalance').innerText = formatted + ' ⭐'; 
+            
             let pBalance = document.getElementById('profileBalanceVal');
             if(pBalance) pBalance.innerText = formatted + ' ⭐';
         }
 
         function updateProfileName() {
             const el = document.getElementById('profileEmailDisplay');
-            if(el) el.innerHTML = (stats.nickname || "Игрок") + ' <span style="font-size:11px; opacity:0.8; margin-left:6px; color: var(--accent-secondary);">✎</span>';
+            if(el) {
+                let name = stats.nickname || (window.auth && auth.currentUser ? auth.currentUser.email : "Игрок");
+                el.innerHTML = name + ' <span style="font-size:10px; opacity:0.7; margin-left:4px;">✎</span>';
+            }
         }
 
         document.getElementById('profileEmailDisplay').addEventListener('click', () => {
-            let newNick = prompt("Введите новый никнейм:", stats.nickname || "Игрок");
+            let currentName = stats.nickname || (window.auth && auth.currentUser ? auth.currentUser.email : "Игрок");
+            let newNick = prompt("Введите новый никнейм:", currentName);
             if (newNick && newNick.trim() !== "") {
                 stats.nickname = newNick.trim();
                 saveData();
@@ -934,32 +912,13 @@
             }
         });
 
-        // Слайдер градиента цвета сайта
-        const balanceBoostSlider = document.getElementById('balanceBoostSlider');
-        balanceBoostSlider.addEventListener('input', function() {
-            const val = ((this.value - this.min) / (this.max - this.min)) * 100 || 0;
-            this.style.background = `linear-gradient(to right, var(--accent-main) ${val}%, var(--border-color) ${val}%)`;
-            updateChance();
-        });
-
         function selectByMultiplier(multiplier) {
-            if (!selectedLeft) { alert("Сначала выберите свой предмет!"); return; }
+            if (!selectedLeft) {
+                alert("Сначала выберите свой предмет!");
+                return;
+            }
             let targetPrice = selectedLeft.price * multiplier;
-            findClosestAndSelect(targetPrice);
-        }
-
-        function selectByChance(targetChancePercent) {
-            if (!selectedLeft) { alert("Сначала выберите свой предмет!"); return; }
-            let targetPrice = (parseFloat(selectedLeft.price) / targetChancePercent) * 100;
-            findClosestAndSelect(targetPrice);
-        }
-
-        function findClosestAndSelect(targetPrice) {
-            // Ищем с учетом того, что предметы где базовый шанс > 79% скрыты
-            let validPool = giftPool.filter(item => (selectedLeft.price / item.price) * 100 <= 79);
-            if (validPool.length === 0) validPool = giftPool;
-
-            let closestItem = validPool.reduce((prev, curr) => {
+            let closestItem = giftPool.reduce((prev, curr) => {
                 return (Math.abs(curr.price - targetPrice) < Math.abs(prev.price - targetPrice) ? curr : prev);
             });
             selectedRight = closestItem;
@@ -968,27 +927,34 @@
         }
 
         function renderGrid() {
-            const pFrom = parseInt(document.getElementById('priceFrom')?.value) || 0;
-            const pTo = parseInt(document.getElementById('priceTo')?.value) || Infinity;
-
-            const gridMy = document.getElementById('gridMyContent');
-            const unauthPromo = document.getElementById('unauthPromoBlock');
+            const combined = document.getElementById('combinedInventory');
+            const promoBlock = document.getElementById('unauthPromoBlock');
+            
+            const priceFromStr = document.getElementById('priceFrom')?.value;
+            const priceToStr = document.getElementById('priceTo')?.value;
+            const pFrom = priceFromStr ? parseInt(priceFromStr) : 0;
+            const pTo = priceToStr ? parseInt(priceToStr) : Infinity;
 
             if (!window.isUserLoggedIn) {
                 document.getElementById('headerLoginBtn').style.display = 'block';
                 document.getElementById('headerUserArea').style.display = 'none';
-                gridMy.style.display = 'none';
-                unauthPromo.style.display = 'flex';
+                combined.style.display = 'none';
+                promoBlock.style.display = 'flex';
                 if (!promoInterval) startPromoSlider();
+                return;
             } else {
                 document.getElementById('headerLoginBtn').style.display = 'none';
                 document.getElementById('headerUserArea').style.display = 'flex';
-                gridMy.style.display = 'grid';
-                unauthPromo.style.display = 'none';
+                combined.style.display = 'block';
+                promoBlock.style.display = 'none';
                 if (promoInterval) { clearInterval(promoInterval); promoInterval = null; }
             }
 
+            const gridMy = document.getElementById('gridMyContent');
+            const gridShop = document.getElementById('gridShopContent');
+
             gridMy.innerHTML = '';
+            
             myInventoryData.forEach((item, idx) => {
                 if (item.price < pFrom || item.price > pTo) return;
                 gridMy.innerHTML += `
@@ -997,37 +963,34 @@
                         <div class="item-img-container"><img src="${item.img}" onerror="this.src='16201.png'"></div>
                         <div class="item-info">
                             <div class="item-rarity-text">${item.title}</div>
-                            <div class="item-title">${item.sub}</div>
+                            <div class="item-sub">${item.sub}</div>
                         </div>
                     </div>
                 `;
             });
-
+            
             const minCells = 8;
             if (myInventoryData.length < minCells && pFrom === 0 && pTo === Infinity) {
-                for(let i=0; i<minCells - myInventoryData.length; i++) {
-                    gridMy.innerHTML += `<div class="item-card empty-slot" style="opacity: 0.2; pointer-events: none;"><div class="item-img-container"><img src="16201.png" style="filter: brightness(0);"></div></div>`;
+                const emptyCount = minCells - myInventoryData.length;
+                for(let i=0; i<emptyCount; i++) {
+                    gridMy.innerHTML += `
+                        <div class="item-card empty-slot" style="opacity: 0.5; pointer-events: none; cursor: default;">
+                            <div class="item-img-container"><img src="16201.png" style="filter: brightness(0); opacity: 0.5;"></div>
+                        </div>
+                    `;
                 }
             }
 
-            const gridShop = document.getElementById('gridShopContent');
             gridShop.innerHTML = '';
             giftPool.forEach((item, idx) => {
                 if (item.price < pFrom || item.price > pTo) return;
-                
-                // ПРОПАДАЮТ ПОДАРКИ: если выбран наш предмет и шанс > 79% (как на upgrader)
-                if (selectedLeft) {
-                    let baseChance = (selectedLeft.price / item.price) * 100;
-                    if (baseChance > 79) return;
-                }
-
                 gridShop.innerHTML += `
                     <div class="item-card ${item.rarity}" onclick="selectItem(${idx}, 'shop')">
                         <div class="item-price">${Math.round(item.price)} ⭐</div>
                         <div class="item-img-container"><img src="${item.img}" onerror="this.src='16201.png'"></div>
                         <div class="item-info">
                             <div class="item-rarity-text">${item.title}</div>
-                            <div class="item-title">${item.sub}</div>
+                            <div class="item-sub">${item.sub}</div>
                         </div>
                     </div>
                 `;
@@ -1038,46 +1001,35 @@
             if (isProcessing) return;
             playSound('click');
             
-            const pFrom = parseInt(document.getElementById('priceFrom')?.value) || 0;
-            const pTo = parseInt(document.getElementById('priceTo')?.value) || Infinity;
+            const priceFromStr = document.getElementById('priceFrom')?.value;
+            const priceToStr = document.getElementById('priceTo')?.value;
+            const pFrom = priceFromStr ? parseInt(priceFromStr) : 0;
+            const pTo = priceToStr ? parseInt(priceToStr) : Infinity;
 
             if (type === 'my') { 
                 let filteredMy = myInventoryData.filter(item => item.price >= pFrom && item.price <= pTo);
-                selectedLeft = filteredMy[index] || myInventoryData[index]; 
-                renderSlot('slotLeft', selectedLeft); 
-                renderGrid(); // Обновляем магазин, чтобы скрыть >79% предметы
-                // Сбрасываем правый слот если он теперь имеет шанс > 79%
-                if (selectedRight && (selectedLeft.price / selectedRight.price * 100 > 79)) {
-                    selectedRight = null;
-                    renderSlot('slotRight', {sub: 'Желаемый предмет', img: '16201.png', price: 0, rarity: ''});
-                }
+                const item = filteredMy[index] || myInventoryData[index];
+                selectedLeft = item; renderSlot('slotLeft', item); 
             } else { 
-                let filteredShop = giftPool.filter(item => {
-                    if (item.price < pFrom || item.price > pTo) return false;
-                    if (selectedLeft && (selectedLeft.price / item.price) * 100 > 79) return false;
-                    return true;
-                });
-                selectedRight = filteredShop[index] || giftPool[index]; 
-                renderSlot('slotRight', selectedRight); 
+                let filteredShop = giftPool.filter(item => item.price >= pFrom && item.price <= pTo);
+                const item = filteredShop[index] || giftPool[index];
+                selectedRight = item; renderSlot('slotRight', item); 
             }
             updateChance();
         }
 
         function renderSlot(slotId, item) {
             const slot = document.getElementById(slotId);
-            slot.classList.remove('rarity-epic', 'rarity-legendary', 'rarity-mythic', 'rarity-immortal', 'win-state');
+            slot.classList.remove('rarity-epic', 'rarity-legendary', 'rarity-mythic', 'rarity-immortal');
             slot.classList.add('active', item.rarity);
             
-            let sunburstHTML = slotId === 'slotRight' ? '<div class="sunburst-bg"></div>' : '';
-
             slot.innerHTML = `
                 <canvas class="slot-confetti"></canvas>
-                ${sunburstHTML}
-                <div style="font-size:12px; font-weight:900; color:#fff; position: relative; z-index: 2; text-transform: uppercase; letter-spacing:0.5px;">${item.sub}</div>
+                <div style="font-size:11px; font-weight:800; color:#fff; position: relative; z-index: 2;">${item.sub}</div>
                 <div style="margin: 8px 0; flex: 1; display:flex; align-items:center; justify-content:center; position: relative; z-index: 2;">
-                    <img src="${item.img}" class="slot-item-img" style="max-height:90px; max-width:90%; object-fit:contain; transition: var(--transition);">
+                    <img src="${item.img}" class="slot-item-img" style="max-height:75px; max-width:90%; object-fit:contain; transition: var(--transition);">
                 </div>
-                <div style="font-size:13px; font-weight:900; color:#fff; background: rgba(0,0,0,0.5); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border-color); position: relative; z-index: 2;">${Math.round(item.price)} ⭐</div>
+                <div style="font-size:11px; font-weight:900; color:#fff; background: var(--bg-panel); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border-color); position: relative; z-index: 2;">${Math.round(item.price)} ⭐</div>
             `;
         }
 
@@ -1090,19 +1042,15 @@
             
             const boostSlider = document.getElementById('balanceBoostSlider');
             const boostValDisplay = document.getElementById('boostValDisplay');
-            const boostMaxDisplay = document.getElementById('boostMaxDisplay');
+            const boostContainer = document.getElementById('boostContainer');
 
             if (!selectedLeft || !selectedRight) {
                 btn.disabled = true;
                 btn.innerText = 'ВЫБЕРИТЕ ПРЕДМЕТЫ';
                 bars.style.display = 'block';
                 chanceDisplay.style.display = 'none';
+                boostContainer.style.display = 'none';
                 document.getElementById('wheelCircle').style.strokeDashoffset = circleCircumference;
-                boostSlider.value = 0;
-                boostSlider.style.background = 'var(--border-color)';
-                boostValDisplay.innerText = '0';
-                boostMaxDisplay.innerText = '0';
-                boostSlider.disabled = true;
                 return;
             }
 
@@ -1111,22 +1059,21 @@
                 btn.innerText = 'ВОЙТИ ДЛЯ АПГРЕЙДА';
                 bars.style.display = 'none';
                 chanceDisplay.style.display = 'block';
-                boostSlider.disabled = true;
+                boostContainer.style.display = 'none';
                 return;
             }
             
-            boostSlider.disabled = false;
+            boostContainer.style.display = 'flex';
             
             let maxBoostPossible = balance; 
-            let neededFor95 = (parseFloat(selectedRight.price) * 0.95) - parseFloat(selectedLeft.price);
-            if (neededFor95 < 0) neededFor95 = 0;
+            let neededFor80 = (parseFloat(selectedRight.price) * 0.8) - parseFloat(selectedLeft.price);
+            if (neededFor80 < 0) neededFor80 = 0;
             
-            let maxAllowed = Math.min(maxBoostPossible, neededFor95);
+            let maxAllowed = Math.min(maxBoostPossible, neededFor80);
             
             if (boostSlider.dataset.leftId !== (selectedLeft.id || selectedLeft.title) || boostSlider.dataset.rightId !== (selectedRight.id || selectedRight.title)) {
                 boostSlider.max = Math.floor(maxAllowed);
                 boostSlider.value = 0;
-                boostSlider.style.background = 'var(--border-color)';
                 boostSlider.dataset.leftId = selectedLeft.id || selectedLeft.title;
                 boostSlider.dataset.rightId = selectedRight.id || selectedRight.title;
             } else {
@@ -1134,11 +1081,7 @@
             }
             
             let currentBoost = parseFloat(boostSlider.value) || 0;
-            boostValDisplay.innerText = Math.floor(currentBoost);
-            boostMaxDisplay.innerText = Math.floor(maxAllowed);
-
-            const valPercent = ((currentBoost - boostSlider.min) / (boostSlider.max - boostSlider.min)) * 100 || 0;
-            boostSlider.style.background = `linear-gradient(to right, var(--accent-main) ${valPercent}%, var(--border-color) ${valPercent}%)`;
+            boostValDisplay.innerText = '+ ' + Math.floor(currentBoost) + ' ⭐';
 
             btn.disabled = false;
             btn.innerText = 'АПГРЕЙД';
@@ -1153,161 +1096,321 @@
             document.getElementById('wheelCircle').style.strokeDashoffset = circleCircumference - (circleCircumference * (chance / 100));
 
             if (chance > 80) {
-                chanceLabel.innerText = "ШАНС > 80%"; chanceLabel.style.color = "rgba(43, 203, 186, 0.8)"; 
+                chanceLabel.innerText = "ШАНС > 80%";
+                chanceLabel.style.color = "rgba(43, 203, 186, 0.8)"; 
+                btn.disabled = true;
+                btn.innerText = 'ШАНС СЛИШКОМ ВЫСОКИЙ';
             } else if (chance >= 50) {
-                chanceLabel.innerText = "СРЕДНИЙ ШАНС"; chanceLabel.style.color = "rgba(253, 150, 68, 0.8)";
+                chanceLabel.innerText = "СРЕДНИЙ ШАНС";
+                chanceLabel.style.color = "rgba(253, 150, 68, 0.8)";
             } else if (chance >= 25) {
-                chanceLabel.innerText = "МАЛЕНЬКИЙ ШАНС"; chanceLabel.style.color = "rgba(165, 94, 234, 0.8)";
+                chanceLabel.innerText = "МАЛЕНЬКИЙ ШАНС";
+                chanceLabel.style.color = "rgba(165, 94, 234, 0.8)";
             } else {
-                chanceLabel.innerText = "ОЧЕНЬ МАЛЕНЬКИЙ ШАНС"; chanceLabel.style.color = "rgba(252, 92, 101, 0.8)";
+                chanceLabel.innerText = "ОЧЕНЬ МАЛЕНЬКИЙ ШАНС";
+                chanceLabel.style.color = "rgba(252, 92, 101, 0.8)";
             }
         }
+        
+        document.getElementById('balanceBoostSlider').addEventListener('input', updateChance);
+
+        let startRotation = 0;
+        let targetRotation = 0;
+        let rotationAnimationRequest; 
 
         function pushToTicker(item, isWin, chanceVal, userNick) {
             const ticker = document.getElementById('liveTicker');
             const color = isWin ? '#00e5ff' : '#fc5c65';
-            const html = document.createElement('div');
-            html.className = `ticker-item`;
-            html.style.borderLeftColor = color;
-            html.innerHTML = `
-                <span class="ticker-user">${userNick}</span>
-                <img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'">
-                <span class="ticker-name">${item.sub}</span>
-                <span class="ticker-chance" style="color: ${color}; background: ${color}22;">${chanceVal.toFixed(2)}%</span>
-            `;
-            ticker.insertBefore(html, ticker.firstChild);
+            const bgStr = isWin ? 'success-stripe' : '';
             
-            if (ticker.children.length > 15) {
-                ticker.removeChild(ticker.lastChild);
-            }
+            const html = `
+                <div class="ticker-item ${bgStr}" style="border-left-color: ${color};">
+                    <span class="ticker-user">${userNick}</span>
+                    <img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'">
+                    <span style="max-width: 80px;">${item.sub}</span>
+                    <span class="ticker-chance" style="color: ${color}; background: ${color}22;">${chanceVal.toFixed(2)}%</span>
+                </div>
+            `;
+            ticker.insertAdjacentHTML('afterbegin', html);
+            
+            const maxItems = window.innerWidth > 900 ? 15 : 6;
+            if (ticker.children.length > maxItems) ticker.removeChild(ticker.lastChild);
         }
 
-        // Выполнение апгрейда, проигрыш красным цветом кнопки
         function executeUpgrade() {
-            if (!selectedLeft || !selectedRight || isProcessing) return;
-            
-            if (!window.isUserLoggedIn) { openModal('authModal'); return; }
-
-            isProcessing = true;
-            let currentBoost = parseFloat(document.getElementById('balanceBoostSlider').value) || 0;
-            
-            if (balance < currentBoost) {
-                alert("Недостаточно баланса для буста!");
-                isProcessing = false;
+            if (!window.isUserLoggedIn) {
+                openModal('authModal');
                 return;
             }
 
-            balance -= currentBoost;
-            updateBalanceUI();
+            if (isProcessing || !selectedLeft || !selectedRight) return;
+            
+            let currentBoost = parseFloat(document.getElementById('balanceBoostSlider').value) || 0;
+            if (currentBoost > balance) {
+                alert('Недостаточно баланса для буста!');
+                return;
+            }
 
             let chance = ((parseFloat(selectedLeft.price) + currentBoost) / parseFloat(selectedRight.price)) * 100;
-            if (chance > 95) chance = 95;
+            if (chance > 80) {
+                alert('Максимальный шанс для апгрейда составляет 80%!');
+                return;
+            }
+            
+            balance -= currentBoost; 
 
+            isProcessing = true;
+            playSound('spin');
+
+            const btn = document.getElementById('btnUpgrade');
+            const arrowSpinner = document.getElementById('arrowSpinner');
+            const isFastUpgrade = document.getElementById('fastUpgradeCheck').checked;
+            const boostContainer = document.getElementById('boostContainer');
+            
+            btn.innerText = 'Улучшение...';
+            boostContainer.style.pointerEvents = 'none';
+            boostContainer.style.opacity = '0.5';
+            
+            let animationDuration = isFastUpgrade ? 800 : 3800; 
+            
+            if (chance < 1) chance = 1;
+            
             let roll = Math.random() * 100;
             let isWin = roll <= chance;
 
-            const btn = document.getElementById('btnUpgrade');
-            const wheelCircle = document.getElementById('wheelCircle');
-            const arrowSpin = document.getElementById('arrowSpinner');
+            let fullRotationDeg = chance * 3.6; 
+            let targetSectorDeg;
             
-            // Анимация кручения
-            let extraSpins = 360 * 3;
-            arrowRotation += extraSpins + (isWin ? (360 * (1 - chance/200)) : (360 * (1 - (chance + 10)/100)));
-            arrowSpin.style.transform = `rotate(${arrowRotation}deg)`;
-            playSound('spin');
+            if (isWin) {
+                let pad = fullRotationDeg > 2 ? 1 : 0;
+                targetSectorDeg = pad + Math.random() * (fullRotationDeg - pad * 2); 
+            } else {
+                let pad = (360 - fullRotationDeg) > 2 ? 1 : 0;
+                targetSectorDeg = fullRotationDeg + pad + Math.random() * (360 - fullRotationDeg - pad * 2); 
+            }
+            
+            let extraSpins = 360 * (Math.floor(Math.random() * 4) + 5);
+            let baseRotation = Math.floor(arrowRotation / 360) * 360; 
+            
+            targetRotation = baseRotation + extraSpins + targetSectorDeg;
+            if (targetRotation <= arrowRotation) {
+                targetRotation += 360;
+            }
+            startRotation = arrowRotation; 
+            stats.total++;
 
-            const isFast = document.getElementById('fastUpgradeCheck').checked;
-            const delayTime = isFast ? 500 : 3000;
+            const indexToRemove = myInventoryData.indexOf(selectedLeft);
+            if (indexToRemove !== -1) {
+                myInventoryData.splice(indexToRemove, 1);
+            }
 
-            setTimeout(() => {
-                let idx = myInventoryData.indexOf(selectedLeft);
-                if (idx > -1) myInventoryData.splice(idx, 1);
+            let animationStartTime = performance.now();
 
-                if (isWin) {
-                    playSound('win');
-                    document.getElementById('slotRight').classList.add('win-state');
-                    myInventoryData.push(selectedRight);
-                    stats.wins++;
-                    
-                    if (!stats.bestDrop || parseFloat(selectedRight.price) > parseFloat(stats.bestDrop.price)) {
-                        stats.bestDrop = selectedRight;
-                    }
-                    
-                    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-                } else {
-                    playSound('lose');
-                    stats.losses++;
-                    
-                    // Красная кнопка при проигрыше
-                    const oldBg = btn.style.background;
-                    btn.style.background = 'var(--rarity-mythic)';
-                    btn.innerText = 'ПРЕДМЕТ СГОРЕЛ';
-                    
-                    setTimeout(() => {
-                        btn.style.background = oldBg;
-                    }, 2000);
+            function animateRotation(timestamp) {
+                let elapsed = timestamp - animationStartTime;
+                
+                if (elapsed > animationDuration) {
+                    arrowSpinner.style.transform = `rotate(${targetRotation}deg)`;
+                    arrowRotation = targetRotation; 
+                    afterSpin(isWin, chance); 
+                    return;
                 }
 
-                stats.total++;
-                saveData();
-                pushToTicker(selectedRight, isWin, chance, stats.nickname || 'Player');
+                let t = elapsed / animationDuration;
+                let p = t - 1; 
+                let progress = 1 + p * p * ((1.70158 + 1) * p + 1.70158); 
+                
+                let totalDiff = targetRotation - startRotation;
+                let currentVisualRotation = startRotation + totalDiff * progress;
+                
+                arrowSpinner.style.transform = `rotate(${currentVisualRotation}deg)`;
+                
+                rotationAnimationRequest = requestAnimationFrame(animateRotation);
+            }
 
-                setTimeout(() => {
-                    selectedLeft = null;
-                    selectedRight = null;
-                    renderSlot('slotLeft', {sub: 'Ваш предмет', img: '16201.png', price: 0, rarity: ''});
-                    renderSlot('slotRight', {sub: 'Желаемый предмет', img: '16201.png', price: 0, rarity: ''});
-                    document.getElementById('slotRight').classList.remove('win-state');
-                    updateChance();
-                    renderGrid();
-                    isProcessing = false;
-                }, 1500);
-
-            }, delayTime);
+            requestAnimationFrame(animateRotation); 
         }
 
-        // Вкладки профиля
-        function switchProfileTab(tab) {
-            document.querySelectorAll('.p-tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('[id^="pContent"]').forEach(c => c.style.display = 'none');
+        function afterSpin(isWin, chanceVal) {
+            const btn = document.getElementById('btnUpgrade');
+            const arena = document.getElementById('arenaBox');
+            const chanceText = document.getElementById('chanceText');
+            const chanceLabel = document.getElementById('chanceLabel');
+            const boostContainer = document.getElementById('boostContainer');
             
-            document.getElementById('pTab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
-            document.getElementById('pContent' + tab.charAt(0).toUpperCase() + tab.slice(1)).style.display = 'block';
+            btn.innerText = isWin ? 'ВЫИГРЫШ!' : 'СГОРЕЛО!';
+            boostContainer.style.pointerEvents = 'auto';
+            boostContainer.style.opacity = '1';
+            
+            let currentName = stats.nickname || "Игрок";
+            pushToTicker(selectedRight, isWin, chanceVal, currentName);
 
-            if (tab === 'sell') renderProfileSellList();
-            if (tab === 'buy') renderProfileBuyList();
-            if (tab === 'stats') updateProfileStatsUI();
+            if (isWin) {
+                playSound('win');
+                stats.wins++;
+                
+                let rightSlot = document.getElementById('slotRight');
+                let rightItemImg = rightSlot.querySelector('.slot-item-img');
+                if(rightItemImg) rightItemImg.classList.add('win-item-anim');
+                
+                let cardCanvas = rightSlot.querySelector('.slot-confetti');
+                if(cardCanvas && window.confetti) {
+                    let cardConfetti = confetti.create(cardCanvas, { resize: true });
+                    cardConfetti({ particleCount: 60, spread: 80, origin: { y: 0.6 }, colors: ['#a55eea', '#00e5ff', '#ffffff'] });
+                }
+                
+                myInventoryData.push(selectedRight);
+                
+                if (!stats.bestDrop || parseFloat(selectedRight.price) > parseFloat(stats.bestDrop.price)) {
+                    stats.bestDrop = selectedRight;
+                    renderBestDrop(); 
+                }
+            } else {
+                playSound('lose');
+                stats.losses++;
+                
+                chanceText.innerText = '0.00%';
+                chanceLabel.innerText = 'шанс';
+                chanceLabel.style.color = "var(--text-muted)";
+                
+                document.getElementById('wheelCircle').style.strokeDashoffset = circleCircumference;
+            }
+
+            saveData();
+            updateBalanceUI();
+
+            setTimeout(() => {
+                btn.innerText = 'ВЫБЕРИТЕ ПРЕДМЕТЫ';
+                btn.disabled = true;
+                
+                selectedLeft = null; selectedRight = null;
+                
+                arrowRotation = 0;
+                document.getElementById('arrowSpinner').style.transform = `rotate(0deg)`;
+                
+                document.getElementById('slotLeft').innerHTML = `
+                    <canvas class="slot-confetti"></canvas>
+                    <img src="16201.png" class="slot-bg-pepe">
+                    <div class="slot-chevron-container">
+                        <svg class="chevron-anim down" viewBox="0 0 50 75" width="40" height="55">
+                            <path class="arrow-1" fill="var(--accent-main)" d="M5 10 L25 25 L45 10 L45 15 L25 30 L5 15 Z" />
+                            <path class="arrow-2" fill="var(--accent-main)" d="M5 25 L25 40 L45 25 L45 30 L25 45 L5 30 Z" />
+                            <path class="arrow-3" fill="var(--accent-main)" d="M5 40 L25 55 L45 40 L45 45 L25 60 L5 45 Z" />
+                        </svg>
+                    </div>
+                    <span class="slot-hint">Ваш предмет</span>
+                `;
+                document.getElementById('slotLeft').classList.remove('active', 'rarity-epic', 'rarity-legendary', 'rarity-mythic', 'rarity-immortal');
+                
+                document.getElementById('slotRight').innerHTML = `
+                    <canvas class="slot-confetti"></canvas>
+                    <img src="16201.png" class="slot-bg-pepe">
+                    <div class="slot-chevron-container">
+                        <svg class="chevron-anim up" viewBox="0 0 50 75" width="40" height="55">
+                            <path class="arrow-1" fill="var(--accent-main)" d="M5 25 L25 10 L45 25 L45 20 L25 5 L5 20 Z" />
+                            <path class="arrow-2" fill="var(--accent-main)" d="M5 40 L25 25 L45 40 L45 35 L25 20 L5 35 Z" />
+                            <path class="arrow-3" fill="var(--accent-main)" d="M5 55 L25 40 L45 55 L45 50 L25 35 L5 50 Z" />
+                        </svg>
+                    </div>
+                    <span class="slot-hint">Желаемый предмет</span>
+                `;
+                document.getElementById('slotRight').classList.remove('active', 'rarity-epic', 'rarity-legendary', 'rarity-mythic', 'rarity-immortal');
+                
+                updateChance(); 
+                renderGrid();
+                isProcessing = false;
+            }, 2500); 
         }
 
-        function updateProfileStatsUI() {
-            document.getElementById('profileTotalUpgradesBlock').innerText = stats.total;
-            document.getElementById('statTotal').innerText = stats.total;
-            document.getElementById('statWins').innerText = stats.wins;
-            document.getElementById('statLosses').innerText = stats.losses;
-            document.getElementById('statWithdrawn').innerText = stats.withdrawn + ' ⭐';
-
-            const bdContainer = document.getElementById('bestDropContainer');
-            if (stats.bestDrop) {
-                bdContainer.innerHTML = `
-                    <div class="bd-header">Лучший дроп <span style="font-size:16px;">🔥</span></div>
-                    <div class="bd-content-large">
-                        <div class="bd-img-container-large"><img src="${stats.bestDrop.img}"></div>
-                        <div style="display:flex; flex-direction:column; align-items:center;">
-                            <span class="bd-rarity">${stats.bestDrop.title}</span>
-                            <span class="bd-name-large">${stats.bestDrop.sub}</span>
-                            <span class="bd-price-large">${Math.round(stats.bestDrop.price)} ⭐</span>
-                        </div>
-                    </div>
+        function renderBestDrop() {
+            const container = document.getElementById('bestDropContainer');
+            if (!stats.bestDrop) {
+                container.innerHTML = `
+                    <div class="bd-header">👑 Главная экипировка</div>
+                    <div class="bd-empty">У вас пока нет лучшего дропа</div>
                 `;
+                return;
+            }
+            
+            let item = stats.bestDrop;
+            container.innerHTML = `
+                <div class="bd-header">👑 Главная экипировка</div>
+                <div class="bd-content-large">
+                    <div class="bd-img-container-large">
+                        <img src="${item.img}" onerror="this.src='16201.png'">
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <div class="bd-name-large">${item.sub}</div>
+                        <div class="bd-rarity">${item.title}</div>
+                    </div>
+                    <div class="bd-price-large">${Math.round(item.price)} ⭐</div>
+                </div>
+            `;
+        }
+
+        function openModal(id) {
+            playSound('click');
+            const overlay = document.getElementById(id);
+            if (overlay) overlay.classList.add('active');
+            if(id === 'profileModal') {
+                document.getElementById('profileTotalUpgradesBlock').innerText = stats.total;
+                updateProfileName();
+                
+                switchProfileTab('stats');
+                renderBestDrop();
             }
         }
 
-        // Продажа: фикс багов с 300к и комиссия 5%
-        function sellItem(idx) {
+        function closeModal(id) { 
+            const overlay = document.getElementById(id);
+            if (overlay) overlay.classList.remove('active');
+        }
+
+        function switchProfileTab(pTab) {
+            playSound('click');
+            const tabs = ['stats', 'sell', 'buy', 'payout'];
+            tabs.forEach(t => {
+                document.getElementById(`pTab${t.charAt(0).toUpperCase() + t.slice(1)}`).classList.toggle('active', t === pTab);
+                document.getElementById(`pContent${t.charAt(0).toUpperCase() + t.slice(1)}`).style.display = t === pTab ? 'block' : 'none';
+            });
+
+            if(pTab === 'stats') {
+                document.getElementById('statTotal').innerText = stats.total;
+                document.getElementById('statWins').innerText = stats.wins;
+                document.getElementById('statLosses').innerText = stats.losses;
+                document.getElementById('statWithdrawn').innerText = stats.withdrawn + ' ⭐';
+            } else if(pTab === 'sell') {
+                renderProfileSellList();
+            } else if(pTab === 'buy') {
+                renderProfileBuyList();
+            }
+        }
+
+        function renderProfileSellList() {
+            const container = document.getElementById('profileSellList');
+            container.innerHTML = '';
+            if(myInventoryData.length === 0) {
+                container.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:15px;">У вас нет предметов для продажи</div>';
+                return;
+            }
+            myInventoryData.forEach((item, idx) => {
+                let sellPrice = Math.round(item.price * 0.15);
+                container.innerHTML += `
+                    <div class="profile-list-item" style="border-left-color: var(--accent-main);">
+                        <div class="p-item-info">
+                            <span class="p-item-name">${item.sub}</span>
+                            <span class="p-item-price">Цена: ${sellPrice} ⭐ (15%)</span>
+                        </div>
+                        <button class="btn-profile-action btn-sell" onclick="sellFromProfile(${idx})">Продать</button>
+                    </div>
+                `;
+            });
+        }
+
+        function sellFromProfile(idx) {
+            playSound('click');
             let item = myInventoryData[idx];
-            let sellPrice = Math.floor(item.price * 0.95); // Комиссия 5%
-            
-            balance += sellPrice;
+            balance += item.price * 0.15;
             myInventoryData.splice(idx, 1);
             saveData();
             updateBalanceUI();
@@ -1315,111 +1418,232 @@
             renderGrid();
         }
 
-        function renderProfileSellList() {
-            let list = document.getElementById('profileSellList');
-            list.innerHTML = '';
-            if (myInventoryData.length === 0) {
-                list.innerHTML = '<div style="text-align:center; padding: 20px; color: var(--text-muted);">Инвентарь пуст</div>';
+        function renderProfileBuyList() {
+            const container = document.getElementById('profileBuyList');
+            container.innerHTML = '';
+            giftPool.forEach((item) => {
+                container.innerHTML += `
+                    <div class="profile-list-item" style="border-left-color: var(--rarity-immortal);">
+                        <div class="p-item-info">
+                            <span class="p-item-name">${item.sub}</span>
+                            <span class="p-item-price">Стоимость: ${Math.round(item.price)} ⭐</span>
+                        </div>
+                        <button class="btn-profile-action btn-buy" onclick="buyFromProfile('${item.id}')">Купить</button>
+                    </div>
+                `;
+            });
+        }
+
+        function buyFromProfile(itemId) {
+            playSound('click');
+            const targetItem = giftPool.find(p => p.id === itemId);
+            let cost = parseFloat(targetItem.price);
+            
+            if(cost > balance) {
+                alert('Недостаточно звезд на балансе для покупки!');
                 return;
             }
-            myInventoryData.forEach((item, idx) => {
-                let sellPrice = Math.floor(item.price * 0.95); // Показываем цену с учетом комиссии
-                list.innerHTML += `
-                    <div class="profile-list-item">
-                        <div style="display:flex; align-items:center; gap:12px;">
-                            <img src="${item.img}" style="width:40px; height:40px; object-fit:contain;">
-                            <div>
-                                <div class="p-item-name">${item.sub}</div>
-                                <div class="p-item-price">${Math.round(item.price)} ⭐ (-5%)</div>
-                            </div>
-                        </div>
-                        <button class="btn-profile-action btn-sell" onclick="sellItem(${idx})">Продать за ${sellPrice}</button>
-                    </div>
-                `;
-            });
+
+            balance -= cost;
+            myInventoryData.push(targetItem);
+            saveData();
+            updateBalanceUI();
+            renderProfileBuyList();
+            renderGrid();
+            alert(`Вы успешно приобрели ${targetItem.sub}! Он добавлен в инвентарь.`);
         }
 
-        function buyItem(idx) {
-            let item = giftPool[idx];
-            if (balance >= item.price) {
-                balance -= item.price;
-                myInventoryData.push({...item});
-                saveData();
-                updateBalanceUI();
-                renderGrid();
-                alert(`Вы купили ${item.sub} за ${item.price} ⭐`);
-            } else {
-                alert("Недостаточно баланса!");
-            }
+        function setDepositAmount(amount) {
+            document.getElementById('depositAmount').value = amount;
+            document.getElementById('payAmountText').innerText = amount;
         }
 
-        function renderProfileBuyList() {
-            let list = document.getElementById('profileBuyList');
-            list.innerHTML = '';
-            giftPool.forEach((item, idx) => {
-                list.innerHTML += `
-                    <div class="profile-list-item">
-                        <div style="display:flex; align-items:center; gap:12px;">
-                            <img src="${item.img}" style="width:40px; height:40px; object-fit:contain;">
-                            <div>
-                                <div class="p-item-name">${item.sub}</div>
-                                <div class="p-item-price">${Math.round(item.price)} ⭐</div>
-                            </div>
-                        </div>
-                        <button class="btn-profile-action btn-buy" onclick="buyItem(${idx})">Купить</button>
-                    </div>
-                `;
-            });
-        }
-
-        function setDepositAmount(amt) {
-            document.getElementById('depositAmount').value = amt;
-            document.getElementById('payAmountText').innerText = amt;
-        }
+        document.getElementById('depositAmount').addEventListener('input', function(e) {
+            let val = e.target.value || 0;
+            document.getElementById('payAmountText').innerText = val;
+        });
 
         function processDeposit() {
-            let amt = parseInt(document.getElementById('depositAmount').value);
-            if (amt >= 15) {
-                balance += amt;
-                saveData();
-                updateBalanceUI();
-                closeModal('depositModal');
-                alert("Успешно пополнено на " + amt + " ⭐");
+            const amount = parseInt(document.getElementById('depositAmount').value);
+            if (!amount || amount < 5000) { 
+                alert('Минимальная сумма — 5000 ⭐'); 
+                return; 
+            }
+            
+            let userId = 'user_123';
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
+                userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+            }
+            
+            const paymentUrl = `https://flashupgrader-1.onrender.com/pay?amount=${amount}&userId=${userId}`;
+            
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) {
+                window.Telegram.WebApp.openLink(paymentUrl);
             } else {
-                alert("Минимум 15 ⭐");
+                window.location.href = paymentUrl;
             }
         }
 
         function processWithdraw() {
-            let amt = parseInt(document.getElementById('withdrawAmount').value);
-            let tg = document.getElementById('withdrawDetails').value;
-            if (amt > 0 && balance >= amt && tg.includes('@')) {
-                balance -= amt;
-                stats.withdrawn += amt;
-                saveData();
-                updateBalanceUI();
-                updateProfileStatsUI();
-                alert(`Заявка на вывод ${amt} ⭐ отправлена на юзернейм ${tg}!`);
-            } else {
-                alert("Проверьте баланс и правильность юзернейма.");
-            }
+            const amount = parseInt(document.getElementById('withdrawAmount').value);
+            const details = document.getElementById('withdrawDetails').value.trim();
+            if(!details || !amount) { alert('Пожалуйста, заполните все поля!'); return; }
+            if(amount > balance) { alert('На балансе недостаточно звезд!'); return; }
+            
+            balance -= amount;
+            stats.withdrawn += amount;
+            saveData();
+            updateBalanceUI();
+            
+            closeModal('profileModal');
+            alert(`Заявка на вывод ${amount} ⭐ на пользователя [${details}] успешно принята! Ожидайте зачисления.`);
         }
 
-        // Инициализация при старте
+        function updateOnline() {
+            const countNode = document.getElementById('onlineCount');
+            let current = parseInt(countNode.innerText.replace(/\s/g, ''));
+            current += Math.random() > 0.5 ? Math.floor(Math.random() * 5) : -Math.floor(Math.random() * 5);
+            if(current < 400) current = 425;
+            if(current > 600) current = 575;
+            countNode.innerText = current.toLocaleString('ru-RU');
+        }
+
+        function updateTicker() {
+            const ticker = document.getElementById('liveTicker');
+            const item = giftPool[Math.floor(Math.random() * giftPool.length)];
+            
+            if (parseInt(item.price) > 100000 && Math.random() > 0.05) return;
+
+            const chance = (Math.random() * 79 + 1).toFixed(2);
+            const color = rarityColors[item.rarity] || '#00e5ff';
+            
+            const html = `
+                <div class="ticker-item success-stripe" style="border-left-color: ${color};">
+                    <img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'">
+                    <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 90px;">${item.sub}</span>
+                    <span class="ticker-chance" style="color: ${color}; background: ${color}22;">${chance}%</span>
+                </div>
+            `;
+            ticker.insertAdjacentHTML('afterbegin', html);
+            
+            const maxItems = window.innerWidth > 900 ? 15 : 6;
+            if (ticker.children.length > maxItems) ticker.removeChild(ticker.lastChild);
+        }
+
+        setInterval(updateOnline, 3000);
+        setInterval(updateTicker, 2200);
+        
         updateBalanceUI();
-        updateProfileName();
         renderGrid();
-        updateChance();
-        updateProfileStatsUI();
+    </script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        setInterval(() => {
-            if (Math.random() > 0.6) {
-                let rItem = giftPool[Math.floor(Math.random() * giftPool.length)];
-                let rWin = Math.random() > 0.5;
-                pushToTicker(rItem, rWin, Math.random() * 50 + 10, botNames[Math.floor(Math.random() * botNames.length)]);
+        const firebaseConfig = {
+            apiKey: "AIzaSyB2sb8NLwzRGqfq3-yA62JcHo1HuxFqHmM",
+            authDomain: "flashupgrader.firebaseapp.com",
+            projectId: "flashupgrader",
+            storageBucket: "flashupgrader.firebasestorage.app",
+            messagingSenderId: "336384416642",
+            appId: "1:336384416642:web:f7c66d167d64b2178a4d9b"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        
+        setPersistence(auth, browserLocalPersistence);
+
+        window.auth = auth;
+        const db = getFirestore(app);
+
+        const loginBtn = document.getElementById('login-btn');
+        const registerBtn = document.getElementById('register-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const emailInput = document.getElementById('email-input');
+        const passInput = document.getElementById('password-input');
+
+        window.syncToDb = async (bal, inv, st) => {
+            if (auth.currentUser) {
+                try {
+                    await setDoc(doc(db, "users", auth.currentUser.uid), {
+                        balance: bal,
+                        inventory: inv,
+                        stats: st
+                    });
+                } catch(e) { console.error("Ошибка сохранения в БД: ", e); }
             }
-        }, 3000);
+        };
 
+        loginBtn.addEventListener('click', () => {
+            const email = emailInput.value.trim();
+            const pass = passInput.value.trim();
+            if(!email || !pass) return alert("Введите почту и пароль");
+            
+            loginBtn.innerText = "Вход...";
+            signInWithEmailAndPassword(auth, email, pass).catch(error => {
+                alert("Ошибка входа: Неверный логин или пароль");
+                loginBtn.innerText = "Войти";
+            });
+        });
+
+        registerBtn.addEventListener('click', () => {
+            const email = emailInput.value.trim();
+            const pass = passInput.value.trim();
+            if(!email || !pass) return alert("Введите почту и пароль");
+            if(pass.length < 6) return alert("Пароль должен быть минимум 6 символов");
+            
+            registerBtn.innerText = "Создание...";
+            createUserWithEmailAndPassword(auth, email, pass).catch(error => {
+                alert("Ошибка регистрации: " + error.message);
+                registerBtn.innerText = "Создать";
+            });
+        });
+
+        if(logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                signOut(auth).then(() => {
+                    localStorage.setItem('ub_logged_in', 'false');
+                    localStorage.clear(); 
+                    location.reload(); 
+                });
+            });
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                closeModal('authModal');
+                
+                window.isUserLoggedIn = true;
+                localStorage.setItem('ub_logged_in', 'true');
+                
+                document.getElementById('headerLoginBtn').style.display = 'none';
+                document.getElementById('headerUserArea').style.display = 'flex';
+                
+                const userRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(userRef);
+                
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    window.loadFromDb(data.balance, data.inventory, data.stats);
+                } else {
+                    window.syncToDb(window.getCurrentBalance(), window.getCurrentInv(), window.getCurrentStats());
+                }
+                
+                renderGrid();
+                updateChance(); 
+            } else {
+                window.isUserLoggedIn = false;
+                localStorage.setItem('ub_logged_in', 'false');
+                
+                document.getElementById('headerLoginBtn').style.display = 'block';
+                document.getElementById('headerUserArea').style.display = 'none';
+                
+                renderGrid();
+                updateChance(); 
+            }
+        });
     </script>
 </body>
 </html>
