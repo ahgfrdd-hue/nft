@@ -11,7 +11,7 @@
         :root {
             --bg-main: #0a0a0f;
             --bg-panel: #13131c;
-            --bg-card: #20202b; /* Сделали карточки чуть светлее */
+            --bg-card: #20202b;
             --bg-card-hover: #2a2a38;
             --accent-main: #8a2be2; 
             --accent-glow: rgba(138, 43, 226, 0.4);
@@ -110,7 +110,6 @@
             display: flex; flex-direction: column; gap: 20px; flex: 1; max-width: 950px; margin: 0 auto; width: 100%;
         }
 
-        /* Лайв лента одной высоты */
         .live-ticker {
             background: var(--bg-panel); border: 1px solid var(--border-color);
             border-radius: var(--radius-md); padding: 8px; display: flex; gap: 8px;
@@ -155,13 +154,11 @@
             width: 100%; z-index: 2; gap: 24px; flex-wrap: nowrap;
         }
         
-        /* Одинаковые обертки и карточки для полной симметрии */
         .left-slot-wrapper, .right-slot-wrapper {
             flex: 1; max-width: 200px; width: 100%; min-width: 110px;
             display: flex; flex-direction: column; justify-content: flex-end;
         }
 
-        /* Молния перенесена прямо над карточкой */
         .top-left-controls { 
             display: flex; gap: 8px; align-items: center; margin-bottom: 8px; align-self: flex-start;
         }
@@ -186,7 +183,6 @@
         .item-slot.active.rarity-mythic { border-color: var(--rarity-mythic); background: rgba(252, 92, 101, 0.05); box-shadow: 0 0 15px rgba(252, 92, 101, 0.25); }
         .item-slot.active.rarity-immortal { border-color: var(--rarity-immortal); background: rgba(43, 203, 186, 0.05); box-shadow: 0 0 15px rgba(43, 203, 186, 0.25); }
 
-        /* Пепе сделан светлее */
         .slot-bg-pepe { position: absolute; width: 65%; height: 65%; object-fit: contain; filter: brightness(0.4) opacity(0.5); z-index: 1; pointer-events: none; animation: floatEffect 5s ease-in-out infinite; }
         
         .slot-chevron-container { position: relative; z-index: 2; margin: auto 0; display: flex; align-items: center; justify-content: center; height: 50px; }
@@ -221,7 +217,6 @@
         .wheel-svg { width: 100%; height: 100%; }
         .wheel-progress { stroke-dasharray: 408.4; stroke-dashoffset: 408.4; transition: stroke-dashoffset 0.8s cubic-bezier(0.25, 0.8, 0.25, 1); filter: drop-shadow(0 0 10px var(--accent-main)); stroke-linecap: round; }
 
-        /* Проценты ВНУТРИ шкалы, маленькие и прозрачные */
         .wheel-marker { 
             position: absolute; 
             width: 26px; height: 26px; 
@@ -240,12 +235,12 @@
         
         .arrow-spinner-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15; will-change: transform; }
         
-        /* Узкая стрелка, которая не выпирает */
+        /* Индикатор перенесен вниз по запросу */
         .wheel-arrow { 
             position: absolute; 
-            top: 25px; 
+            bottom: 25px; 
             left: 50%; 
-            transform: translateX(-50%) rotate(180deg);
+            transform: translateX(-50%);
             width: 12px; 
             height: 25px; 
             fill: var(--accent-main); 
@@ -262,7 +257,6 @@
         @keyframes slowBarsAnim { 0%, 100% { opacity: 1; transform: translateY(0); } 50% { opacity: 0.6; transform: translateY(-2px); } }
         .bars-anim { animation: slowBarsAnim 2s ease-in-out infinite; transition: var(--transition); }
         
-        /* Класс для серых замерших стрелок при выборе предметов */
         .disabled-bars path { fill: #4b4b5e !important; animation: none !important; transition: var(--transition); }
         .disabled-bars { opacity: 0.4; transform: scale(0.9); }
 
@@ -293,7 +287,6 @@
         @keyframes winItemPop { 0% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); } 50% { transform: scale(1.15); filter: drop-shadow(0 0 20px var(--accent-main)); } 100% { transform: scale(1); filter: drop-shadow(0 0 15px var(--accent-main)); } }
         .win-item-anim { animation: winItemPop 1.2s cubic-bezier(0.3, 1, 0.3, 1) forwards !important; z-index: 20; }
 
-        /* === АДАПТИВ ПОД МОБИЛКИ === */
         @media (max-width: 650px) {
             .arena-row { flex-direction: row; flex-wrap: nowrap; gap: 8px; }
             .left-slot-wrapper, .right-slot-wrapper { max-width: 50%; flex: 1; }
@@ -306,7 +299,7 @@
             .slot-item-img { max-height: 50px; }
             .multiplier-bar { gap: 4px; margin-top: 8px; }
             .multiplier-btn { font-size: 10px; padding: 4px 0; }
-            .wheel-arrow { top: 15px; width: 10px; height: 18px; }
+            .wheel-arrow { bottom: 15px; width: 10px; height: 18px; }
             .marker-top { top: 12px; width: 18px; height: 18px; font-size: 6px;} 
             .marker-bottom { bottom: 12px; width: 18px; height: 18px; font-size: 6px;}
             .marker-left { left: 12px; width: 18px; height: 18px; font-size: 6px;} 
@@ -314,21 +307,16 @@
             #circleStatusText { font-size: 6px !important; bottom: 12px !important; }
         }
 
-        /* === БЛОК ДЛЯ НЕАВТОРИЗОВАННЫХ === */
         #unauthPromoBlock { display: none; flex-direction: column; align-items: center; text-align: center; padding: 30px 10px; }
         .unauth-title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 4px; }
         .unauth-subtitle { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 16px; }
         
         #promoDisplay { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 140px; width: 100%; transition: opacity 0.4s ease; }
         .promo-item { display: flex; flex-direction: column; align-items: center; justify-content: center; transition: var(--transition); width: 60px; }
-        
-        /* Подарки по бокам черные */
         .promo-item.side.near { opacity: 0.5; transform: scale(0.8); }
         .promo-item.side.near img { filter: brightness(0); }
         .promo-item.side.far { opacity: 0.2; transform: scale(0.6); }
         .promo-item.side.far img { filter: brightness(0); }
-        
-        /* Подарок по центру в рамке */
         .promo-item.center { transform: scale(1.1); z-index: 5; width: 90px; border: 2px solid var(--accent-main); border-radius: var(--radius-md); background: var(--bg-card); padding: 8px; box-shadow: 0 0 15px var(--accent-glow); }
         .promo-item img { max-width: 100%; max-height: 60px; object-fit: contain; }
         .promo-item.center img { animation: floatEffect 4s ease-in-out infinite; max-height: 75px; }
@@ -336,7 +324,6 @@
         .promo-sub { font-size: 9px; color: var(--text-muted); font-weight: 700; white-space: nowrap; }
         .promo-price-tag { font-size: 10px; font-weight: 800; color: #fff; background: rgba(0,0,0,0.6); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border-color); margin-bottom: 6px;}
 
-        /* === ИНВЕНТАРЬ И МАГАЗИН === */
         .inventory-section { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; }
         #combinedInventory { padding: 16px; max-height: 600px; overflow-y: auto; scroll-behavior: smooth; display: none; }
         #combinedInventory::-webkit-scrollbar { width: 4px; }
@@ -344,7 +331,6 @@
         
         .inventory-split { display: flex; gap: 16px; align-items: flex-start; }
         .inv-col { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-        
         @media (max-width: 768px) { .inventory-split { flex-direction: column; } }
 
         .inv-header-title { font-size: 14px; font-weight: 800; color: #fff; margin: 8px 0 12px; text-transform: uppercase; border-left: 3px solid var(--accent-main); padding-left: 8px; }
@@ -371,7 +357,6 @@
         .rarity-immortal .item-rarity-text { color: var(--rarity-immortal); background: rgba(43, 203, 186, 0.1); }
 
         .item-title { font-size: 9px; color: var(--text-muted); font-weight: 700;}
-
         .rarity-epic { border-bottom: 2px solid var(--rarity-epic); }
         .rarity-legendary { border-bottom: 2px solid var(--rarity-legendary); }
         .rarity-mythic { border-bottom: 2px solid var(--rarity-mythic); }
@@ -381,7 +366,6 @@
         footer { margin-top: auto; padding: 20px 16px; background: var(--bg-panel); border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
         .lang-switch-footer { display: flex; align-items: center; gap: 6px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 6px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: var(--transition); }
         .lang-switch-footer span.active { color: var(--text-main); }
-        
         .footer-contacts { display: flex; align-items: center; gap: 8px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 20px; color: var(--text-main); font-size: 12px; font-weight: 700; text-decoration: none; transition: var(--transition); }
         .footer-contacts:hover { background: var(--bg-card-hover); border-color: #2AABEE; }
         .tg-icon { width: 18px; height: 18px; fill: #2AABEE; }
@@ -406,7 +390,6 @@
         .amount-btn { flex: 1; min-width: 70px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 8px; border-radius: 6px; color: var(--text-main); font-size: 12px; font-weight: 700; cursor: pointer; transition: var(--transition); text-align: center; }
         .amount-btn:hover { border-color: var(--accent-main); background: rgba(138, 43, 226, 0.1); }
 
-        /* === ПЕРЕДЕЛАННЫЙ ПРОФИЛЬ === */
         .profile-page-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-main); z-index: 300; display: none; flex-direction: column; opacity: 0; transform: translateX(100%); transition: transform 0.4s ease, opacity 0.4s ease; }
         .profile-page-overlay.active { display: flex; opacity: 1; transform: translateX(0); }
         .profile-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: var(--bg-panel); border-bottom: 1px solid var(--border-color); }
@@ -415,13 +398,11 @@
         .profile-title-text { font-size: 18px; font-weight: 800; color: #fff; text-transform: uppercase; }
         
         .profile-body { flex: 1; overflow-y: auto; padding: 20px 14px; width: 100%; margin: 0 auto; max-width: 1000px; }
-        
         .layout-pubg { display: grid; grid-template-columns: 1fr; gap: 20px; }
         @media (min-width: 768px) { .layout-pubg { grid-template-columns: 280px 1fr; align-items: flex-start; } }
         
         .profile-left-panel { display: flex; flex-direction: column; gap: 16px; }
         .profile-right-panel { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
-
         .profile-side-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; gap: 12px; }
 
         .best-drop-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px; text-align: center; }
@@ -673,15 +654,15 @@
                     </div>
                 </div>
             </div>
-            <label style="font-size: 11px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 6px; display: block;">Сумма (Минимум 5000 ⭐)</label>
-            <input type="number" class="modal-input" id="depositAmount" placeholder="Введите сумму..." min="5000" value="5000" style="margin-bottom: 8px;">
+            <label style="font-size: 11px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 6px; display: block;">Сумма (Минимум 15 ⭐)</label>
+            <input type="number" class="modal-input" id="depositAmount" placeholder="Введите сумму..." min="15" value="15" style="margin-bottom: 8px;">
             <div class="amount-presets">
-                <button class="amount-btn" onclick="setDepositAmount(5000)">5000 ⭐</button>
-                <button class="amount-btn" onclick="setDepositAmount(10000)">10000 ⭐</button>
-                <button class="amount-btn" onclick="setDepositAmount(15000)">15000 ⭐</button>
-                <button class="amount-btn" onclick="setDepositAmount(30000)">30000 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(15)">15 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(50)">50 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(100)">100 ⭐</button>
+                <button class="amount-btn" onclick="setDepositAmount(500)">500 ⭐</button>
             </div>
-            <button class="modal-btn" id="depositBtn" onclick="processDeposit()">Оплатить <span id="payAmountText">5000</span> ⭐</button>
+            <button class="modal-btn" id="depositBtn" onclick="processDeposit()">Оплатить <span id="payAmountText">15</span> ⭐</button>
         </div>
     </div>
 
@@ -789,7 +770,6 @@
 
         giftPool.sort((a, b) => parseInt(a.price) - parseInt(b.price));
 
-        // Выдаем всем по миллиону
         let balance = 1000000;
         let myInventoryData = []; 
         let stats = { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0, nickname: '' };
@@ -1013,13 +993,12 @@
             }
 
             gridShop.innerHTML = '';
-            // Фильтр магазина: если есть шанс больше 79.99%, скрываем подарок
             giftPool.forEach((item, idx) => {
                 if (item.price < pFrom || item.price > pTo) return;
                 
                 if (selectedLeft) {
                     let baseChance = (parseFloat(selectedLeft.price) / parseFloat(item.price)) * 100;
-                    if (baseChance > 79.99) return; // Пропускаем слишком дешевые предметы
+                    if (baseChance > 79.99) return; 
                 }
                 
                 gridShop.innerHTML += `
@@ -1068,7 +1047,7 @@
                 }
             }
             updateChance();
-            renderGrid(); // Обновляем сетку, чтобы сработал фильтр магазина
+            renderGrid(); 
         }
 
         function renderSlot(slotId, item) {
@@ -1143,7 +1122,6 @@
             btn.disabled = false;
             btn.innerText = 'АПГРЕЙД';
             
-            // Вместо того чтобы прятать стрелочки, мы делаем их серыми (disabled-bars)
             bars.classList.add('disabled-bars');
             chanceDisplay.style.display = 'flex';
 
@@ -1503,8 +1481,8 @@
 
         function processDeposit() {
             const amount = parseInt(document.getElementById('depositAmount').value);
-            if (!amount || amount < 5000) { 
-                alert('Минимальная сумма — 5000 ⭐'); 
+            if (!amount || amount < 15) { 
+                alert('Минимальная сумма — 15 ⭐'); 
                 return; 
             }
             
