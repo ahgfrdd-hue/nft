@@ -11,8 +11,8 @@
         :root {
             --bg-main: #0a0a0f;
             --bg-panel: #13131c;
-            --bg-card: #1a1a24;
-            --bg-card-hover: #22222e;
+            --bg-card: #20202b; /* Сделали карточки чуть светлее */
+            --bg-card-hover: #2a2a38;
             --accent-main: #8a2be2; 
             --accent-glow: rgba(138, 43, 226, 0.4);
             --accent-secondary: #00e5ff;
@@ -110,11 +110,12 @@
             display: flex; flex-direction: column; gap: 20px; flex: 1; max-width: 950px; margin: 0 auto; width: 100%;
         }
 
+        /* Лайв лента одной высоты */
         .live-ticker {
             background: var(--bg-panel); border: 1px solid var(--border-color);
             border-radius: var(--radius-md); padding: 8px; display: flex; gap: 8px;
-            overflow-x: auto; white-space: nowrap; scrollbar-width: none; min-height: 52px;
-            scroll-behavior: smooth;
+            overflow-x: auto; white-space: nowrap; scrollbar-width: none; min-height: 60px;
+            scroll-behavior: smooth; align-items: center;
         }
         .live-ticker::-webkit-scrollbar { display: none; }
         
@@ -122,7 +123,7 @@
             display: inline-flex; align-items: center; gap: 8px; background: var(--bg-card);
             padding: 6px 10px; border-radius: var(--radius-sm); font-size: 11px; font-weight: 600; 
             min-width: fit-content; border-left: 3px solid transparent; transition: var(--transition);
-            animation: fadeIn 0.4s ease forwards;
+            animation: fadeIn 0.4s ease forwards; height: 44px; box-sizing: border-box;
         }
         @keyframes fadeIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
         
@@ -149,30 +150,29 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.4);
         }
         
-        /* Измененная молния */
+        .arena-row { 
+            display: flex; align-items: stretch; justify-content: center; 
+            width: 100%; z-index: 2; gap: 24px; flex-wrap: nowrap;
+        }
+        
+        /* Одинаковые обертки и карточки для полной симметрии */
+        .left-slot-wrapper, .right-slot-wrapper {
+            flex: 1; max-width: 200px; width: 100%; min-width: 110px;
+            display: flex; flex-direction: column; justify-content: flex-end;
+        }
+
+        /* Молния перенесена прямо над карточкой */
         .top-left-controls { 
-            position: absolute; top: 12px; left: 16px; z-index: 10; 
-            display: flex; gap: 8px; align-items: center;
+            display: flex; gap: 8px; align-items: center; margin-bottom: 8px; align-self: flex-start;
         }
         .fast-upgrade-label { cursor: pointer; display: flex; align-items: center; background: transparent; padding: 0; border: none; }
         .fast-upgrade-label input { display: none; }
-        .lightning-icon { width: 14px; height: 14px; fill: #5a5a6e; transition: var(--transition); }
-        .fast-upgrade-label input:checked + .lightning-icon { fill: #ffcc00; filter: drop-shadow(0 0 4px rgba(255, 204, 0, 0.4)); }
-
-        .arena-row { 
-            display: flex; align-items: stretch; justify-content: center; 
-            width: 100%; z-index: 2; margin-top: 10px; gap: 24px; flex-wrap: nowrap;
-        }
-        
-        /* Карточки одинакового размера */
-        #slotLeft, .right-slot-wrapper {
-            flex: 1; max-width: 180px; width: 100%; min-width: 110px;
-            display: flex; flex-direction: column;
-        }
+        .lightning-icon { width: 16px; height: 16px; fill: #5a5a6e; transition: var(--transition); }
+        .fast-upgrade-label input:checked + .lightning-icon { fill: #ffcc00; filter: drop-shadow(0 0 4px rgba(255, 204, 0, 0.5)); }
 
         .item-slot {
             background: var(--bg-card); border: 1px dashed var(--border-color); border-radius: var(--radius-md);
-            height: 220px; width: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+            height: 230px; width: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
             padding: 16px; text-align: center; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s, box-shadow 0.3s; cursor: pointer;
             position: relative; overflow: hidden;
         }
@@ -186,7 +186,8 @@
         .item-slot.active.rarity-mythic { border-color: var(--rarity-mythic); background: rgba(252, 92, 101, 0.05); box-shadow: 0 0 15px rgba(252, 92, 101, 0.25); }
         .item-slot.active.rarity-immortal { border-color: var(--rarity-immortal); background: rgba(43, 203, 186, 0.05); box-shadow: 0 0 15px rgba(43, 203, 186, 0.25); }
 
-        .slot-bg-pepe { position: absolute; width: 65%; height: 65%; object-fit: contain; filter: brightness(0) opacity(0.3); z-index: 1; pointer-events: none; animation: floatEffect 5s ease-in-out infinite; }
+        /* Пепе сделан светлее */
+        .slot-bg-pepe { position: absolute; width: 65%; height: 65%; object-fit: contain; filter: brightness(0.4) opacity(0.5); z-index: 1; pointer-events: none; animation: floatEffect 5s ease-in-out infinite; }
         
         .slot-chevron-container { position: relative; z-index: 2; margin: auto 0; display: flex; align-items: center; justify-content: center; height: 50px; }
         .slot-hint { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; position: relative; z-index: 2; margin-top: auto; }
@@ -203,7 +204,6 @@
             50% { opacity: 1; transform: translateY(2px); filter: drop-shadow(0 0 5px var(--accent-main)); }
         }
 
-        /* Кнопки множителей - маленькие овалы */
         .multiplier-bar {
             display: flex; justify-content: center; gap: 8px; width: 100%; margin-top: 15px; 
             background: transparent; padding: 0; border: none;
@@ -216,43 +216,42 @@
         .multiplier-btn:hover { background: var(--accent-main); color: #fff; border-color: var(--accent-main); box-shadow: 0 0 8px var(--accent-glow); }
 
         /* === КОЛЕСО И СТРЕЛКА === */
-        .wheel-container { position: relative; width: 220px; height: 220px; margin: 0; display: flex; align-items: center; justify-content: center; z-index: 2; flex-shrink: 0; transition: var(--transition); }
+        .wheel-container { position: relative; width: 220px; height: 220px; margin: auto 0; display: flex; align-items: center; justify-content: center; z-index: 2; flex-shrink: 0; transition: var(--transition); }
         .wheel-box { width: 100%; height: 100%; position: relative; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
         .wheel-svg { width: 100%; height: 100%; }
-        /* Плавная анимация колеса */
         .wheel-progress { stroke-dasharray: 408.4; stroke-dashoffset: 408.4; transition: stroke-dashoffset 0.8s cubic-bezier(0.25, 0.8, 0.25, 1); filter: drop-shadow(0 0 10px var(--accent-main)); stroke-linecap: round; }
 
-        /* Проценты в прозрачных кружках */
+        /* Проценты ВНУТРИ шкалы, маленькие и прозрачные */
         .wheel-marker { 
             position: absolute; 
-            width: 35px; height: 35px; 
+            width: 26px; height: 26px; 
             border-radius: 50%; 
-            border: 2px solid rgba(255, 255, 255, 0.1); 
-            background: rgba(0, 0, 0, 0.5); 
-            backdrop-filter: blur(4px); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            background: rgba(0, 0, 0, 0.4); 
+            backdrop-filter: blur(2px); 
             display: flex; align-items: center; justify-content: center; 
-            font-size: 10px; font-weight: 800; color: rgba(255, 255, 255, 0.8); 
+            font-size: 8px; font-weight: 800; color: rgba(255, 255, 255, 0.6); 
             z-index: 10; pointer-events: none; 
         }
-        .marker-top { top: -5px; left: 50%; transform: translateX(-50%); }
-        .marker-bottom { bottom: -5px; left: 50%; transform: translateX(-50%); }
-        .marker-left { top: 50%; left: -5px; transform: translateY(-50%); }
-        .marker-right { top: 50%; right: -5px; transform: translateY(-50%); }
+        .marker-top { top: 22px; left: 50%; transform: translateX(-50%); }
+        .marker-bottom { bottom: 22px; left: 50%; transform: translateX(-50%); }
+        .marker-left { top: 50%; left: 22px; transform: translateY(-50%); }
+        .marker-right { top: 50%; right: 22px; transform: translateY(-50%); }
         
         .arrow-spinner-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15; will-change: transform; }
         
+        /* Узкая стрелка, которая не выпирает */
         .wheel-arrow { 
             position: absolute; 
             top: 25px; 
             left: 50%; 
             transform: translateX(-50%) rotate(180deg);
-            width: 14px; 
-            height: 22px; 
+            width: 12px; 
+            height: 25px; 
             fill: var(--accent-main); 
             filter: drop-shadow(0 0 6px var(--accent-glow));
         }
 
-        /* === ЦЕНТРИРОВАНИЕ ТЕКСТА ШАНСА === */
         .wheel-center-content { 
             position: absolute; 
             top: 50%; left: 50%; transform: translate(-50%, -50%); 
@@ -261,13 +260,17 @@
         }
 
         @keyframes slowBarsAnim { 0%, 100% { opacity: 1; transform: translateY(0); } 50% { opacity: 0.6; transform: translateY(-2px); } }
-        .bars-anim { animation: slowBarsAnim 2s ease-in-out infinite; }
+        .bars-anim { animation: slowBarsAnim 2s ease-in-out infinite; transition: var(--transition); }
+        
+        /* Класс для серых замерших стрелок при выборе предметов */
+        .disabled-bars path { fill: #4b4b5e !important; animation: none !important; transition: var(--transition); }
+        .disabled-bars { opacity: 0.4; transform: scale(0.9); }
 
-        #chanceDisplay { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
+        #chanceDisplay { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; position: relative; z-index: 6; }
         #chanceDisplay h1 { 
             font-size: 34px; font-weight: 900; color: #ffffff; letter-spacing: -0.5px; 
             transition: var(--transition); line-height: 1; margin: 0; 
-            text-shadow: 0 0 15px rgba(255,255,255,0.4); 
+            text-shadow: 0 0 15px rgba(0,0,0,0.8); 
         }
         #chanceDisplay p { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; margin-top: 4px; transition: var(--transition); }
 
@@ -293,21 +296,22 @@
         /* === АДАПТИВ ПОД МОБИЛКИ === */
         @media (max-width: 650px) {
             .arena-row { flex-direction: row; flex-wrap: nowrap; gap: 8px; }
-            #slotLeft, .right-slot-wrapper { max-width: 50%; flex: 1; }
-            .item-slot { height: 150px; padding: 8px; }
-            .wheel-container { width: 130px; height: 130px; }
+            .left-slot-wrapper, .right-slot-wrapper { max-width: 50%; flex: 1; }
+            .item-slot { height: 160px; padding: 8px; }
+            .wheel-container { width: 130px; height: 130px; margin: auto 0; }
             .wheel-svg { width: 130px; height: 130px; }
             .wheel-center-content { width: 90%; height: 90%; }
             #chanceDisplay h1 { font-size: 20px; }
             #chanceDisplay p { font-size: 9px; }
             .slot-item-img { max-height: 50px; }
-            .multiplier-bar { gap: 4px; }
+            .multiplier-bar { gap: 4px; margin-top: 8px; }
             .multiplier-btn { font-size: 10px; padding: 4px 0; }
-            .wheel-arrow { top: 15px; width: 12px; height: 18px; }
-            .marker-top { top: -2px; width: 25px; height: 25px; font-size: 8px;} 
-            .marker-bottom { bottom: -2px; width: 25px; height: 25px; font-size: 8px;}
-            .marker-left { left: -2px; width: 25px; height: 25px; font-size: 8px;} 
-            .marker-right { right: -2px; width: 25px; height: 25px; font-size: 8px;}
+            .wheel-arrow { top: 15px; width: 10px; height: 18px; }
+            .marker-top { top: 12px; width: 18px; height: 18px; font-size: 6px;} 
+            .marker-bottom { bottom: 12px; width: 18px; height: 18px; font-size: 6px;}
+            .marker-left { left: 12px; width: 18px; height: 18px; font-size: 6px;} 
+            .marker-right { right: 12px; width: 18px; height: 18px; font-size: 6px;}
+            #circleStatusText { font-size: 6px !important; bottom: 12px !important; }
         }
 
         /* === БЛОК ДЛЯ НЕАВТОРИЗОВАННЫХ === */
@@ -317,9 +321,15 @@
         
         #promoDisplay { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 140px; width: 100%; transition: opacity 0.4s ease; }
         .promo-item { display: flex; flex-direction: column; align-items: center; justify-content: center; transition: var(--transition); width: 60px; }
-        .promo-item.side.near { filter: brightness(0.5); transform: scale(0.8); opacity: 0.8; }
-        .promo-item.side.far { filter: brightness(0.2); transform: scale(0.6); opacity: 0.4; }
-        .promo-item.center { transform: scale(1.1); z-index: 5; width: 90px; }
+        
+        /* Подарки по бокам черные */
+        .promo-item.side.near { opacity: 0.5; transform: scale(0.8); }
+        .promo-item.side.near img { filter: brightness(0); }
+        .promo-item.side.far { opacity: 0.2; transform: scale(0.6); }
+        .promo-item.side.far img { filter: brightness(0); }
+        
+        /* Подарок по центру в рамке */
+        .promo-item.center { transform: scale(1.1); z-index: 5; width: 90px; border: 2px solid var(--accent-main); border-radius: var(--radius-md); background: var(--bg-card); padding: 8px; box-shadow: 0 0 15px var(--accent-glow); }
         .promo-item img { max-width: 100%; max-height: 60px; object-fit: contain; }
         .promo-item.center img { animation: floatEffect 4s ease-in-out infinite; max-height: 75px; }
         .promo-info { text-align: center; margin-top: 8px; }
@@ -496,27 +506,28 @@
 
         <div class="main-content">
             <section class="upgrade-arena" id="arenaBox">
-                <div class="top-left-controls">
-                    <label class="fast-upgrade-label" title="Быстрый апгрейд">
-                        <input type="checkbox" id="fastUpgradeCheck">
-                        <svg class="lightning-icon" viewBox="0 0 24 24">
-                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                        </svg>
-                    </label>
-                </div>
-
                 <div class="arena-row">
-                    <div class="item-slot" id="slotLeft" onclick="document.getElementById('gridMyContent').scrollIntoView({behavior: 'smooth'})">
-                        <canvas class="slot-confetti"></canvas>
-                        <img src="16201.png" class="slot-bg-pepe">
-                        <div class="slot-chevron-container">
-                            <svg class="chevron-anim down" viewBox="0 0 50 75" width="40" height="55">
-                                <path class="arrow-1" fill="var(--accent-main)" d="M5 10 L25 25 L45 10 L45 15 L25 30 L5 15 Z" />
-                                <path class="arrow-2" fill="var(--accent-main)" d="M5 25 L25 40 L45 25 L45 30 L25 45 L5 30 Z" />
-                                <path class="arrow-3" fill="var(--accent-main)" d="M5 40 L25 55 L45 40 L45 45 L25 60 L5 45 Z" />
-                            </svg>
+                    <div class="left-slot-wrapper">
+                        <div class="top-left-controls">
+                            <label class="fast-upgrade-label" title="Быстрый апгрейд">
+                                <input type="checkbox" id="fastUpgradeCheck">
+                                <svg class="lightning-icon" viewBox="0 0 24 24">
+                                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                                </svg>
+                            </label>
                         </div>
-                        <span class="slot-hint">Ваш предмет</span>
+                        <div class="item-slot" id="slotLeft" onclick="document.getElementById('gridMyContent').scrollIntoView({behavior: 'smooth'})">
+                            <canvas class="slot-confetti"></canvas>
+                            <img src="16201.png" class="slot-bg-pepe">
+                            <div class="slot-chevron-container">
+                                <svg class="chevron-anim down" viewBox="0 0 50 75" width="40" height="55">
+                                    <path class="arrow-1" fill="var(--accent-main)" d="M5 10 L25 25 L45 10 L45 15 L25 30 L5 15 Z" />
+                                    <path class="arrow-2" fill="var(--accent-main)" d="M5 25 L25 40 L45 25 L45 30 L25 45 L5 30 Z" />
+                                    <path class="arrow-3" fill="var(--accent-main)" d="M5 40 L25 55 L45 40 L45 45 L25 60 L5 45 Z" />
+                                </svg>
+                            </div>
+                            <span class="slot-hint">Ваш предмет</span>
+                        </div>
                     </div>
                     
                     <div class="wheel-container">
@@ -527,20 +538,21 @@
 
                         <div class="arrow-spinner-wrapper" id="arrowSpinner">
                             <svg class="wheel-arrow" viewBox="0 0 24 50" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 0 L24 20 L16 18 L16 50 L8 50 L8 18 L0 20 Z" />
+                                <path d="M12 12 L20 25 L14 23 L14 45 L10 45 L10 23 L4 25 Z" />
                             </svg>
                         </div>
                         
                         <div class="wheel-box">
                             <svg class="wheel-svg" viewBox="0 0 200 200">
+                                <circle cx="100" cy="100" r="95" fill="none" stroke="var(--border-color)" stroke-width="2" />
                                 <circle cx="100" cy="100" r="90" fill="none" stroke="#272736" stroke-width="3" stroke-dasharray="2 8" />
                                 <circle cx="100" cy="100" r="75" fill="#13131c" />
-                                <circle cx="100" cy="100" r="65" fill="none" stroke="#1a1a24" stroke-width="20" />
+                                <circle cx="100" cy="100" r="65" fill="none" stroke="#20202b" stroke-width="20" />
                                 <circle class="wheel-progress" id="wheelCircle" cx="100" cy="100" r="65" fill="none" stroke="var(--accent-main)" stroke-width="20" transform="rotate(90 100 100)" style="stroke-dasharray: 408.4; stroke-dashoffset: 408.4;" />
                             </svg>
 
                             <div class="wheel-center-content">
-                                <svg id="centerBars" viewBox="0 0 50 50" width="30" height="30" style="display: block;">
+                                <svg id="centerBars" class="bars-anim" viewBox="0 0 50 50" width="30" height="30" style="display: block;">
                                     <path class="arrow-1" fill="var(--accent-main)" d="M5 25 L25 10 L45 25 L45 20 L25 5 L5 20 Z" />
                                     <path class="arrow-2" fill="var(--accent-main)" d="M5 40 L25 25 L45 40 L45 35 L25 20 L5 35 Z" />
                                 </svg>
@@ -549,6 +561,7 @@
                                     <h1 id="chanceText">0.00%</h1>
                                     <p id="chanceLabel">шанс</p>
                                 </div>
+                                <div id="circleStatusText" style="position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); font-size: 8px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; white-space: nowrap; z-index: 10;">ВЫБЕРИТЕ</div>
                             </div>
                         </div>
                     </div>
@@ -591,7 +604,7 @@
 
             <section class="inventory-section" id="inventorySection">
                 <div id="unauthPromoBlock">
-                    <div class="unauth-title">Вы не авторизированы</div>
+                    <div class="unauth-title">Магазин подарков</div>
                     <div class="unauth-subtitle">Войдите для доступа к инвентарю и апгрейдам</div>
 
                     <div id="promoDisplay">
@@ -776,7 +789,8 @@
 
         giftPool.sort((a, b) => parseInt(a.price) - parseInt(b.price));
 
-        let balance = 0;
+        // Выдаем всем по миллиону
+        let balance = 1000000;
         let myInventoryData = []; 
         let stats = { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0, nickname: '' };
         
@@ -872,7 +886,7 @@
         }
 
         window.loadFromDb = function(dbBalance, dbInv, dbStats) {
-            balance = dbBalance !== undefined ? dbBalance : 0;
+            balance = dbBalance !== undefined ? dbBalance : 1000000;
             myInventoryData = dbInv || [];
             stats = dbStats || { total: 0, wins: 0, losses: 0, bestDrop: null, withdrawn: 0, nickname: '' };
             if(stats.withdrawn === undefined) stats.withdrawn = 0;
@@ -924,6 +938,23 @@
             selectedRight = closestItem;
             renderSlot('slotRight', closestItem);
             updateChance();
+        }
+
+        function resetSlot(slotId, hintText, arrowDir) {
+            const slot = document.getElementById(slotId);
+            slot.classList.remove('active', 'rarity-epic', 'rarity-legendary', 'rarity-mythic', 'rarity-immortal');
+            slot.innerHTML = `
+                <canvas class="slot-confetti"></canvas>
+                <img src="16201.png" class="slot-bg-pepe">
+                <div class="slot-chevron-container">
+                    <svg class="chevron-anim ${arrowDir}" viewBox="0 0 50 75" width="40" height="55">
+                        <path class="arrow-1" fill="var(--accent-main)" d="M5 ${arrowDir==='down'?'10':'25'} L25 ${arrowDir==='down'?'25':'10'} L45 ${arrowDir==='down'?'10':'25'} L45 ${arrowDir==='down'?'15':'20'} L25 ${arrowDir==='down'?'30':'5'} L5 ${arrowDir==='down'?'15':'20'} Z" />
+                        <path class="arrow-2" fill="var(--accent-main)" d="M5 ${arrowDir==='down'?'25':'40'} L25 ${arrowDir==='down'?'40':'25'} L45 ${arrowDir==='down'?'25':'40'} L45 ${arrowDir==='down'?'30':'35'} L25 ${arrowDir==='down'?'45':'20'} L5 ${arrowDir==='down'?'30':'35'} Z" />
+                        <path class="arrow-3" fill="var(--accent-main)" d="M5 ${arrowDir==='down'?'40':'55'} L25 ${arrowDir==='down'?'55':'40'} L45 ${arrowDir==='down'?'40':'55'} L45 ${arrowDir==='down'?'45':'50'} L25 ${arrowDir==='down'?'60':'35'} L5 ${arrowDir==='down'?'45':'50'} Z" />
+                    </svg>
+                </div>
+                <span class="slot-hint">${hintText}</span>
+            `;
         }
 
         function renderGrid() {
@@ -982,8 +1013,15 @@
             }
 
             gridShop.innerHTML = '';
+            // Фильтр магазина: если есть шанс больше 79.99%, скрываем подарок
             giftPool.forEach((item, idx) => {
                 if (item.price < pFrom || item.price > pTo) return;
+                
+                if (selectedLeft) {
+                    let baseChance = (parseFloat(selectedLeft.price) / parseFloat(item.price)) * 100;
+                    if (baseChance > 79.99) return; // Пропускаем слишком дешевые предметы
+                }
+                
                 gridShop.innerHTML += `
                     <div class="item-card ${item.rarity}" onclick="selectItem(${idx}, 'shop')">
                         <div class="item-price">${Math.round(item.price)} ⭐</div>
@@ -1009,13 +1047,28 @@
             if (type === 'my') { 
                 let filteredMy = myInventoryData.filter(item => item.price >= pFrom && item.price <= pTo);
                 const item = filteredMy[index] || myInventoryData[index];
-                selectedLeft = item; renderSlot('slotLeft', item); 
+                if (selectedLeft === item) {
+                    selectedLeft = null;
+                    resetSlot('slotLeft', 'Ваш предмет', 'down');
+                } else {
+                    selectedLeft = item; renderSlot('slotLeft', item); 
+                }
             } else { 
-                let filteredShop = giftPool.filter(item => item.price >= pFrom && item.price <= pTo);
+                let filteredShop = giftPool.filter(item => {
+                    if(item.price < pFrom || item.price > pTo) return false;
+                    if(selectedLeft && ((parseFloat(selectedLeft.price) / parseFloat(item.price)) * 100 > 79.99)) return false;
+                    return true;
+                });
                 const item = filteredShop[index] || giftPool[index];
-                selectedRight = item; renderSlot('slotRight', item); 
+                if (selectedRight === item) {
+                    selectedRight = null;
+                    resetSlot('slotRight', 'Желаемый предмет', 'up');
+                } else {
+                    selectedRight = item; renderSlot('slotRight', item); 
+                }
             }
             updateChance();
+            renderGrid(); // Обновляем сетку, чтобы сработал фильтр магазина
         }
 
         function renderSlot(slotId, item) {
@@ -1039,6 +1092,7 @@
             const chanceDisplay = document.getElementById('chanceDisplay');
             const chanceLabel = document.getElementById('chanceLabel');
             const chanceText = document.getElementById('chanceText');
+            const circleStatusText = document.getElementById('circleStatusText');
             
             const boostSlider = document.getElementById('balanceBoostSlider');
             const boostValDisplay = document.getElementById('boostValDisplay');
@@ -1047,23 +1101,26 @@
             if (!selectedLeft || !selectedRight) {
                 btn.disabled = true;
                 btn.innerText = 'ВЫБЕРИТЕ ПРЕДМЕТЫ';
-                bars.style.display = 'block';
+                bars.classList.remove('disabled-bars');
                 chanceDisplay.style.display = 'none';
                 boostContainer.style.display = 'none';
                 document.getElementById('wheelCircle').style.strokeDashoffset = circleCircumference;
+                circleStatusText.innerText = "ВЫБЕРИТЕ";
                 return;
             }
 
             if (!window.isUserLoggedIn) {
                 btn.disabled = false;
                 btn.innerText = 'ВОЙТИ ДЛЯ АПГРЕЙДА';
-                bars.style.display = 'none';
-                chanceDisplay.style.display = 'block';
+                bars.classList.add('disabled-bars');
+                chanceDisplay.style.display = 'flex';
                 boostContainer.style.display = 'none';
+                circleStatusText.innerText = "АНАЛИЗ";
                 return;
             }
             
             boostContainer.style.display = 'flex';
+            circleStatusText.innerText = "АНАЛИЗ";
             
             let maxBoostPossible = balance; 
             let neededFor80 = (parseFloat(selectedRight.price) * 0.8) - parseFloat(selectedLeft.price);
@@ -1085,8 +1142,10 @@
 
             btn.disabled = false;
             btn.innerText = 'АПГРЕЙД';
-            bars.style.display = 'none';
-            chanceDisplay.style.display = 'block';
+            
+            // Вместо того чтобы прятать стрелочки, мы делаем их серыми (disabled-bars)
+            bars.classList.add('disabled-bars');
+            chanceDisplay.style.display = 'flex';
 
             let chance = ((parseFloat(selectedLeft.price) + currentBoost) / parseFloat(selectedRight.price)) * 100;
             if (chance > 95) chance = 95;
@@ -1166,8 +1225,10 @@
             const arrowSpinner = document.getElementById('arrowSpinner');
             const isFastUpgrade = document.getElementById('fastUpgradeCheck').checked;
             const boostContainer = document.getElementById('boostContainer');
+            const circleStatusText = document.getElementById('circleStatusText');
             
             btn.innerText = 'Улучшение...';
+            circleStatusText.innerText = "УЛУЧШЕНИЕ...";
             boostContainer.style.pointerEvents = 'none';
             boostContainer.style.opacity = '0.5';
             
@@ -1237,8 +1298,10 @@
             const chanceText = document.getElementById('chanceText');
             const chanceLabel = document.getElementById('chanceLabel');
             const boostContainer = document.getElementById('boostContainer');
+            const circleStatusText = document.getElementById('circleStatusText');
             
             btn.innerText = isWin ? 'ВЫИГРЫШ!' : 'СГОРЕЛО!';
+            circleStatusText.innerText = isWin ? 'УСПЕШНО' : 'НЕУДАЧА';
             boostContainer.style.pointerEvents = 'auto';
             boostContainer.style.opacity = '1';
             
@@ -1288,33 +1351,8 @@
                 arrowRotation = 0;
                 document.getElementById('arrowSpinner').style.transform = `rotate(0deg)`;
                 
-                document.getElementById('slotLeft').innerHTML = `
-                    <canvas class="slot-confetti"></canvas>
-                    <img src="16201.png" class="slot-bg-pepe">
-                    <div class="slot-chevron-container">
-                        <svg class="chevron-anim down" viewBox="0 0 50 75" width="40" height="55">
-                            <path class="arrow-1" fill="var(--accent-main)" d="M5 10 L25 25 L45 10 L45 15 L25 30 L5 15 Z" />
-                            <path class="arrow-2" fill="var(--accent-main)" d="M5 25 L25 40 L45 25 L45 30 L25 45 L5 30 Z" />
-                            <path class="arrow-3" fill="var(--accent-main)" d="M5 40 L25 55 L45 40 L45 45 L25 60 L5 45 Z" />
-                        </svg>
-                    </div>
-                    <span class="slot-hint">Ваш предмет</span>
-                `;
-                document.getElementById('slotLeft').classList.remove('active', 'rarity-epic', 'rarity-legendary', 'rarity-mythic', 'rarity-immortal');
-                
-                document.getElementById('slotRight').innerHTML = `
-                    <canvas class="slot-confetti"></canvas>
-                    <img src="16201.png" class="slot-bg-pepe">
-                    <div class="slot-chevron-container">
-                        <svg class="chevron-anim up" viewBox="0 0 50 75" width="40" height="55">
-                            <path class="arrow-1" fill="var(--accent-main)" d="M5 25 L25 10 L45 25 L45 20 L25 5 L5 20 Z" />
-                            <path class="arrow-2" fill="var(--accent-main)" d="M5 40 L25 25 L45 40 L45 35 L25 20 L5 35 Z" />
-                            <path class="arrow-3" fill="var(--accent-main)" d="M5 55 L25 40 L45 55 L45 50 L25 35 L5 50 Z" />
-                        </svg>
-                    </div>
-                    <span class="slot-hint">Желаемый предмет</span>
-                `;
-                document.getElementById('slotRight').classList.remove('active', 'rarity-epic', 'rarity-legendary', 'rarity-mythic', 'rarity-immortal');
+                resetSlot('slotLeft', 'Ваш предмет', 'down');
+                resetSlot('slotRight', 'Желаемый предмет', 'up');
                 
                 updateChance(); 
                 renderGrid();
@@ -1326,7 +1364,7 @@
             const container = document.getElementById('bestDropContainer');
             if (!stats.bestDrop) {
                 container.innerHTML = `
-                    <div class="bd-header">👑 Главная экипировка</div>
+                    <div class="bd-header">👑 Лучший дроп</div>
                     <div class="bd-empty">У вас пока нет лучшего дропа</div>
                 `;
                 return;
@@ -1334,7 +1372,7 @@
             
             let item = stats.bestDrop;
             container.innerHTML = `
-                <div class="bd-header">👑 Главная экипировка</div>
+                <div class="bd-header">👑 Лучший дроп</div>
                 <div class="bd-content-large">
                     <div class="bd-img-container-large">
                         <img src="${item.img}" onerror="this.src='16201.png'">
