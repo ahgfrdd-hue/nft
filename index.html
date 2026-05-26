@@ -7,7 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <title>FlashUpgrader — Premium Edition</title>
     <style>
-        /* === НОВЫЙ ДИЗАЙН === */
+        /* === ОБЩИЙ СТИЛЬ И ТЕМАТИКА === */
         :root {
             --bg-main: #0a0a0f;
             --bg-panel: #13131c;
@@ -189,17 +189,10 @@
         /* === КОЛЕСО И СТРЕЛКА === */
         .wheel-container { position: relative; width: 220px; height: 220px; margin: auto 0; display: flex; align-items: center; justify-content: center; z-index: 2; flex-shrink: 0; transition: var(--transition); }
         .wheel-box { width: 100%; height: 100%; position: relative; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
-        .wheel-svg { width: 100%; height: 100%; transform: rotate(-90deg); /* Поворачиваем колесо, чтобы прогресс начинался ровно сверху */ }
+        .wheel-svg { width: 100%; height: 100%; transform: rotate(180deg); /* Поворачиваем, чтобы заполнение было снизу вверх */ }
         .wheel-progress { stroke-dasharray: 408.4; stroke-dashoffset: 408.4; transition: stroke-dashoffset 0.8s cubic-bezier(0.25, 0.8, 0.25, 1); filter: drop-shadow(0 0 10px var(--accent-main)); stroke-linecap: round; }
 
-        /* Проценты ВНУТРИ шкалы - убрали фон, сделали прозрачнее и аккуратнее */
-        .wheel-marker { 
-            position: absolute;
-            width: 30px; height: 30px; 
-            display: flex; align-items: center; justify-content: center; 
-            font-size: 10px; font-weight: 600; color: rgba(255, 255, 255, 0.5); 
-            z-index: 10; pointer-events: none;
-        }
+        .wheel-marker { position: absolute; font-size: 10px; font-weight: 700; color: var(--text-muted); z-index: 10; pointer-events: none; }
         .marker-top { top: 18px; left: 50%; transform: translateX(-50%); }
         .marker-bottom { bottom: 18px; left: 50%; transform: translateX(-50%); }
         .marker-left { top: 50%; left: 18px; transform: translateY(-50%); }
@@ -216,7 +209,6 @@
         .disabled-bars { opacity: 0.4; transform: scale(0.9); }
 
         #chanceDisplay { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; position: relative; z-index: 6; }
-        /* Уменьшили размер процентов и шанса */
         #chanceDisplay h1 { font-size: 26px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px; transition: var(--transition); line-height: 1; margin: 0; text-shadow: 0 0 10px rgba(0,0,0,0.6); }
         #chanceDisplay p { font-size: 9px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-top: 4px; transition: var(--transition); }
 
@@ -1458,8 +1450,8 @@
                 <div class="ticker-item success-stripe" style="border-left-color: ${color};">
                     <span class="ticker-user">${randomName}</span>
                     <img class="ticker-img" src="${item.img}" onerror="this.src='16201.png'">
-                    <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 90px;">${item.sub}</span>
-                    <span class="ticker-chance" style="color: ${color}; background: ${color}22;">${chance}%</span>
+                    <span style="max-width: 80px;">${item.sub}</span>
+                    <span class="ticker-chance" style="color: ${color}; background: ${color}22;">${chanceVal.toFixed(2)}%</span>
                 </div>
             `;
             ticker.insertAdjacentHTML('afterbegin', html);
